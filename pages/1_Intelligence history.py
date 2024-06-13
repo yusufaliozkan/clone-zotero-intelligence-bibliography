@@ -28,7 +28,7 @@ from events import evens_conferences
 from streamlit_dynamic_filters import DynamicFilters
 import time
 
-TIMER_INTERVAL = 3*1
+TIMER_INTERVAL = 5
 if 'start_time' not in st.session_state:
     st.session_state.start_time = time.time()
 elapsed_time = time.time() - st.session_state.start_time
