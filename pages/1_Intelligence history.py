@@ -266,8 +266,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 if sort_by == 'Publication type':
                     df_table_view = df_table_view.sort_values(by=['Publication type'], ascending=True)
                     df_table_view = df_table_view.reset_index(drop=True, inplace=True)
-
-                df_table_view
+                    df_table_view
+                else:
+                    df_table_view
 #UNTIL HERE
         with col2:
             with st.expander('Collections', expanded=True):
