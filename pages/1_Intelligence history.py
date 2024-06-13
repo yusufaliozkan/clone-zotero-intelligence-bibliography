@@ -87,7 +87,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
     if selected_collection_name in unique_collections:
         # Set the default value to the selected collection from the query params
         radio = container.radio('Select a collection', unique_collections, index=unique_collections.index(selected_collection_name))
-        st.rerun()
     else:
         radio = container.radio('Select a collection', unique_collections)
 
