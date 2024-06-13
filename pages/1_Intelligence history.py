@@ -159,7 +159,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
             item_type_no = df_collections['Publication type'].nunique()
             author_no = df_collections['FirstName2'].nunique()
-            author_pub_ratio = num_items_collections/author_no
+            author_pub_ratio = round(num_items_collections/author_no, 2)
 
             true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
             total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
