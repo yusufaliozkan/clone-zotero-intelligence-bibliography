@@ -120,11 +120,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
     collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0]
 
     st.markdown('#### Collection theme: ' + collection_name)
-    col1, col2 = st.columns([1,5])
+    col1, col2, col3 = st.columns(3)
     with col1:
         container_metric = st.container()
-        container_citation = st.container()
     with col2:
+        container_citation = st.container()
+    with col3:
         with st.popover("Filters and more"):
             st.write(f"View the collection in [Zotero]({collection_link})")
             col112, col113, col114 = st.columns(3)
