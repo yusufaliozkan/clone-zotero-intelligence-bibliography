@@ -127,10 +127,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
         with st.popover("More metrics"):
             cola1, cola2 = st.columns(2)
             with cola1:
-
                 container_citation = st.container()
-            with cola2:
                 container_oa = st.container()
+            with cola2:                
                 container_type = st.container()
                 container_author_no = st.container()
     with col3:
