@@ -164,7 +164,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
 
             container_metric.metric(label="Items found", value=num_items_collections, help=breakdown_string)
-            container_citation.metric(label="Number of citations", value=citation_count)
+            container_citation.metric(label="Number of citations", value=int(citation_count))
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
