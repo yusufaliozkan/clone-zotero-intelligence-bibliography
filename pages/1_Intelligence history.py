@@ -160,7 +160,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             a = f'{collection_name}_{today}'
             st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
     with col2:
-        st.metric(label="Items found", value=num_items_collections)
+        st.metric(label="Items found", value=num_items_collections, help=breakdown_string)
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
