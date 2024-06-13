@@ -90,6 +90,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         st.query_params.clear()
     else:
         radio = container.radio('Select a collection', unique_collections)
+        st.query_params.clear()
 
     # radio = container.radio('Select a collection', unique_collections)
     # collection_name = st.selectbox('Select a collection:', clist)
