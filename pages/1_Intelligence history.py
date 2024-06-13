@@ -122,6 +122,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     st.markdown('#### Collection theme: ' + collection_name)
     col1, col2 = st.columns([1,3])
     with col1:
+        container_metric = st.container()
+    with col2:
         with st.popover("Filters and more"):
             st.write(f"View the collection in [Zotero]({collection_link})")
             col112, col113, col114 = st.columns(3)
@@ -159,8 +161,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             a = f'{collection_name}_{today}'
             st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
-    with col2:
-        st.metric(label="Items found", value=num_items_collections, help=breakdown_string)
+
+            container_metric.metric(label="Items found", value=num_items_collections, help=breakdown_string)
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
