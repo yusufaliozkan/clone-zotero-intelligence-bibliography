@@ -128,6 +128,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             container_citation = st.container()
             container_oa = st.container()
             container_type = st.container()
+            container_author_no = st.container()
     with col3:
         with st.popover("Filters and more"):
             st.write(f"View the collection in [Zotero]({collection_link})")
@@ -155,6 +156,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             publications_by_type = df_collections['Publication type'].value_counts()
             breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
             item_type_no = df_collections['Publication type'].nunique()
+            author_no = df_collections['FirstName2'].nunique()
 
             true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
             total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
@@ -172,6 +174,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container_citation.metric(label="Number of citations", value=int(citation_count))
     container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
     container_type.metric(label='Number of publication types', value=int(item_type_no))
+    container_author_no.metric(label='Number of authors', value=int(author_no))
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
