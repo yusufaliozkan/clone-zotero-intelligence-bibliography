@@ -160,7 +160,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             item_type_no = df_collections['Publication type'].nunique()
             author_no = df_collections['FirstName2'].nunique()
             if author_no == 0:
-                author_no=0.0
+                author_pub_ratio=0.0
             else:
                 author_pub_ratio = round(num_items_collections/author_no, 2)
 
