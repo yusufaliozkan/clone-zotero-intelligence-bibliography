@@ -75,7 +75,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-    container = st.container()
+    with st.container(height=300):
+        container = st.container()
 
     query_params = st.query_params.to_dict()
     selected_collection_key  = query_params.get("collection_id", None)
