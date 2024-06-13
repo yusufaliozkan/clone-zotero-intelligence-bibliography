@@ -268,7 +268,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_table_view = df_table_view.reset_index(drop=True)
                     df_table_view
                 elif sort_by == 'Citation':
-                    df_table_view = df_table_view.sort_values(by=['Citation'], ascending=True)
+                    df_table_view = df_table_view.sort_values(by=['Citation'], ascending=False)
                     df_table_view = df_table_view.reset_index(drop=True)
                     df_table_view
                 else:
