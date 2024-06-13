@@ -75,7 +75,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-    with st.container(height=100):
+    with st.container(height=120):
         container = st.container()
 
     query_params = st.query_params.to_dict()
