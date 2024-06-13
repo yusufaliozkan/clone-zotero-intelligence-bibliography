@@ -183,7 +183,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
             # st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
             # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
-
+            sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
             if not table_view:
                 articles_list = []  # Store articles in a list
                 for index, row in df_collections.iterrows():
@@ -217,8 +217,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         '[[Publication link]](' + str(link_to_publication) + ') ' +
                         '[[Zotero link]](' + str(zotero_link) + ')'
                     )
-                sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
-                
+                                
                 with st.expander('Click to expand', expanded=True):
 
                     if sort_by == 'Publication date :arrow_down:': # or df_collections['Citation'].sum() == 0:
