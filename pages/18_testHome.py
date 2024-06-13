@@ -187,8 +187,9 @@ cite_today = datetime.date.today().strftime("%d %B %Y")
 
 into = f'''
 Welcome to **Intelligence studies bibliography**.
-This website lists **hundreds of sources, events, conferences, and call for papers** on intelligence history and intelligence studies. Finding sources on intelligence
-can sometimes be challening. This bibliography will be your helpful research assistant in finding and saving sources.
+The Intelligence studies bibliography is one of the most comprehensive databases listing sources on intelligence studies and history. 
+Finding sources on intelligence can sometimes be challening because of various reasons. 
+Therefore, this bibliography offers a carefully curated selection of publications, serving as an invaluable research assistant to guide you through exploring various sources.
 
 Check out the following guides for a quick intoduction about the website:
 
