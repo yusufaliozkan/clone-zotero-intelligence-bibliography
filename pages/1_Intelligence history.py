@@ -119,8 +119,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     publications_by_type = df_collections['Publication type'].value_counts()
     collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0]
 
-    show_pubs = st.button('Show publications')
-    if st.button ==show_pubs:
+    if st.button('Show publications'):
             
 
         st.divider()
