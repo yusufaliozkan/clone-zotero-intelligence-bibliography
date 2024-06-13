@@ -129,7 +129,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             with cola1:
 
                 container_citation = st.container()
-            with cola12:
+            with cola2:
                 container_oa = st.container()
                 container_type = st.container()
                 container_author_no = st.container()
