@@ -75,7 +75,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     # st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-    coltest1, coltest2 = st.columns(2)
+    coltest1, coltest2 = st.columns([1,5])
     with coltest1:
         with st.container(height=300):
             container = st.container()
