@@ -125,10 +125,15 @@ with st.spinner('Retrieving data & updating dashboard...'):
         container_metric = st.container()
     with col2:
         with st.popover("More metrics"):
-            container_citation = st.container()
-            container_oa = st.container()
-            container_type = st.container()
-            container_author_no = st.container()
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                container_citation = st.container()
+            with col2:
+                container_oa = st.container()
+            with col3:
+                container_type = st.container()
+            with col4:
+                container_author_no = st.container()
     with col3:
         with st.popover("Filters and more"):
             st.write(f"View the collection in [Zotero]({collection_link})")
