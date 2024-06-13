@@ -239,7 +239,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 st.subheader(current_type)
                                 count_by_type[current_type] = 1
                             formatted_entry = format_entry(row)
-                            st.write(f"{count_by_type[current_type]}) {formatted_entry}")
+                            st.write_stream(f"{count_by_type[current_type]}) {formatted_entry}")
                             count_by_type[current_type] += 1
                             if display2:
                                 st.caption(row['Abstract'])
