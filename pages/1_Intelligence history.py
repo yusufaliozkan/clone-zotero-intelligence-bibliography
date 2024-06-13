@@ -265,7 +265,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                 if sort_by == 'Publication type':
                     df_table_view = df_table_view.sort_values(by=['Publication type'], ascending=True)
-                    df_table_view = df_table_view.reset_index()
+                    df_table_view = df_table_view.reset_index(drop=True, inplace=True)
                     df_table_view
                 else:
                     df_table_view
