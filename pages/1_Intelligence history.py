@@ -286,7 +286,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 event_info = evens_conferences()
                 for info in event_info:
                     st.write(info)
-        st.rerun()
 
     with tab2:
         st.header('Dashboard')
