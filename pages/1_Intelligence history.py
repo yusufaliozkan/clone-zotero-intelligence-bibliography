@@ -120,7 +120,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0]
 
     st.markdown('#### Collection theme: ' + collection_name)
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5 = st.columns(5)
     with col1:
         container_metric = st.container()
     with col2:
@@ -128,6 +128,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     with col3: 
         container_oa = st.container()
     with col4:
+        container_type = st.container()
+    with col5:
         with st.popover("Filters and more"):
             st.write(f"View the collection in [Zotero]({collection_link})")
             col112, col113, col114 = st.columns(3)
@@ -170,7 +172,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container_metric.metric(label="Items found", value=num_items_collections, help=breakdown_string)
     container_citation.metric(label="Number of citations", value=int(citation_count))
     container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
-    item_type_no
+    container_type.metric(label='Number of types', value=int(item_type_no))
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
