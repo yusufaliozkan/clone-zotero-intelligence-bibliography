@@ -26,6 +26,19 @@ from format_entry import format_entry
 from copyright import display_custom_license
 from events import evens_conferences
 from streamlit_dynamic_filters import DynamicFilters
+import time
+
+TIMER_INTERVAL = 3*60
+if 'start_time' not in st.session_state:
+    st.session_state.start_time = time.time()
+elapsed_time = time.time() - st.session_state.start_time
+if elapsed_time >= TIMER_INTERVAL:
+    # Reset the start time
+    st.session_state.start_time = time.time()
+    # Rerun the app
+    st.experimental_rerun()
+remaining_time = TIMER_INTERVAL - elapsed_time
+
 
 st.set_page_config(layout = "wide", 
                     page_title='Intelligence studies network',
@@ -87,10 +100,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     if selected_collection_name in unique_collections:
         # Set the default value to the selected collection from the query params
         radio = container.radio('Select a collection', unique_collections, index=unique_collections.index(selected_collection_name))
-        st.query_params.clear()
     else:
         radio = container.radio('Select a collection', unique_collections)
-        st.query_params.clear()
 
     # radio = container.radio('Select a collection', unique_collections)
     # collection_name = st.selectbox('Select a collection:', clist)
