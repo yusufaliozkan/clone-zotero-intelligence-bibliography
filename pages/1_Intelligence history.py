@@ -123,6 +123,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     col1, col2 = st.columns([1,5])
     with col1:
         container_metric = st.container()
+        container_citation = st.container()
     with col2:
         with st.popover("Filters and more"):
             st.write(f"View the collection in [Zotero]({collection_link})")
@@ -163,6 +164,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
 
             container_metric.metric(label="Items found", value=num_items_collections, help=breakdown_string)
+            container_citation.metric(label="Number of citations", value=citation_count)
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
