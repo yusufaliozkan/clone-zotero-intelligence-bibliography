@@ -261,11 +261,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 if display2:
                                     st.caption(row['Abstract']) 
             else:
-                if sort_by == 'Publication type':
-                    df_collections = df_collections.sort_values(by=['Publication type'], ascending=True)
-                    df_collections = df_collections.reset_index(drop=True, inplace=True)
                 df_table_view = df_collections[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
                 df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
+                if sort_by == 'Publication type':
+                    df_table_view = df_table_view.sort_values(by=['Publication type'], ascending=True)
+                    df_table_view = df_table_view.reset_index(drop=True, inplace=True)
+
                 df_table_view
 #UNTIL HERE
         with col2:
