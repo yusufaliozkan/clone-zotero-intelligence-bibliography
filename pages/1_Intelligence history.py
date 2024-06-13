@@ -158,6 +158,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
             item_type_no = df_collections['Publication type'].nunique()
             author_no = df_collections['FirstName2'].nunique()
+            author_pub_ratio = author_no/num_items_collections
 
             true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
             total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
@@ -176,6 +177,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
     container_type.metric(label='Number of publication types', value=int(item_type_no))
     container_author_no.metric(label='Number of authors', value=int(author_no))
+    author_pub_ratio
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
