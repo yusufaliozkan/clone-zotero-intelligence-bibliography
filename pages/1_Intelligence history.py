@@ -120,45 +120,47 @@ with st.spinner('Retrieving data & updating dashboard...'):
     collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0]
 
     st.markdown('#### Collection theme: ' + collection_name)
+    col1, col2 = st.columns(2)
+    with col1:
+        with st.popover("Filters and more"):
+            st.write(f"View the collection in [Zotero]({collection_link})")
+            col112, col113, col114 = st.columns(3)
+            with col112:
+                display2 = st.checkbox('Display abstracts')
+            with col113:
+                only_citation = st.checkbox('Show cited items only')
+                if only_citation:
+                    df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
+            with col114:
+                table_view = st.checkbox('See results in table')
 
-    types = st.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original')
-    df_collections = df_collections[df_collections['Publication type'].isin(types)]
-    df_collections = df_collections.reset_index(drop=True)
-    df_collections['FirstName2'] = df_collections['FirstName2'].map(name_replacements).fillna(df_collections['FirstName2'])
-    df_download = df_collections[['Publication type','Title','FirstName2','Abstract','Date published','Publisher','Journal','Link to publication','Zotero link']]
-    df_download = df_download.reset_index(drop=True)
-    def convert_df(df_download):
-        return df_download.to_csv(index=False).encode('utf-8-sig')
-    csv = convert_df(df_download)
-    today = datetime.date.today().isoformat()
-    num_items_collections = len(df_collections)
-    publications_by_type = df_collections['Publication type'].value_counts()
-    breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
+            types = st.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original')
+            df_collections = df_collections[df_collections['Publication type'].isin(types)]
+            df_collections = df_collections.reset_index(drop=True)
+            df_collections['FirstName2'] = df_collections['FirstName2'].map(name_replacements).fillna(df_collections['FirstName2'])
+            df_download = df_collections[['Publication type','Title','FirstName2','Abstract','Date published','Publisher','Journal','Link to publication','Zotero link']]
+            df_download = df_download.reset_index(drop=True)
+            def convert_df(df_download):
+                return df_download.to_csv(index=False).encode('utf-8-sig')
+            csv = convert_df(df_download)
+            today = datetime.date.today().isoformat()
+            num_items_collections = len(df_collections)
+            publications_by_type = df_collections['Publication type'].value_counts()
+            breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
 
-    true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
-    total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
-    if total_count == 0:
-        oa_ratio = 0.0
-    else:
-        oa_ratio = true_count / total_count * 100
+            true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
+            total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
+            if total_count == 0:
+                oa_ratio = 0.0
+            else:
+                oa_ratio = true_count / total_count * 100
 
-    citation_count = df_collections['Citation'].sum()
-    
-    with st.popover("Filters and more"):
-        st.write(f"View the collection in [Zotero]({collection_link})")
-        col112, col113, col114 = st.columns(3)
-        with col112:
-            display2 = st.checkbox('Display abstracts')
-        with col113:
-            only_citation = st.checkbox('Show cited items only')
-            if only_citation:
-                df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
-        with col114:
-            table_view = st.checkbox('See results in table')
+            citation_count = df_collections['Citation'].sum()
 
-        a = f'{collection_name}_{today}'
-        st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
-
+            a = f'{collection_name}_{today}'
+            st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
+    with col2:
+        st.metric(label="Items found", value=num_items_collections)
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
