@@ -73,10 +73,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
     collection_mapping = df_collections.drop_duplicates('Collection_Name').set_index('Collection_Name')['Collection_Key'].to_dict()
     reverse_collection_mapping = {v: k for k, v in collection_mapping.items()}
 
-    # st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-    with st.container(height=300):
-        container = st.container()
+    container = st.container()
 
     query_params = st.query_params.to_dict()
     selected_collection_key  = query_params.get("collection_id", None)
