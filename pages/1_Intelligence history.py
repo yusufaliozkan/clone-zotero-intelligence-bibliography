@@ -77,50 +77,50 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     col1, col2 = st.columns(2)
     with col1:
-    with st.container(height=300):
-        container = st.container()
+        with st.container(height=300):
+            container = st.container()
 
-        query_params = st.query_params.to_dict()
-        selected_collection_key  = query_params.get("collection_id", None)
+            query_params = st.query_params.to_dict()
+            selected_collection_key  = query_params.get("collection_id", None)
 
-        unique_collections = list(df_collections['Collection_Name'].unique())
+            unique_collections = list(df_collections['Collection_Name'].unique())
 
-        selected_collection_name = reverse_collection_mapping.get(selected_collection_key, None)
+            selected_collection_name = reverse_collection_mapping.get(selected_collection_key, None)
 
-        if selected_collection_name in unique_collections:
-            # Set the default value to the selected collection from the query params
-            radio = container.radio('Select a collection', unique_collections, index=unique_collections.index(selected_collection_name))
-        else:
-            radio = container.radio('Select a collection', unique_collections)
+            if selected_collection_name in unique_collections:
+                # Set the default value to the selected collection from the query params
+                radio = container.radio('Select a collection', unique_collections, index=unique_collections.index(selected_collection_name))
+            else:
+                radio = container.radio('Select a collection', unique_collections)
 
-        # radio = container.radio('Select a collection', unique_collections)
-        # collection_name = st.selectbox('Select a collection:', clist)
-        collection_name = radio
-        collection_key = collection_mapping[collection_name]
-        # if collection_name:
-        st.query_params.from_dict({"collection_id": collection_key})
+            # radio = container.radio('Select a collection', unique_collections)
+            # collection_name = st.selectbox('Select a collection:', clist)
+            collection_name = radio
+            collection_key = collection_mapping[collection_name]
+            # if collection_name:
+            st.query_params.from_dict({"collection_id": collection_key})
 
-        # if collection_name:
-    #    st.query_params.from_dict({"collection_id": collection_key})
+            # if collection_name:
+        #    st.query_params.from_dict({"collection_id": collection_key})
 
-        df_collections = df_collections.loc[df_collections['Collection_Name']==collection_name]
-        pd.set_option('display.max_colwidth', None)
+            df_collections = df_collections.loc[df_collections['Collection_Name']==collection_name]
+            pd.set_option('display.max_colwidth', None)
 
-        # df_collections['Date published'] = pd.to_datetime(df_collections['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
-        df_collections['Date published'] = (
-            df_collections['Date published']
-            .str.strip()
-            .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-        )
-        df_collections['Date published'] = df_collections['Date published'].dt.strftime('%Y-%m-%d')
-        df_collections['Date published'] = df_collections['Date published'].fillna('')
-        df_collections['No date flag'] = df_collections['Date published'].isnull().astype(np.uint8)
-        df_collections = df_collections.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
-        df_collections = df_collections.sort_values(by=['Date published'], ascending=False)
-        df_collections = df_collections.reset_index(drop=True)
+            # df_collections['Date published'] = pd.to_datetime(df_collections['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
+            df_collections['Date published'] = (
+                df_collections['Date published']
+                .str.strip()
+                .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+            )
+            df_collections['Date published'] = df_collections['Date published'].dt.strftime('%Y-%m-%d')
+            df_collections['Date published'] = df_collections['Date published'].fillna('')
+            df_collections['No date flag'] = df_collections['Date published'].isnull().astype(np.uint8)
+            df_collections = df_collections.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
+            df_collections = df_collections.sort_values(by=['Date published'], ascending=False)
+            df_collections = df_collections.reset_index(drop=True)
 
-        publications_by_type = df_collections['Publication type'].value_counts()
-        collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0]
+            publications_by_type = df_collections['Publication type'].value_counts()
+            collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0]
 
     with col2:
         st.markdown('#### Collection theme: ' + collection_name)
