@@ -75,8 +75,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     # st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-    col1, col2 = st.columns(2)
-    with col1:
+    coltest1, coltest2 = st.columns(2)
+    with coltest1:
         with st.container(height=300):
             container = st.container()
 
@@ -122,7 +122,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             publications_by_type = df_collections['Publication type'].value_counts()
             collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0]
 
-    with col2:
+    with coltest2:
         st.markdown('#### Collection theme: ' + collection_name)
         col1, col2, col3 = st.columns([1,2,4])
         with col1:
