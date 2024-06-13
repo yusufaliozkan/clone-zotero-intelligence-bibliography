@@ -120,7 +120,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0]
 
     st.markdown('#### Collection theme: ' + collection_name)
-    col1, col2, col3 = st.columns([1,2,5])
+    col1, col2, col3 = st.columns([1,2,4])
     with col1:
         container_metric = st.container()
     with col2:
