@@ -129,6 +129,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             container_oa = st.container()
             container_type = st.container()
             container_author_no = st.container()
+            container_author_pub_ratio = st.container()
     with col3:
         with st.popover("Filters and more"):
             st.write(f"View the collection in [Zotero]({collection_link})")
@@ -177,7 +178,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
     container_type.metric(label='Number of publication types', value=int(item_type_no))
     container_author_no.metric(label='Number of authors', value=int(author_no))
-    author_pub_ratio
+    container_author_pub_ratio.metric(label='Author/publication ratio', value=int(author_pub_ratio), help='The mean author number per publication')
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
