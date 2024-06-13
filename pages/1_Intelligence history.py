@@ -174,9 +174,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     with tab1:
         col1, col2 = st.columns([5,1.6])
         with col1:            
-            # st.metric(label='Number of items', value=num_items_collections, help=breakdown_string)
-            st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
-            st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
+            # st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
+            # st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
             # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
 
             if table_view:
