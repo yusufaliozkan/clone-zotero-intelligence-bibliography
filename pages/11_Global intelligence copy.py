@@ -33,74 +33,76 @@ st.title("Global intelligence")
 with st.spinner('Retrieving data & updating dashboard...'):
     sidebar_content()
 
-    col1, col2 = st.columns([1,3])
+    col1, col2, col3 = st.columns([1,3,5])
     with col1:
         container_metric = st.container()
     with col2: 
-        container_info = st.container()
-    @st.cache_data(ttl=100)
-    def load_data():
-        df_collections = pd.read_csv('all_items_duplicated.csv')
-        df_collections = df_collections.sort_values(by='Collection_Name')
-        return df_collections
-
-    df_collections = load_data()
-    df_collections = df_collections[df_collections['Collection_Name'].str.contains("14.")]
-
-    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-    
-    # container = st.container()
-
-    collection_name = df_collections['Collection_Name'].iloc[0]
-    pd.set_option('display.max_colwidth', None)
-
-    # df_collections['Date published'] = pd.to_datetime(df_collections['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
-    df_collections['Date published'] = (
-        df_collections['Date published']
-        .str.strip()
-        .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-    )
-    df_collections['Date published'] = df_collections['Date published'].dt.strftime('%Y-%m-%d')
-    df_collections['Date published'] = df_collections['Date published'].fillna('')
-    df_collections['No date flag'] = df_collections['Date published'].isnull().astype(np.uint8)
-    df_collections = df_collections.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
-    df_collections = df_collections.sort_values(by=['Date published'], ascending=False)
-    df_collections = df_collections.reset_index(drop=True)
-
-    publications_by_type = df_collections['Publication type'].value_counts()
-    collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0] 
-
-    # st.markdown('#### Collection theme: ' + collection_name)
-    with st.popover('More'):
-        col112, col113 = st.columns(2)
-        with col112:
-            st.write(f"See the collection in [Zotero]({collection_link}) from which you can easily generate citations.")
-        with col113:
-            only_citation = st.checkbox('Show cited items only')
-            if only_citation:
-                df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
-                df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
-                df_continent = df_continent[(df_continent['Citation'].notna()) & (df_continent['Citation'] != 0)]
         
-        container_info = container_info.info('This collection lists academic sources that are **non-UK/US** on intelligence.')
+        @st.cache_data(ttl=100)
+        def load_data():
+            df_collections = pd.read_csv('all_items_duplicated.csv')
+            df_collections = df_collections.sort_values(by='Collection_Name')
+            return df_collections
 
-        df_countries_chart = df_countries.copy()
-        df_continent = df_continent.copy()
-        df_continent_chart = df_continent.copy() 
+        df_collections = load_data()
+        df_collections = df_collections[df_collections['Collection_Name'].str.contains("14.")]
 
-        unique_items_count = df_countries_chart['Country'].nunique()
-        num_items_collections = len(df_collections)
-        st.write(f"**{num_items_collections}** sources found for **{unique_items_count-1}** countries.")
-        true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
-        total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
-        if total_count == 0:
-            oa_ratio = 0.0
-        else:
-            oa_ratio = true_count / total_count * 100
+        st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+        
+        # container = st.container()
 
-        citation_count = df_collections['Citation'].sum()
-        st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
-        container_metric = container_metric.metric(label='Number of items in this collection', value=num_items_collections, help=f'sources found for **{unique_items_count-1}** countries.')
+        collection_name = df_collections['Collection_Name'].iloc[0]
+        pd.set_option('display.max_colwidth', None)
+
+        # df_collections['Date published'] = pd.to_datetime(df_collections['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
+        df_collections['Date published'] = (
+            df_collections['Date published']
+            .str.strip()
+            .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+        )
+        df_collections['Date published'] = df_collections['Date published'].dt.strftime('%Y-%m-%d')
+        df_collections['Date published'] = df_collections['Date published'].fillna('')
+        df_collections['No date flag'] = df_collections['Date published'].isnull().astype(np.uint8)
+        df_collections = df_collections.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
+        df_collections = df_collections.sort_values(by=['Date published'], ascending=False)
+        df_collections = df_collections.reset_index(drop=True)
+
+        publications_by_type = df_collections['Publication type'].value_counts()
+        collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0] 
+
+        # st.markdown('#### Collection theme: ' + collection_name)
+        with st.popover('Filters and more'):
+            col112, col113 = st.columns(2)
+            with col112:
+                st.write(f"See the collection in [Zotero]({collection_link}) from which you can easily generate citations.")
+            with col113:
+                only_citation = st.checkbox('Show cited items only')
+                if only_citation:
+                    df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
+                    df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
+                    df_continent = df_continent[(df_continent['Citation'].notna()) & (df_continent['Citation'] != 0)]
+            
+            container_info = container_info.info('This collection lists academic sources that are **non-UK/US** on intelligence.')
+
+            df_countries_chart = df_countries.copy()
+            df_continent = df_continent.copy()
+            df_continent_chart = df_continent.copy() 
+
+            unique_items_count = df_countries_chart['Country'].nunique()
+            num_items_collections = len(df_collections)
+            st.write(f"**{num_items_collections}** sources found for **{unique_items_count-1}** countries.")
+            true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
+            total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
+            if total_count == 0:
+                oa_ratio = 0.0
+            else:
+                oa_ratio = true_count / total_count * 100
+
+            citation_count = df_collections['Citation'].sum()
+            st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
+            container_metric = container_metric.metric(label='Number of items in this collection', value=num_items_collections, help=f'sources found for **{unique_items_count-1}** countries.')
+    with col3:
+        container_info = st.container()
 
     df_countries['Date published'] = ( 
         df_countries['Date published']
@@ -143,8 +145,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     if selected_country=='':
         query_params.clear()
-    selected_country
-    st.write('test')
+
     number_of_pub = df_countries[df_countries['Country'] == selected_country]
     publications_count = len(number_of_pub)
 
