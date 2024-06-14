@@ -436,7 +436,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 # Selectbox for search options
                 with cols:
                     st.session_state.search_in = st.selectbox(
-                        '🔍 options', 
+                        '🔍 Search in', 
                         ['Title', 'Title and abstract'], 
                         index=['Title', 'Title and abstract'].index(st.session_state.search_in)
                     )
