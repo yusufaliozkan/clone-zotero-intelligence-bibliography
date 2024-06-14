@@ -78,24 +78,26 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container = st.container()
 
     unique_collections = list(df_collections['Collection_Name'].unique())
-    unique_collections
 
     def update_params():
-        st.query_params.from_dict({'collection_id':st.session_state.qp})
+        st.query_params.from_dict({'collection_id': collection_mapping[st.session_state.qp]})
+
     query_params = st.query_params
     ix = 0
+
     if 'collection_id' in query_params:
         try:
-            ix = unique_collections.index(query_params['collection_id'])
-        except ValueError:
+            # Get the collection name using the key from query_params
+            collection_name_from_key = reverse_collection_mapping[query_params['collection_id']]
+            ix = unique_collections.index(collection_name_from_key)
+        except (ValueError, KeyError):
             pass
+
     radio = container.radio('Select a collection', unique_collections, index=ix, key="qp", on_change=update_params)
-    radio
+    query_params = st.query_params.to_dict()
+
     collection_name = radio
     collection_key = collection_mapping[collection_name]
-
-    query_params = st.query_params.to_dict()
-    query_params
     
     # query_params = st.query_params.to_dict()
     # selected_collection_key  = query_params.get("collection_id", None)
