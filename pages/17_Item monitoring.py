@@ -37,7 +37,7 @@ image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
 with st.sidebar:
 
     sidebar_content()
-    
+
 def update_params():
     st.query_params.from_dict({'option': st.session_state.qp})
 
@@ -56,7 +56,8 @@ if 'option' in query_params:
 selected_option = st.radio(
     "Param", options, index=ix, key="qp", on_change=update_params
 )
-
+query_params = st.query_params
+st.write(query_params)
 col1, col2 = st.columns([5,2])
 
 with col1:
