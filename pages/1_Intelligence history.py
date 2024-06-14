@@ -92,6 +92,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     radio = container.radio('Select a collection', unique_collections, index=ix, key="qp", on_change=update_params)
     radio
     collection_name = radio
+    collection_key = collection_mapping[collection_name]
 
     query_params = st.query_params.to_dict()
     query_params
