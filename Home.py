@@ -405,8 +405,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 def update_search_params():
                     st.query_params.from_dict({
-                        "query": st.session_state.search_term,
                         "include_abstracts": st.session_state.include_abstracts
+                        "query": st.session_state.search_term,
                     })
 
                 # Extracting initial query parameters
