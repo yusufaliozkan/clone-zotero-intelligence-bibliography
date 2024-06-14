@@ -325,7 +325,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         oa_ratio = true_count / total_count * 100
 
                     author_no = df_countries['FirstName2'].nunique()
-                    author_no
                     if author_no == 0:
                         author_pub_ratio=0.0
                     else:
