@@ -82,7 +82,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             unique_items_count = df_countries_chart['Country'].nunique()
             num_items_collections = len(df_collections)
-            st.write(f"**{num_items_collections}** sources found for **{unique_items_count-1}** countries.")
             true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
             total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
             if total_count == 0:
