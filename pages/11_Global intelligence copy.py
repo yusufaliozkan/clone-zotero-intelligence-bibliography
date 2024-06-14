@@ -51,105 +51,105 @@ with st.spinner('Retrieving data & updating dashboard...'):
     
     # container = st.container()
 
+    collection_name = df_collections['Collection_Name'].iloc[0]
+    pd.set_option('display.max_colwidth', None)
+
+    # df_collections['Date published'] = pd.to_datetime(df_collections['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
+    df_collections['Date published'] = (
+        df_collections['Date published']
+        .str.strip()
+        .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+    )
+    df_collections['Date published'] = df_collections['Date published'].dt.strftime('%Y-%m-%d')
+    df_collections['Date published'] = df_collections['Date published'].fillna('')
+    df_collections['No date flag'] = df_collections['Date published'].isnull().astype(np.uint8)
+    df_collections = df_collections.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
+    df_collections = df_collections.sort_values(by=['Date published'], ascending=False)
+    df_collections = df_collections.reset_index(drop=True)
+
+    publications_by_type = df_collections['Publication type'].value_counts()
+    collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0] 
+
+    # st.markdown('#### Collection theme: ' + collection_name)
+    col112, col113 = st.columns(2)
+    with col112:
+        st.write(f"See the collection in [Zotero]({collection_link}) from which you can easily generate citations.")
+    with col113:
+        only_citation = st.checkbox('Show cited items only')
+        if only_citation:
+            df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
+            df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
+            df_continent = df_continent[(df_continent['Citation'].notna()) & (df_continent['Citation'] != 0)]
+    
+    container_info = container_info.info('This collection lists academic sources that are **non-UK/US** on intelligence.')
+
+    df_countries_chart = df_countries.copy()
+    df_continent = df_continent.copy()
+    df_continent_chart = df_continent.copy() 
+
+    unique_items_count = df_countries_chart['Country'].nunique()
+    num_items_collections = len(df_collections)
+    st.write(f"**{num_items_collections}** sources found for **{unique_items_count-1}** countries.")
+    true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
+    total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
+    if total_count == 0:
+        oa_ratio = 0.0
+    else:
+        oa_ratio = true_count / total_count * 100
+
+    citation_count = df_collections['Citation'].sum()
+    st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
+    container_metric = container_metric.metric(label='Number of items in this collection', value=num_items_collections, help=f'sources found for **{unique_items_count-1}** countries.')
+
+    df_countries['Date published'] = ( 
+        df_countries['Date published']
+        .str.strip()
+        .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+    )
+    # df_countries['Date published'] = pd.to_datetime(df_countries['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
+    df_countries['Date published'] = df_countries['Date published'].dt.strftime('%Y-%m-%d')
+    df_countries['Date published'] = df_countries['Date published'].fillna('')
+    df_countries['No date flag'] = df_countries['Date published'].isnull().astype(np.uint8)
+    df_countries = df_countries.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
+    df_countries = df_countries.sort_values(by=['Date published'], ascending=False)
+    df_countries = df_countries.drop_duplicates(subset=['Country', 'Zotero link'])
+    df_countries = df_countries.reset_index(drop=True)
+    unique_countries = [''] + ['All Countries'] + sorted(df_countries['Country'].unique())
+
+    # Function to update query_params based on selected country
+    def update_params():
+        if st.session_state.qp:
+            st.query_params.from_dict({'country': st.session_state.qp})
+
+    # Retrieve query_params and initialize selected_country
+    query_params = st.query_params
+    selected_country = query_params.get('country', '')  # Use .get() to handle None gracefully
+
+    # Calculate selected_country_index to set the initial index of the selectbox
+    selected_country_index = unique_countries.index(selected_country) if selected_country in unique_countries else 0
+
+    # Create selectbox to choose a country
+    selected_country = st.selectbox('Select a Country', unique_countries, index=selected_country_index, on_change=update_params, key='qp')
+
+    # Query_params handling based on selected country
+    ix = 0
+    if selected_country:
+        try:
+            # Get the index of selected_country in unique_countries
+            ix = unique_countries.index(selected_country)
+        except ValueError:
+            pass
+
+    number_of_pub = df_countries[df_countries['Country'] == selected_country]
+    publications_count = len(number_of_pub)
+
+    # Filter the DataFrame based on the selected country
+    df_countries = df_countries[df_countries['Country'] == selected_country]
+
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
         col1, col2 = st.columns([5,1.6])
         with col1:
-            collection_name = df_collections['Collection_Name'].iloc[0]
-            pd.set_option('display.max_colwidth', None)
-
-            # df_collections['Date published'] = pd.to_datetime(df_collections['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
-            df_collections['Date published'] = (
-                df_collections['Date published']
-                .str.strip()
-                .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-            )
-            df_collections['Date published'] = df_collections['Date published'].dt.strftime('%Y-%m-%d')
-            df_collections['Date published'] = df_collections['Date published'].fillna('')
-            df_collections['No date flag'] = df_collections['Date published'].isnull().astype(np.uint8)
-            df_collections = df_collections.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
-            df_collections = df_collections.sort_values(by=['Date published'], ascending=False)
-            df_collections = df_collections.reset_index(drop=True)
-
-            publications_by_type = df_collections['Publication type'].value_counts()
-            collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0] 
-
-            # st.markdown('#### Collection theme: ' + collection_name)
-            col112, col113 = st.columns(2)
-            with col112:
-                st.write(f"See the collection in [Zotero]({collection_link}) from which you can easily generate citations.")
-            with col113:
-                only_citation = st.checkbox('Show cited items only')
-                if only_citation:
-                    df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
-                    df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
-                    df_continent = df_continent[(df_continent['Citation'].notna()) & (df_continent['Citation'] != 0)]
-            
-            container_info = container_info.info('This collection lists academic sources that are **non-UK/US** on intelligence.')
-
-            df_countries_chart = df_countries.copy()
-            df_continent = df_continent.copy()
-            df_continent_chart = df_continent.copy() 
-
-            unique_items_count = df_countries_chart['Country'].nunique()
-            num_items_collections = len(df_collections)
-            st.write(f"**{num_items_collections}** sources found for **{unique_items_count-1}** countries.")
-            true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
-            total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
-            if total_count == 0:
-                oa_ratio = 0.0
-            else:
-                oa_ratio = true_count / total_count * 100
-
-            citation_count = df_collections['Citation'].sum()
-            st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
-            container_metric = container_metric.metric(label='Number of items in this collection', value=num_items_collections, help=f'sources found for **{unique_items_count-1}** countries.')
-
-            df_countries['Date published'] = ( 
-                df_countries['Date published']
-                .str.strip()
-                .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-            )
-            # df_countries['Date published'] = pd.to_datetime(df_countries['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
-            df_countries['Date published'] = df_countries['Date published'].dt.strftime('%Y-%m-%d')
-            df_countries['Date published'] = df_countries['Date published'].fillna('')
-            df_countries['No date flag'] = df_countries['Date published'].isnull().astype(np.uint8)
-            df_countries = df_countries.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
-            df_countries = df_countries.sort_values(by=['Date published'], ascending=False)
-            df_countries = df_countries.drop_duplicates(subset=['Country', 'Zotero link'])
-            df_countries = df_countries.reset_index(drop=True)
-            unique_countries = [''] + ['All Countries'] + sorted(df_countries['Country'].unique())
-
-            # Function to update query_params based on selected country
-            def update_params():
-                if st.session_state.qp:
-                    st.query_params.from_dict({'country': st.session_state.qp})
-
-            # Retrieve query_params and initialize selected_country
-            query_params = st.query_params
-            selected_country = query_params.get('country', '')  # Use .get() to handle None gracefully
-
-            # Calculate selected_country_index to set the initial index of the selectbox
-            selected_country_index = unique_countries.index(selected_country) if selected_country in unique_countries else 0
-
-            # Create selectbox to choose a country
-            selected_country = st.selectbox('Select a Country', unique_countries, index=selected_country_index, on_change=update_params, key='qp')
-
-            # Query_params handling based on selected country
-            ix = 0
-            if selected_country:
-                try:
-                    # Get the index of selected_country in unique_countries
-                    ix = unique_countries.index(selected_country)
-                except ValueError:
-                    pass
-
-            number_of_pub = df_countries[df_countries['Country'] == selected_country]
-            publications_count = len(number_of_pub)
-
-            # Filter the DataFrame based on the selected country
-            df_countries = df_countries[df_countries['Country'] == selected_country]
-
             # Display the filtered DataFrame
             # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
             if not selected_country or selected_country=="":
