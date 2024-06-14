@@ -145,14 +145,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             # Retrieve query_params and initialize selected_country
             query_params = st.query_params
-            selected_country = None
-
-            # If 'country' is in query_params, use it to initialize selected_country
-            if 'country' in query_params:
-                selected_country = query_params['country']
+            selected_country = query_params.get('country')  # Use .get() to handle None gracefully
 
             # Create selectbox to choose a country
-            selected_country = st.selectbox('Select a Country', unique_countries, index=unique_countries.index(selected_country), on_change=update_params)
+            selected_country_index = unique_countries.index(selected_country) if selected_country in unique_countries else 0
+            selected_country = st.selectbox('Select a Country', unique_countries, index=selected_country_index, on_change=update_params)
 
             number_of_pub = df_countries[df_countries['Country'] == selected_country]
             publications_count = len(number_of_pub)
