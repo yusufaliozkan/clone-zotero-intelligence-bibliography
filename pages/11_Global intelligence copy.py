@@ -71,35 +71,36 @@ with st.spinner('Retrieving data & updating dashboard...'):
     collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0] 
 
     # st.markdown('#### Collection theme: ' + collection_name)
-    col112, col113 = st.columns(2)
-    with col112:
-        st.write(f"See the collection in [Zotero]({collection_link}) from which you can easily generate citations.")
-    with col113:
-        only_citation = st.checkbox('Show cited items only')
-        if only_citation:
-            df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
-            df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
-            df_continent = df_continent[(df_continent['Citation'].notna()) & (df_continent['Citation'] != 0)]
-    
-    container_info = container_info.info('This collection lists academic sources that are **non-UK/US** on intelligence.')
+    with st.popover('More'):
+        col112, col113 = st.columns(2)
+        with col112:
+            st.write(f"See the collection in [Zotero]({collection_link}) from which you can easily generate citations.")
+        with col113:
+            only_citation = st.checkbox('Show cited items only')
+            if only_citation:
+                df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
+                df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
+                df_continent = df_continent[(df_continent['Citation'].notna()) & (df_continent['Citation'] != 0)]
+        
+        container_info = container_info.info('This collection lists academic sources that are **non-UK/US** on intelligence.')
 
-    df_countries_chart = df_countries.copy()
-    df_continent = df_continent.copy()
-    df_continent_chart = df_continent.copy() 
+        df_countries_chart = df_countries.copy()
+        df_continent = df_continent.copy()
+        df_continent_chart = df_continent.copy() 
 
-    unique_items_count = df_countries_chart['Country'].nunique()
-    num_items_collections = len(df_collections)
-    st.write(f"**{num_items_collections}** sources found for **{unique_items_count-1}** countries.")
-    true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
-    total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
-    if total_count == 0:
-        oa_ratio = 0.0
-    else:
-        oa_ratio = true_count / total_count * 100
+        unique_items_count = df_countries_chart['Country'].nunique()
+        num_items_collections = len(df_collections)
+        st.write(f"**{num_items_collections}** sources found for **{unique_items_count-1}** countries.")
+        true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
+        total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
+        if total_count == 0:
+            oa_ratio = 0.0
+        else:
+            oa_ratio = true_count / total_count * 100
 
-    citation_count = df_collections['Citation'].sum()
-    st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
-    container_metric = container_metric.metric(label='Number of items in this collection', value=num_items_collections, help=f'sources found for **{unique_items_count-1}** countries.')
+        citation_count = df_collections['Citation'].sum()
+        st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
+        container_metric = container_metric.metric(label='Number of items in this collection', value=num_items_collections, help=f'sources found for **{unique_items_count-1}** countries.')
 
     df_countries['Date published'] = ( 
         df_countries['Date published']
