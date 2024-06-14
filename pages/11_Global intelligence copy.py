@@ -326,7 +326,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     else:
                         oa_ratio = true_count / total_count * 100
 
-                    item_type_no = df_collections['Publication type'].nunique()
+                    item_type_no_2 = df_collections['Publication type'].nunique()
+                    item_type_no_2
 
                     author_no = df_collections['FirstName2'].nunique()
                     author_no
