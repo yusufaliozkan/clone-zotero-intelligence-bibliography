@@ -326,6 +326,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     item_type_no_2 = df_collections['Publication type'].nunique()
                     item_type_no_2
+                    df_countries
 
                     author_no = df_collections['FirstName2'].nunique()
                     author_no
