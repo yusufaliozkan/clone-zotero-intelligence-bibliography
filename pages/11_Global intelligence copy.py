@@ -31,27 +31,8 @@ st.set_page_config(layout = "wide",
 st.title("Global intelligence") 
 
 with st.spinner('Retrieving data & updating dashboard...'):
-
-    # # Connecting Zotero with API
-    # library_id = '2514686' # intel 2514686
-    # library_type = 'group'
-    # api_key = '' # api_key is only needed for private groups and libraries
-
     sidebar_content()
 
-    # zot = zotero.Zotero(library_id, library_type)
-
-    # @st.cache_data(ttl=300)
-    # def zotero_collections(library_id, library_type):
-    #     collections = zot.collections()
-    #     data2=[]
-    #     columns2 = ['Key','Name', 'Link']
-    #     for item in collections:
-    #         data2.append((item['data']['key'], item['data']['name'], item['links']['alternate']['href']))
-    #     pd.set_option('display.max_colwidth', None)
-    #     df_collections = pd.DataFrame(data2, columns=columns2)
-    #     return df_collections
-    # df_collections = zotero_collections(library_id, library_type)
     col1, col2 = st.columns([1,3])
     with col1:
         container_metric = st.container()
@@ -93,7 +74,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             publications_by_type = df_collections['Publication type'].value_counts()
             collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0] 
 
-            st.markdown('#### Collection theme: ' + collection_name)
+            # st.markdown('#### Collection theme: ' + collection_name)
             col112, col113 = st.columns(2)
             with col112:
                 st.write(f"See the collection in [Zotero]({collection_link}) from which you can easily generate citations.")
