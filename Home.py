@@ -403,8 +403,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 #     Search with parantheses is **not** available.                   
                 #     ''')
 
-                
-                query_params = st.query_params.to_dict() 
+                query_params = st.query_params.to_dict()
 
                 # Retrieve the initial search term from query parameters if available
                 search_term = query_params.get("query", "")
@@ -467,9 +466,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         collections = filtered_df['Collection_Name'].dropna().unique()
 
                         # Update query params when the user changes the input
-                        st.session_state.include_abstracts = include_abstracts
                         st.session_state.search_term = search_term
-                        st.session_state.qp = search_term  # Assuming 'qp' stands for query parameter related to the search term
+                        st.session_state.include_abstracts = include_abstracts
                         update_search_params()
             
                         # if container_refresh_button.button('Refresh'):
