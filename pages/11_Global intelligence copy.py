@@ -156,8 +156,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     # Filter the DataFrame based on the selected country
     df_countries = df_countries[df_countries['Country'] == selected_country]
 
+    st.subheader(f"{selected_country}")
     if selected_country!='':
-        st.subheader(f"{selected_country}")
         col1, col2, col3 = st.columns(3)
         with col1:
             container_metric_2 = st.container()
@@ -222,6 +222,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
                     container_type.metric(label='Number of publication types', value=int(item_type_no))
                     container_author_no.metric(label='Number of authors', value=int(author_no))
+                    container_country.(label='Number of country', value=unique_items_count-1)
+
+            st.metric(label='Number of country', value=unique_items_count-1)
+            st.metric(label="Number of citations", value=int(citation_count), help='Journal articles only')
+            st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
+            st.metric(label='Number of authors', value=int(author_no))
+            st.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
                     # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
 
