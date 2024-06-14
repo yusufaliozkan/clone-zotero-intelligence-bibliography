@@ -139,6 +139,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_countries = df_countries.reset_index(drop=True)
             unique_countries = [''] + ['All Countries'] + sorted(df_countries['Country'].unique())
 
+            # Function to update query_params based on selected country
             def update_params():
                 if selected_country:
                     st.query_params.from_dict({'country': selected_country})
@@ -156,14 +157,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # Convert selected_country to country_key if necessary (if mapping is needed)
             country_key = selected_country  # You can add mapping logic here if needed
 
-            # Query_params handling similar to collection_id
+            # Query_params handling based on selected country
             ix = 0
-            if 'collection_id' in query_params:
+            if selected_country:
                 try:
-                    # Get the collection name using the key from query_params
-                    collection_name_from_key = reverse_collection_mapping[query_params['collection_id']]
-                    ix = unique_collections.index(collection_name_from_key)
-                except (ValueError, KeyError):
+                    # Get the index of selected_country in unique_countries
+                    ix = unique_countries.index(selected_country)
+                except ValueError:
                     pass
 
             number_of_pub = df_countries[df_countries['Country'] == selected_country]
