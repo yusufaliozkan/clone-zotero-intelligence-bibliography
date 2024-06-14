@@ -74,12 +74,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
     with tab1:
         col1, col2 = st.columns([5,1.6])
         with col1:
-            # unique_collections = list(df_collections['Collection_Name'].unique()) 
-            # radio = container.radio('Select a collection', unique_collections)
-            # # collection_name = st.selectbox('Select a collection:', clist)
-            # df_collections=df_collections.reset_index(drop=True)
-            # collection_name = radio
-            # df_collections = df_collections.loc[df_collections['Collection_Name']==collection_name]
             collection_name = df_collections['Collection_Name'].iloc[0]
             pd.set_option('display.max_colwidth', None)
 
@@ -143,9 +137,27 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_countries = df_countries.sort_values(by=['Date published'], ascending=False)
             df_countries = df_countries.drop_duplicates(subset=['Country', 'Zotero link'])
             df_countries = df_countries.reset_index(drop=True)
-            unique_countries = sorted(df_countries['Country'].unique())
-            unique_countries =  [''] + ['All Countries'] + list(unique_countries)  # Added 'All Countries' option
+            unique_countries = [''] + ['All Countries'] + sorted(df_countries['Country'].unique())
+
+            def update_params():
+                if selected_country:
+                    st.query_params.from_dict({'country': selected_country})
+
+            # Retrieve query_params and initialize selected_country
+            query_params = st.query_params
+            selected_country = None
+
+            # If 'country' is in query_params, use it to initialize selected_country
+            if 'country' in query_params:
+                selected_country = query_params['country']
+
+            # Create selectbox to choose a country
+            selected_country = st.selectbox('Select a Country', unique_countries, index=unique_countries.index(selected_country), on_change=update_params)
+
+
+
             selected_country = st.selectbox('Select a Country', unique_countries)
+
             number_of_pub = df_countries[df_countries['Country'] == selected_country]
             publications_count = len(number_of_pub)
 
