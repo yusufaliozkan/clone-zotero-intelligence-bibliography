@@ -404,13 +404,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 #     ''')
 
                 def update_search_params():
-                    st.experimental_set_query_params(
+                    st.query_params(
                         search_in=st.session_state.search_in,
                         query=st.session_state.search_term
                     )
 
                 # Extracting initial query parameters
-                query_params = st.experimental_get_query_params()
+                query_params = st.query_params()
                 search_term = ""
                 search_in = "Title"
 
@@ -489,9 +489,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                         # Update query params when the user changes the input
                         update_search_params()
-                                # if container_refresh_button.button('Refresh'):
-                        #     st.query_params.clear()
-                        #     st.rerun()
+
 
                         with st.popover("Filters and more"):
                             types2 = st.multiselect('Publication types', types, key='original2')
