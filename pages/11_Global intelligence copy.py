@@ -100,6 +100,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.metric(label="Number of citations", value=int(citation_count), help='Journal articles only')
             st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
             st.metric(label='Number of authors', value=int(author_no))
+            st.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
             container_metric = container_metric.metric(label='Number of items in this collection', value=num_items_collections, help=f'sources found for **{unique_items_count-1}** countries.')
 
