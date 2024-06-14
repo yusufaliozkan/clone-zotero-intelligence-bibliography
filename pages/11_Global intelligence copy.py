@@ -72,14 +72,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
         # st.markdown('#### Collection theme: ' + collection_name)
         with st.popover('More details'):
-            st.info('''
+            st.info(f'''
             This collection lists academic sources that are **non-UK/US** on intelligence. 
             
             Pick up a country from the drop down menu too publications.
-            ''')
 
-            st.write(f"See the collection in [Zotero]({collection_link}) from which you can easily generate citations.")
-            
+            See the collection in [Zotero]({collection_link}) from which you can easily generate citations.
+            ''')
+           
             df_countries_chart = df_countries.copy()
             df_continent = df_continent.copy()
             df_continent_chart = df_continent.copy() 
