@@ -165,6 +165,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             with st.popover('More metrics'):
                 container_citation_2 = st.container()
                 container_oa = st.container()
+                container_type = st.container()
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
