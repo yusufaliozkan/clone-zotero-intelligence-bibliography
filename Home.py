@@ -466,11 +466,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
                         collections = filtered_df['Collection_Name'].dropna().unique()
 
-                # Update query params when the user changes the input
-                st.session_state.search_term = search_term
-                st.session_state.include_abstracts = include_abstracts
-                st.session_state.qp = search_term  # Assuming 'qp' stands for query parameter related to the search term
-                update_search_params()
+                        # Update query params when the user changes the input
+                        st.session_state.search_term = search_term
+                        st.session_state.include_abstracts = include_abstracts
+                        st.session_state.qp = search_term  # Assuming 'qp' stands for query parameter related to the search term
+                        update_search_params()
             
                         # if container_refresh_button.button('Refresh'):
                         #     st.query_params.clear()
