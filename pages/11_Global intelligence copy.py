@@ -166,6 +166,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 container_citation_2 = st.container()
                 container_oa = st.container()
                 container_type = st.container()
+                container_author_no = st.container()
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
@@ -208,6 +209,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         oa_ratio = true_count / total_count * 100
 
                     citation_count = df_collections['Citation'].sum()
+                    author_no = df_collections['FirstName2'].nunique()
+                    if author_no == 0:
+                        author_pub_ratio=0.0
+                    else:
+                        author_pub_ratio = round(num_items_collections/author_no, 2)
                     st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
                     item_type_no = df_collections['Publication type'].nunique()
 
@@ -215,6 +221,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     container_citation_2.metric(label="Number of citations", value=int(citation_count))
                     container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
                     container_type.metric(label='Number of publication types', value=int(item_type_no))
+                    container_author_no.metric(label='Number of authors', value=int(author_no))
 
                     # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
 
