@@ -72,7 +72,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
         # st.markdown('#### Collection theme: ' + collection_name)
         with st.popover('More metrics'):
-            st.toast('This collection lists academic sources that are **non-UK/US** on intelligence.')
+            st.info('This collection lists academic sources that are **non-UK/US** on intelligence.')
 
             col112, col113 = st.columns(2)
             with col112:
