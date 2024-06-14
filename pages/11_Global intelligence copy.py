@@ -323,7 +323,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         oa_ratio = 0.0
                     else:
                         oa_ratio = true_count / total_count * 100
-
+                    df_countries
                     item_type_no_2 = df_collections['Publication type'].nunique()
                     item_type_no_2
                     df_countries
