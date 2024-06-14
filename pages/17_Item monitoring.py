@@ -38,6 +38,23 @@ with st.sidebar:
 
     sidebar_content()
 
+def update_params():
+    st.query_params(option=st.session_state.qp)
+
+options = st.selectbox(
+    "Param", ["cat", "dog", "mouse", "bat", "duck"], key="qp", on_change=update_params
+)
+
+query_params = st.query_params()
+
+# set the initial query param on first run
+# based on the default option in selectbox
+if not query_params:
+    st.experimental_set_query_params(option=st.session_state.qp)
+
+# display for debugging purposes
+query_params = st.query_params()
+st.write(query_params)
 
 col1, col2 = st.columns([5,2])
 
