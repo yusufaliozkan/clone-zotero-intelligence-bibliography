@@ -76,6 +76,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     container = st.container()
 
+    unique_collections = list(df_collections['Collection_Name'].unique())
+
     def update_params():
         st.query_params.from_dict({'collection_id': collection_mapping[st.session_state.qp]})
 
