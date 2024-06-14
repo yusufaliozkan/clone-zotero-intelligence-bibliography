@@ -404,11 +404,31 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 #     ''')
 
                 
-                query_params = st.query_params.to_dict() 
+                unique_collections = list(df_collections['Collection_Name'].unique())
 
-                # Retrieve the initial search term from query parameters if available
+                def update_params():
+                    st.query_params.from_dict({
+                        'collection_id': collection_mapping[st.session_state.qp],
+                        "query": st.session_state.search_term,
+                        "include_abstracts": st.session_state.include_abstracts
+                    })
+
+                # Extracting initial query parameters
+                query_params = st.query_params.to_dict()
+
+                # Retrieve the initial collection ID and search term from query parameters if available
                 search_term = query_params.get("query", "")
                 include_abstracts = query_params.get("include_abstracts", "In title")
+                collection_id = query_params.get('collection_id', None)
+
+                # Determine the initial index for the collection selection
+                ix = 0
+                if collection_id:
+                    try:
+                        collection_name_from_key = reverse_collection_mapping[collection_id]
+                        ix = unique_collections.index(collection_name_from_key)
+                    except (ValueError, KeyError):
+                        pass
 
                 # Layout for input elements
                 cols, cola = st.columns([2, 6])
@@ -421,6 +441,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 with cola:
                     search_term = st.text_input('Search keywords in titles or abstracts', search_term, placeholder='Type your keyword(s)')
 
+                # Radio button for collection selection
+                radio = st.radio('Select a collection', unique_collections, index=ix, key="qp", on_change=update_params)
+
                 # Function to extract quoted phrases
                 def extract_quoted_phrases(text):
                     quoted_phrases = re.findall(r'"(.*?)"', text)
@@ -432,7 +455,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 def update_search_params():
                     st.query_params.from_dict({
                         "query": st.session_state.search_term,
-                        "include_abstracts": st.session_state.include_abstracts
+                        "include_abstracts": st.session_state.include_abstracts,
+                        'collection_id': collection_mapping[st.session_state.qp]
                     })
 
                 # Stripping and processing the search term
