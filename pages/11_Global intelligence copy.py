@@ -158,6 +158,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     st.subheader(f"{selected_country}")
     container_metric_2 = st.container()
+    with st.popover('More metrics)'):
+        container_citation_2 = st.container()
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
@@ -203,6 +205,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
                     container_metric_2.metric('Number of publications', value=num_items_collections)
+                    container_citation_2.metric(label="Number of citations", value=int(citation_count))
 
                     # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
 
