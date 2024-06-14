@@ -158,7 +158,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     st.subheader(f"{selected_country}")
     if selected_country!='':
-        col1, col2, col3 = st.columns([1,3,3])
+        col1, col2, col3 = st.columns([1,4,3])
         with col1:
             container_metric_2 = st.container()
         with col2:
@@ -171,9 +171,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 container_author_pub_ratio = st.container()
         with col3:
             with st.popover('Filters and more'):
+                container_cited_items = st.container()
+
                 container_pub_types = st.container()
                 container_download = st.container()
-                container_cited_items = st.container()
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
