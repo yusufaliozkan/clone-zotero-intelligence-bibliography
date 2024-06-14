@@ -61,9 +61,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
     # df_collections = df_collections[~df_collections['Collection_Name'].str.contains('01.98')]
     df_collections = df_collections[df_collections['Collection_Name'] != '01 Intelligence history']
 
-    df_collections = df_collections.sort_values(by='Collection_Name')
-    df_collections = df_collections[df_collections['Collection_Name'].str.contains("01.")]
 
+    df_collections = df_collections.sort_values(by='Collection_Name')
+    df_collections=df_collections[df_collections['Collection_Name'].str.contains("01.")]
+    
     def remove_numbers(name):
         return re.sub(r'^\d+(\.\d+)*\s*', '', name)
 
@@ -77,7 +78,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container = st.container()
 
     query_params = st.query_params.to_dict()
-    selected_collection_key = query_params.get("collection_id", None)
+    selected_collection_key  = query_params.get("collection_id", None)
 
     unique_collections = list(df_collections['Collection_Name'].unique())
 
@@ -85,19 +86,16 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     if selected_collection_name in unique_collections:
         # Set the default value to the selected collection from the query params
-        radio = container.radio('Select a collection', unique_collections, index=unique_collections.index(selected_collection_name), key="qp", on_change=lambda: update_query_params())
+        radio = container.radio('Select a collection', unique_collections, index=unique_collections.index(selected_collection_name))
     else:
-        radio = container.radio('Select a collection', unique_collections, key="qp", on_change=lambda: update_query_params())
+        radio = container.radio('Select a collection', unique_collections)
 
+    # radio = container.radio('Select a collection', unique_collections)
+    # collection_name = st.selectbox('Select a collection:', clist)
     collection_name = radio
     collection_key = collection_mapping[collection_name]
-
-    def update_query_params():
-        st.query_params.from_dict({"collection_id": collection_key})
-
-    # Update the query params initially if not already set
-    if not query_params:
-        update_query_params()
+    # if collection_name:
+    st.query_params.from_dict({"collection_id": collection_key})
 
     # if collection_name:
 #    st.query_params.from_dict({"collection_id": collection_key})

@@ -42,6 +42,7 @@ def update_params():
     st.query_params.from_dict({'option': st.session_state.qp})
 
 options = ["cat", "dog", "mouse", "bat", "duck"]
+options
 query_params = st.query_params
 
 # Set radio button value based on query param, or provide a default
