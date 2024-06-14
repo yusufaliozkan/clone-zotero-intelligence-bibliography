@@ -377,7 +377,36 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_continent = df_continent.reset_index(drop=True)
             unique_continents = sorted(df_continent['Continent'].unique())
             unique_continents =  [''] + list(unique_continents)  # Added 'All Countries' option
-            selected_continent = st.selectbox('Select a Continent', unique_continents)
+
+
+            # Function to update query_params based on selected country
+            def update_params2():
+                if st.session_state.qt:
+                    st.query_params.from_dict({'country': st.session_state.qt})
+
+            # Retrieve query_params and initialize selected_country
+            query_params = st.query_params
+            selected_continent = query_params.get('continent', '')  # Use .get() to handle None gracefully
+
+            # Calculate selected_country_index to set the initial index of the selectbox
+            selected_continent_index = unique_continents.index(selected_continent) if selected_continent in unique_continents else 0
+
+            # Create selectbox to choose a country
+            selected_continent = st.selectbox('Select a Country', unique_continents, index=selected_continent_index, on_change=update_params2, key='qt')
+
+            # Query_params handling based on selected country
+            ix = 0
+            if selected_continent:
+                try:
+                    # Get the index of selected_country in unique_countries
+                    ix = unique_continents.index(selected_continent)
+                except ValueError:
+                    pass
+
+            number_of_pub = df_countries[df_countries['Continent'] == selected_continent]
+
+            publications_count = len(number_of_pub)
+
             number_of_pub_con = df_continent[df_continent['Continent'] == selected_continent]
             publications_count_con = len(number_of_pub_con)
 
