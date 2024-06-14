@@ -338,6 +338,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         author_pub_ratio = round(num_items_collections/author_no, 2)
 
                     citation_count = df_countries['Citation'].sum()
+                    citation_count
                     st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
                     container_metric_2.metric('Number of publications', value=num_items_collections)
