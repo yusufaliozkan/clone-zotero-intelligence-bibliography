@@ -154,10 +154,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # Create selectbox to choose a country
             selected_country = st.selectbox('Select a Country', unique_countries, index=unique_countries.index(selected_country), on_change=update_params)
 
-
-
-            selected_country = st.selectbox('Select a Country', unique_countries)
-
             number_of_pub = df_countries[df_countries['Country'] == selected_country]
             publications_count = len(number_of_pub)
 
