@@ -39,7 +39,7 @@ with st.sidebar:
     sidebar_content()
 
 def update_params():
-    st.set_query_params(option=st.session_state.qp)
+    st.query_params.from_dict({'option': st.session_state.qp})
 
 options = st.selectbox(
     "Param", ["cat", "dog", "mouse", "bat", "duck"], key="qp", on_change=update_params
@@ -50,7 +50,7 @@ query_params = st.query_params
 # set the initial query param on first run
 # based on the default option in selectbox
 if not query_params:
-    st.set_query_params(option=st.session_state.qp)
+    st.query_params.from_dict({'option': st.session_state.qp})
 
 # display for debugging purposes
 query_params = st.query_params
