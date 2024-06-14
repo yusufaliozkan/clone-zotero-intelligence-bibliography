@@ -405,19 +405,37 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 
                 query_params = st.query_params.to_dict() 
-                search_term = query_params.get("query", "")
-                cols, cola = st.columns([2,6])
-                with cols:
-                    include_abstracts = st.selectbox('🔍 options', ['In title','In title & abstract'])
-                with cola:
-                    search_term = st.text_input('Search keywords in titles or abstracts', placeholder='Type your keyword(s)')
 
+                # Retrieve the initial search term from query parameters if available
+                search_term = query_params.get("query", "")
+                include_abstracts = query_params.get("include_abstracts", "In title")
+
+                # Layout for input elements
+                cols, cola = st.columns([2, 6])
+
+                # Selectbox for search options
+                with cols:
+                    include_abstracts = st.selectbox('🔍 options', ['In title', 'In title & abstract'], index=['In title', 'In title & abstract'].index(include_abstracts))
+
+                # Text input for search keywords
+                with cola:
+                    search_term = st.text_input('Search keywords in titles or abstracts', search_term, placeholder='Type your keyword(s)')
+
+                # Function to extract quoted phrases
                 def extract_quoted_phrases(text):
                     quoted_phrases = re.findall(r'"(.*?)"', text)
                     text_without_quotes = re.sub(r'"(.*?)"', '', text)
                     words = text_without_quotes.split()
                     return quoted_phrases + words
 
+                # Update the query parameters when search term or search options change
+                def update_search_params():
+                    st.query_params.from_dict({
+                        "query": st.session_state.search_term,
+                        "include_abstracts": st.session_state.include_abstracts
+                    })
+
+                # Stripping and processing the search term
                 search_term = search_term.strip()
                 if search_term:
                     with st.status("Searching publications...", expanded=True) as status:
@@ -429,6 +447,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
                         filtered_df = filtered_df.drop_duplicates()
                         print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
+                        
                         if not filtered_df.empty and 'Date published' in filtered_df.columns:
                             filtered_df['Date published'] = filtered_df['Date published'].astype(str).str.strip()
                             filtered_df['Date published'] = filtered_df['Date published'].str.strip().apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
@@ -443,10 +462,15 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             filtered_df['Date published'] = ''
                             filtered_df['No date flag'] = 1
                         print(f"Final Filtered DataFrame:\n{filtered_df}")  # Debugging: Print final DataFrame
-                        
+
                         types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
                         collections = filtered_df['Collection_Name'].dropna().unique()
-                        # st.query_params.from_dict({"query": search_term})
+
+                # Update query params when the user changes the input
+                st.session_state.search_term = search_term
+                st.session_state.include_abstracts = include_abstracts
+                st.session_state.qp = search_term  # Assuming 'qp' stands for query parameter related to the search term
+                update_search_params()
             
                         # if container_refresh_button.button('Refresh'):
                         #     st.query_params.clear()
