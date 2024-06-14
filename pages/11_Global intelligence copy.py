@@ -403,7 +403,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 except ValueError:
                     pass
 
-            number_of_pub = df_countries[df_countries['Continent'] == selected_continent]
+            number_of_pub = df_continent[df_continent['Continent'] == selected_continent]
 
             publications_count = len(number_of_pub)
 
