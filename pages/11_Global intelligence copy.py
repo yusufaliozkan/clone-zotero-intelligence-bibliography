@@ -147,9 +147,24 @@ with st.spinner('Retrieving data & updating dashboard...'):
             query_params = st.query_params
             selected_country = query_params.get('country')  # Use .get() to handle None gracefully
 
-            # Create selectbox to choose a country
+            # Calculate selected_country_index to set the initial index of the selectbox
             selected_country_index = unique_countries.index(selected_country) if selected_country in unique_countries else 0
+
+            # Create selectbox to choose a country
             selected_country = st.selectbox('Select a Country', unique_countries, index=selected_country_index, on_change=update_params)
+
+            # Convert selected_country to country_key if necessary (if mapping is needed)
+            country_key = selected_country  # You can add mapping logic here if needed
+
+            # Query_params handling similar to collection_id
+            ix = 0
+            if 'collection_id' in query_params:
+                try:
+                    # Get the collection name using the key from query_params
+                    collection_name_from_key = reverse_collection_mapping[query_params['collection_id']]
+                    ix = unique_collections.index(collection_name_from_key)
+                except (ValueError, KeyError):
+                    pass
 
             number_of_pub = df_countries[df_countries['Country'] == selected_country]
             publications_count = len(number_of_pub)
