@@ -404,21 +404,21 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 #     ''')
 
                 def update_search_params():
-                    st.query_params.from_dict({
-                        "search_in": st.session_state.search_in,
-                        "query": st.session_state.search_term
-                    })
+                    st.experimental_set_query_params(
+                        search_in=st.session_state.search_in,
+                        query=st.session_state.search_term
+                    )
 
                 # Extracting initial query parameters
-                query_params = st.query_params
+                query_params = st.experimental_get_query_params()
                 search_term = ""
                 search_in = "Title"
 
                 # Retrieve the initial search term and search_in from query parameters if available
                 if 'query' in query_params:
-                    search_term = query_params['query']
+                    search_term = query_params['query'][0]  # query_params returns lists
                 if 'search_in' in query_params:
-                    search_in = query_params['search_in']
+                    search_in = query_params['search_in'][0]  # query_params returns lists
 
                 # Initialize session state variables
                 if 'search_term' not in st.session_state:
@@ -426,17 +426,29 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 if 'search_in' not in st.session_state:
                     st.session_state.search_in = search_in
 
+                # Ensure that search_in has a valid value
+                if st.session_state.search_in not in ['Title', 'Title and abstract']:
+                    st.session_state.search_in = 'Title'
+
                 # Layout for input elements
                 cols, cola = st.columns([2, 6])
 
                 # Selectbox for search options
                 with cols:
-                    st.session_state.search_in = st.selectbox('🔍 options', ['Title', 'Title and abstract'], index=['Title', 'Title and abstract'].index(st.session_state.search_in))
+                    st.session_state.search_in = st.selectbox(
+                        '🔍 options', 
+                        ['Title', 'Title and abstract'], 
+                        index=['Title', 'Title and abstract'].index(st.session_state.search_in)
+                    )
 
                 # Text input for search keywords
                 with cola:
-                    st.session_state.search_term = st.text_input('Search keywords in titles or abstracts', st.session_state.search_term, placeholder='Type your keyword(s)', on_change=update_search_params)
-
+                    st.session_state.search_term = st.text_input(
+                        'Search keywords in titles or abstracts', 
+                        st.session_state.search_term, 
+                        placeholder='Type your keyword(s)', 
+                        on_change=update_search_params
+                    )
                 # Function to extract quoted phrases
                 def extract_quoted_phrases(text):
                     quoted_phrases = re.findall(r'"(.*?)"', text)
