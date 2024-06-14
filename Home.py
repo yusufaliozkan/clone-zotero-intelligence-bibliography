@@ -403,11 +403,22 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 #     Search with parantheses is **not** available.                   
                 #     ''')
 
-                query_params = st.query_params.to_dict()
+                def update_search_params():
+                    st.query_params.from_dict({
+                        "query": st.session_state.search_term,
+                        "include_abstracts": st.session_state.include_abstracts
+                    })
 
-                # Retrieve the initial search term from query parameters if available
-                search_term = query_params.get("query", "")
-                include_abstracts = query_params.get("include_abstracts", "In title")
+                # Extracting initial query parameters
+                query_params = st.query_params
+                search_term = ""
+                include_abstracts = "In title"
+
+                # Retrieve the initial search term and include_abstracts from query parameters if available
+                if 'query' in query_params:
+                    search_term = query_params['query']
+                if 'include_abstracts' in query_params:
+                    include_abstracts = query_params['include_abstracts']
 
                 # Layout for input elements
                 cols, cola = st.columns([2, 6])
@@ -418,7 +429,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 # Text input for search keywords
                 with cola:
-                    search_term = st.text_input('Search keywords in titles or abstracts', search_term, placeholder='Type your keyword(s)')
+                    search_term = st.text_input('Search keywords in titles or abstracts', search_term, placeholder='Type your keyword(s)', key="search_term", on_change=update_search_params)
 
                 # Function to extract quoted phrases
                 def extract_quoted_phrases(text):
@@ -426,13 +437,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     text_without_quotes = re.sub(r'"(.*?)"', '', text)
                     words = text_without_quotes.split()
                     return quoted_phrases + words
-
-                # Update the query parameters when search term or search options change
-                def update_search_params():
-                    st.query_params.from_dict({
-                        "query": st.session_state.search_term,
-                        "include_abstracts": st.session_state.include_abstracts
-                    })
 
                 # Stripping and processing the search term
                 search_term = search_term.strip()
@@ -465,10 +469,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
                         collections = filtered_df['Collection_Name'].dropna().unique()
 
-                        # Update query params when the user changes the input
-                        st.session_state.search_term = search_term
-                        st.session_state.include_abstracts = include_abstracts
-                        update_search_params()
+                # Update query params when the user changes the input
+                st.session_state.search_term = search_term
+                st.session_state.include_abstracts = include_abstracts
+                update_search_params()
             
                         # if container_refresh_button.button('Refresh'):
                         #     st.query_params.clear()
