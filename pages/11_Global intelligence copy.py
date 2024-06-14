@@ -317,9 +317,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     articles_list = []  # Store articles in a list
                     st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
 
-                    citation_count = df_collections['Citation'].sum()
-                    citation_count
-
                     true_count = df_countries[df_countries['Publication type']=='Journal article']['OA status'].sum()
                     total_count = len(df_countries[df_countries['Publication type']=='Journal article'])
                     if total_count == 0:
@@ -339,6 +336,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     citation_count = df_countries['Citation'].sum()
                     citation_count
+                    item_type_no = df_collections['Publication type'].nunique()
+                    item_type_no
                     st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
                     container_metric_2.metric('Number of publications', value=num_items_collections)
