@@ -71,8 +71,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
         collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0] 
 
         # st.markdown('#### Collection theme: ' + collection_name)
-        with st.popover('More metrics'):
-            st.info('This collection lists academic sources that are **non-UK/US** on intelligence.')
+        with st.popover('More details'):
+            st.info('This collection lists academic sources that are **non-UK/US** on intelligence. Pick up a country from the drop down menu too publications.')
 
             st.write(f"See the collection in [Zotero]({collection_link}) from which you can easily generate citations.")
             
@@ -91,7 +91,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 oa_ratio = true_count / total_count * 100
 
             citation_count = df_collections['Citation'].sum()
-            st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
+            st.metric.metric(label="Number of citations", value=int(citation_count), help='Journal articles only')
+            st.metric.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
             container_metric = container_metric.metric(label='Number of items in this collection', value=num_items_collections, help=f'sources found for **{unique_items_count-1}** countries.')
 
     df_countries['Date published'] = ( 
