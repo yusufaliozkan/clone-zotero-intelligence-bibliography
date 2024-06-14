@@ -410,7 +410,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     )
 
                 # Extracting initial query parameters
-                query_params = st.query_params()
+                query_params = st.query_params
                 search_term = ""
                 search_in = "Title"
 
