@@ -420,16 +420,22 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 if 'include_abstracts' in query_params:
                     include_abstracts = query_params['include_abstracts']
 
+                # Initialize session state variables
+                if 'search_term' not in st.session_state:
+                    st.session_state.search_term = search_term
+                if 'include_abstracts' not in st.session_state:
+                    st.session_state.include_abstracts = include_abstracts
+
                 # Layout for input elements
                 cols, cola = st.columns([2, 6])
 
                 # Selectbox for search options
                 with cols:
-                    include_abstracts = st.selectbox('🔍 options', ['In title', 'In title & abstract'], index=['In title', 'In title & abstract'].index(include_abstracts))
+                    st.session_state.include_abstracts = st.selectbox('🔍 options', ['In title', 'In title & abstract'], index=['In title', 'In title & abstract'].index(st.session_state.include_abstracts))
 
                 # Text input for search keywords
                 with cola:
-                    search_term = st.text_input('Search keywords in titles or abstracts', search_term, placeholder='Type your keyword(s)', key="search_term", on_change=update_search_params)
+                    st.session_state.search_term = st.text_input('Search keywords in titles or abstracts', st.session_state.search_term, placeholder='Type your keyword(s)', on_change=update_search_params)
 
                 # Function to extract quoted phrases
                 def extract_quoted_phrases(text):
@@ -439,14 +445,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     return quoted_phrases + words
 
                 # Stripping and processing the search term
-                search_term = search_term.strip()
+                search_term = st.session_state.search_term.strip()
                 if search_term:
                     with st.status("Searching publications...", expanded=True) as status:
                         search_tokens = parse_search_terms(search_term)
                         print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
                         df_csv = df_duplicated.copy()
 
-                        filtered_df = apply_boolean_search(df_csv, search_tokens, include_abstracts)
+                        filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.include_abstracts)
                         print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
                         filtered_df = filtered_df.drop_duplicates()
                         print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
@@ -470,11 +476,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         collections = filtered_df['Collection_Name'].dropna().unique()
 
                         # Update query params when the user changes the input
-                        st.session_state.search_term = search_term
-                        st.session_state.include_abstracts = include_abstracts
                         update_search_params()
-            
-                        # if container_refresh_button.button('Refresh'):
+                                # if container_refresh_button.button('Refresh'):
                         #     st.query_params.clear()
                         #     st.rerun()
 
