@@ -156,6 +156,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     # Filter the DataFrame based on the selected country
     df_countries = df_countries[df_countries['Country'] == selected_country]
 
+    st.subheader(f"{selected_country}")
+
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
         col1, col2 = st.columns([5,1.6])
@@ -166,7 +168,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 st.write('Please select a country')
             
             elif selected_country == 'All Countries':
-                st.subheader(f"{selected_country}")
                 with st.expander('Click to expand', expanded=True):
                     with st.popover('Filters and more'):
                         types = st.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original')
