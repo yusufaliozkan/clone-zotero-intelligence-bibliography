@@ -157,9 +157,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_countries = df_countries[df_countries['Country'] == selected_country]
 
     st.subheader(f"{selected_country}")
-    container_metric_2 = st.container()
-    with st.popover('More metrics)'):
-        container_citation_2 = st.container()
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        container_metric_2 = st.container()
+    with col2:
+        with st.popover('More metrics)'):
+            container_citation_2 = st.container()
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
