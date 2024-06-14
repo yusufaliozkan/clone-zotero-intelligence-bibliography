@@ -268,7 +268,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             
             else:
                 with st.expander('Click to expand', expanded=True):
-                    st.subheader(f"{selected_country} ({publications_count} sources)")
+                    st.subheader(f"{selected_country}")
                     types = st.multiselect('Publication type', df_countries['Publication type'].unique(),df_countries['Publication type'].unique(), key='original_4')
                     df_countries = df_countries[df_countries['Publication type'].isin(types)]
                     df_countries = df_countries.reset_index(drop=True)
