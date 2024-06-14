@@ -328,11 +328,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     item_type_no = df_collections['Publication type'].nunique()
 
-                    author_no = df_collections['FirstName2'].nunique()
-                    if author_no == 0:
+                    author_no_2 = df_collections['FirstName2'].nunique()
+                    if author_no_2 == 0:
                         author_pub_ratio=0.0
                     else:
-                        author_pub_ratio = round(num_items_collections/author_no, 2)
+                        author_pub_ratio = round(num_items_collections/author_no_2, 2)
 
                     citation_count = df_countries['Citation'].sum()
                     st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
@@ -341,7 +341,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     container_citation_2.metric(label="Number of citations", value=int(citation_count))
                     container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
                     container_type.metric(label='Number of publication types', value=int(item_type_no))
-                    container_author_no.metric(label='Number of authors', value=int(author_no))
+                    container_author_no.metric(label='Number of authors', value=int(author_no_2))
                     container_country.metric(label='Number of country', value=unique_items_count-1)
                     container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
                 
