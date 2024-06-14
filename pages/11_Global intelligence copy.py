@@ -143,6 +143,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     if selected_country=='':
         query_params.clear()
+        st.rerun()
     selected_country
     number_of_pub = df_countries[df_countries['Country'] == selected_country]
     publications_count = len(number_of_pub)
