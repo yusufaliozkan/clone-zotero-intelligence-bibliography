@@ -318,7 +318,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
 
                     citation_count = df_collections['Citation'].sum()
-                    
+
                     true_count = df_countries[df_countries['Publication type']=='Journal article']['OA status'].sum()
                     total_count = len(df_countries[df_countries['Publication type']=='Journal article'])
                     if total_count == 0:
@@ -334,6 +334,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     else:
                         author_pub_ratio = round(num_items_collections/author_no, 2)
 
+                    citation_count = df_countries['Citation'].sum()
+                    st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
+
                     container_metric_2.metric('Number of publications', value=num_items_collections)
                     container_citation_2.metric(label="Number of citations", value=int(citation_count))
                     container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
@@ -341,9 +344,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     container_author_no.metric(label='Number of authors', value=int(author_no))
                     container_country.metric(label='Number of country', value=unique_items_count-1)
                     container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
-
-                    citation_count = df_countries['Citation'].sum()
-                    st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
                 
                     for index, row in df_countries.iterrows():
                         formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
