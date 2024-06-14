@@ -167,6 +167,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 container_oa = st.container()
                 container_type = st.container()
                 container_author_no = st.container()
+                container_country = st.container()
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
@@ -222,7 +223,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
                     container_type.metric(label='Number of publication types', value=int(item_type_no))
                     container_author_no.metric(label='Number of authors', value=int(author_no))
-                    container_country.(label='Number of country', value=unique_items_count-1)
+                    container_country.metric(label='Number of country', value=unique_items_count-1)
 
             # st.metric(label='Number of country', value=unique_items_count-1)
             # st.metric(label="Number of citations", value=int(citation_count), help='Journal articles only')
