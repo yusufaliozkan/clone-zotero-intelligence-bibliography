@@ -488,7 +488,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         collections = filtered_df['Collection_Name'].dropna().unique()
 
                         # Update query params when the user changes the input
-                        update_search_params()
+                        update_search_params
 
 
                         with st.popover("Filters and more"):
