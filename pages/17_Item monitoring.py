@@ -38,27 +38,6 @@ with st.sidebar:
 
     sidebar_content()
 
-def update_params():
-    st.query_params.from_dict({'option': st.session_state.qp})
-
-options = ["cat", "dog", "mouse", "bat", "duck"]
-options
-query_params = st.query_params
-
-# Set radio button value based on query param, or provide a default
-ix = 0
-if 'option' in query_params:
-    try:
-        ix = options.index(query_params['option'])
-    except ValueError:
-        pass
-
-selected_option = st.radio(
-    "Param", options, index=ix, key="qp", on_change=update_params
-)
-query_params = st.query_params
-st.write(query_params)
-
 col1, col2 = st.columns([5,2])
 
 with col1:
