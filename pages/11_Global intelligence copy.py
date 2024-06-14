@@ -82,8 +82,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
                     df_continent = df_continent[(df_continent['Citation'].notna()) & (df_continent['Citation'] != 0)]
             
-            container_info = container_info.info('This collection lists academic sources that are **non-UK/US** on intelligence.')
-
             df_countries_chart = df_countries.copy()
             df_continent = df_continent.copy()
             df_continent_chart = df_continent.copy() 
@@ -102,7 +100,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
             container_metric = container_metric.metric(label='Number of items in this collection', value=num_items_collections, help=f'sources found for **{unique_items_count-1}** countries.')
     with col3:
-        container_info = st.container()
+        st.info('This collection lists academic sources that are **non-UK/US** on intelligence.')
 
     df_countries['Date published'] = ( 
         df_countries['Date published']
