@@ -164,6 +164,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         with col2:
             with st.popover('More metrics'):
                 container_citation_2 = st.container()
+                container_oa = st.container()
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
@@ -210,6 +211,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     container_metric_2.metric('Number of publications', value=num_items_collections)
                     container_citation_2.metric(label="Number of citations", value=int(citation_count))
+                    container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
 
                     # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
 
