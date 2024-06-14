@@ -184,6 +184,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         a = f'{collection_name}_{today}'
                         st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
 
+                        only_citation = st.checkbox('Show cited items only')
+                        if only_citation:
+                            df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
+                            df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
+
                     st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
                     true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
                     total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
@@ -194,10 +199,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     citation_count = df_collections['Citation'].sum()
                     st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
-                    only_citation = st.checkbox('Show cited items only')
-                    if only_citation:
-                        df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
-                        df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
+
                     # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
 
                     articles_list = []  # Store articles in a list
