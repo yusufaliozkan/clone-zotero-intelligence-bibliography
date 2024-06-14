@@ -88,11 +88,18 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 oa_ratio = 0.0
             else:
                 oa_ratio = true_count / total_count * 100
+        
+            author_no = df_collections['FirstName2'].nunique()
+            if author_no == 0:
+                author_pub_ratio=0.0
+            else:
+                author_pub_ratio = round(num_items_collections/author_no, 2)
 
             citation_count = df_collections['Citation'].sum()
             st.metric(label='Number of country', value=unique_items_count-1)
             st.metric(label="Number of citations", value=int(citation_count), help='Journal articles only')
             st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
+            st.metric(label='Number of authors', value=int(author_no))
 
             container_metric = container_metric.metric(label='Number of items in this collection', value=num_items_collections, help=f'sources found for **{unique_items_count-1}** countries.')
 
