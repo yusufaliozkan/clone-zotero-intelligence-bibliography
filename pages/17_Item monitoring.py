@@ -37,24 +37,25 @@ image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
 with st.sidebar:
 
     sidebar_content()
-
+    
 def update_params():
     st.query_params.from_dict({'option': st.session_state.qp})
 
-options = st.radio(
-    "Param", ["cat", "dog", "mouse", "bat", "duck"], key="qp", on_change=update_params
+options = ["cat", "dog", "mouse", "bat", "duck"]
+
+query_params = st.query_params
+
+# Set radio button value based on query param, or provide a default
+ix = 0
+if 'option' in query_params:
+    try:
+        ix = options.index(query_params['option'])
+    except ValueError:
+        pass
+
+selected_option = st.radio(
+    "Param", options, index=ix, key="qp", on_change=update_params
 )
-
-query_params = st.query_params
-
-# set the initial query param on first run
-# based on the default option in selectbox
-if not query_params:
-    st.query_params.from_dict({'option': st.session_state.qp})
-
-# display for debugging purposes
-query_params = st.query_params
-st.write(query_params)
 
 col1, col2 = st.columns([5,2])
 
