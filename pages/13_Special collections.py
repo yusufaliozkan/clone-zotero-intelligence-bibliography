@@ -134,7 +134,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.write(f"View the collection in [Zotero]({collection_link})")
             col112, col113, col114 = st.columns(3)
             with col112:
-                display2 = container_abstract.checkbox('Display abstracts')
+                display2 = st.checkbox('Display abstracts')
             with col113:
                 only_citation = st.checkbox('Show cited items only')
                 if only_citation:
