@@ -192,26 +192,25 @@ with st.spinner('Retrieving data & updating dashboard...'):
             
             elif selected_country == 'All Countries':
                 with st.expander('Click to expand', expanded=True):
-                    with st.popover('Filters and more'):
-                        types = container_pub_types.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original')
-                        df_collections = df_collections[df_collections['Publication type'].isin(types)]
-                        df_collections = df_collections.reset_index(drop=True)
-                        df_collections['FirstName2'] = df_collections['FirstName2'].map(name_replacements).fillna(df_collections['FirstName2'])
-                        df_download = df_collections[['Publication type','Title','FirstName2','Abstract','Date published','Publisher','Journal','Link to publication','Zotero link']]
-                        df_download = df_download.reset_index(drop=True)
-                        def convert_df(df_download):
-                            return df_download.to_csv(index=False).encode('utf-8-sig')
-                        csv = convert_df(df_download)
-                        today = datetime.date.today().isoformat()
-                        num_items_collections = len(df_collections)
-                        breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
-                        a = f'{collection_name}_{today}'
-                        container_download.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
+                    types = container_pub_types.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original')
+                    df_collections = df_collections[df_collections['Publication type'].isin(types)]
+                    df_collections = df_collections.reset_index(drop=True)
+                    df_collections['FirstName2'] = df_collections['FirstName2'].map(name_replacements).fillna(df_collections['FirstName2'])
+                    df_download = df_collections[['Publication type','Title','FirstName2','Abstract','Date published','Publisher','Journal','Link to publication','Zotero link']]
+                    df_download = df_download.reset_index(drop=True)
+                    def convert_df(df_download):
+                        return df_download.to_csv(index=False).encode('utf-8-sig')
+                    csv = convert_df(df_download)
+                    today = datetime.date.today().isoformat()
+                    num_items_collections = len(df_collections)
+                    breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
+                    a = f'{collection_name}_{today}'
+                    container_download.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
 
-                        only_citation = container_cited_items.checkbox('Show cited items only')
-                        if only_citation:
-                            df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
-                            df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
+                    only_citation = container_cited_items.checkbox('Show cited items only')
+                    if only_citation:
+                        df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
+                        df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
 
                     st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
                     true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
