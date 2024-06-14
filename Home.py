@@ -323,7 +323,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         query += ") "
                     else:
                         escaped_token = re.escape(token)
-                        if search_in == 'In title & abstract':
+                        if search_in == 'Title and abstract':
                             condition = f'(Title.str.contains(r"\\b{escaped_token}\\b", case=False, na=False) | Abstract.str.contains(r"\\b{escaped_token}\\b", case=False, na=False))'
                         else:
                             condition = f'Title.str.contains(r"\\b{escaped_token}\\b", case=False, na=False)'
@@ -412,7 +412,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 # Extracting initial query parameters
                 query_params = st.query_params
                 search_term = ""
-                search_in = "In title"
+                search_in = "Title"
 
                 # Retrieve the initial search term and search_in from query parameters if available
                 if 'query' in query_params:
@@ -431,7 +431,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 # Selectbox for search options
                 with cols:
-                    st.session_state.search_in = st.selectbox('🔍 options', ['In title', 'In title & abstract'], index=['In title', 'In title & abstract'].index(st.session_state.search_in))
+                    st.session_state.search_in = st.selectbox('🔍 options', ['Title', 'Title and abstract'], index=['Title', 'Title and abstract'].index(st.session_state.search_in))
 
                 # Text input for search keywords
                 with cola:
@@ -668,7 +668,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                         if display_abstracts:
                                             abstract = abstracts_list[i - 1]  # Get the corresponding abstract for this article
                                             if pd.notnull(abstract):
-                                                if search_in == 'In title & abstract':
+                                                if search_in == 'Title and abstract':
                                                     highlighted_abstract = highlight_terms(abstract, search_tokens)
                                                 else:
                                                     highlighted_abstract = abstract 
@@ -2558,17 +2558,17 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     gpe_counts = pd.read_csv('gpe.csv')
-                    fig = px.bar(gpe_counts.head(15), x='GPE', y='count', height=600, title="Top 15 locations mentioned in title & abstract")
+                    fig = px.bar(gpe_counts.head(15), x='GPE', y='count', height=600, title="Top 15 locations mentioned Title and abstract")
                     fig.update_xaxes(tickangle=-65)
                     col1.plotly_chart(fig, use_container_width=True)
                 with col2:
                     person_counts = pd.read_csv('person.csv')
-                    fig = px.bar(person_counts.head(15), x='PERSON', y='count', height=600, title="Top 15 person mentioned in title & abstract")
+                    fig = px.bar(person_counts.head(15), x='PERSON', y='count', height=600, title="Top 15 person mentioned Title and abstract")
                     fig.update_xaxes(tickangle=-65)
                     col2.plotly_chart(fig, use_container_width=True)
                 with col3:
                     org_counts = pd.read_csv('org.csv')
-                    fig = px.bar(org_counts.head(15), x='ORG', y='count', height=600, title="Top 15 organisations mentioned in title & abstract")
+                    fig = px.bar(org_counts.head(15), x='ORG', y='count', height=600, title="Top 15 organisations mentioned Title and abstract")
                     fig.update_xaxes(tickangle=-65)
                     col3.plotly_chart(fig, use_container_width=True)
 
