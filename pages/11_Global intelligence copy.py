@@ -169,6 +169,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 container_author_no = st.container()
                 container_country = st.container()
                 container_author_pub_ratio = st.container()
+        with col3:
+            with st.popover('Filters and more'):
+                container_pub_types = st.container()
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
@@ -182,7 +185,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             elif selected_country == 'All Countries':
                 with st.expander('Click to expand', expanded=True):
                     with st.popover('Filters and more'):
-                        types = st.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original')
+                        types = container_pub_types.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original')
                         df_collections = df_collections[df_collections['Publication type'].isin(types)]
                         df_collections = df_collections.reset_index(drop=True)
                         df_collections['FirstName2'] = df_collections['FirstName2'].map(name_replacements).fillna(df_collections['FirstName2'])
