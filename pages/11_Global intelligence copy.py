@@ -158,7 +158,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     st.subheader(f"{selected_country}")
     if selected_country!='':
-        col1, col2, col3 = st.columns([1,2,5])
+        col1, col2, col3 = st.columns([1,4,8])
         with col1:
             container_metric_2 = st.container()
         with col2:
