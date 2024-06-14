@@ -301,7 +301,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 
                 return boolean_tokens
 
-            def apply_boolean_search(df, search_tokens, include_abstracts):
+            def apply_boolean_search(df, search_tokens, search_in):
                 if not search_tokens:
                     return df
 
@@ -323,7 +323,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         query += ") "
                     else:
                         escaped_token = re.escape(token)
-                        if include_abstracts == 'In title & abstract':
+                        if search_in == 'In title & abstract':
                             condition = f'(Title.str.contains(r"\\b{escaped_token}\\b", case=False, na=False) | Abstract.str.contains(r"\\b{escaped_token}\\b", case=False, na=False))'
                         else:
                             condition = f'Title.str.contains(r"\\b{escaped_token}\\b", case=False, na=False)'
@@ -405,33 +405,33 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 def update_search_params():
                     st.query_params.from_dict({
-                        "include_abstracts": st.session_state.include_abstracts,
+                        "search_in": st.session_state.search_in,
                         "query": st.session_state.search_term
                     })
 
                 # Extracting initial query parameters
                 query_params = st.query_params
                 search_term = ""
-                include_abstracts = "In title"
+                search_in = "In title"
 
-                # Retrieve the initial search term and include_abstracts from query parameters if available
+                # Retrieve the initial search term and search_in from query parameters if available
                 if 'query' in query_params:
                     search_term = query_params['query']
-                if 'include_abstracts' in query_params:
-                    include_abstracts = query_params['include_abstracts']
+                if 'search_in' in query_params:
+                    search_in = query_params['search_in']
 
                 # Initialize session state variables
                 if 'search_term' not in st.session_state:
                     st.session_state.search_term = search_term
-                if 'include_abstracts' not in st.session_state:
-                    st.session_state.include_abstracts = include_abstracts
+                if 'search_in' not in st.session_state:
+                    st.session_state.search_in = search_in
 
                 # Layout for input elements
                 cols, cola = st.columns([2, 6])
 
                 # Selectbox for search options
                 with cols:
-                    st.session_state.include_abstracts = st.selectbox('🔍 options', ['In title', 'In title & abstract'], index=['In title', 'In title & abstract'].index(st.session_state.include_abstracts))
+                    st.session_state.search_in = st.selectbox('🔍 options', ['In title', 'In title & abstract'], index=['In title', 'In title & abstract'].index(st.session_state.search_in))
 
                 # Text input for search keywords
                 with cola:
@@ -452,7 +452,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
                         df_csv = df_duplicated.copy()
 
-                        filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.include_abstracts)
+                        filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
                         print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
                         filtered_df = filtered_df.drop_duplicates()
                         print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
@@ -668,7 +668,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                         if display_abstracts:
                                             abstract = abstracts_list[i - 1]  # Get the corresponding abstract for this article
                                             if pd.notnull(abstract):
-                                                if include_abstracts == 'In title & abstract':
+                                                if search_in == 'In title & abstract':
                                                     highlighted_abstract = highlight_terms(abstract, search_tokens)
                                                 else:
                                                     highlighted_abstract = abstract 
