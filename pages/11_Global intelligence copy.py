@@ -172,6 +172,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         with col3:
             with st.popover('Filters and more'):
                 container_pub_types = st.container()
+                container_download = st.container()
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
@@ -198,7 +199,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         num_items_collections = len(df_collections)
                         breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
                         a = f'{collection_name}_{today}'
-                        st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
+                        container_download.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
 
                         only_citation = st.checkbox('Show cited items only')
                         if only_citation:
