@@ -317,12 +317,21 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     articles_list = []  # Store articles in a list
                     st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
 
+
                     true_count = df_countries[df_countries['Publication type']=='Journal article']['OA status'].sum()
                     total_count = len(df_countries[df_countries['Publication type']=='Journal article'])
                     if total_count == 0:
                         oa_ratio = 0.0
                     else:
                         oa_ratio = true_count / total_count * 100
+
+                    item_type_no = df_collections['Publication type'].nunique()
+
+                    author_no = df_collections['FirstName2'].nunique()
+                    if author_no == 0:
+                        author_pub_ratio=0.0
+                    else:
+                        author_pub_ratio = round(num_items_collections/author_no, 2)
 
                     container_metric_2.metric('Number of publications', value=num_items_collections)
                     container_citation_2.metric(label="Number of citations", value=int(citation_count))
