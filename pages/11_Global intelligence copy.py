@@ -142,7 +142,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # Function to update query_params based on selected country
             def update_params():
                 if selected_country:
-                    st.query_params.from_dict({'country': selected_country})
+                    st.query_params.from_dict({'country': selected_country[st.session_state.qp]})
 
             # Retrieve query_params and initialize selected_country
             query_params = st.query_params
@@ -152,7 +152,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             selected_country_index = unique_countries.index(selected_country) if selected_country in unique_countries else 0
 
             # Create selectbox to choose a country
-            selected_country = st.selectbox('Select a Country', unique_countries, index=selected_country_index, on_change=update_params)
+            selected_country = st.selectbox('Select a Country', unique_countries, index=selected_country_index, on_change=update_params, key='qp')
 
             # Convert selected_country to country_key if necessary (if mapping is needed)
             country_key = selected_country  # You can add mapping logic here if needed
