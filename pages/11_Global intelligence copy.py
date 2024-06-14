@@ -72,7 +72,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
         # st.markdown('#### Collection theme: ' + collection_name)
         with st.popover('More details'):
-            st.info('This collection lists academic sources that are **non-UK/US** on intelligence. Pick up a country from the drop down menu too publications.')
+            st.info('''
+            This collection lists academic sources that are **non-UK/US** on intelligence. 
+            
+            Pick up a country from the drop down menu too publications.
+            ''')
 
             st.write(f"See the collection in [Zotero]({collection_link}) from which you can easily generate citations.")
             
