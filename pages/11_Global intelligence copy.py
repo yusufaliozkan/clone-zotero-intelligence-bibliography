@@ -304,6 +304,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     citation_count = df_countries['Citation'].sum()
                     st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
+                    container_metric_2.metric('Number of publications', value=num_items_collections)
                 
                     for index, row in df_countries.iterrows():
                         formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
