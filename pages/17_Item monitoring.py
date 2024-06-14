@@ -41,7 +41,7 @@ with st.sidebar:
 def update_params():
     st.query_params.from_dict({'option': st.session_state.qp})
 
-options = st.selectbox(
+options = st.radio(
     "Param", ["cat", "dog", "mouse", "bat", "duck"], key="qp", on_change=update_params
 )
 
