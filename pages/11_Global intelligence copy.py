@@ -318,6 +318,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
 
                     citation_count = df_collections['Citation'].sum()
+                    citation_count
 
                     true_count = df_countries[df_countries['Publication type']=='Journal article']['OA status'].sum()
                     total_count = len(df_countries[df_countries['Publication type']=='Journal article'])
