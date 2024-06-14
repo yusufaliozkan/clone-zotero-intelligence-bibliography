@@ -130,7 +130,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     selected_country_index = unique_countries.index(selected_country) if selected_country in unique_countries else 0
 
     # Create selectbox to choose a country
-    selected_country = st.selectbox('Select a Country', unique_countries, index=selected_country_index, on_change=update_params, key='qp')
+    selected_country = st.selectbox('**Select a Country**', unique_countries, index=selected_country_index, on_change=update_params, key='qp')
 
     # Query_params handling based on selected country
     ix = 0
