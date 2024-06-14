@@ -90,7 +90,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         except ValueError:
             pass
     radio = container.radio('Select a collection', unique_collections, key="qp", on_change=update_params)
-    query_params = st.query_params
+    query_params = st.query_params.to_dict()
     query_params
     collection_name = radio
 
