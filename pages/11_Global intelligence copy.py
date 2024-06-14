@@ -173,6 +173,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             with st.popover('Filters and more'):
                 container_pub_types = st.container()
                 container_download = st.container()
+                container_cited_items = st.container()
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
@@ -201,7 +202,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         a = f'{collection_name}_{today}'
                         container_download.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
 
-                        only_citation = st.checkbox('Show cited items only')
+                        only_citation = container_cited_items.checkbox('Show cited items only')
                         if only_citation:
                             df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
                             df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
