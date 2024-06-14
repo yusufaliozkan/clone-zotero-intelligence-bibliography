@@ -171,8 +171,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 container_author_pub_ratio = st.container()
         with col3:
             with st.popover('Filters and more'):
-                container_cited_items = st.container()
-
+                col31, col32, col33 = st.columns(3)
+                with col31:
+                    container_abstract = st.container()
+                with col32:
+                    container_cited_items = st.container()
+                with col33:
+                    st.write('See results in table')
                 container_pub_types = st.container()
                 container_download = st.container()
 
