@@ -78,25 +78,40 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     container = st.container()
 
-    query_params = st.query_params.to_dict()
-    selected_collection_key  = query_params.get("collection_id", None)
-
     unique_collections = list(df_collections['Collection_Name'].unique())
 
-    selected_collection_name = reverse_collection_mapping.get(selected_collection_key, None)
-
-    if selected_collection_name in unique_collections:
-        # Set the default value to the selected collection from the query params
-        radio = container.radio('Select a collection', unique_collections, index=unique_collections.index(selected_collection_name))
-    else:
-        radio = container.radio('Select a collection', unique_collections)
-
-    # radio = container.radio('Select a collection', unique_collections)
-    # collection_name = st.selectbox('Select a collection:', clist)
+    def update_params():
+        st.query_params.from_dict({'collection_id':st.session_state.qp})
+    query_params = st.query_params
+    ix = 0
+    if 'collection_id' in query_params:
+        try:
+            ix = unique_collections.index(query_params['collection_id'])
+        except ValueError:
+            pass
+    radio = container.radio('Select a collection', unique_collections, key="qp", on_change=update_params)
+    query_params = st.query_params
     collection_name = radio
-    collection_key = collection_mapping[collection_name]
-    # if collection_name:
-    st.query_params.from_dict({"collection_id": collection_key})
+
+    # query_params = st.query_params.to_dict()
+    # selected_collection_key  = query_params.get("collection_id", None)
+
+    # unique_collections = list(df_collections['Collection_Name'].unique())
+
+    # selected_collection_name = reverse_collection_mapping.get(selected_collection_key, None)
+
+    # if selected_collection_name in unique_collections:
+    #     # Set the default value to the selected collection from the query params
+    #     radio = container.radio('Select a collection', unique_collections, index=unique_collections.index(selected_collection_name))
+    # else:
+    #     radio = container.radio('Select a collection', unique_collections)
+
+    # # radio = container.radio('Select a collection', unique_collections)
+    # # collection_name = st.selectbox('Select a collection:', clist)
+    # collection_name = radio
+    # collection_key = collection_mapping[collection_name]
+    # # if collection_name:
+    # st.query_params.from_dict({"collection_id": collection_key})
 
     # if collection_name:
 #    st.query_params.from_dict({"collection_id": collection_key})
