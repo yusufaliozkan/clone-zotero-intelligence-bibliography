@@ -33,7 +33,7 @@ st.title("Global intelligence")
 with st.spinner('Retrieving data & updating dashboard...'):
     sidebar_content()
 
-    col1, col2, col3 = st.columns([1,3,5])
+    col1, col2 = st.columns([1,3])
     with col1:
         container_metric = st.container()
     with col2: 
@@ -71,7 +71,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
         collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0] 
 
         # st.markdown('#### Collection theme: ' + collection_name)
-        with st.popover('Filters and more'):
+        with st.popover('More metrics'):
+            st.toast('This collection lists academic sources that are **non-UK/US** on intelligence.')
+
             col112, col113 = st.columns(2)
             with col112:
                 st.write(f"See the collection in [Zotero]({collection_link}) from which you can easily generate citations.")
@@ -99,8 +101,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
             citation_count = df_collections['Citation'].sum()
             st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
             container_metric = container_metric.metric(label='Number of items in this collection', value=num_items_collections, help=f'sources found for **{unique_items_count-1}** countries.')
-    with col3:
-        st.toast('This collection lists academic sources that are **non-UK/US** on intelligence.')
 
     df_countries['Date published'] = ( 
         df_countries['Date published']
