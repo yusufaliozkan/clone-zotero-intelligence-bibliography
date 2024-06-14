@@ -392,7 +392,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             selected_continent_index = unique_continents.index(selected_continent) if selected_continent in unique_continents else 0
 
             # Create selectbox to choose a country
-            selected_continent = st.selectbox('Select a Country', unique_continents, index=selected_continent_index, on_change=update_params2, key='qt')
+            selected_continent = st.selectbox('Select a Continent', unique_continents, index=selected_continent_index, on_change=update_params2, key='qt')
 
             # Query_params handling based on selected country
             ix = 0
