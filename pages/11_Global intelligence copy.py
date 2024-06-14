@@ -167,7 +167,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             
             elif selected_country == 'All Countries':
                 with st.expander('Click to expand', expanded=True):
-                    with st.popover('Filters and more')
+                    with st.popover('Filters and more'):
                         types = st.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original')
                         df_collections = df_collections[df_collections['Publication type'].isin(types)]
                         df_collections = df_collections.reset_index(drop=True)
