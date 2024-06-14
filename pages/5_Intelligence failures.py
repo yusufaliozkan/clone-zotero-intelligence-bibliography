@@ -95,6 +95,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
     radio = container.radio('Select a collection', unique_collections, index=ix, key="qp", on_change=update_params)
     query_params = st.query_params.to_dict()
 
+    collection_name = radio
+    collection_key = collection_mapping[collection_name]
+
     df_collections = df_collections.loc[df_collections['Collection_Name']==collection_name]
     pd.set_option('display.max_colwidth', None)
 
