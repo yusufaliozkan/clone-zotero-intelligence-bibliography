@@ -385,8 +385,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     st.query_params.from_dict({'country': st.session_state.qt})
 
             # Retrieve query_params and initialize selected_country
-            query_params = st.query_params
-            selected_continent = query_params.get('continent', '')  # Use .get() to handle None gracefully
+            query_params2 = st.query_params
+            selected_continent = query_params2.get('continent', '')  # Use .get() to handle None gracefully
 
             # Calculate selected_country_index to set the initial index of the selectbox
             selected_continent_index = unique_continents.index(selected_continent) if selected_continent in unique_continents else 0
