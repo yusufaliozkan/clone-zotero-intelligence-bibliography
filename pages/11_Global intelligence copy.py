@@ -265,7 +265,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
                     display2 = container_abstract.checkbox('Display abstracts', key='type_count2')
-                    
+
                     if not table_view:
                         articles_list = []  # Store articles in a list
                         for index, row in df_collections.iterrows():
@@ -368,112 +368,128 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     num_items_collections = len(df_countries)
                     breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type_country.items()])                    
 
-                    articles_list = []  # Store articles in a list
-                    st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
-
-                    true_count = df_countries[df_countries['Publication type']=='Journal article']['OA status'].sum()
-                    total_count = len(df_countries[df_countries['Publication type']=='Journal article'])
-                    if total_count == 0:
-                        oa_ratio = 0.0
-                    else:
-                        oa_ratio = true_count / total_count * 100
-
-                    def split_and_expand(authors):
-                        # Ensure the input is a string
-                        if isinstance(authors, str):
-                            # Split by comma and strip whitespace
-                            split_authors = [author.strip() for author in authors.split(',')]
-                            return pd.Series(split_authors)
-                        else:
-                            # Return the original author if it's not a string
-                            return pd.Series([authors])
-                    if len(df_countries)==0:
-                        author_no=0
-                    else:
-                        expanded_authors = df_countries['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
-                        expanded_authors = expanded_authors.reset_index(name='Author')
-                        author_no = len(expanded_authors)
-                    if author_no == 0:
-                        author_pub_ratio=0.0
-                    else:
-                        author_pub_ratio = round(author_no/num_items_collections, 2)
-
-                    citation_count = df_countries['Citation'].sum()
-                    item_type_no = df_countries['Publication type'].nunique()
-                    st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
-
-                    container_metric_2.metric('Number of publications', value=num_items_collections)
-                    container_citation_2.metric(label="Number of citations", value=int(citation_count))
-                    container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
-                    container_type.metric(label='Number of publication types', value=int(item_type_no))
-                    container_author_no.metric(label='Number of authors', value=int(author_no))
-                    container_country.metric(label='Number of country', value=unique_items_count-1)
-                    container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
-                
-                    for index, row in df_countries.iterrows():
-                        formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
-                        articles_list.append(formatted_entry)        
-                    
-                    for index, row in df_countries.iterrows():
-                        publication_type = row['Publication type']
-                        title = row['Title']
-                        authors = row['FirstName2']
-                        date_published = row['Date published']
-                        link_to_publication = row['Link to publication']
-                        zotero_link = row['Zotero link']
-
-                        if publication_type == 'Journal article':
-                            published_by_or_in = 'Published in'
-                            published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
-                        elif publication_type == 'Book':
-                            published_by_or_in = 'Published by'
-                            published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
-                        else:
-                            published_by_or_in = ''
-                            published_source = ''
-
-                        formatted_entry = (
-                            '**' + str(publication_type) + '**' + ': ' +
-                            str(title) + ' ' +
-                            '(by ' + '*' + str(authors) + '*' + ') ' +
-                            '(Publication date: ' + str(date_published) + ') ' +
-                            ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
-                            '[[Publication link]](' + str(link_to_publication) + ') ' +
-                            '[[Zotero link]](' + str(zotero_link) + ')'
-                        )
                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
                     display2 = container_abstract.checkbox('Display abstracts', key='type_country_2')
-                    if sort_by == 'Publication date :arrow_down:' or df_countries['Citation'].sum() == 0:
-                        count = 1
+
+                    if not table_view:
+                        articles_list = []  # Store articles in a list
+                        st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
+
+                        true_count = df_countries[df_countries['Publication type']=='Journal article']['OA status'].sum()
+                        total_count = len(df_countries[df_countries['Publication type']=='Journal article'])
+                        if total_count == 0:
+                            oa_ratio = 0.0
+                        else:
+                            oa_ratio = true_count / total_count * 100
+
+                        def split_and_expand(authors):
+                            # Ensure the input is a string
+                            if isinstance(authors, str):
+                                # Split by comma and strip whitespace
+                                split_authors = [author.strip() for author in authors.split(',')]
+                                return pd.Series(split_authors)
+                            else:
+                                # Return the original author if it's not a string
+                                return pd.Series([authors])
+                        if len(df_countries)==0:
+                            author_no=0
+                        else:
+                            expanded_authors = df_countries['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                            expanded_authors = expanded_authors.reset_index(name='Author')
+                            author_no = len(expanded_authors)
+                        if author_no == 0:
+                            author_pub_ratio=0.0
+                        else:
+                            author_pub_ratio = round(author_no/num_items_collections, 2)
+
+                        citation_count = df_countries['Citation'].sum()
+                        item_type_no = df_countries['Publication type'].nunique()
+                        st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
+
+                        container_metric_2.metric('Number of publications', value=num_items_collections)
+                        container_citation_2.metric(label="Number of citations", value=int(citation_count))
+                        container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
+                        container_type.metric(label='Number of publication types', value=int(item_type_no))
+                        container_author_no.metric(label='Number of authors', value=int(author_no))
+                        container_country.metric(label='Number of country', value=unique_items_count-1)
+                        container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
+                    
                         for index, row in df_countries.iterrows():
-                            formatted_entry = format_entry(row)
-                            st.write(f"{count}) {formatted_entry}")
-                            count += 1
-                            if display2:
-                                st.caption(row['Abstract']) 
-                    elif sort_by == 'Publication type' or df_countries['Citation'].sum() == 0:
-                        df_countries = df_countries.sort_values(by=['Publication type'], ascending=True)
-                        current_type = None
-                        count_by_type = {}
+                            formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
+                            articles_list.append(formatted_entry)        
+                        
                         for index, row in df_countries.iterrows():
-                            if row['Publication type'] != current_type:
-                                current_type = row['Publication type']
-                                st.subheader(current_type)
-                                count_by_type[current_type] = 1
-                            formatted_entry = format_entry(row)
-                            st.write(f"{count_by_type[current_type]}) {formatted_entry}")
-                            count_by_type[current_type] += 1
-                            if display2:
-                                st.caption(row['Abstract'])
+                            publication_type = row['Publication type']
+                            title = row['Title']
+                            authors = row['FirstName2']
+                            date_published = row['Date published']
+                            link_to_publication = row['Link to publication']
+                            zotero_link = row['Zotero link']
+
+                            if publication_type == 'Journal article':
+                                published_by_or_in = 'Published in'
+                                published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
+                            elif publication_type == 'Book':
+                                published_by_or_in = 'Published by'
+                                published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
+                            else:
+                                published_by_or_in = ''
+                                published_source = ''
+
+                            formatted_entry = (
+                                '**' + str(publication_type) + '**' + ': ' +
+                                str(title) + ' ' +
+                                '(by ' + '*' + str(authors) + '*' + ') ' +
+                                '(Publication date: ' + str(date_published) + ') ' +
+                                ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
+                                '[[Publication link]](' + str(link_to_publication) + ') ' +
+                                '[[Zotero link]](' + str(zotero_link) + ')'
+                            )
+
+                        if sort_by == 'Publication date :arrow_down:' or df_countries['Citation'].sum() == 0:
+                            count = 1
+                            for index, row in df_countries.iterrows():
+                                formatted_entry = format_entry(row)
+                                st.write(f"{count}) {formatted_entry}")
+                                count += 1
+                                if display2:
+                                    st.caption(row['Abstract']) 
+                        elif sort_by == 'Publication type' or df_countries['Citation'].sum() == 0:
+                            df_countries = df_countries.sort_values(by=['Publication type'], ascending=True)
+                            current_type = None
+                            count_by_type = {}
+                            for index, row in df_countries.iterrows():
+                                if row['Publication type'] != current_type:
+                                    current_type = row['Publication type']
+                                    st.subheader(current_type)
+                                    count_by_type[current_type] = 1
+                                formatted_entry = format_entry(row)
+                                st.write(f"{count_by_type[current_type]}) {formatted_entry}")
+                                count_by_type[current_type] += 1
+                                if display2:
+                                    st.caption(row['Abstract'])
+                        else:
+                            df_countries = df_countries.sort_values(by=['Citation'], ascending=False)
+                            count = 1
+                            for index, row in df_countries.iterrows():
+                                formatted_entry = format_entry(row)
+                                st.write(f"{count}) {formatted_entry}")
+                                count += 1
+                                if display2:
+                                    st.caption(row['Abstract']) 
                     else:
-                        df_countries = df_countries.sort_values(by=['Citation'], ascending=False)
-                        count = 1
-                        for index, row in df_countries.iterrows():
-                            formatted_entry = format_entry(row)
-                            st.write(f"{count}) {formatted_entry}")
-                            count += 1
-                            if display2:
-                                st.caption(row['Abstract']) 
+                        df_table_view = df_countries[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal', 'Citation', 'Collection_Name','Link to publication','Zotero link']]
+                        df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
+                        if sort_by == 'Publication type':
+                            df_table_view = df_table_view.sort_values(by=['Publication type'], ascending=True)
+                            df_table_view = df_table_view.reset_index(drop=True)
+                            df_table_view
+                        elif sort_by == 'Citation':
+                            df_table_view = df_table_view.sort_values(by=['Citation'], ascending=False)
+                            df_table_view = df_table_view.reset_index(drop=True)
+                            df_table_view
+                        else:
+                            df_table_view                                 
 
             df_continent['Date published'] = pd.to_datetime(df_continent['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
             df_continent['Date published'] = df_continent['Date published'].dt.strftime('%Y-%m-%d')
