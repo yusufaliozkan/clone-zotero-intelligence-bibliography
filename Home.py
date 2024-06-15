@@ -409,35 +409,33 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         "query": st.session_state.search_term
                     })
 
-                # Retrieve query_params and initialize search_term and search_in
+                # Extracting initial query parameters
                 query_params = st.query_params
+                search_term = ""
+                search_in = "Title"
+
+                # Retrieve the initial search term and search_in from query parameters if available
+                if 'query' in query_params:
+                    search_term = query_params['query']
+                if 'search_in' in query_params:
+                    search_in = query_params['search_in']
+
+                # Initialize session state variables
                 if 'search_term' not in st.session_state:
-                    st.session_state.search_term = query_params.get('query', '')
+                    st.session_state.search_term = search_term
                 if 'search_in' not in st.session_state:
-                    st.session_state.search_in = query_params.get('search_in', 'Title')
+                    st.session_state.search_in = search_in
 
                 # Layout for input elements
                 cols, cola = st.columns([2, 6])
 
                 # Selectbox for search options
                 with cols:
-                    st.selectbox(
-                        '🔍 options', 
-                        ['Title', 'Title and abstract'], 
-                        index=['Title', 'Title and abstract'].index(st.session_state.search_in),
-                        on_change=update_search_params, 
-                        key='search_in'
-                    )
+                    st.session_state.search_in = st.selectbox('🔍 options', ['Title', 'Title and abstract'], index=['Title', 'Title and abstract'].index(st.session_state.search_in))
 
                 # Text input for search keywords
                 with cola:
-                    st.text_input(
-                        'Search keywords in titles or abstracts', 
-                        st.session_state.search_term, 
-                        placeholder='Type your keyword(s)', 
-                        on_change=update_search_params, 
-                        key='search_term'
-                    )
+                    st.session_state.search_term = st.text_input('Search keywords in titles or abstracts', st.session_state.search_term, placeholder='Type your keyword(s)', on_change=update_search_params)
 
                 # Function to extract quoted phrases
                 def extract_quoted_phrases(text):
@@ -449,8 +447,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 # Stripping and processing the search term
                 search_term = st.session_state.search_term.strip()
                 if search_term:
-                    with st.spinner("Searching publications..."):
-                        search_tokens = extract_quoted_phrases(search_term)
+                    with st.status("Searching publications...", expanded=True) as status:
+                        search_tokens = parse_search_terms(search_term)
                         print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
                         df_csv = df_duplicated.copy()
 
@@ -458,7 +456,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
                         filtered_df = filtered_df.drop_duplicates()
                         print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
-
+                        
                         if not filtered_df.empty and 'Date published' in filtered_df.columns:
                             filtered_df['Date published'] = filtered_df['Date published'].astype(str).str.strip()
                             filtered_df['Date published'] = filtered_df['Date published'].str.strip().apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
@@ -479,7 +477,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                         # Update query params when the user changes the input
                         update_search_params()
-
                                 # if container_refresh_button.button('Refresh'):
                         #     st.query_params.clear()
                         #     st.rerun()
