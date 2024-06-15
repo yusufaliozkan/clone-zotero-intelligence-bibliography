@@ -180,6 +180,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             publications_by_type = df_collections['Publication type'].value_counts()
             breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
             item_type_no = df_collections['Publication type'].nunique()
+            df_collections
             author_no = df_collections['FirstName2'].nunique()
             if author_no == 0:
                 author_pub_ratio=0.0
