@@ -125,11 +125,22 @@ with st.spinner('Retrieving data & updating dashboard...'):
             publications_by_type = df_collections['Publication type'].value_counts()
             breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
             item_type_no = df_collections['Publication type'].nunique()
-            author_no = df_collections['FirstName2'].nunique()
+            def split_and_expand(authors):
+                # Ensure the input is a string
+                if isinstance(authors, str):
+                    # Split by comma and strip whitespace
+                    split_authors = [author.strip() for author in authors.split(',')]
+                    return pd.Series(split_authors)
+                else:
+                    # Return the original author if it's not a string
+                    return pd.Series([authors])
+            expanded_authors = df_collections['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+            expanded_authors = expanded_authors.reset_index(name='Author')
+            author_no = len(expanded_authors)
             if author_no == 0:
                 author_pub_ratio=0.0
             else:
-                author_pub_ratio = round(num_items_collections/author_no, 2)
+                author_pub_ratio = round(author_no/num_items_collections, 2)
 
             true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
             total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
