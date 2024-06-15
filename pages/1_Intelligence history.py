@@ -191,7 +191,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     # Return the original author if it's not a string
                     return pd.Series([authors])
             expanded_authors = df_collections['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
-            expanded_df = expanded_df.reset_index(name='Author')
+            expanded_authors = expanded_authors.reset_index(name='Author')
             expanded_authors
             author_no = df_collections['FirstName2'].nunique()
             if author_no == 0:
