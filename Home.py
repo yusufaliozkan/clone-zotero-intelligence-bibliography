@@ -515,7 +515,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             with col113:
                                 only_citation = st.checkbox('Show cited items only')
                                 if only_citation:
-                                    df_csv = df_csv[(df_csv['Citation'].notna()) & (df_csv['Citation'] != 0)]
+                                    filtered_df = filtered_df[(df_csv['Citation'].notna()) & (filtered_df['Citation'] != 0)]
                             with col114:
                                 table_view = st.checkbox('See results in table')
 
