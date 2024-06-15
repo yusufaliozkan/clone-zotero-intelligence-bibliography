@@ -264,7 +264,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
-
+                    display2 = container_abstract.checkbox('Display abstracts', key='type_count2')
+                    
                     if not table_view:
                         articles_list = []  # Store articles in a list
                         for index, row in df_collections.iterrows():
@@ -299,7 +300,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 '[[Zotero link]](' + str(zotero_link) + ')'
                             )                    
 
-                        display2 = container_abstract.checkbox('Display abstracts', key='type_count2')
                         if sort_by == 'Publication date :arrow_down:' or df_collections['Citation'].sum() == 0:
                             count = 1
                             for index, row in df_collections.iterrows():
