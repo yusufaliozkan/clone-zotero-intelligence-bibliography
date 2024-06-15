@@ -226,6 +226,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
             citation_count = df_dedup['Citation'].sum()
             st.metric(label="Number of citations", value=int(citation_count))
 
+            true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
+            total_count = len(df_dedup[df_dedup['Publication type']=='Journal article'])
+            if total_count == 0:
+                oa_ratio = 0.0
+            else:
+                oa_ratio = true_count / total_count * 100
+            st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
+
     sidebar_content() 
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard']) #, '🔀 Surprise me'])
