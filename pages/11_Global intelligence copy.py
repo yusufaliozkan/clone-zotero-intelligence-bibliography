@@ -263,6 +263,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
                     # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
+                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
 
                     if not table_view:
                         articles_list = []  # Store articles in a list
@@ -298,7 +299,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 '[[Zotero link]](' + str(zotero_link) + ')'
                             )                    
 
-                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
                         display2 = container_abstract.checkbox('Display abstracts', key='type_count2')
                         if sort_by == 'Publication date :arrow_down:' or df_collections['Citation'].sum() == 0:
                             count = 1
