@@ -207,8 +207,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
 
-    col1, col2 = st.columns([3,5])
-    with col2:
+    col1, col2, col3 = st.columns([3,2,5])
+    with col3:
         with st.expander('Introduction'):
             st.info(into)
     with col1:
@@ -220,7 +220,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
             (df_intro['Date added'].dt.month == current_date.month)
         ]        # st.write(f'**{item_count}** items available in this library. **{len(items_added_this_month)}** items added in {current_date.strftime("%B %Y")}.')
         st.metric(label='Number of items in the library', value=item_count, delta=len(items_added_this_month),label_visibility='visible', help=f' **{len(items_added_this_month)}** items added in {current_date.strftime("%B %Y")}')
-        st.write('The library last updated on ' + '**'+ df.loc[0]['Date modified']+'**') 
+        st.write('The library last updated on ' + '**'+ df.loc[0]['Date modified']+'**')
+    with col2:
+        with st.popover:
+            st.write('Test')
 
     sidebar_content() 
 
