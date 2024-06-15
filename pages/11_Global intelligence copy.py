@@ -722,8 +722,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
         on = st.toggle("Display dashboard")
         if on:
             st.header('Dashboard')
-            st.markdown('#### Collection theme: ' + collection_name)
-            df_collections = df_countries.copy()
+            if not selected_country == '' or selected_country=='All Countries':
+                df_collections = df_countries.copy()
 
             if df_collections['Title'].any() in ("", [], None, 0, False):
                 all = st.checkbox('Show all types')
