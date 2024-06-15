@@ -333,7 +333,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             
             else:
                 with st.expander('Click to expand', expanded=True):
-                    types = st.multiselect('Publication type', df_countries['Publication type'].unique(),df_countries['Publication type'].unique(), key='original_4')
+                    types = container_pub_types.multiselect('Publication type', df_countries['Publication type'].unique(),df_countries['Publication type'].unique(), key='original_4')
                     df_countries = df_countries[df_countries['Publication type'].isin(types)]
                     df_countries = df_countries.reset_index(drop=True)
                     df_download = df_countries[['Publication type','Title','FirstName2','Abstract','Date published','Publisher','Journal','Link to publication','Zotero link']]
@@ -343,7 +343,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     csv = convert_df(df_download)
                     today = datetime.date.today().isoformat()
                     a = f'{selected_country}_{today}'
-                    st.download_button('💾 Download items', csv, (a+'.csv'), mime="text/csv", key='download-csv-5')
+                    container_download.download_button('💾 Download items', csv, (a+'.csv'), mime="text/csv", key='download-csv-5')
 
                     publications_by_type_country = df_countries['Publication type'].value_counts()
                     num_items_collections = len(df_countries)
@@ -382,7 +382,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     citation_count = df_countries['Citation'].sum()
                     item_type_no = df_countries['Publication type'].nunique()
                     st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
-                    df_countries
 
                     container_metric_2.metric('Number of publications', value=num_items_collections)
                     container_citation_2.metric(label="Number of citations", value=int(citation_count))
