@@ -188,7 +188,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 with col32:
                     container_cited_items = st.container()
                 with col33:
-                    st.write('See results in table')
+                    table_view = st.checkbox('See results in table')
                 container_pub_types = st.container()
                 container_download = st.container()
 
@@ -203,6 +203,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
             
             elif selected_country == 'All Countries':
                 with st.expander('Click to expand', expanded=True):
+                    only_citation = container_cited_items.checkbox('Show cited items only')
+                    if only_citation:
+                        df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
+                        df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
+
                     types = container_pub_types.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original')
                     df_collections = df_collections[df_collections['Publication type'].isin(types)]
                     df_collections = df_collections.reset_index(drop=True)
@@ -217,11 +222,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
                     a = f'{collection_name}_{today}'
                     container_download.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
-
-                    only_citation = container_cited_items.checkbox('Show cited items only')
-                    if only_citation:
-                        df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
-                        df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
 
                     st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
                     true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
@@ -264,73 +264,87 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
 
-                    articles_list = []  # Store articles in a list
-                    for index, row in df_collections.iterrows():
-                        formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
-                        articles_list.append(formatted_entry)        
-                    
-                    for index, row in df_collections.iterrows():
-                        publication_type = row['Publication type']
-                        title = row['Title']
-                        authors = row['FirstName2']
-                        date_published = row['Date published']
-                        link_to_publication = row['Link to publication']
-                        zotero_link = row['Zotero link']
+                    if not table_view:
+                        articles_list = []  # Store articles in a list
+                        for index, row in df_collections.iterrows():
+                            formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
+                            articles_list.append(formatted_entry)        
+                        
+                        for index, row in df_collections.iterrows():
+                            publication_type = row['Publication type']
+                            title = row['Title']
+                            authors = row['FirstName2']
+                            date_published = row['Date published']
+                            link_to_publication = row['Link to publication']
+                            zotero_link = row['Zotero link']
 
-                        if publication_type == 'Journal article':
-                            published_by_or_in = 'Published in'
-                            published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
-                        elif publication_type == 'Book':
-                            published_by_or_in = 'Published by'
-                            published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
+                            if publication_type == 'Journal article':
+                                published_by_or_in = 'Published in'
+                                published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
+                            elif publication_type == 'Book':
+                                published_by_or_in = 'Published by'
+                                published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
+                            else:
+                                published_by_or_in = ''
+                                published_source = ''
+
+                            formatted_entry = (
+                                '**' + str(publication_type) + '**' + ': ' +
+                                str(title) + ' ' +
+                                '(by ' + '*' + str(authors) + '*' + ') ' +
+                                '(Publication date: ' + str(date_published) + ') ' +
+                                ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
+                                '[[Publication link]](' + str(link_to_publication) + ') ' +
+                                '[[Zotero link]](' + str(zotero_link) + ')'
+                            )                    
+
+                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
+                        display2 = container_abstract.checkbox('Display abstracts', key='type_count2')
+                        if sort_by == 'Publication date :arrow_down:' or df_collections['Citation'].sum() == 0:
+                            count = 1
+                            for index, row in df_collections.iterrows():
+                                formatted_entry = format_entry(row)
+                                st.write(f"{count}) {formatted_entry}")
+                                count += 1
+                                if display2:
+                                    st.caption(row['Abstract']) 
+                        elif sort_by == 'Publication type' or df_collections['Citation'].sum() == 0:
+                            df_collections = df_collections.sort_values(by=['Publication type'], ascending=True)
+                            current_type = None
+                            count_by_type = {}
+                            for index, row in df_collections.iterrows():
+                                if row['Publication type'] != current_type:
+                                    current_type = row['Publication type']
+                                    st.subheader(current_type)
+                                    count_by_type[current_type] = 1
+                                formatted_entry = format_entry(row)
+                                st.write(f"{count_by_type[current_type]}) {formatted_entry}")
+                                count_by_type[current_type] += 1
+                                if display2:
+                                    st.caption(row['Abstract'])
                         else:
-                            published_by_or_in = ''
-                            published_source = ''
-
-                        formatted_entry = (
-                            '**' + str(publication_type) + '**' + ': ' +
-                            str(title) + ' ' +
-                            '(by ' + '*' + str(authors) + '*' + ') ' +
-                            '(Publication date: ' + str(date_published) + ') ' +
-                            ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
-                            '[[Publication link]](' + str(link_to_publication) + ') ' +
-                            '[[Zotero link]](' + str(zotero_link) + ')'
-                        )                    
-
-                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
-                    display2 = container_abstract.checkbox('Display abstracts', key='type_count2')
-                    if sort_by == 'Publication date :arrow_down:' or df_collections['Citation'].sum() == 0:
-                        count = 1
-                        for index, row in df_collections.iterrows():
-                            formatted_entry = format_entry(row)
-                            st.write(f"{count}) {formatted_entry}")
-                            count += 1
-                            if display2:
-                                st.caption(row['Abstract']) 
-                    elif sort_by == 'Publication type' or df_collections['Citation'].sum() == 0:
-                        df_collections = df_collections.sort_values(by=['Publication type'], ascending=True)
-                        current_type = None
-                        count_by_type = {}
-                        for index, row in df_collections.iterrows():
-                            if row['Publication type'] != current_type:
-                                current_type = row['Publication type']
-                                st.subheader(current_type)
-                                count_by_type[current_type] = 1
-                            formatted_entry = format_entry(row)
-                            st.write(f"{count_by_type[current_type]}) {formatted_entry}")
-                            count_by_type[current_type] += 1
-                            if display2:
-                                st.caption(row['Abstract'])
+                            df_collections = df_collections.sort_values(by=['Citation'], ascending=False)
+                            count = 1
+                            for index, row in df_collections.iterrows():
+                                formatted_entry = format_entry(row)
+                                st.write(f"{count}) {formatted_entry}")
+                                count += 1
+                                if display2:
+                                    st.caption(row['Abstract']) 
                     else:
-                        df_collections = df_collections.sort_values(by=['Citation'], ascending=False)
-                        count = 1
-                        for index, row in df_collections.iterrows():
-                            formatted_entry = format_entry(row)
-                            st.write(f"{count}) {formatted_entry}")
-                            count += 1
-                            if display2:
-                                st.caption(row['Abstract']) 
-            
+                        df_table_view = df_collections[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal', 'Citation', 'Collection_Name','Link to publication','Zotero link']]
+                        df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
+                        if sort_by == 'Publication type':
+                            df_table_view = df_table_view.sort_values(by=['Publication type'], ascending=True)
+                            df_table_view = df_table_view.reset_index(drop=True)
+                            df_table_view
+                        elif sort_by == 'Citation':
+                            df_table_view = df_table_view.sort_values(by=['Citation'], ascending=False)
+                            df_table_view = df_table_view.reset_index(drop=True)
+                            df_table_view
+                        else:
+                            df_table_view
+
             else:
                 with st.expander('Click to expand', expanded=True):
                     only_citation = container_cited_items.checkbox('Show cited items only')
