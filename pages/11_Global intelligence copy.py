@@ -202,6 +202,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
             if not selected_country or selected_country=="":
                 st.write('Please select a country')
+                st.divider()
             
             elif selected_country == 'All Countries':
                 with st.expander('Click to expand', expanded=True):
