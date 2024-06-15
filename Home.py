@@ -431,7 +431,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 # Selectbox for search options
                 with cols:
-                    st.session_state.search_in = st.selectbox('🔍 options', ['Title', 'Title and abstract'], index=['Title', 'Title and abstract'].index(st.session_state.search_in))
+                    st.session_state.search_in = st.selectbox('🔍 Search in', ['Title', 'Title and abstract'], index=['Title', 'Title and abstract'].index(st.session_state.search_in))
 
                 # Text input for search keywords
                 with cola:
