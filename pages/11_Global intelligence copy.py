@@ -345,6 +345,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     a = f'{selected_country}_{today}'
                     container_download.download_button('💾 Download items', csv, (a+'.csv'), mime="text/csv", key='download-csv-5')
 
+                    only_citation = container_cited_items.checkbox('Show cited items only')
+                    if only_citation:
+                        df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
+                        df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
+
                     publications_by_type_country = df_countries['Publication type'].value_counts()
                     num_items_collections = len(df_countries)
                     breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type_country.items()])                    
