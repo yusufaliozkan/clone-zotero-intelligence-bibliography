@@ -425,23 +425,25 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 # Selectbox for search options
                 with cols:
-                    st.session_state.search_in = st.selectbox(
+                    search_in = st.selectbox(
                         '🔍 options', 
                         ['Title', 'Title and abstract'], 
                         index=['Title', 'Title and abstract'].index(st.session_state.search_in),
                         on_change=update_search_params, 
                         key='search_in'
                     )
+                    st.session_state.search_in = search_in  # Ensure session state is updated
 
                 # Text input for search keywords
                 with cola:
-                    st.session_state.search_term = st.text_input(
+                    search_term = st.text_input(
                         'Search keywords in titles or abstracts', 
                         st.session_state.search_term, 
                         placeholder='Type your keyword(s)', 
                         on_change=update_search_params, 
                         key='search_term'
                     )
+                    st.session_state.search_term = search_term  # Ensure session state is updated
 
                 # Function to extract quoted phrases
                 def extract_quoted_phrases(text):
@@ -453,7 +455,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 # Stripping and processing the search term
                 search_term = st.session_state.search_term.strip()
                 if search_term:
-                    with st.status("Searching publications...", expanded=True) as status:
+                    with st.spinner("Searching publications..."):
                         search_tokens = extract_quoted_phrases(search_term)
                         print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
                         df_csv = df_duplicated.copy()
