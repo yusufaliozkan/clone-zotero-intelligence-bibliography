@@ -222,7 +222,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         st.metric(label='Number of items in the library', value=item_count, delta=len(items_added_this_month),label_visibility='visible', help=f' **{len(items_added_this_month)}** items added in {current_date.strftime("%B %Y")}')
         st.write('The library last updated on ' + '**'+ df.loc[0]['Date modified']+'**')
     with col2:
-        with st.popover:
+        with st.popover('More metrics'):
             st.write('Test')
 
     sidebar_content() 
