@@ -333,6 +333,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
             
             else:
                 with st.expander('Click to expand', expanded=True):
+                    only_citation = container_cited_items.checkbox('Show cited items only')
+                    if only_citation:
+                        df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
+                        df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
+                    
                     types = container_pub_types.multiselect('Publication type', df_countries['Publication type'].unique(),df_countries['Publication type'].unique(), key='original_4')
                     df_countries = df_countries[df_countries['Publication type'].isin(types)]
                     df_countries = df_countries.reset_index(drop=True)
@@ -344,11 +349,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     today = datetime.date.today().isoformat()
                     a = f'{selected_country}_{today}'
                     container_download.download_button('💾 Download items', csv, (a+'.csv'), mime="text/csv", key='download-csv-5')
-
-                    only_citation = container_cited_items.checkbox('Show cited items only')
-                    if only_citation:
-                        df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
-                        df_countries = df_countries[(df_countries['Citation'].notna()) & (df_countries['Citation'] != 0)]
 
                     publications_by_type_country = df_countries['Publication type'].value_counts()
                     num_items_collections = len(df_countries)
