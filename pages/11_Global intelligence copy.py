@@ -723,7 +723,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         if on:
             st.header('Dashboard')
             st.markdown('#### Collection theme: ' + collection_name)
-            df_collections = df_countries()
+            df_collections = df_countries.copy()
 
             if df_collections['Title'].any() in ("", [], None, 0, False):
                 all = st.checkbox('Show all types')
