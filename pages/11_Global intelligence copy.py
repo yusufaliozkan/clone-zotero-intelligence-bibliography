@@ -201,7 +201,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # Display the filtered DataFrame
             # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
             if not selected_country or selected_country=="":
-                st.write('Please select a country')
+                st.write('Please select a country from the dropdown menu above to see publications.')
                 st.divider()
             
             elif selected_country == 'All Countries':
