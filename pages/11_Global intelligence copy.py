@@ -167,7 +167,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     # Filter the DataFrame based on the selected country
     df_countries = df_countries[df_countries['Country'] == selected_country]
 
-    st.divier()
+    st.divider()
 
     st.subheader(f"{selected_country}")
     if selected_country!='':
