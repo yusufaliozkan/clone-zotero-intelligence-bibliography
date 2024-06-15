@@ -252,7 +252,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             if author_no == 0:
                 author_pub_ratio=0.0
             else:
-                author_pub_ratio = round(author_no/num_items_collections, 2)
+                author_pub_ratio = round(author_no/item_count, 2)
             st.metric(label='Number of authors', value=int(author_no))
             st.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
