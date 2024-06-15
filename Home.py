@@ -404,7 +404,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 #     ''')
                 # Function to update search parameters in the query string
                 def update_search_params():
-                    st.session_state.search_term = st.session_state.search_term_input
                     st.query_params.from_dict({
                         "search_in": st.session_state.search_in,
                         "query": st.session_state.search_term
@@ -426,8 +425,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     st.session_state.search_term = search_term
                 if 'search_in' not in st.session_state:
                     st.session_state.search_in = search_in
-                if 'search_term_input' not in st.session_state:
-                    st.session_state.search_term_input = search_term
 
                 # Define unique search options
                 search_options = ["Title", "Title and abstract"]
@@ -441,6 +438,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     except (ValueError, KeyError):
                         pass
 
+                # Handling the search_term text input
+                search_term_value = ""
+                if 'query' in query_params:
+                    search_term_value = query_params['query']
+
                 # Layout for input elements
                 cols, cola = st.columns([2, 6])
 
@@ -448,16 +450,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 with cols:
                     st.session_state.search_in = st.selectbox(
                         '🔍 Search in', search_options,
-                        index=search_in_index,
-                        on_change=update_search_params
+                        index=search_in_index
                     )
 
                 # Text input for search keywords
                 with cola:
-                    st.text_input(
+                    st.session_state.search_term = st.text_input(
                         'Search keywords in titles or abstracts',
-                        st.session_state.search_term_input,
-                        key='search_term_input',
+                        search_term_value,
                         placeholder='Type your keyword(s)',
                         on_change=update_search_params
                     )
@@ -472,7 +472,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 # Stripping and processing the search term
                 search_term = st.session_state.search_term.strip()
                 if search_term:
-                    with st.spinner("Searching publications..."):
+                    with st.status("Searching publications...", expanded=True) as status:
                         search_tokens = extract_quoted_phrases(search_term)
                         print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
                         df_csv = df_duplicated.copy()
@@ -499,6 +499,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                         types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
                         collections = filtered_df['Collection_Name'].dropna().unique()
+
+                        # Update query params when the user changes the input
+                        update_search_params()
 
 
                                 # if container_refresh_button.button('Refresh'):
