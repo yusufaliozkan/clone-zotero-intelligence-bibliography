@@ -639,6 +639,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             #                 if display2:
             #                     st.caption(row['Abstract']) 
 
+            st.subheader('Countries overview')
             col11, col12 = st.columns([3,2])
             with col11:                
                 df_countries_chart = df_countries_chart[df_countries_chart['Country'] != 'Country not known']
