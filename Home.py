@@ -234,6 +234,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 oa_ratio = true_count / total_count * 100
             st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
 
+            item_type_no = df_dedup['Publication type'].nunique()
+            st.metric(label='Number of publication types', value=int(item_type_no))
+
     sidebar_content() 
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard']) #, '🔀 Surprise me'])
