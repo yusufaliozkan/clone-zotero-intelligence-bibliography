@@ -877,7 +877,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 st.write("No publication type selected.")
 
             # SEARCH IN COLLECTIONS
-            elif search_option == "Search collection": 
+            elif search_option == "Search collection":
+                st.query_params.clear()
                 st.subheader('Search collection')
 
                 df_csv_collections = df_duplicated.copy()
@@ -1077,6 +1078,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 st.write("No publication type selected.")
 
             elif search_option == "Publication types":
+                st.query_params.clear()
                 st.subheader('Publication types')
 
                 df_csv_types = df_dedup.copy()
@@ -1251,6 +1253,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 st.write(f"{index + 1}) {formatted_entry}")
 
             elif search_option == "Search journal":
+                st.query_params.clear()
                 st.subheader('Search journal')
 
                 df_csv = df_dedup.copy()
@@ -1463,6 +1466,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 st.write(f"{index + 1}) {formatted_entry}")
 
             elif search_option == "Publication year": 
+                st.query_params.clear()
                 st.subheader('Items by publication year')
 
                 with st.expander('Click to expand', expanded=True):                    
@@ -1688,7 +1692,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             # Display the article with highlighted search terms
                             st.markdown(f"{i}. {article}", unsafe_allow_html=True)
 
-            elif search_option == "Cited papers": 
+            elif search_option == "Cited papers":
+                st.query_params.clear()
                 st.subheader('Cited items in the library')
 
                 with st.expander('Click to expand', expanded=True):                    
