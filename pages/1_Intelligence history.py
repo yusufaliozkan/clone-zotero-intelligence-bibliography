@@ -191,6 +191,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     return pd.Series([authors])
             expanded_authors = df_collections['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
             expanded_authors = expanded_authors.reset_index(name='Author')
+            expanded_authors = expanded_authors.drop_duplicates(subset='Author')
             expanded_authors
             author_no = expanded_authors['Author'].nunique()
             if author_no == 0:
