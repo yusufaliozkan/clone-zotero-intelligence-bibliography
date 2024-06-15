@@ -368,9 +368,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         else:
                             # Return the original author if it's not a string
                             return pd.Series([authors])
-                    expanded_authors = df_countries['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
-                    expanded_authors = expanded_authors.reset_index(name='Author')
-                    author_no = len(expanded_authors)
+                    if len(df_countries)==0:
+                        author_no=0
+                    else:
+                        expanded_authors = df_countries['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                        expanded_authors = expanded_authors.reset_index(name='Author')
+                        author_no = len(expanded_authors)
                     if author_no == 0:
                         author_pub_ratio=0.0
                     else:
