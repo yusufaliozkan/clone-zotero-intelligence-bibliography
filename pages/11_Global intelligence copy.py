@@ -223,7 +223,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     a = f'{collection_name}_{today}'
                     container_download.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
 
-                    st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
+                    # st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
                     true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
                     total_count = len(df_collections[df_collections['Publication type']=='Journal article'])
                     if total_count == 0:
@@ -251,7 +251,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         author_pub_ratio=0.0
                     else:
                         author_pub_ratio = round(author_no/num_items_collections, 2)
-                    st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
+                    # st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
                     item_type_no = df_collections['Publication type'].nunique()
 
                     container_metric_2.metric('Number of publications', value=num_items_collections, help=breakdown_string)
