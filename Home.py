@@ -430,13 +430,18 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 search_options = ["Title", "Title and abstract"]
 
                 # Handling the search_in select box selection
-                ix = 0
+                search_in_index = 0
                 if 'search_in' in query_params:
                     try:
                         search_in_from_key = query_params['search_in']
-                        ix = search_options.index(search_in_from_key)
+                        search_in_index = search_options.index(search_in_from_key)
                     except (ValueError, KeyError):
                         pass
+
+                # Handling the search_term text input
+                search_term_value = ""
+                if 'query' in query_params:
+                    search_term_value = query_params['query']
 
                 # Layout for input elements
                 cols, cola = st.columns([2, 6])
@@ -445,14 +450,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 with cols:
                     st.session_state.search_in = st.selectbox(
                         '🔍 Search in', search_options,
-                        index=ix
+                        index=search_in_index
                     )
 
                 # Text input for search keywords
                 with cola:
                     st.session_state.search_term = st.text_input(
                         'Search keywords in titles or abstracts',
-                        st.session_state.search_term,
+                        search_term_value,
                         placeholder='Type your keyword(s)',
                         on_change=update_search_params
                     )
@@ -497,6 +502,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                         # Update query params when the user changes the input
                         update_search_params()
+
+
                                 # if container_refresh_button.button('Refresh'):
                         #     st.query_params.clear()
                         #     st.rerun()
