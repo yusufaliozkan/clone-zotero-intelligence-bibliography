@@ -497,6 +497,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             filtered_df['No date flag'] = 1
                         print(f"Final Filtered DataFrame:\n{filtered_df}")  # Debugging: Print final DataFrame
 
+                        search_tokens
                         filtered_df
 
                         types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
