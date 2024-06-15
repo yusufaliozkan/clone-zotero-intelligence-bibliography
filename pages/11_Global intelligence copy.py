@@ -722,7 +722,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         on = st.toggle("Display dashboard")
         if on:
             st.header('Dashboard')
-            if not selected_country == '' or selected_country=='All Countries':
+            if not selected_country=='All Countries':
                 df_collections = df_countries.copy()
 
             if df_collections['Title'].any() in ("", [], None, 0, False):
