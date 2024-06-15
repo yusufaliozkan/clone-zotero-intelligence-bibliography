@@ -58,7 +58,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
     # df_collections = zotero_collections(library_id, library_type)
 
     df_collections = pd.read_csv('all_items_duplicated.csv')
-    df_collections
     # df_collections = df_collections[~df_collections['Collection_Name'].str.contains('01.98')]
     df_collections = df_collections[df_collections['Collection_Name'] != '01 Intelligence history']
 
@@ -181,6 +180,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             publications_by_type = df_collections['Publication type'].value_counts()
             breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
             item_type_no = df_collections['Publication type'].nunique()
+            df_collections
             author_no = df_collections['FirstName2'].nunique()
             if author_no == 0:
                 author_pub_ratio=0.0
