@@ -402,6 +402,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 #     Search with parantheses is **not** available.                   
                 #     ''')
+                # Function to update search parameters in the query string
                 def update_search_params():
                     st.query_params.from_dict({
                         "search_in": st.session_state.search_in,
@@ -425,23 +426,15 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 if 'search_in' not in st.session_state:
                     st.session_state.search_in = search_in
 
-                # Define unique collections and update_params function
-                df_collections = pd.DataFrame({"Collection_Name": ["Collection 1", "Collection 2", "Collection 3"]})
-                unique_collections = list(df_collections['Collection_Name'].unique())
+                # Define unique search options
+                search_options = ["Title", "Title and abstract"]
 
-                def update_params():
-                    st.query_params.from_dict({
-                        "search_in": st.session_state.search_in,
-                        "query": st.session_state.search_term,
-                        "collection": st.session_state.qp
-                    })
-
-                # Handling the collection radio button selection
+                # Handling the search_in select box selection
                 ix = 0
-                if 'collection' in query_params:
+                if 'search_in' in query_params:
                     try:
-                        collection_name_from_key = query_params['collection']
-                        ix = unique_collections.index(collection_name_from_key)
+                        search_in_from_key = query_params['search_in']
+                        ix = search_options.index(search_in_from_key)
                     except (ValueError, KeyError):
                         pass
 
@@ -451,8 +444,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 # Selectbox for search options
                 with cols:
                     st.session_state.search_in = st.selectbox(
-                        '🔍 Search in', ['Title', 'Title and abstract'],
-                        index=['Title', 'Title and abstract'].index(st.session_state.search_in)
+                        '🔍 Search in', search_options,
+                        index=ix
                     )
 
                 # Text input for search keywords
@@ -463,12 +456,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         placeholder='Type your keyword(s)',
                         on_change=update_search_params
                     )
-
-                # Radio button for selecting a collection
-                container = st.container()
-                radio = container.radio(
-                    'Select a collection', unique_collections, index=ix, key="qp", on_change=update_params
-                )
 
                 # Function to extract quoted phrases
                 def extract_quoted_phrases(text):
@@ -483,9 +470,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     with st.status("Searching publications...", expanded=True) as status:
                         search_tokens = extract_quoted_phrases(search_term)
                         print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
-                        df_csv = df_collections.copy()  # Assuming df_duplicated is similar to df_collections for demo purposes
+                        df_csv = df_duplicated.copy()
 
-                        filtered_df = df_csv[df_csv['Collection_Name'].isin(search_tokens)]
+                        filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
                         print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
                         filtered_df = filtered_df.drop_duplicates()
                         print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
