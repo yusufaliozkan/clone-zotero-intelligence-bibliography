@@ -225,7 +225,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         with st.popover('More metrics'):
             st.write('Test')
             citation_count = df_dedup['Citation'].sum()
-            citation_count
+            st.metric(label="Number of citations", value=int(citation_count))
 
     sidebar_content() 
 
