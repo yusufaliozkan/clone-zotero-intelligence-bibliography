@@ -411,39 +411,33 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 # Retrieve query_params and initialize search_term and search_in
                 query_params = st.query_params
-                search_term = query_params.get('query', '')  # Use .get() to handle None gracefully
-                search_in = query_params.get('search_in', 'Title')
-
-                # Initialize session state variables
                 if 'search_term' not in st.session_state:
-                    st.session_state.search_term = search_term
+                    st.session_state.search_term = query_params.get('query', '')
                 if 'search_in' not in st.session_state:
-                    st.session_state.search_in = search_in
+                    st.session_state.search_in = query_params.get('search_in', 'Title')
 
                 # Layout for input elements
                 cols, cola = st.columns([2, 6])
 
                 # Selectbox for search options
                 with cols:
-                    search_in = st.selectbox(
+                    st.selectbox(
                         '🔍 options', 
                         ['Title', 'Title and abstract'], 
                         index=['Title', 'Title and abstract'].index(st.session_state.search_in),
                         on_change=update_search_params, 
                         key='search_in'
                     )
-                    st.session_state.search_in = search_in  # Ensure session state is updated
 
                 # Text input for search keywords
                 with cola:
-                    search_term = st.text_input(
+                    st.text_input(
                         'Search keywords in titles or abstracts', 
                         st.session_state.search_term, 
                         placeholder='Type your keyword(s)', 
                         on_change=update_search_params, 
                         key='search_term'
                     )
-                    st.session_state.search_term = search_term  # Ensure session state is updated
 
                 # Function to extract quoted phrases
                 def extract_quoted_phrases(text):
