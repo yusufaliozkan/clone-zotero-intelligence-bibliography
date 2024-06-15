@@ -403,6 +403,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 #     Search with parantheses is **not** available.                   
                 #     ''')
                 # Function to update search parameters in the query string
+                # Function to update search parameters in the query string
                 def update_search_params():
                     st.query_params.from_dict({
                         "search_in": st.session_state.search_in,
@@ -438,11 +439,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     except (ValueError, KeyError):
                         pass
 
-                # Handling the search_term text input
-                search_term_value = ""
-                if 'query' in query_params:
-                    search_term_value = query_params['query']
-
                 # Layout for input elements
                 cols, cola = st.columns([2, 6])
 
@@ -455,12 +451,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 # Text input for search keywords
                 with cola:
-                    st.session_state.search_term = st.text_input(
+                    search_term_input = st.text_input(
                         'Search keywords in titles or abstracts',
-                        search_term_value,
-                        placeholder='Type your keyword(s)',
-                        on_change=update_search_params
+                        st.session_state.search_term,
+                        placeholder='Type your keyword(s)'
                     )
+
+                # Update session state search term
+                st.session_state.search_term = search_term_input
 
                 # Function to extract quoted phrases
                 def extract_quoted_phrases(text):
@@ -469,39 +467,42 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     words = text_without_quotes.split()
                     return quoted_phrases + words
 
-                # Stripping and processing the search term
-                search_term = st.session_state.search_term.strip()
-                if search_term:
-                    with st.status("Searching publications...", expanded=True) as status:
-                        search_tokens = extract_quoted_phrases(search_term)
-                        print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
-                        df_csv = df_duplicated.copy()
+                # Perform the search when the button is pressed
+                if st.button('Search'):
+                    update_search_params()
+                    search_term = st.session_state.search_term.strip()
+                    if search_term:
+                        with st.spinner("Searching publications..."):
+                            search_tokens = extract_quoted_phrases(search_term)
+                            print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
+                            df_csv = df_duplicated.copy()
 
-                        filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
-                        print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
-                        filtered_df = filtered_df.drop_duplicates()
-                        print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
-                        
-                        if not filtered_df.empty and 'Date published' in filtered_df.columns:
-                            filtered_df['Date published'] = filtered_df['Date published'].astype(str).str.strip()
-                            filtered_df['Date published'] = filtered_df['Date published'].str.strip().apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                            if filtered_df['Date published'].notna().any():
-                                filtered_df['Date published'] = filtered_df['Date published'].dt.strftime('%Y-%m-%d')
+                            filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
+                            print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
+                            filtered_df = filtered_df.drop_duplicates()
+                            print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
+                            
+                            if not filtered_df.empty and 'Date published' in filtered_df.columns:
+                                filtered_df['Date published'] = filtered_df['Date published'].astype(str).str.strip()
+                                filtered_df['Date published'] = filtered_df['Date published'].str.strip().apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                                if filtered_df['Date published'].notna().any():
+                                    filtered_df['Date published'] = filtered_df['Date published'].dt.strftime('%Y-%m-%d')
+                                else:
+                                    filtered_df['Date published'] = ''
+                                filtered_df['Date published'] = filtered_df['Date published'].fillna('')
+                                filtered_df['No date flag'] = filtered_df['Date published'].isnull().astype(np.uint8)
+                                filtered_df = filtered_df.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
                             else:
                                 filtered_df['Date published'] = ''
-                            filtered_df['Date published'] = filtered_df['Date published'].fillna('')
-                            filtered_df['No date flag'] = filtered_df['Date published'].isnull().astype(np.uint8)
-                            filtered_df = filtered_df.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
-                        else:
-                            filtered_df['Date published'] = ''
-                            filtered_df['No date flag'] = 1
-                        print(f"Final Filtered DataFrame:\n{filtered_df}")  # Debugging: Print final DataFrame
+                                filtered_df['No date flag'] = 1
+                            print(f"Final Filtered DataFrame:\n{filtered_df}")  # Debugging: Print final DataFrame
 
-                        types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
-                        collections = filtered_df['Collection_Name'].dropna().unique()
+                            types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
+                            collections = filtered_df['Collection_Name'].dropna().unique()
 
-                        # Update query params when the user changes the input
-                        update_search_params()
+                            # Display filtered results
+                            st.write(f"Search results for {search_term}:")
+                            st.dataframe(filtered_df)
 
 
                                 # if container_refresh_button.button('Refresh'):
