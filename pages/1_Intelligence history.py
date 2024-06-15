@@ -182,9 +182,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
             item_type_no = df_collections['Publication type'].nunique()
             df_collections
             def split_and_expand(authors):
-                # Split by comma and strip whitespace
-                split_authors = [author.strip() for author in authors.split(',')]
-                return pd.Series(split_authors)
+                # Ensure the input is a string
+                if isinstance(authors, str):
+                    # Split by comma and strip whitespace
+                    split_authors = [author.strip() for author in authors.split(',')]
+                    return pd.Series(split_authors)
+                else:
+                    # Return the original author if it's not a string
+                    return pd.Series([authors])
             expanded_authors = df_collections['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
             expanded_authors
             author_no = df_collections['FirstName2'].nunique()
