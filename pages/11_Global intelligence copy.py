@@ -759,7 +759,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     autosize=False,
                     width=400,
                     height=400,)
-                fig.update_layout(title={'text':'Publications: '+collection_name})
+                fig.update_layout(title=f'Publications: {collection_name} ({selected_country})')
                 col2.plotly_chart(fig, use_container_width = True)
 
             df_collections['Date published'] = pd.to_datetime(df_collections['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
@@ -782,7 +782,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     autosize=False,
                     width=400,
                     height=500,)
-                fig.update_layout(title={'text':'Publications by year: '+collection_name})
+                fig.update_layout(title=f'Publications: {collection_name} ({selected_country})')
                 col1.plotly_chart(fig, use_container_width = True)
 
             with col2:
@@ -806,7 +806,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     publications_by_author = filtered_authors['Author_name'].value_counts().head(num_authors)
                     fig = px.bar(publications_by_author, x=publications_by_author.index, y=publications_by_author.values)
                     fig.update_layout(
-                        title=f'Top {num_authors} Authors by Publication Count ({collection_name})',
+                        title=f'Top {num_authors} Authors by Publication Count ({collection_name} - {selected_country})',
                         xaxis_title='Author',
                         yaxis_title='Number of Publications',
                         xaxis_tickangle=-45,
