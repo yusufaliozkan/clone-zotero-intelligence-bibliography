@@ -42,5 +42,3 @@ def sidebar_content():
             Report your technical issues or requests [here](https://github.com/YusufAliOzkan/zotero-intelligence-bibliography/issues).            
             ''')
         st.write('Check the digest [here](https://intelligence.streamlit.app/Digest)')
-        st.toast('Join our [mailing list](https://groups.google.com/g/intelligence-studies-network) to receive updates.')
-
