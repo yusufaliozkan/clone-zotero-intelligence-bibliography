@@ -191,7 +191,7 @@ The Intelligence studies bibliography is one of the most comprehensive databases
 Finding sources on intelligence can sometimes be challening because of various reasons. 
 Therefore, this bibliography offers a carefully curated selection of publications, serving as an invaluable research assistant to guide you through exploring various sources.
 
-Join our Google Groups to get updates and new features about the website and the database. 
+Join our Google Groups to get updates and learn  new features about the website and the database. 
 You can also ask questions or make suggestions. (https://groups.google.com/g/intelligence-studies-network)
 
 Check out the following guides for a quick intoduction about the website:
