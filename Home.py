@@ -185,8 +185,6 @@ st.header('Intelligence studies bibliography', anchor=False)
 # cite_today = datetime.date.today().isoformat()
 cite_today = datetime.date.today().strftime("%d %B %Y")
 
-st.toast('Join our [mailing list](https://groups.google.com/g/intelligence-studies-network) to receive updates, ask questions, or make suggestions.')
-
 into = f'''
 Welcome to **Intelligence studies bibliography**.
 The Intelligence studies bibliography is one of the most comprehensive databases listing sources on intelligence studies and history. 
