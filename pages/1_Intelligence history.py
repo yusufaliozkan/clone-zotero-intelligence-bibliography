@@ -123,8 +123,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 #    st.query_params.from_dict({"collection_id": collection_key})
 
     df_collections = df_collections.loc[df_collections['Collection_Name']==collection_name]
-    unique_title = list(df_collections['Title'].unique())
-    selected_title = st.selectbox('Select a title:',unique_title)
+
     pd.set_option('display.max_colwidth', None)
 
     # df_collections['Date published'] = pd.to_datetime(df_collections['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
