@@ -2162,6 +2162,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     
 
         with col2:
+            st.info('Join the [mailing list](https://groups.google.com/g/intelligence-studies-network)')
             with st.expander('Collections', expanded=True):
                 st.caption('[Intelligence history](https://intelligence.streamlit.app/Intelligence_history)')
                 st.caption('[Intelligence studies](https://intelligence.streamlit.app/Intelligence_studies)')
