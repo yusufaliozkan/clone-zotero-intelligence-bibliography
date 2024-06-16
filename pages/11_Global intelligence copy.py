@@ -1009,7 +1009,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 wordcloud = WordCloud(stopwords=stopword, width=1500, height=750, background_color='white', collocations=False, colormap='magma').generate(wordcloud_texts_str)
                 plt.figure(figsize=(20,8))
                 plt.axis('off')
-                plt.title('Top words in title (collection: ' +collection_name+')')
+                plt.title(f'Top words in title (collection: {collection_name} - {selected_country}')
                 plt.imshow(wordcloud)
                 plt.axis("off")
                 plt.show()
