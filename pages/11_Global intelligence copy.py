@@ -729,7 +729,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 all = st.checkbox('Show all types')
                 if all:
                     df=df_collections.copy()
-            types = st.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original2')
             df_collections = df_collections[df_collections['Publication type'].isin(types)]  #filtered_df = df[df["app"].isin(selected_options)]
             df_collections = df_collections.reset_index()
             
@@ -1033,7 +1032,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 st.pyplot() 
         else:
             st.info('Toggle to see the dashboard!')
-            
+
     components.html(
     """
     <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence" style="border-width:0" 
