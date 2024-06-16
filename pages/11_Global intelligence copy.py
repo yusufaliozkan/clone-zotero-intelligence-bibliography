@@ -795,11 +795,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 num_authors = st.slider('Select number of authors to display:', 1, min(50, max_authors), 20)
                 
                 # Adding a multiselect widget for publication types
+                # selected_types = st.multiselect('Select publication types:', df_collections['Publication type'].unique(), default=df_collections['Publication type'].unique())
                 
                 # Filtering data based on selected publication types
-                filtered_authors = df_collections[df_collections['Publication type'].isin(selected_types)]
+                filtered_authors = df_collections[df_collections['Publication type'].isin(types)]
                 
-                if len(selected_types) == 0:
+                if len(types) == 0:
                     st.write('No results to display')
                 else:
                     publications_by_author = filtered_authors['Author_name'].value_counts().head(num_authors)
