@@ -2,8 +2,6 @@ import streamlit as st
 import streamlit.components.v1 as components
 from copyright import display_custom_license, cc_by_licence_image
 
-st.toast('Join our [mailing list](https://groups.google.com/g/intelligence-studies-network) to receive updates.')
-
 def sidebar_content():
     image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
     with st.sidebar:
@@ -44,3 +42,5 @@ def sidebar_content():
             Report your technical issues or requests [here](https://github.com/YusufAliOzkan/zotero-intelligence-bibliography/issues).            
             ''')
         st.write('Check the digest [here](https://intelligence.streamlit.app/Digest)')
+        st.toast('Join our [mailing list](https://groups.google.com/g/intelligence-studies-network) to receive updates.')
+
