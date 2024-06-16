@@ -314,6 +314,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     st.write(info)
 
     with tab2:
+        on = st.toggle('Re')
         st.header('Dashboard')
 
         if df_collections['Title'].any() in ("", [], None, 0, False):
