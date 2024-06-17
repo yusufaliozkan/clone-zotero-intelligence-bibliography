@@ -2828,7 +2828,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
 
     user_id = '2514686'
-    api_key = 'Your-API-Key-Here'  # Only required for non-public libraries
 
     # Base URL for Zotero API
     base_url = 'https://api.zotero.org'
@@ -2851,7 +2850,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         }
 
         # Make GET request to Zotero API
-        response = requests.get(base_url + endpoint, params=params, headers={'Zotero-API-Key': api_key})
+        response = requests.get(base_url + endpoint, params=params)
 
         # Check if request was successful
         if response.status_code == 200:
