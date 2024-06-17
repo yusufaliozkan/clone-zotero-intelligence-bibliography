@@ -2862,4 +2862,4 @@ with st.spinner('Retrieving data & updating dashboard...'):
             all_bibliographies += f'{response.text}\n\n'  # Print error response for debugging
 
     # Display all bibliographies in Streamlit
-st.write(all_bibliographies, unsafe_allow_html=True)
+    st.write(all_bibliographies, unsafe_allow_html=True)
