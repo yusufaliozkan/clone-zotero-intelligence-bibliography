@@ -82,7 +82,9 @@ def zotero_data(library_id, library_type):
         ))
     df = pd.DataFrame(data, columns=columns)
     return df
-for item in items:
+
+items999 = zot.everything(zot.top(limit=10))
+for item in items999:
     citation = zot.format_single(item['key'], style='apa', linkwrap=False, content='citation')
     citation
 df = zotero_data(library_id, library_type)
