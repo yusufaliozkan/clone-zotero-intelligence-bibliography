@@ -2829,7 +2829,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     # Replace with your Zotero user ID, item key, and API key (if required)
     user_id = '2514686'
-    item_key = '3TUBNMCR'
+    item_key = 'ZWRFYLAW'
     api_key = 'Your-API-Key-Here'  # Only required for non-public libraries
 
     # Base URL for Zotero API
