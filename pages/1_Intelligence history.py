@@ -320,7 +320,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_collections
             def display_bibliographies(df):
                 for index, row in df.iterrows():
-                    st.markdown(f"<h3>{row['title']}</h3>", unsafe_allow_html=True)  # Display title (optional)
                     st.markdown(row['bibliography'], unsafe_allow_html=True)  # Display bibliography
 
             # Streamlit app
