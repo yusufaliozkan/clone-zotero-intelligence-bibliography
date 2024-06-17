@@ -2844,7 +2844,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
         # Parameters for the request
         params = {
-            'format': 'bib',
+            'format': 'citation',
             'linkwrap': 1
         }
 
@@ -2854,7 +2854,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
         # Check if request was successful
         if response.status_code == 200:
             bibliography = response.text.strip()  # Strip any leading/trailing whitespace
-            bibliography = f'<p>{bibliography}</p>'
             all_bibliographies += f'<p>{bibliography}</p>'  # Append bibliography with two newlines for separation
         else:
             all_bibliographies += f'Error fetching bibliography for item {item_key}: Status Code {response.status_code}\n'
