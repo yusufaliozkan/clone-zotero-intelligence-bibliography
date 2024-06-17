@@ -324,6 +324,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     st.markdown(f"<h3>{row['title']}</h3>", unsafe_allow_html=True)  # Display title (optional)
                     st.markdown(row['bibliography'], unsafe_allow_html=True) 
             st.title('Bibliographies')
+            display_bibliographies(df_collections)
+
 
 #UNTIL HERE
         with col2:
