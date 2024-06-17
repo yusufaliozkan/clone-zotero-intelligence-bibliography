@@ -86,7 +86,7 @@ def zotero_data(library_id, library_type):
 items999 = zot.everything(zot.top(limit=10))
 for item in items999:
     citation = zot.format_single(item['key'], style='apa', linkwrap=False, content='citation')
-    citation
+citation
 df = zotero_data(library_id, library_type)
 
 df['Abstract'] = df['Abstract'].replace(r'^\s*$', np.nan, regex=True) # To replace '' with NaN. Otherwise the code below do not understand the value is nan.
