@@ -2863,4 +2863,3 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
         # Display all bibliographies in Streamlit
     st.markdown(all_bibliographies, unsafe_allow_html=True)
-    all_bibliographies
