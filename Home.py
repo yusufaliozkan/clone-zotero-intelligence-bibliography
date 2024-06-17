@@ -37,6 +37,14 @@ from format_entry import format_entry
 from streamlit_dynamic_filters import DynamicFilters
 # from rss_feed import df_podcast, df_magazines
 
+citation_html = '''
+<div class="csl-bib-body" style="line-height: 2; padding-left: 1em; text-indent:-1em;">
+  <div class="csl-entry"><i>&#x201C;U.S. Army Open-Source Intelligence (OSINT)&#x201D; &#x2013; with Dennis Eger &amp; Shawn Nilius</i>. (2024, June 11). <a href="https://thecyberwire.com/podcasts/spycast/637/notes">https://thecyberwire.com/podcasts/spycast/637/notes</a></div>
+</div>
+'''
+
+# Display the citation in Streamlit
+st.markdown(citation_html, unsafe_allow_html=True)
 
 # Connecting Zotero with API 
 library_id = '2514686'
@@ -83,10 +91,6 @@ def zotero_data(library_id, library_type):
     df = pd.DataFrame(data, columns=columns)
     return df
 
-items999 = zot.everything(zot.top(limit=10))
-for item in items999:
-    citation = zot.format_single(item['key'], style='apa', linkwrap=False, content='citation')
-citation
 df = zotero_data(library_id, library_type)
 
 df['Abstract'] = df['Abstract'].replace(r'^\s*$', np.nan, regex=True) # To replace '' with NaN. Otherwise the code below do not understand the value is nan.
