@@ -320,8 +320,16 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
             df_collections
             def display_bibliographies(df):
+                all_bibliographies = ""
                 for index, row in df.iterrows():
-                    st.markdown(row['bibliography'], unsafe_allow_html=True)  # Display bibliography
+                    # Add a horizontal line between bibliographies
+                    if index > 0:
+                        all_bibliographies += '<hr style="margin-top: 1em; margin-bottom: 1em;">'
+                    
+                    # Display bibliography
+                    all_bibliographies += row['bibliography']
+
+                st.markdown(all_bibliographies, unsafe_allow_html=True)
 
             # Streamlit app
             st.title('Bibliographies Display')
