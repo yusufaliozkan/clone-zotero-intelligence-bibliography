@@ -2832,7 +2832,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     base_url = 'https://api.zotero.org'
 
     # List of item keys you want to retrieve
-    item_keys = ['ZWRFYLAW', 'QPGERC3Q', 'D4TFCPGK', '94EQKK5L', 'AN5YI8EM']
+    item_keys = ['ZWRFYLAW', 'QPGERC3Q', 'D4TFCPGK', '94EQKK5L', 'PSQ3ZMWN']
 
     # Initialize an empty string to accumulate bibliographies
     all_bibliographies = ""
@@ -2844,9 +2844,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
         # Parameters for the request
         params = {
-            'format': 'json',
-            'linkwrap': 1,
-            'include':'bib'
+            'format': 'bib',
+            'linkwrap': 1
         }
 
         # Make GET request to Zotero API
@@ -2854,8 +2853,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
         # Check if request was successful
         if response.status_code == 200:
-            item_data = response.json()
-            bibliography = item_data.get('bib', '').strip()  # Strip any leading/trailing whitespace
+            bibliography = response.text.strip()  # Strip any leading/trailing whitespace
             all_bibliographies += f'<p>{bibliography}</p>'  # Append bibliography with two newlines for separation
         else:
             all_bibliographies += f'Error fetching bibliography for item {item_key}: Status Code {response.status_code}\n'
