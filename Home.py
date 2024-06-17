@@ -2859,5 +2859,5 @@ with st.spinner('Retrieving data & updating dashboard...'):
             all_bibliographies += f'Error fetching bibliography for item {item_key}: Status Code {response.status_code}\n'
             all_bibliographies += f'{response.text}\n\n'  # Print error response for debugging
 
-    # Display all bibliographies in Streamlit
-    st.markdown(all_bibliographies, unsafe_allow_html=True)
+        # Display all bibliographies in Streamlit
+        st.markdown(bibliography, unsafe_allow_html=True)
