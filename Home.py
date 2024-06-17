@@ -37,14 +37,14 @@ from format_entry import format_entry
 from streamlit_dynamic_filters import DynamicFilters
 # from rss_feed import df_podcast, df_magazines
 
-citation_html = '''
+citation_html333 = '''
 <div class="csl-bib-body" style="line-height: 2; padding-left: 1em; text-indent:-1em;">
   <div class="csl-entry"><i>&#x201C;U.S. Army Open-Source Intelligence (OSINT)&#x201D; &#x2013; with Dennis Eger &amp; Shawn Nilius</i>. (2024, June 11). <a href="https://thecyberwire.com/podcasts/spycast/637/notes">https://thecyberwire.com/podcasts/spycast/637/notes</a></div>
 </div>
 '''
 
 # Display the citation in Streamlit
-st.markdown(citation_html, unsafe_allow_html=True)
+st.markdown(citation_html333, unsafe_allow_html=True)
 
 # Connecting Zotero with API 
 library_id = '2514686'
