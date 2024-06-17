@@ -2845,7 +2845,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
         # Parameters for the request
         params = {
             'format': 'json',
-            'linkwrap': 1
+            'linkwrap': 1,
+            'include':'bib'
         }
 
         # Make GET request to Zotero API
