@@ -2844,7 +2844,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
         # Parameters for the request
         params = {
-            'include/content': 'citation',
+            'include': 'citation',
+            'content':'citation',
             'linkwrap': 1
         }
 
