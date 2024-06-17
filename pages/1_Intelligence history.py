@@ -316,6 +316,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_table_view
             df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
             df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+            df_zotero_id
             df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
             df_collections
             def display_bibliographies(df):
