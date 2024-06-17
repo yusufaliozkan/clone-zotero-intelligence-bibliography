@@ -323,7 +323,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 all_bibliographies = ""
                 for index, row in df.iterrows():
                     # Add a horizontal line between bibliographies
-
+                    if index > 0:
+                        all_bibliographies += '<br><br>'
+                    
                     # Display bibliography
                     all_bibliographies += row['bibliography']
 
