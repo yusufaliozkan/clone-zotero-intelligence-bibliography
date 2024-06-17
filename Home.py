@@ -2826,9 +2826,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     display_custom_license()
 
-    citation_html333 = '''
-<div class="csl-bib-body" style="line-height: 1.35; padding-left: 1em; text-indent:-1em;">\n  <div class="csl-entry"><i>&#x201C;U.S. Army Open-Source Intelligence (OSINT)&#x201D; &#x2013; with Dennis Eger &amp; Shawn Nilius</i>. SpyCast, 2024. <a href="https://thecyberwire.com/podcasts/spycast/637/notes">https://thecyberwire.com/podcasts/spycast/637/notes</a>.</div>\n</div>
-    '''
+    citation_html333 = '''<?xml version="1.0"?>
+<div class="csl-bib-body" style="line-height: 1.35; padding-left: 1em; text-indent:-1em;">
+  <div class="csl-entry">Calkins, Laura M. &#x201C;British Surveillance of Postwar Soviet Radio Jamming: US&#x2013;UK Intelligence Relations and Interference Detection at BBC Tatsfield, 1948-1949.&#x201D; <i>Journal of Intelligence History</i>, June 5, 2024, 1&#x2013;22. https://doi.org/10.1080/16161262.2024.2363716.</div>
+</div>'''
 
     # Display the citation in Streamlit
     st.markdown(citation_html333, unsafe_allow_html=True)
