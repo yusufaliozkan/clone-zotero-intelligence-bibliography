@@ -2828,7 +2828,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     citation_html333 = '''<?xml version="1.0"?>
 <div class="csl-bib-body" style="line-height: 1.35; padding-left: 1em; text-indent:-1em;">
-  <div class="csl-entry">Calkins, Laura M. &#x201C;British Surveillance of Postwar Soviet Radio Jamming: US&#x2013;UK Intelligence Relations and Interference Detection at BBC Tatsfield, 1948-1949.&#x201D; <i>Journal of Intelligence History</i>, June 5, 2024, 1&#x2013;22. https://doi.org/10.1080/16161262.2024.2363716.</div>
+  <div class="csl-entry">Calkins, Laura M. &#x201C;British Surveillance of Postwar Soviet Radio Jamming: US&#x2013;UK Intelligence Relations and Interference Detection at BBC Tatsfield, 1948-1949.&#x201D; <i>Journal of Intelligence History</i>, June 5, 2024, 1&#x2013;22. <a href="https://doi.org/10.1080/16161262.2024.2363716">https://doi.org/10.1080/16161262.2024.2363716</a>.</div>
 </div>'''
 
     # Display the citation in Streamlit
