@@ -318,6 +318,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_zotero_id = pd.read_csv('zotero_citation_format.csv')
             df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
             df_collections
+            all_bibliographies += f'<p>{bibliography}</p>' 
+            st.markdown(all_bibliographies, unsafe_allow_html=True)
 #UNTIL HERE
         with col2:
             with st.expander('Collections', expanded=True):
