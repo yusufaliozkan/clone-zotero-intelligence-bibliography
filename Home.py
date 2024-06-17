@@ -2854,7 +2854,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         # Check if request was successful
         if response.status_code == 200:
             bibliography = response.text.strip()  # Strip any leading/trailing whitespace
-            all_bibliographies += f'{bibliography}\n\n'  # Append bibliography with two newlines for separation
+            all_bibliographies += f'\n\n{bibliography}\n\n'  # Append bibliography with two newlines for separation
         else:
             all_bibliographies += f'Error fetching bibliography for item {item_key}: Status Code {response.status_code}\n'
             all_bibliographies += f'{response.text}\n\n'  # Print error response for debugging
