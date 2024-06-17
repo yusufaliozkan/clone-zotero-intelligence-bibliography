@@ -314,9 +314,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_table_view
                 else:
                     df_table_view
-            df_collections
             df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
             df_collections
+            df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+            df_zotero_id
 #UNTIL HERE
         with col2:
             with st.expander('Collections', expanded=True):
