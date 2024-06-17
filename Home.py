@@ -2826,10 +2826,37 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     display_custom_license()
 
-    citation_html333 = '''<?xml version="1.0"?>
-<div class="csl-bib-body" style="line-height: 1.35; padding-left: 1em; text-indent:-1em;">
-  <div class="csl-entry">Calkins, Laura M. &#x201C;British Surveillance of Postwar Soviet Radio Jamming: US&#x2013;UK Intelligence Relations and Interference Detection at BBC Tatsfield, 1948-1949.&#x201D; <i>Journal of Intelligence History</i>, June 5, 2024, 1&#x2013;22. <a href="https://doi.org/10.1080/16161262.2024.2363716">https://doi.org/10.1080/16161262.2024.2363716</a>.</div>
-</div>'''
+
+    # Replace with your Zotero user ID, item key, and API key (if required)
+    user_id = '2514686'
+    item_key = 'YV5CFI6H'
+    api_key = 'Your-API-Key-Here'  # Only required for non-public libraries
+
+    # Base URL for Zotero API
+    base_url = 'https://api.zotero.org'
+
+    # Endpoint to get item bibliography
+    endpoint = f'/groups/{user_id}/items/{item_key}'
+
+    # Parameters for the request
+    params = {
+        'format': 'bib',
+        'linkwrap': 1
+    }
+
+
+    # Make GET request to Zotero API
+    response = requests.get(base_url + endpoint, params=params)
+
+    # Check if request was successful
+    if response.status_code == 200:
+        bibliography = response.text
+        print(f'Bibliography for item {item_key}:\n{bibliography}')
+    else:
+        print(f'Error fetching bibliography: Status Code {response.status_code}')
+        print(response.text)  # Print error response for debugging
+
+    citation_html333 = bibliography
 
     # Display the citation in Streamlit
     st.markdown(citation_html333, unsafe_allow_html=True)
