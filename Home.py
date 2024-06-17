@@ -2838,7 +2838,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     all_bibliographies = ""
 
     # Iterate through each item key
-    for index, item_key in enumerate(item_keys, 1):  # Start index from 1
+    for item_key in item_keys:
         # Endpoint to get item bibliography
         endpoint = f'/groups/{user_id}/items/{item_key}'
 
@@ -2854,10 +2854,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
         # Check if request was successful
         if response.status_code == 200:
             bibliography = response.text.strip()  # Strip any leading/trailing whitespace
-            all_bibliographies += f'{index}. {bibliography}\n\n'  # Numbered list
+            all_bibliographies += f'{bibliography}\n\n'  # Append bibliography with two newlines for separation
         else:
-            all_bibliographies += f'{index}. Error fetching bibliography for item {item_key}: Status Code {response.status_code}\n'
+            all_bibliographies += f'Error fetching bibliography for item {item_key}: Status Code {response.status_code}\n'
             all_bibliographies += f'{response.text}\n\n'  # Print error response for debugging
 
     # Display all bibliographies in Streamlit
-    st.markdown(all_bibliographies, unsafe_allow_html=True)
+    st.text(all_bibliographies)
