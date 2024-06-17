@@ -318,8 +318,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_zotero_id = pd.read_csv('zotero_citation_format.csv')
             df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
             df_collections
-            all_bibliographies += f'<p>{bibliography}</p>' 
-            st.markdown(all_bibliographies, unsafe_allow_html=True)
+
+            def display_bibliographies(df_collections):
+                for index, row in df_collections.iterrows():
+                    st.markdown(f"<h3>{row['title']}</h3>", unsafe_allow_html=True)  # Display title (optional)
+                    st.markdown(row['bibliography'], unsafe_allow_html=True) 
+            st.title('Bibliographies')
+
 #UNTIL HERE
         with col2:
             with st.expander('Collections', expanded=True):
