@@ -318,14 +318,16 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_zotero_id = pd.read_csv('zotero_citation_format.csv')
             df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
             df_collections
-
-            def display_bibliographies(df_collections):
-                for index, row in df_collections.iterrows():
+            def display_bibliographies(df):
+                for index, row in df.iterrows():
                     st.markdown(f"<h3>{row['title']}</h3>", unsafe_allow_html=True)  # Display title (optional)
-                    st.markdown(row['bibliography'], unsafe_allow_html=True) 
-            st.title('Bibliographies')
-            display_bibliographies(df_collections)
+                    st.markdown(row['bibliography'], unsafe_allow_html=True)  # Display bibliography
 
+            # Streamlit app
+            st.title('Bibliographies Display')
+
+            # Display bibliographies from df_collections DataFrame
+            display_bibliographies(df_collections)
 
 #UNTIL HERE
         with col2:
