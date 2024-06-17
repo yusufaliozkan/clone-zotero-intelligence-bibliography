@@ -2845,7 +2845,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         # Parameters for the request
         params = {
             'format': 'atom',
-            'content':'bib'
+            'content':'citation'
         }
 
         # Make GET request to Zotero API
@@ -2860,4 +2860,4 @@ with st.spinner('Retrieving data & updating dashboard...'):
             all_bibliographies += f'{response.text}\n\n'  # Print error response for debugging
 
         # Display all bibliographies in Streamlit
-        st.markdown(bibliography, unsafe_allow_html=True)
+        st.markdown(all_bibliographies, unsafe_allow_html=True)
