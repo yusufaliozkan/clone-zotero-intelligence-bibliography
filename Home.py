@@ -2832,7 +2832,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     base_url = 'https://api.zotero.org'
 
     # List of item keys you want to retrieve
-    item_keys = ['ZWRFYLAW', 'QPGERC3Q', 'D4TFCPGK', '94EQKK5L', 'PSQ3ZMWN']
+    item_keys = ['ZWRFYLAW', 'QPGERC3Q', 'D4TFCPGK', '94EQKK5L', 'AN5YI8EM']
 
     # Initialize an empty string to accumulate bibliographies
     all_bibliographies = ""
