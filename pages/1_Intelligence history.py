@@ -314,6 +314,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_table_view
                 else:
                     df_table_view
+            df_collections
 #UNTIL HERE
         with col2:
             with st.expander('Collections', expanded=True):
