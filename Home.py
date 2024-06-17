@@ -2844,7 +2844,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
         # Parameters for the request
         params = {
-            'format': 'bib',
+            'format': 'json',
             'linkwrap': 1
         }
 
