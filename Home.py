@@ -2826,7 +2826,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     display_custom_license()
 
-
     user_id = '2514686'
     api_key = 'Your-API-Key-Here'  # Only required for non-public libraries
 
@@ -2836,8 +2835,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     # List of item keys you want to retrieve
     item_keys = ['ZWRFYLAW', 'QPGERC3Q', 'D4TFCPGK', '94EQKK5L', 'PSQ3ZMWN']
 
-    # Initialize an empty list to accumulate bibliographies
-    all_bibliographies = []
+    # Initialize an empty string to accumulate bibliographies
+    all_bibliographies = ""
 
     # Iterate through each item key
     for index, item_key in enumerate(item_keys, 1):  # Start index from 1
@@ -2851,18 +2850,15 @@ with st.spinner('Retrieving data & updating dashboard...'):
         }
 
         # Make GET request to Zotero API
-        response = requests.get(base_url + endpoint, params=params)
+        response = requests.get(base_url + endpoint, params=params, headers={'Zotero-API-Key': api_key})
 
         # Check if request was successful
         if response.status_code == 200:
-            bibliography = response.text
-            all_bibliographies.append(f'{index}. {bibliography}\n')  # Numbered list
+            bibliography = response.text.strip()  # Strip any leading/trailing whitespace
+            all_bibliographies += f'{index}. {bibliography}\n\n'  # Numbered list
         else:
-            all_bibliographies.append(f'{index}. Error fetching bibliography for item {item_key}: Status Code {response.status_code}\n')
-            all_bibliographies.append(f'{response.text}\n')  # Print error response for debugging
+            all_bibliographies += f'{index}. Error fetching bibliography for item {item_key}: Status Code {response.status_code}\n'
+            all_bibliographies += f'{response.text}\n\n'  # Print error response for debugging
 
-    # Join all bibliographies into a single string
-    all_bibliographies_str = '\n'.join(all_bibliographies)
-
-    # Display all bibliographies in Streamlit using markdown
-    st.markdown(all_bibliographies_str, unsafe_allow_html=True)
+    # Display all bibliographies in Streamlit
+    st.markdown(all_bibliographies, unsafe_allow_html=True)
