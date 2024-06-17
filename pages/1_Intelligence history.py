@@ -315,7 +315,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 else:
                     df_table_view
             df_collections
-            df_collections['zotero_item_key'] = df_collections['Zotero link'].st.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+            df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
             df_collections
 #UNTIL HERE
         with col2:
