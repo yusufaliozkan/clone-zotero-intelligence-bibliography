@@ -164,6 +164,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 only_citation = st.checkbox('Show cited items only')
                 if only_citation:
                     df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
+            view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
             colview1, colview2 = st.columns(2)
             with colview1:
                 table_view = st.checkbox('See results in table')
@@ -229,7 +230,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
             # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
             sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
-            if not table_view or cited_view:
+            if view == 'Basic list':
                 articles_list = []  # Store articles in a list
                 for index, row in df_collections.iterrows():
                     formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
@@ -305,7 +306,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 count += 1
                                 if display2:
                                     st.caption(row['Abstract']) 
-            elif table_view:
+            elif view == 'Table':
                 df_table_view = df_collections[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal', 'Citation', 'Collection_Name','Link to publication','Zotero link']]
                 df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                 if sort_by == 'Publication type':
