@@ -316,64 +316,28 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 else:
                     df_table_view
             df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
-            # df_zotero_id = pd.read_csv('zotero_citation_format.csv')
-            # df_zotero_id
-            # df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
+            df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+            df_zotero_id
+            df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
             df_zotero_id = df_collections[['zotero_item_key']]
 
-            user_id = '2514686'
-
-            # Base URL for Zotero API
-            base_url = 'https://api.zotero.org'
-
-            # Initialize an empty string to accumulate bibliographies
-            all_bibliographies = ""
-
-            # List to store bibliographies
-            bibliographies = []
-
-            # Iterate through each item key in the DataFrame
-            for item_key in df_zotero_id['zotero_item_key']:
-                # Endpoint to get item bibliography
-                endpoint = f'/groups/{user_id}/items/{item_key}'
-
-                # Parameters for the request
-                params = {
-                    'format': 'bib',
-                    'linkwrap': 1
-                }
-
-                # Make GET request to Zotero API
-                response = requests.get(base_url + endpoint, params=params)
-
-                # Check if request was successful
-                if response.status_code == 200:
-                    bibliography = response.text.strip()  # Strip any leading/trailing whitespace
-                    all_bibliographies += f'<p>{bibliography}</p>'  # Append bibliography with two newlines for separation
-                else:
-                    error_message = f'Error fetching bibliography for item {item_key}: Status Code {response.status_code}'
-                    bibliographies.append(error_message)
-                    all_bibliographies += f'<p>{error_message}</p><br><br>'
-            st.markdown(all_bibliographies, unsafe_allow_html=True)
-
-
-            # def display_bibliographies(df):
-            #     all_bibliographies = ""
-            #     for index, row in df.iterrows():
-            #         # Add a horizontal line between bibliographies
-            #         if index > 0:
-            #             all_bibliographies += '<p><p>'
+            def display_bibliographies(df):
+                all_bibliographies = ""
+                for index, row in df.iterrows():
+                    # Add a horizontal line between bibliographies
+                    if index > 0:
+                        all_bibliographies += '<p><p>'
                     
-            #         # Display bibliography
-            #         all_bibliographies += row['bibliography']
+                    # Display bibliography
+                    all_bibliographies += row['bibliography']
 
-            #     st.markdown(all_bibliographies, unsafe_allow_html=True)
+                st.markdown(all_bibliographies, unsafe_allow_html=True)
 
-            # # Streamlit app
-            # st.title('Bibliographies Display')
+            # Streamlit app
+            st.title('Bibliographies Display')
 
-            # # Display bibliographies from df_collections DataFrame
-            # display_bibliographies(df_collections)
+            # Display bibliographies from df_collections DataFrame
+            display_bibliographies(df_collections)
 
 #UNTIL HERE
         with col2:
