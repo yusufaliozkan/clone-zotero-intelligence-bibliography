@@ -355,6 +355,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     error_message = f'Error fetching bibliography for item {item_key}: Status Code {response.status_code}'
                     bibliographies.append(error_message)
                     all_bibliographies += f'<p>{error_message}</p><br><br>'
+                
                 st.markdown(all_bibliographies, unsafe_allow_html=True)
 
 
@@ -370,11 +371,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             #     st.markdown(all_bibliographies, unsafe_allow_html=True)
 
-            # Streamlit app
-            st.title('Bibliographies Display')
+            # # Streamlit app
+            # st.title('Bibliographies Display')
 
-            # Display bibliographies from df_collections DataFrame
-            display_bibliographies(df_collections)
+            # # Display bibliographies from df_collections DataFrame
+            # display_bibliographies(df_collections)
 
 #UNTIL HERE
         with col2:
