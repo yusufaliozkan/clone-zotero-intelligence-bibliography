@@ -165,11 +165,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 if only_citation:
                     df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
             view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
-            colview1, colview2 = st.columns(2)
-            with colview1:
-                table_view = st.checkbox('See results in table')
-            with colview2:
-                cited_view = st.checkbox('See results as bibliography')
 
             types = st.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original')
             df_collections = df_collections[df_collections['Publication type'].isin(types)]
