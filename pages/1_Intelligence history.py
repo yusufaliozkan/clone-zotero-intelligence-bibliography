@@ -334,7 +334,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             bibliographies = []
 
             # Iterate through each item key in the DataFrame
-            for item_key in df_collections['zotero_item_key']:
+            for item_key in df_zotero_id['zotero_item_key']:
                 # Endpoint to get item bibliography
                 endpoint = f'/groups/{user_id}/items/{item_key}'
 
