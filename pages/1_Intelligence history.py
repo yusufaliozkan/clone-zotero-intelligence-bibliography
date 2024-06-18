@@ -320,7 +320,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # df_zotero_id
             # df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
             df_zotero_id = df_collections[['zotero_item_key']]
-            df_zotero_id
 
             user_id = '2514686'
 
