@@ -157,15 +157,18 @@ with st.spinner('Retrieving data & updating dashboard...'):
     with col3:
         with st.popover("Filters and more"):
             st.write(f"View the collection in [Zotero]({collection_link})")
-            col112, col113, col114 = st.columns(3)
+            col112, col113 = st.columns(2)
             with col112:
                 display2 = st.checkbox('Display abstracts')
             with col113:
                 only_citation = st.checkbox('Show cited items only')
                 if only_citation:
                     df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
-            with col114:
+            colview1, colview2 = st.columns(2)
+            with colview1:
                 table_view = st.checkbox('See results in table')
+            with colview2:
+                cited_view = st.checkbox('See results as bibliography')
 
             types = st.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original')
             df_collections = df_collections[df_collections['Publication type'].isin(types)]
@@ -226,7 +229,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
             # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
             sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
-            if not table_view:
+            if not table_view or cited_view:
                 articles_list = []  # Store articles in a list
                 for index, row in df_collections.iterrows():
                     formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
@@ -302,7 +305,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 count += 1
                                 if display2:
                                     st.caption(row['Abstract']) 
-            else:
+            elif table_view:
                 df_table_view = df_collections[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal', 'Citation', 'Collection_Name','Link to publication','Zotero link']]
                 df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                 if sort_by == 'Publication type':
@@ -315,22 +318,23 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_table_view
                 else:
                     df_table_view
-            df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
-            df_zotero_id = pd.read_csv('zotero_citation_format.csv')
-            df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
-            df_zotero_id = df_collections[['zotero_item_key']]
+            else:
+                df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
+                df_zotero_id = df_collections[['zotero_item_key']]
 
-            def display_bibliographies(df):
-                all_bibliographies = ""
-                for index, row in df.iterrows():
-                    # Add a horizontal line between bibliographies
-                    if index > 0:
-                        all_bibliographies += '<p><p>'
-                    
-                    # Display bibliography
-                    all_bibliographies += row['bibliography']
+                def display_bibliographies(df):
+                    all_bibliographies = ""
+                    for index, row in df.iterrows():
+                        # Add a horizontal line between bibliographies
+                        if index > 0:
+                            all_bibliographies += '<p><p>'
+                        
+                        # Display bibliography
+                        all_bibliographies += row['bibliography']
 
-                # st.markdown(all_bibliographies, unsafe_allow_html=True)
+                    st.markdown(all_bibliographies, unsafe_allow_html=True)
 
             # Streamlit app
 
