@@ -319,27 +319,28 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_collections = df_collections.sort_values(by=['Publication type'], ascending=True)
                 elif sort_by == 'Citation':
                     df_collections = df_collections.sort_values(by=['Citation'], ascending=False)
-                df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
-                df_zotero_id = pd.read_csv('zotero_citation_format.csv')
-                df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
-                df_zotero_id = df_collections[['zotero_item_key']]
+                with st.expander('Click to expand'):
+                    df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                    df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                    df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
+                    df_zotero_id = df_collections[['zotero_item_key']]
 
-                def display_bibliographies(df):
-                    all_bibliographies = ""
-                    for index, row in df.iterrows():
-                        # Add a horizontal line between bibliographies
-                        if index > 0:
-                            all_bibliographies += '<p><p>'
-                        
-                        # Display bibliography
-                        all_bibliographies += row['bibliography']
+                    def display_bibliographies(df):
+                        all_bibliographies = ""
+                        for index, row in df.iterrows():
+                            # Add a horizontal line between bibliographies
+                            if index > 0:
+                                all_bibliographies += '<p><p>'
+                            
+                            # Display bibliography
+                            all_bibliographies += row['bibliography']
 
-                    st.markdown(all_bibliographies, unsafe_allow_html=True)
+                        st.markdown(all_bibliographies, unsafe_allow_html=True)
 
-                # Streamlit app
+                    # Streamlit app
 
-                # Display bibliographies from df_collections DataFrame
-                display_bibliographies(df_collections)
+                    # Display bibliographies from df_collections DataFrame
+                    display_bibliographies(df_collections)
 
 #UNTIL HERE
         with col2:
