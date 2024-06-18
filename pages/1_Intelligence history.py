@@ -315,30 +315,30 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_table_view
                 else:
                     df_table_view
-            df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
-            df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+            # df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+            # df_zotero_id = pd.read_csv('zotero_citation_format.csv')
             df_zotero_id 
-            df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
-            df_zotero_id = df_collections[['zotero_item_key']]
-            df_zotero_id
+            # df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
+            # df_zotero_id = df_collections[['zotero_item_key']]
+            # df_zotero_id
 
-            def display_bibliographies(df):
-                all_bibliographies = ""
-                for index, row in df.iterrows():
-                    # Add a horizontal line between bibliographies
-                    if index > 0:
-                        all_bibliographies += '<p><p>'
+            # def display_bibliographies(df):
+            #     all_bibliographies = ""
+            #     for index, row in df.iterrows():
+            #         # Add a horizontal line between bibliographies
+            #         if index > 0:
+            #             all_bibliographies += '<p><p>'
                     
-                    # Display bibliography
-                    all_bibliographies += row['bibliography']
+            #         # Display bibliography
+            #         all_bibliographies += row['bibliography']
 
-                st.markdown(all_bibliographies, unsafe_allow_html=True)
+            #     st.markdown(all_bibliographies, unsafe_allow_html=True)
 
-            # Streamlit app
-            st.title('Bibliographies Display')
+            # # Streamlit app
+            # st.title('Bibliographies Display')
 
-            # Display bibliographies from df_collections DataFrame
-            display_bibliographies(df_collections)
+            # # Display bibliographies from df_collections DataFrame
+            # display_bibliographies(df_collections)
 
 #UNTIL HERE
         with col2:
