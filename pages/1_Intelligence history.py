@@ -335,7 +335,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # Streamlit app
 
             # Display bibliographies from df_collections DataFrame
-            display_bibliographies(df_collections)
+            # display_bibliographies(df_collections)
 
 #UNTIL HERE
         with col2:
