@@ -333,7 +333,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 st.markdown(all_bibliographies, unsafe_allow_html=True)
 
             # Streamlit app
-            st.title('Bibliographies Display')
 
             # Display bibliographies from df_collections DataFrame
             display_bibliographies(df_collections)
