@@ -307,12 +307,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 if sort_by == 'Publication type':
                     df_table_view = df_table_view.sort_values(by=['Publication type'], ascending=True)
                     df_table_view = df_table_view.reset_index(drop=True)
-                    df_table_view
                 elif sort_by == 'Citation':
                     df_table_view = df_table_view.sort_values(by=['Citation'], ascending=False)
                     df_table_view = df_table_view.reset_index(drop=True)
-                    df_table_view
-                else:
+                with st.expander('Click to expand', expanded=True):
                     df_table_view
             else:
                 if sort_by == 'Publication type':
