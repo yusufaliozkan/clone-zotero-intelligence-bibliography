@@ -330,12 +330,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     # Display bibliography
                     all_bibliographies += row['bibliography']
 
-                st.markdown(all_bibliographies, unsafe_allow_html=True)
+                # st.markdown(all_bibliographies, unsafe_allow_html=True)
 
             # Streamlit app
 
             # Display bibliographies from df_collections DataFrame
-            # display_bibliographies(df_collections)
+            display_bibliographies(df_collections)
 
 #UNTIL HERE
         with col2:
