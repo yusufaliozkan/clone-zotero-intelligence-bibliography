@@ -259,7 +259,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         '[[Zotero link]](' + str(zotero_link) + ')'
                     )
                                 
-                with st.expander('Click to expand', expanded=True):
+                with st.expander('**Basic list view**', expanded=True):
 
                     if sort_by == 'Publication date :arrow_down:': # or df_collections['Citation'].sum() == 0:
                         count = 1
@@ -310,14 +310,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 elif sort_by == 'Citation':
                     df_table_view = df_table_view.sort_values(by=['Citation'], ascending=False)
                     df_table_view = df_table_view.reset_index(drop=True)
-                with st.expander('Click to expand', expanded=True):
+                with st.expander('**Table view**', expanded=True):
                     df_table_view
             else:
                 if sort_by == 'Publication type':
                     df_collections = df_collections.sort_values(by=['Publication type'], ascending=True)
                 elif sort_by == 'Citation':
                     df_collections = df_collections.sort_values(by=['Citation'], ascending=False)
-                with st.expander('Click to expand', expanded=True):
+                with st.expander('**Bibliographic listing', expanded=True):
                     df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
                     df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                     df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
