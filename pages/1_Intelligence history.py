@@ -355,7 +355,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     error_message = f'Error fetching bibliography for item {item_key}: Status Code {response.status_code}'
                     bibliographies.append(error_message)
                     all_bibliographies += f'<p>{error_message}</p><br><br>'
-                
+                bibliography
                 st.markdown(all_bibliographies, unsafe_allow_html=True)
 
 
