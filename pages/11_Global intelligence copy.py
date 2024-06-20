@@ -439,7 +439,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
                         
-                    if not table_view:      
+                    if view == 'Basic list':    
                         for index, row in df_countries.iterrows():
                             formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
                             articles_list.append(formatted_entry)        
@@ -503,7 +503,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 count += 1
                                 if display2:
                                     st.caption(row['Abstract']) 
-                    else:
+                    elif view == 'Table':
                         df_table_view = df_countries[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal', 'Citation', 'Collection_Name','Link to publication','Zotero link']]
                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                         if sort_by == 'Publication type':
@@ -516,7 +516,28 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             df_table_view
                         else:
                             df_table_view                                 
+                    else:
+                        df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                        df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                        df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
+                        df_zotero_id = df_collections[['zotero_item_key']]
 
+                        def display_bibliographies(df):
+                            all_bibliographies = ""
+                            for index, row in df.iterrows():
+                                # Add a horizontal line between bibliographies
+                                if index > 0:
+                                    all_bibliographies += '<p><p>'
+                                
+                                # Display bibliography
+                                all_bibliographies += row['bibliography']
+
+                            st.markdown(all_bibliographies, unsafe_allow_html=True)
+
+                        # Streamlit app
+
+                        # Display bibliographies from df_collections DataFrame
+                        display_bibliographies(df_collections)                        
             df_continent['Date published'] = pd.to_datetime(df_continent['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
             df_continent['Date published'] = df_continent['Date published'].dt.strftime('%Y-%m-%d')
             df_continent['Date published'] = df_continent['Date published'].fillna('')
