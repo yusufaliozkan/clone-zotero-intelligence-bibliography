@@ -422,7 +422,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
             search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
-            st.divider()
             if search_option == "Search keywords":
                 st.subheader('Search keywords', anchor=False)
                 @st.experimental_dialog("Search guide")
