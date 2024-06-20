@@ -36,6 +36,7 @@ import requests
 from format_entry import format_entry
 from streamlit_dynamic_filters import DynamicFilters
 # from rss_feed import df_podcast, df_magazines
+import pdfkit
 
 # Connecting Zotero with API 
 library_id = '2514686'
@@ -1023,6 +1024,35 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                                         st.markdown(all_bibliographies, unsafe_allow_html=True)
                                     display_bibliographies(filtered_collection_df_authors)
+
+                                    def display_bibliographies(df):
+                                        all_bibliographies = ""
+                                        for index, row in df.iterrows():
+                                            # Add a horizontal line between bibliographies
+                                            if index > 0:
+                                                all_bibliographies += '<p><p>'
+                                            
+                                            # Display bibliography
+                                            all_bibliographies += row['bibliography']
+
+                                        st.markdown(all_bibliographies, unsafe_allow_html=True)
+                                        return all_bibliographies
+
+                                    bibliographies_html = display_bibliographies(filtered_collection_df_authors)
+
+                                    if st.button("Download as PDF"):
+                                        # Save the HTML to a file
+                                        with open("bibliographies.html", "w") as file:
+                                            file.write(bibliographies_html)
+
+                                        # Convert the HTML to PDF
+                                        pdfkit.from_file("bibliographies.html", "bibliographies.pdf")
+
+                                        # Provide a link to download the PDF
+                                        with open("bibliographies.pdf", "rb") as pdf_file:
+                                            pdf_bytes = pdf_file.read()
+                                            st.download_button(label="Download PDF", data=pdf_bytes, file_name="bibliographies.pdf", mime="application/pdf")
+
                             else:  # If toggle is on but no publications are available
                                 st.write("No publication type selected.")
 
