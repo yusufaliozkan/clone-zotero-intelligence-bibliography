@@ -231,16 +231,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
             total_rows = len(df_dedup)
             nan_count_citation = df_dedup['Citation_list'].isna().sum()
             non_nan_count_citation = total_rows - nan_count_citation
-            non_nan_count_citation
-            st.metric(label='Citation per publication', value=round(citation_count/non_nan_count_citation, 1))
-
             non_nan_cited_df_dedup = df_dedup.dropna(subset=['Citation_list'])
             non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
-            non_nan_cited_df_dedup
-            mean = non_nan_cited_df_dedup['Citation'].mean()
-            asd = len(non_nan_cited_df_dedup)
-            asd
-            mean
+            citation_mean = non_nan_cited_df_dedup['Citation'].mean()
+            st.metric(label='Citation per publication', value=round(citation_mean, 1))
 
             true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
             total_count = len(df_dedup[df_dedup['Publication type']=='Journal article'])
