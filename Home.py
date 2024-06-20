@@ -826,6 +826,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         with colauthor3:
                             with st.popover('Filters and more'):
                                 container_types = st.container()
+                                container_download = st.container()
 
                         st.write('*Please note that this database **may not show** all research outputs of the author.*')
                         types = container_types.multiselect('Publication type', filtered_collection_df_authors['Publication type'].unique(), filtered_collection_df_authors['Publication type'].unique(), key='original_authors')
@@ -881,7 +882,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             
                         today = datetime.date.today().isoformat()
                         a = f'{selected_author}_{today}'
-                        st.download_button('💾 Download publications', csv, (a+'.csv'), mime="text/csv", key='download-csv-authors')
+                        container_download.download_button('💾 Download publications', csv, (a+'.csv'), mime="text/csv", key='download-csv-authors')
 
                         on = st.toggle('Generate dashboard')
                         if on and len(filtered_collection_df_authors) > 0: 
