@@ -226,6 +226,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     with col2:
         with st.popover('More metrics'):
             citation_count = df_dedup['Citation'].sum()
+            st.metric(label='Citation per publication', value=round(citation_count/item_count, 0))
             st.metric(label="Number of citations", value=int(citation_count))
 
             true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
@@ -235,7 +236,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             else:
                 oa_ratio = true_count / total_count * 100
             st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
-
+            
             item_type_no = df_dedup['Publication type'].nunique()
             st.metric(label='Number of publication types', value=int(item_type_no))
 
