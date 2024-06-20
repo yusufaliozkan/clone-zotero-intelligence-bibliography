@@ -1002,6 +1002,28 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                     df_table_view = filtered_collection_df_authors[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Citation', 'Link to publication','Zotero link']]
                                     df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                                     df_table_view
+                                else:
+                                    if sort_by == 'Publication type':
+                                        filtered_collection_df_authors = filtered_collection_df_authors.sort_values(by=['Publication type'], ascending=True)
+                                    elif sort_by == 'Citation':
+                                        filtered_collection_df_authors = filtered_collection_df_authors.sort_values(by=['Citation'], ascending=False)
+                                    filtered_collection_df_authors['zotero_item_key'] = filtered_collection_df_authors['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                    df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                                    filtered_collection_df_authors = pd.merge(filtered_collection_df_authors, df_zotero_id, on='zotero_item_key', how='left')
+                                    df_zotero_id = filtered_collection_df_authors[['zotero_item_key']]
+
+                                    def display_bibliographies(df):
+                                        all_bibliographies = ""
+                                        for index, row in df.iterrows():
+                                            # Add a horizontal line between bibliographies
+                                            if index > 0:
+                                                all_bibliographies += '<p><p>'
+                                            
+                                            # Display bibliography
+                                            all_bibliographies += row['bibliography']
+
+                                        st.markdown(all_bibliographies, unsafe_allow_html=True)
+                                    display_bibliographies(filtered_collection_df_authors)
                             else:  # If toggle is on but no publications are available
                                 st.write("No publication type selected.")
 
