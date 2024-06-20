@@ -2943,39 +2943,3 @@ with st.spinner('Retrieving data & updating dashboard...'):
         ''') 
 
     display_custom_license()
-
-    user_id = '2514686'
-
-    # Base URL for Zotero API
-    base_url = 'https://api.zotero.org'
-
-    # List of item keys you want to retrieve
-    item_keys = ['ZWRFYLAW', 'QPGERC3Q', 'D4TFCPGK', '94EQKK5L', 'PSQ3ZMWN']
-
-    # Initialize an empty string to accumulate bibliographies
-    all_bibliographies = ""
-
-    # Iterate through each item key
-    for item_key in item_keys:
-        # Endpoint to get item bibliography
-        endpoint = f'/groups/{user_id}/items/{item_key}'
-
-        # Parameters for the request
-        params = {
-            'format': 'bib',
-            'linkwrap': 1
-        }
-
-        # Make GET request to Zotero API
-        response = requests.get(base_url + endpoint, params=params)
-
-        # Check if request was successful
-        if response.status_code == 200:
-            bibliography = response.text.strip()  # Strip any leading/trailing whitespace
-            all_bibliographies += f'<p>{bibliography}</p>'  # Append bibliography with two newlines for separation
-        else:
-            all_bibliographies += f'Error fetching bibliography for item {item_key}: Status Code {response.status_code}\n'
-            all_bibliographies += f'{response.text}\n\n'  # Print error response for debugging
-
-        # Display all bibliographies in Streamlit
-    st.markdown(all_bibliographies, unsafe_allow_html=True)
