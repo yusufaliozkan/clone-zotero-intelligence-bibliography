@@ -228,6 +228,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
             citation_count = df_dedup['Citation'].sum()
             st.metric(label="Number of citations", value=int(citation_count))
             st.metric(label='Citation per publication', value=round(citation_count/item_count, 1))
+            mean = df_dedup['Citation'].mean()
+            mean
 
             true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
             total_count = len(df_dedup[df_dedup['Publication type']=='Journal article'])
