@@ -834,10 +834,16 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
 
                         citation_count = filtered_collection_df_authors['Citation'].sum()
-                        container_citation.metric(label="Number of citations", value=citation_count, help='Not ')
+                        container_citation.metric(label="Number of citations", value=int(citation_count), help='Not ')
 
                         st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
-                        container_metric.metric(label="Items found", value=num_items_collections, help=breakdown_string)
+                        container_metric.metric(
+                            label="Number of citations", 
+                            value=int(citation_count), 
+                            help=f'''Not all papers are tracked for citation. 
+                            Citation per publication: **{round(citation_mean, 1)}**, 
+                            Citation median: **{round(citation_median, 1)}**'''
+                            )
 
                         true_count = filtered_collection_df_authors[filtered_collection_df_authors['Publication type']=='Journal article']['OA status'].sum()
                         total_count = len(filtered_collection_df_authors[filtered_collection_df_authors['Publication type']=='Journal article'])
