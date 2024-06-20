@@ -2576,6 +2576,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                     df_authors
                     df_authors = df_authors.explode('Author_name')
+                    df_authors
                     df_authors.reset_index(drop=True, inplace=True)
                     max_authors = len(df_authors['Author_name'].unique())
                     num_authors = st.slider('Select number of authors to display:', 5, min(30, max_authors), 20)
