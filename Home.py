@@ -837,6 +837,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         expanded_authors = filtered_collection_df_authors['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
                         expanded_authors = expanded_authors.reset_index(name='Author')
                         expanded_authors
+                        filtered_collection_df_authors['multiple_authors'] = filtered_collection_df_authors['FirstName2'].apply(lambda x: ',' in x)
+                        filtered_collection_df_authors
                         author_no = len(expanded_authors)
                         if author_no == 0:
                             author_pub_ratio=0.0
