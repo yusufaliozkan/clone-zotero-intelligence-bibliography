@@ -867,7 +867,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                         filtered_collection_df_authors['multiple_authors'] = filtered_collection_df_authors['FirstName2'].apply(lambda x: ',' in x)
                         multiple_authored_papers = filtered_collection_df_authors['multiple_authors'].sum()
-                        collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
+                        if multiple_authored_papers == 0:
+                            collaboration_ratio = 0
+                        else:
+                            collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
                         container_collaboration_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
                         non_nan_cited_df_dedup = filtered_collection_df_authors.dropna(subset=['Citation_list'])
