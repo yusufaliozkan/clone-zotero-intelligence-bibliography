@@ -234,6 +234,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             non_nan_cited_df_dedup = df_dedup.dropna(subset=['Citation_list'])
             non_nan_cited_df_dedup
             mean = non_nan_cited_df_dedup['Citation'].mean()
+            asd = len(non_nan_cited_df_dedup)
             mean
 
             true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
