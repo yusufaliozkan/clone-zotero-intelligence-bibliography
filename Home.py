@@ -232,7 +232,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             nan_count_citation = df_dedup['Citation_list'].isna().sum()
             non_nan_count_citation = total_rows - nan_count_citation
             non_nan_count_citation
-            st.metric(label='Citation per publication', value=round(citation_count/nan_count_citation, 1))
+            st.metric(label='Citation per publication', value=round(citation_count/non_nan_count_citation, 1))
 
             non_nan_cited_df_dedup = df_dedup.dropna(subset=['Citation_list'])
             non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
