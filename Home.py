@@ -807,10 +807,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         with colauthor2:
                             with st.popover('More metrics'):
                                 container_citation = st.container()
+                                container_collaboration_ratio = st.container()
                                 citation_average = st.container()
                                 container_oa = st.container()
                                 container_type = st.container()
-                                container_collaboration_ratio = st.container()
 
                         st.write('*Please note that this database **may not show** all research outputs of the author.*')
                         types = st.multiselect('Publication type', filtered_collection_df_authors['Publication type'].unique(), filtered_collection_df_authors['Publication type'].unique(), key='original_authors')
