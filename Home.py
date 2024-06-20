@@ -827,7 +827,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             container_types = st.container()
 
                         st.write('*Please note that this database **may not show** all research outputs of the author.*')
-                        container_types = st.multiselect('Publication type', filtered_collection_df_authors['Publication type'].unique(), filtered_collection_df_authors['Publication type'].unique(), key='original_authors')
+                        types = container_types.multiselect('Publication type', filtered_collection_df_authors['Publication type'].unique(), filtered_collection_df_authors['Publication type'].unique(), key='original_authors')
                         filtered_collection_df_authors = filtered_collection_df_authors[filtered_collection_df_authors['Publication type'].isin(types)]
                         filtered_collection_df_authors = filtered_collection_df_authors.reset_index(drop=True)
                         publications_by_type = filtered_collection_df_authors['Publication type'].value_counts()
