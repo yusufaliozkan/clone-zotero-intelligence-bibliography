@@ -397,7 +397,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     display2 = container_abstract.checkbox('Display abstracts', key='type_country_2')
 
                     articles_list = []  # Store articles in a list
-                    st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
 
                     true_count = df_countries[df_countries['Publication type']=='Journal article']['OA status'].sum()
                     total_count = len(df_countries[df_countries['Publication type']=='Journal article'])
@@ -428,7 +427,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     citation_count = df_countries['Citation'].sum()
                     item_type_no = df_countries['Publication type'].nunique()
-                    st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
                     container_metric_2.metric('Number of publications', value=num_items_collections)
                     container_citation_2.metric(label="Number of citations", value=int(citation_count))
