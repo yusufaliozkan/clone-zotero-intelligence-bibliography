@@ -2725,7 +2725,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 
                 col1, col2 = st.columns(2)
                 with col1:
-                    df_dedup_oa
                     df_dedup_oa=df_dedup_oa['Publication_year'].value_counts()
                     df_dedup_oa=df_dedup_oa.reset_index()
                     df_dedup_oa=df_dedup_oa.rename(columns={'index':'Publication year','Date year':'Count'})
