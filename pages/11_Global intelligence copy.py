@@ -537,7 +537,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         # Streamlit app
 
                         # Display bibliographies from df_collections DataFrame
-                        display_bibliographies(df_collections)                        
+                        display_bibliographies(df_countries)                        
             df_continent['Date published'] = pd.to_datetime(df_continent['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
             df_continent['Date published'] = df_continent['Date published'].dt.strftime('%Y-%m-%d')
             df_continent['Date published'] = df_continent['Date published'].fillna('')
