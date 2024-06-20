@@ -2738,7 +2738,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         autosize=False,
                         width=1200,
                         height=600,)
-                    fig.update_layout(title={'text':'All items in the library by publication year', 'yanchor':'top'})
+                    fig.update_layout(title={'text':'Number of open access publications over time', 'yanchor':'top'})
                     col1.plotly_chart(fig, use_container_width = True)
 
                 col1, col2 = st.columns([7,2])
