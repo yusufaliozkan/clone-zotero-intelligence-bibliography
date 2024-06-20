@@ -794,10 +794,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     with st.expander('Click to expand', expanded=True): 
                         st.markdown('#### Publications by ' + selected_author)
-                        col1, col2, col3 = st.columns(3)
-                        with col1:
+                        colauthor1, colauthor2, colauthor3 = st.columns(3)
+                        with colauthor1:
                             container_metric = st.container()
-                        with col2:
+                        with colauthor2:
                             with st.popover('More metrics'):
                                 container_citation = st.container()
 
