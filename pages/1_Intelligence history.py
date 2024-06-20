@@ -191,6 +191,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 else:
                     # Return the original author if it's not a string
                     return pd.Series([authors])
+            df_collections
             expanded_authors = df_collections['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
             expanded_authors = expanded_authors.reset_index(name='Author')
             author_no = len(expanded_authors)
