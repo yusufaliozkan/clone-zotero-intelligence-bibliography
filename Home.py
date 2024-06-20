@@ -225,6 +225,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     st.write('The library last updated on ' + '**'+ df.loc[0]['Date modified']+'**')
     with col2:
         with st.popover('More metrics'):
+            df_dedup
             citation_count = df_dedup['Citation'].sum()
             st.metric(label="Number of citations", value=int(citation_count))
             st.metric(label='Citation per publication', value=round(citation_count/item_count, 1))
