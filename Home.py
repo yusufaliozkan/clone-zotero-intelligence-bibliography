@@ -800,6 +800,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         with colauthor2:
                             with st.popover('More metrics'):
                                 container_citation = st.container()
+                                container_oa = st.container()
 
                         st.write('*Please note that this database **may not show** all research outputs of the author.*')
                         types = st.multiselect('Publication type', filtered_collection_df_authors['Publication type'].unique(), filtered_collection_df_authors['Publication type'].unique(), key='original_authors')
@@ -818,6 +819,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             oa_ratio = 0.0
                         else:
                             oa_ratio = true_count / total_count * 100
+                        container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
 
                         citation_count = filtered_collection_df_authors['Citation'].sum()
                         container_citation.metric(label="Number of citations", value=int(citation_count))
