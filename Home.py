@@ -2726,6 +2726,15 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 col1, col2 = st.columns(2)
                 with col1:
                     df_dedup_oa
+                    fig = px.bar(df_dedup_oa, x='Publication year', y='Count')
+                    fig.update_xaxes(tickangle=-70)
+                    fig.update_layout(
+                        autosize=False,
+                        width=1200,
+                        height=600,)
+                    fig.update_layout(title={'text':'All items in the library by publication year', 'yanchor':'top'})
+                    col1.plotly_chart(fig, use_container_width = True)
+
                 col1, col2 = st.columns([7,2])
                 with col1:
                     df_countries = pd.read_csv('countries.csv')
