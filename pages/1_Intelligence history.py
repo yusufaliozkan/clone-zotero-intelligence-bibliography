@@ -323,15 +323,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
                     df_zotero_id = df_collections[['zotero_item_key']]
 
-                    def extract_last_name(bibliography):
-                        match = re.match(r"([A-Za-z]+),", bibliography)
-                        if match:
-                            return match.group(1)
-                        return ""
-                    df_collections['last_name'] = df_collections['bibliography'].apply(extract_last_name)
-                    df_collections.sort_values(by='last_name', inplace=True)
-                    df_collections
-
                     def display_bibliographies(df):
                         all_bibliographies = ""
                         for index, row in df.iterrows():
@@ -345,7 +336,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         st.markdown(all_bibliographies, unsafe_allow_html=True)
 
                     # Streamlit app
-                        
+
                     # Display bibliographies from df_collections DataFrame
                     display_bibliographies(df_collections)
 
