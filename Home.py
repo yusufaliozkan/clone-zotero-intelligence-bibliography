@@ -807,10 +807,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         with colauthor2:
                             with st.popover('More metrics'):
                                 container_citation = st.container()
-                                container_collaboration_ratio = st.container()
-                                citation_average = st.container()
+                                container_average_citation = st.container()
                                 container_oa = st.container()
                                 container_type = st.container()
+                                container_collaboration_ratio = st.container()
 
                         st.write('*Please note that this database **may not show** all research outputs of the author.*')
                         types = st.multiselect('Publication type', filtered_collection_df_authors['Publication type'].unique(), filtered_collection_df_authors['Publication type'].unique(), key='original_authors')
@@ -841,7 +841,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                         citation_count = filtered_collection_df_authors['Citation'].sum()
                         container_citation.metric(label="Number of citations", value=int(citation_count))
-                        container_collaboration_ratio.metric(label='Citation per publication', value=round(citation_count/num_items_collections, 0))
+                        container_average_citation.metric(label='Citation per publication', value=round(citation_count/num_items_collections, 0))
 
                         st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
