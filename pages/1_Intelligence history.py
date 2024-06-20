@@ -335,7 +335,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             all_bibliographies += row['bibliography']
 
                         st.markdown(all_bibliographies, unsafe_allow_html=True)
-                        all_bibliographies
+                        bibliography
 
                     # Streamlit app
                         
