@@ -2732,8 +2732,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_dedup_oa=df_dedup_oa.sort_values(by='Publication year', ascending=True)
                     df_dedup_oa=df_dedup_oa.reset_index(drop=True)
                     df_dedup_oa = df_dedup_oa.rename(columns={'Publication_year':'Count'})
-                    df_dedup_oa['Cumulative Count'] = df_dedup_oa['Count'].cumsum()
-                    fig = px.line(df_dedup_oa, x='Publication year', y='Cumulative Count')
+                    fig = px.bar(df_dedup_oa, x='Publication year', y='Count')
                     fig.update_xaxes(tickangle=-70)
                     fig.update_layout(
                         autosize=False,
