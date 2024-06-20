@@ -799,7 +799,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             container_metric = st.container()
                         with col2:
                             with st.popover('More metrics'):
-                                container_citation = st.metric()
+                                container_citation = st.container()
 
                         st.write('*Please note that this database **may not show** all research outputs of the author.*')
                         types = st.multiselect('Publication type', filtered_collection_df_authors['Publication type'].unique(), filtered_collection_df_authors['Publication type'].unique(), key='original_authors')
