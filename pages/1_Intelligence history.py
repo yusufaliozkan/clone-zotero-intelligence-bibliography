@@ -222,9 +222,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     df_collections['FirstName2'] = df_collections['FirstName2'].astype(str)
     df_collections['multiple_authors'] = df_collections['FirstName2'].apply(lambda x: ',' in x)
-    multiple_authored_papers = df_collections['multiple_authors'].sum()
-    collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
-    container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
+    if len(df_collections) == 0:
+        collaboration_ratio=0
+    else:
+        multiple_authored_papers = df_collections['multiple_authors'].sum()
+        collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
+        container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
