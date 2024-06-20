@@ -136,12 +136,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 else:
                     # Return the original author if it's not a string
                     return pd.Series([authors])
-            expanded_authors = df_collections['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
-            expanded_authors = expanded_authors.reset_index(name='Author')
-            author_no = len(expanded_authors)
-            if author_no == 0:
+            if len(df_collections) == 0:
                 author_pub_ratio=0.0
+                author_no=0
             else:
+                expanded_authors = df_collections['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                expanded_authors = expanded_authors.reset_index(name='Author')
+                author_no = len(expanded_authors)
                 author_pub_ratio = round(author_no/num_items_collections, 2)
 
             true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
@@ -166,9 +167,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     df_collections['FirstName2'] = df_collections['FirstName2'].astype(str)
     df_collections['multiple_authors'] = df_collections['FirstName2'].apply(lambda x: ',' in x)
-    multiple_authored_papers = df_collections['multiple_authors'].sum()
-    collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
-    container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
+    if len(df_collections) == 0:
+        collaboration_ratio=0
+    else:
+        multiple_authored_papers = df_collections['multiple_authors'].sum()
+        collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
+        container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
