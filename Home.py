@@ -806,6 +806,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         with colauthor2:
                             with st.popover('More metrics'):
                                 container_citation = st.container()
+                                citation_average = st.container()
                                 container_oa = st.container()
                                 container_type = st.container()
                                 container_collaboration_ratio = st.container()
@@ -839,6 +840,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                         citation_count = filtered_collection_df_authors['Citation'].sum()
                         container_citation.metric(label="Number of citations", value=int(citation_count))
+                        container_collaboration_ratio.metric(label='Citation per publication', value=citation_count/num_items_collections)
 
                         st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
