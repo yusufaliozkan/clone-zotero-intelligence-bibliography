@@ -262,7 +262,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_dedup['multiple_authors'] = df_dedup['FirstName2'].apply(lambda x: ',' in x)
             multiple_authored_papers = df_dedup['multiple_authors'].sum()
             collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
-            container_collaboration_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
+            st.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
     sidebar_content() 
 
