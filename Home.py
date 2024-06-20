@@ -240,7 +240,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 help=f'''Not all papers are tracked for citation. 
                 Citation per publication: **{round(citation_mean, 1)}**, 
                 Citation median: **{round(citation_median, 1)}**'''
-                )
+                ) 
 
             true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
             total_count = len(df_dedup[df_dedup['Publication type']=='Journal article'])
