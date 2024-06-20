@@ -225,7 +225,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     st.write('The library last updated on ' + '**'+ df.loc[0]['Date modified']+'**')
     with col2:
         with st.popover('More metrics'):
-            colgen1, colgen2, colgen3 = st.columns(3)
+            colgen1, colgen2 = st.columns(2)
             with colgen1:
                 citation_count = df_dedup['Citation'].sum()
                 st.metric(label="Number of citations", value=int(citation_count))
@@ -237,7 +237,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
                 citation_mean = non_nan_cited_df_dedup['Citation'].mean()
                 st.metric(label='Citation per publication', value=round(citation_mean, 1))
-            with colgen3:
+
                 true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
                 total_count = len(df_dedup[df_dedup['Publication type']=='Journal article'])
                 if total_count == 0:
