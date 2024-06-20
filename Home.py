@@ -2078,7 +2078,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             st.markdown(f"{i}. {article}", unsafe_allow_html=True) 
 
             # OVERVIEW
-            st.header('Overview', anchor=None)
+            st.header('Overview', anchor=False)
             tab11, tab12, tab13 = st.tabs(['Recently added items', 'Recently published items', 'Top cited items'])
             with tab11:
                 st.markdown('#### Recently added or updated items')
