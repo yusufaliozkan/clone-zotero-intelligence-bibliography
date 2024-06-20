@@ -1113,13 +1113,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             st.plotly_chart(fig_year_bar)
                         
                             collection_author_df = filtered_collection_df.copy()
-                            collection_author_df
                             collection_author_df['Author_name'] = collection_author_df['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                             collection_author_df = collection_author_df.explode('Author_name')
                             collection_author_df.reset_index(drop=True, inplace=True)
                             collection_author_df['Author_name'] = collection_author_df['Author_name'].map(name_replacements).fillna(collection_author_df['Author_name'])
                             collection_author_df = collection_author_df['Author_name'].value_counts().head(10)
-                            collection_author_df
                             fig = px.bar(collection_author_df, x=collection_author_df.index, y=collection_author_df.values)
                             fig.update_layout(
                                 title=f'Top 10 Authors by Publication Count ({selected_collection})',
@@ -2582,6 +2580,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     num_authors = st.slider('Select number of authors to display:', 5, min(30, max_authors), 20)
                     df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
                     df_authors = df_authors['Author_name'].value_counts().head(num_authors)
+                    df_authors
                     fig = px.bar(df_authors, x=df_authors.index, y=df_authors.values)
                     fig.update_layout(
                         title=f'Top {num_authors} Authors by Publication Count',
