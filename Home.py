@@ -2556,7 +2556,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         col1.plotly_chart(fig, use_container_width = True)
                 with col2:
                     fig = px.pie(df_types, values='Count', names='Publication type')
-                    fig.update_layout(title={'text':'Item types', 'y':0.95, 'x':0.45, 'yanchor':'top'})
+                    fig.update_layout(title={'text':'Item types',  'yanchor':'top'})
                     col2.plotly_chart(fig, use_container_width = True)
 
                 col1, col2 = st.columns(2)
@@ -2567,7 +2567,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         autosize=False,
                         width=1200,
                         height=600,)
-                    fig.update_layout(title={'text':'All items in the library by publication year', 'y':0.95, 'x':0.5, 'yanchor':'top'})
+                    fig.update_layout(title={'text':'All items in the library by publication year', 'yanchor':'top'})
                     col1.plotly_chart(fig, use_container_width = True)
 
                 with col2:
@@ -2722,6 +2722,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             for i in range(row_nu_collections):
                                 st.caption(df_journal['Journal'].iloc[i]
                                 )
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    df_dedup_oa
                 col1, col2 = st.columns([7,2])
                 with col1:
                     df_countries = pd.read_csv('countries.csv')
