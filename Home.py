@@ -2726,6 +2726,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 col1, col2 = st.columns(2)
                 with col1:
                     df_dedup_oa
+                    df_dedup_oa=df_dedup_oa['Date year'].value_counts()
+                    df_dedup_oa=df_dedup_oa.reset_index()
+                    df_dedup_oa=df_dedup_oa.rename(columns={'index':'Publication year','Date year':'Count'})
+                    df_dedup_oa.drop(df_dedup_oa[df_dedup_oa['Publication year']== 'No date'].index, inplace = True)
+                    df_dedup_oa=df_dedup_oa.sort_values(by='Publication year', ascending=True)
+                    df_dedup_oa=df_dedup_oa.reset_index(drop=True)
                     fig = px.bar(df_dedup_oa, x='Publication year', y='Count')
                     fig.update_xaxes(tickangle=-70)
                     fig.update_layout(
