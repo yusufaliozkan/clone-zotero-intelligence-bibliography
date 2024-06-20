@@ -840,7 +840,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         filtered_collection_df_authors['multiple_authors'] = filtered_collection_df_authors['FirstName2'].apply(lambda x: ',' in x)
                         filtered_collection_df_authors
                         multiple_authored_papers = filtered_collection_df_authors['multiple_authors'].sum()
-                        collaboration_ratio = multiple_authored_papers/num_items_collections*100
+                        collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 0)
                         collaboration_ratio
                         author_no = len(expanded_authors)
                         if author_no == 0:
