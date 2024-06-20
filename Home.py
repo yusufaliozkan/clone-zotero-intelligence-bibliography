@@ -2574,13 +2574,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 with col2:
                     df_authors = df_csv.copy()
                     df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
+                    df_authors = df_authors.dropna()
                     df_authors = df_authors.explode('Author_name')
                     df_authors.reset_index(drop=True, inplace=True)
                     max_authors = len(df_authors['Author_name'].unique())
                     num_authors = st.slider('Select number of authors to display:', 5, min(30, max_authors), 20)
                     df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
                     df_authors = df_authors['Author_name'].value_counts().head(num_authors)
-                    df_authors = df_authors.dropna()
                     df_authors
                     fig = px.bar(df_authors, x=df_authors.index, y=df_authors.values)
                     fig.update_layout(
