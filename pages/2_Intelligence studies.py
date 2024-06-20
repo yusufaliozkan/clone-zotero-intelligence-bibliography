@@ -128,6 +128,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             container_type = st.container()
             container_author_no = st.container()
             container_author_pub_ratio = st.container()
+            container_publication_ratio = st.container()
     with col3:
         with st.popover("Filters and more"):
             st.write(f"View the collection in [Zotero]({collection_link})")
@@ -181,6 +182,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             citation_count = df_collections['Citation'].sum()
 
+
             a = f'{collection_name}_{today}'
             st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
 
@@ -190,6 +192,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container_type.metric(label='Number of publication types', value=int(item_type_no))
     container_author_no.metric(label='Number of authors', value=int(author_no))
     container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
+
+    df_collections['FirstName2'] = df_collections['FirstName2'].astype(str)
+    df_collections['multiple_authors'] = df_collections['FirstName2'].apply(lambda x: ',' in x)
+    multiple_authored_papers = df_collections['multiple_authors'].sum()
+    collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
+    container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard'])
     with tab1:
@@ -313,7 +321,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     # Display bibliographies from df_collections DataFrame
                     display_bibliographies(df_collections)
-                    
+
 #UNTIL HERE
         with col2:
             with st.expander('Collections', expanded=True):
