@@ -1030,7 +1030,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # SEARCH IN COLLECTIONS
             elif search_option == "Search collection":
                 st.query_params.clear()
-                st.subheader('Search collection')
+                st.subheader('Search collection', anchor=False, divider='blue')
 
                 df_csv_collections = df_duplicated.copy()
                 excluded_collections = ['97 KCL intelligence']
@@ -1230,7 +1230,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             elif search_option == "Publication types":
                 st.query_params.clear()
-                st.subheader('Publication types')
+                st.subheader('Publication types', anchor=False, divider='blue')
 
                 df_csv_types = df_dedup.copy()
                 unique_types =  list(df_csv_types['Publication type'].unique())  # Adding an empty string as the first option The following bit was at the front [''] +
@@ -1405,7 +1405,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             elif search_option == "Search journal":
                 st.query_params.clear()
-                st.subheader('Search journal')
+                st.subheader('Search journal', anchor=False, divider='blue')
 
                 df_csv = df_dedup.copy()
                 df_csv = df_csv[df_csv['Publication type']=='Journal article']
@@ -1618,7 +1618,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             elif search_option == "Publication year": 
                 st.query_params.clear()
-                st.subheader('Items by publication year')
+                st.subheader('Items by publication year', anchor=False, divider='blue')
 
                 with st.expander('Click to expand', expanded=True):                    
                     df_all = df_dedup.copy()
@@ -1845,7 +1845,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             elif search_option == "Cited papers":
                 st.query_params.clear()
-                st.subheader('Cited items in the library')
+                st.subheader('Cited items in the library', anchor=False, divider='blue')
 
                 with st.expander('Click to expand', expanded=True):                    
                     df_cited = df_dedup.copy()
@@ -2271,7 +2271,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 ).transform_filter(
                     alt.datum.YearMonth % step == 0
                 )
-                st.subheader('Growth of the library')
+                st.subheader('Growth of the library', anchor=False, divider='blue')
                 st.altair_chart(cumulative_chart + data_labels, use_container_width=True)
                     
 
@@ -2734,7 +2734,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     col2.plotly_chart(fig, use_container_width=True)
                 
                 st.write('---')
-                st.subheader('Named Entity Recognition analysis')
+                st.subheader('Named Entity Recognition analysis', anchor=False, divider='blue')
                 st.caption('[What is Named Entity Recognition?](https://medium.com/mysuperai/what-is-named-entity-recognition-ner-and-how-can-i-use-it-2b68cf6f545d)')
                 col1, col2, col3 = st.columns(3)
                 with col1:
@@ -2799,7 +2799,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 listdf = df['lemma_title']
                 listdf_abstract = df['lemma_abstract']
 
-                st.subheader('Wordcloud')
+                st.subheader('Wordcloud', anchor=False, divider='blue')
                 wordcloud_opt = st.radio('Wordcloud of:', ('Titles', 'Abstracts'))
                 if wordcloud_opt=='Titles':
                     df_list = [item for sublist in listdf for item in sublist]
@@ -2926,7 +2926,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     #                 st.write(f"{index + 1}) {formatted_entry}")
     st.write('---')
     with st.expander('Acknowledgements'):
-        st.subheader('Acknowledgements')
+        st.subheader('Acknowledgements', anchor=False)
         st.write('''
         The following sources are used to collate some of the items and events in this website:
         1. [King's Centre for the Study of Intelligence (KCSI) digest](https://kcsi.uk/kcsi-digests) compiled by David Schaefer
