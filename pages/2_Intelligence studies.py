@@ -131,15 +131,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
     with col3:
         with st.popover("Filters and more"):
             st.write(f"View the collection in [Zotero]({collection_link})")
-            col112, col113, col114 = st.columns(3)
+            col112, col113 = st.columns(2)
             with col112:
                 display2 = st.checkbox('Display abstracts')
             with col113:
                 only_citation = st.checkbox('Show cited items only')
                 if only_citation:
                     df_collections = df_collections[(df_collections['Citation'].notna()) & (df_collections['Citation'] != 0)]
-            with col114:
-                table_view = st.checkbox('See results in table')
+            view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
 
             types = st.multiselect('Publication type', df_collections['Publication type'].unique(),df_collections['Publication type'].unique(), key='original')
             df_collections = df_collections[df_collections['Publication type'].isin(types)]
@@ -200,7 +199,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
             # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
             sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
-            if not table_view:
+            if view == 'Basic list':
                 articles_list = []  # Store articles in a list
                 for index, row in df_collections.iterrows():
                     formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
@@ -234,7 +233,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         '[[Zotero link]](' + str(zotero_link) + ')'
                     )
                                 
-                with st.expander('Click to expand', expanded=True):
+                with st.expander('**Basic list view**', expanded=True):
 
                     if sort_by == 'Publication date :arrow_down:': # or df_collections['Citation'].sum() == 0:
                         count = 1
@@ -276,19 +275,18 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 count += 1
                                 if display2:
                                     st.caption(row['Abstract']) 
-            else:
+            elif view == 'Table':
                 df_table_view = df_collections[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal', 'Citation', 'Collection_Name','Link to publication','Zotero link']]
                 df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                 if sort_by == 'Publication type':
                     df_table_view = df_table_view.sort_values(by=['Publication type'], ascending=True)
                     df_table_view = df_table_view.reset_index(drop=True)
-                    df_table_view
                 elif sort_by == 'Citation':
                     df_table_view = df_table_view.sort_values(by=['Citation'], ascending=False)
                     df_table_view = df_table_view.reset_index(drop=True)
+                with st.expander('**Table view**', expanded=True):
                     df_table_view
-                else:
-                    df_table_view
+            else:
 
 #UNTIL HERE
         with col2:
