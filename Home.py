@@ -1113,6 +1113,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             st.plotly_chart(fig_year_bar)
                         
                             collection_author_df = filtered_collection_df.copy()
+                            collection_author_df
                             collection_author_df['Author_name'] = collection_author_df['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                             collection_author_df = collection_author_df.explode('Author_name')
                             collection_author_df.reset_index(drop=True, inplace=True)
