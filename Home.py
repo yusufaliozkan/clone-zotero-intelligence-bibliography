@@ -846,9 +846,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
                         container_collaboration_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
-                        citation_count = filtered_collection_df_authors['Citation'].sum()
-                        container_citation.metric(label="Number of citations", value=int(citation_count))
-                        container_average_citation.metric(label='Citation per publication', value=round(citation_count/num_items_collections, 1))
+                        non_nan_cited_df_dedup = filtered_collection_df_authors.dropna(subset=['Citation_list'])
+                        non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
+                        citation_mean = non_nan_cited_df_dedup['Citation'].mean()
+                        container_average_citation.metric(label='Citation per publication', value=round(citation_mean, 1))
 
                         st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
