@@ -871,7 +871,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         non_nan_cited_df_dedup = filtered_collection_df_authors.dropna(subset=['Citation_list'])
                         non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
                         citation_mean = non_nan_cited_df_dedup['Citation'].mean()
-                        container_average_citation.metric(label='Citation per publication', value=round(citation_mean, 1))
 
                         st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
