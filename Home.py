@@ -258,6 +258,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.metric(label='Number of authors', value=int(author_no))
             st.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
+            df_dedup['multiple_authors'] = df_dedup['FirstName2'].apply(lambda x: ',' in x)
+            multiple_authored_papers = df_dedup['multiple_authors'].sum()
+            collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
+            container_collaboration_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
+
     sidebar_content() 
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard']) #, '🔀 Surprise me'])
