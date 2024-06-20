@@ -825,28 +825,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         item_type_no = filtered_collection_df_authors['Publication type'].nunique()
                         container_type.metric(label='Number of publication types', value=int(item_type_no))
 
-                        def split_and_expand(authors):
-                            # Ensure the input is a string
-                            if isinstance(authors, str):
-                                # Split by comma and strip whitespace
-                                split_authors = [author.strip() for author in authors.split(',')]
-                                return pd.Series(split_authors)
-                            else:
-                                # Return the original author if it's not a string
-                                return pd.Series([authors])
-                        expanded_authors = filtered_collection_df_authors['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
-                        expanded_authors = expanded_authors.reset_index(name='Author')
-                        expanded_authors
                         filtered_collection_df_authors['multiple_authors'] = filtered_collection_df_authors['FirstName2'].apply(lambda x: ',' in x)
-                        filtered_collection_df_authors
                         multiple_authored_papers = filtered_collection_df_authors['multiple_authors'].sum()
-                        collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 0)
-                        collaboration_ratio
-                        author_no = len(expanded_authors)
-                        if author_no == 0:
-                            author_pub_ratio=0.0
-                        else:
-                            author_pub_ratio = round(author_no/num_items_collections, 2)
+                        collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
+                        container_collaboration_ratio.metric(label='Number of authors', value=f'{int(collaboration_ratio)}%')
 
                         citation_count = filtered_collection_df_authors['Citation'].sum()
                         container_citation.metric(label="Number of citations", value=int(citation_count))
