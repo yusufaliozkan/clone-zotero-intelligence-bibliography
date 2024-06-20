@@ -225,26 +225,24 @@ with st.spinner('Retrieving data & updating dashboard...'):
     st.write('The library last updated on ' + '**'+ df.loc[0]['Date modified']+'**')
     with col2:
         with st.popover('More metrics'):
-            colgen1, colgen2 = st.columns(2)
-            with colgen1:
-                citation_count = df_dedup['Citation'].sum()
-                st.metric(label="Number of citations", value=int(citation_count))
-            with colgen2: 
-                total_rows = len(df_dedup)
-                nan_count_citation = df_dedup['Citation_list'].isna().sum()
-                non_nan_count_citation = total_rows - nan_count_citation
-                non_nan_cited_df_dedup = df_dedup.dropna(subset=['Citation_list'])
-                non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
-                citation_mean = non_nan_cited_df_dedup['Citation'].mean()
-                st.metric(label='Citation per publication', value=round(citation_mean, 1))
+            citation_count = df_dedup['Citation'].sum()
+            st.metric(label="Number of citations", value=int(citation_count))
 
-                true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
-                total_count = len(df_dedup[df_dedup['Publication type']=='Journal article'])
-                if total_count == 0:
-                    oa_ratio = 0.0
-                else:
-                    oa_ratio = true_count / total_count * 100
-                st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
+            total_rows = len(df_dedup)
+            nan_count_citation = df_dedup['Citation_list'].isna().sum()
+            non_nan_count_citation = total_rows - nan_count_citation
+            non_nan_cited_df_dedup = df_dedup.dropna(subset=['Citation_list'])
+            non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
+            citation_mean = non_nan_cited_df_dedup['Citation'].mean()
+            st.metric(label='Citation per publication', value=round(citation_mean, 1))
+
+            true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
+            total_count = len(df_dedup[df_dedup['Publication type']=='Journal article'])
+            if total_count == 0:
+                oa_ratio = 0.0
+            else:
+                oa_ratio = true_count / total_count * 100
+            st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
             
             item_type_no = df_dedup['Publication type'].nunique()
             st.metric(label='Number of publication types', value=int(item_type_no))
