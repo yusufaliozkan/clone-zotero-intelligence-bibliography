@@ -184,13 +184,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 container_author_pub_ratio = st.container()
         with col3:
             with st.popover('Filters and more'):
-                col31, col32, col33 = st.columns(3)
+                col31, col32 = st.columns(2)
                 with col31:
                     container_abstract = st.container()
                 with col32:
                     container_cited_items = st.container()
-                with col33:
-                    table_view = st.checkbox('See results in table')
+                view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
                 container_pub_types = st.container()
                 container_download = st.container()
 
@@ -269,7 +268,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
                     display2 = container_abstract.checkbox('Display abstracts', key='type_count2')
 
-                    if not table_view:
+                    if view == 'Basic list':
                         articles_list = []  # Store articles in a list
                         for index, row in df_collections.iterrows():
                             formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
@@ -334,7 +333,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 count += 1
                                 if display2:
                                     st.caption(row['Abstract']) 
-                    else:
+                    elif view == 'Table':
                         df_table_view = df_collections[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal', 'Citation', 'Collection_Name','Link to publication','Zotero link']]
                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                         if sort_by == 'Publication type':
@@ -347,6 +346,29 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             df_table_view
                         else:
                             df_table_view
+                    else:
+                        df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                        df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                        df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
+                        df_zotero_id = df_collections[['zotero_item_key']]
+
+                        def display_bibliographies(df):
+                            all_bibliographies = ""
+                            for index, row in df.iterrows():
+                                # Add a horizontal line between bibliographies
+                                if index > 0:
+                                    all_bibliographies += '<p><p>'
+                                
+                                # Display bibliography
+                                all_bibliographies += row['bibliography']
+
+                            st.markdown(all_bibliographies, unsafe_allow_html=True)
+
+                        # Streamlit app
+
+                        # Display bibliographies from df_collections DataFrame
+                        display_bibliographies(df_collections)
+
 
             else:
                 with st.expander('Click to expand', expanded=True):
