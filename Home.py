@@ -237,9 +237,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.metric(
                 label="Number of citations", 
                 value=int(citation_count), 
-                help=f'Not all papers are tracked for citation. 
+                help=f'''Not all papers are tracked for citation. 
                 Citation per publication: **{round(citation_mean, 1)}**, 
-                Citation median: **{round(citation_median, 1)}**'
+                Citation median: **{round(citation_median, 1)}**'''
                 )
 
             true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
