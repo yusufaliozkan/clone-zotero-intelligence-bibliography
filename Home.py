@@ -832,6 +832,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         container_type.metric(label='Number of publication types', value=int(item_type_no))
 
                         filtered_collection_df_authors['multiple_authors'] = filtered_collection_df_authors['FirstName2'].apply(lambda x: ',' in x)
+                        filtered_collection_df_authors
                         multiple_authored_papers = filtered_collection_df_authors['multiple_authors'].sum()
                         collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
                         st.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
