@@ -834,8 +834,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         container_metric.metric(label="Number of items", value=int(num_items_collections), help=breakdown_string)
 
                         citation_count = filtered_collection_df_authors['Citation'].sum()
-
-                        st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
             
                         total_rows = len(filtered_collection_df_authors)
                         nan_count_citation = filtered_collection_df_authors['Citation_list'].isna().sum()
@@ -871,8 +869,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         non_nan_cited_df_dedup = filtered_collection_df_authors.dropna(subset=['Citation_list'])
                         non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
                         citation_mean = non_nan_cited_df_dedup['Citation'].mean()
-
-                        st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
                         def convert_df(filtered_collection_df_authors):
                             return filtered_collection_df_authors.to_csv(index=False).encode('utf-8-sig')
