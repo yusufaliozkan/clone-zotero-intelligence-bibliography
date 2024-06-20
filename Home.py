@@ -824,7 +824,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 container_type = st.container()
                                 container_collaboration_ratio = st.container()
                         with colauthor3:
-                            container_types = st.container()
+                            with st.popover('Filters and more'):
+                                container_types = st.container()
 
                         st.write('*Please note that this database **may not show** all research outputs of the author.*')
                         types = container_types.multiselect('Publication type', filtered_collection_df_authors['Publication type'].unique(), filtered_collection_df_authors['Publication type'].unique(), key='original_authors')
