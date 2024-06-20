@@ -837,7 +837,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         container_citation.metric(label="Number of citations", value=int(citation_count), help='Not ')
 
                         st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
-                        container_metric.metric(
+                        container_citation.metric(
                             label="Number of citations", 
                             value=int(citation_count), 
                             help=f'''Not all papers are tracked for citation. 
