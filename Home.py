@@ -813,7 +813,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     publications_by_type = filtered_collection_df_authors['Publication type'].value_counts()
 
                     with st.expander('Click to expand', expanded=True): 
-                        st.markdown('#### Publications by ' + selected_author)
+                        st.subheader('#### Publications by ' + selected_author, anchor=False)
                         colauthor1, colauthor2, colauthor3 = st.columns(3)
                         with colauthor1:
                             container_metric = st.container()
