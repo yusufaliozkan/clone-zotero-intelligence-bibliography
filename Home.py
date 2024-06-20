@@ -258,6 +258,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.metric(label='Number of authors', value=int(author_no))
             st.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
+            df_dedup
             df_dedup['multiple_authors'] = df_dedup['FirstName2'].apply(lambda x: ',' in x)
             multiple_authored_papers = df_dedup['multiple_authors'].sum()
             collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
@@ -832,7 +833,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         container_type.metric(label='Number of publication types', value=int(item_type_no))
 
                         filtered_collection_df_authors['multiple_authors'] = filtered_collection_df_authors['FirstName2'].apply(lambda x: ',' in x)
-                        filtered_collection_df_authors
                         multiple_authored_papers = filtered_collection_df_authors['multiple_authors'].sum()
                         collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
                         st.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
