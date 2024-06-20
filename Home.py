@@ -794,6 +794,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     with st.expander('Click to expand', expanded=True): 
                         st.markdown('#### Publications by ' + selected_author)
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            container_metric = st.container()
+                        with col2:
+                            with st.popover:
+                                container_citation.metric(label="Number of citations", value=int(citation_count))
+
                         st.write('*Please note that this database **may not show** all research outputs of the author.*')
                         types = st.multiselect('Publication type', filtered_collection_df_authors['Publication type'].unique(), filtered_collection_df_authors['Publication type'].unique(), key='original_authors')
                         filtered_collection_df_authors = filtered_collection_df_authors[filtered_collection_df_authors['Publication type'].isin(types)]
@@ -802,8 +809,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         num_items_collections = len(filtered_collection_df_authors)
                         breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
 
-                        st.metric(label='Items found', value=num_items_collections, help=breakdown_string)
                         st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
+                        container_metric.metric(label="Items found", value=num_items_collections, help=breakdown_string)
 
                         true_count = filtered_collection_df_authors[filtered_collection_df_authors['Publication type']=='Journal article']['OA status'].sum()
                         total_count = len(filtered_collection_df_authors[filtered_collection_df_authors['Publication type']=='Journal article'])
@@ -813,6 +820,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             oa_ratio = true_count / total_count * 100
 
                         citation_count = filtered_collection_df_authors['Citation'].sum()
+                        container_citation.metric(label="Number of citations", value=int(citation_count))
+                        
                         st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
                         def convert_df(filtered_collection_df_authors):
