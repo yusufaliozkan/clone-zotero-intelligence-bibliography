@@ -819,6 +819,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             container_metric = st.container()
                         with colauthor2:
                             with st.popover('More metrics'):
+                                container_metric = st.container()
                                 container_citation = st.container()
                                 container_average_citation = st.container()
                                 container_oa = st.container()
@@ -837,6 +838,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         container_citation.metric(label="Number of citations", value=int(citation_count), help='Not ')
 
                         st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
+            
+                        total_rows = len(filtered_collection_df_authors)
+                        nan_count_citation = filtered_collection_df_authors['Citation_list'].isna().sum()
+                        non_nan_count_citation = total_rows - nan_count_citation
+                        non_nan_cited_df_dedup = filtered_collection_df_authors.dropna(subset=['Citation_list'])
+                        non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
+                        citation_mean = non_nan_cited_df_dedup['Citation'].mean()
+                        citation_median = non_nan_cited_df_dedup['Citation'].median()
                         container_citation.metric(
                             label="Number of citations", 
                             value=int(citation_count), 
