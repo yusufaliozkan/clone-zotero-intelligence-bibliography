@@ -191,13 +191,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 else:
                     # Return the original author if it's not a string
                     return pd.Series([authors])
-            df_collections
-            expanded_authors = df_collections['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
-            expanded_authors = expanded_authors.reset_index(name='Author')
-            author_no = len(expanded_authors)
-            if author_no == 0:
+            if len(df_collections) == 0:
                 author_pub_ratio=0.0
             else:
+                expanded_authors = df_collections['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                expanded_authors = expanded_authors.reset_index(name='Author')
+                author_no = len(expanded_authors)
                 author_pub_ratio = round(author_no/num_items_collections, 2)
 
             true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
