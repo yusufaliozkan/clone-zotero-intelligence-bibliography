@@ -829,7 +829,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         filtered_collection_df_authors['multiple_authors'] = filtered_collection_df_authors['FirstName2'].apply(lambda x: ',' in x)
                         multiple_authored_papers = filtered_collection_df_authors['multiple_authors'].sum()
                         collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
-                        container_collaboration_ratio.metric(label='Number of authors', value=f'{int(collaboration_ratio)}%')
+                        container_collaboration_ratio.metric(label='Number of authors', value=f'{(collaboration_ratio)}%')
 
                         citation_count = filtered_collection_df_authors['Citation'].sum()
                         container_citation.metric(label="Number of citations", value=int(citation_count))
