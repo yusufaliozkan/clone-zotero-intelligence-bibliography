@@ -1118,6 +1118,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             collection_author_df.reset_index(drop=True, inplace=True)
                             collection_author_df['Author_name'] = collection_author_df['Author_name'].map(name_replacements).fillna(collection_author_df['Author_name'])
                             collection_author_df = collection_author_df['Author_name'].value_counts().head(10)
+                            collection_author_df
                             fig = px.bar(collection_author_df, x=collection_author_df.index, y=collection_author_df.values)
                             fig.update_layout(
                                 title=f'Top 10 Authors by Publication Count ({selected_collection})',
