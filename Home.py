@@ -234,11 +234,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
             non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
             citation_mean = non_nan_cited_df_dedup['Citation'].mean()
             citation_median = non_nan_cited_df_dedup['Citation'].median()
-            st.metric(label='Citation per publication', value=round(citation_mean, 1))
             st.metric(
                 label="Number of citations", 
                 value=int(citation_count), 
-                help=f'Not all papers are tracked for citation. Citation mean: {round(citation_mean, 1)}, Citation median: {round(citation_median, 1)}'
+                help=f'Not all papers are tracked for citation. Citation mean: **{round(citation_mean, 1)}**, Citation median: **{round(citation_median, 1)}**'
                 )
 
             true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
