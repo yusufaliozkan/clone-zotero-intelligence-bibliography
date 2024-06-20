@@ -819,9 +819,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             container_metric = st.container()
                         with colauthor2:
                             with st.popover('More metrics'):
-                                container_metric = st.container()
                                 container_citation = st.container()
-                                container_average_citation = st.container()
                                 container_oa = st.container()
                                 container_type = st.container()
                                 container_collaboration_ratio = st.container()
@@ -835,7 +833,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
 
                         citation_count = filtered_collection_df_authors['Citation'].sum()
-                        container_citation.metric(label="Number of citations", value=int(citation_count), help='Not ')
+                        container.metric(label="Number of items", value=int(num_items_collections), help=breakdown_string)
 
                         st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
             
