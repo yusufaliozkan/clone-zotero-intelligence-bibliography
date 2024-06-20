@@ -227,7 +227,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         with st.popover('More metrics'):
             citation_count = df_dedup['Citation'].sum()
             st.metric(label="Number of citations", value=int(citation_count))
-            st.metric(label='Citation per publication', value=round(citation_count/item_count, 0))
+            st.metric(label='Citation per publication', value=round(citation_count/item_count, 1))
 
             true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
             total_count = len(df_dedup[df_dedup['Publication type']=='Journal article'])
@@ -841,7 +841,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                         citation_count = filtered_collection_df_authors['Citation'].sum()
                         container_citation.metric(label="Number of citations", value=int(citation_count))
-                        container_average_citation.metric(label='Citation per publication', value=round(citation_count/num_items_collections, 0))
+                        container_average_citation.metric(label='Citation per publication', value=round(citation_count/num_items_collections, 1))
 
                         st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
