@@ -2784,9 +2784,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 grouped = df_dedup_v2.groupby('Date year')
                 total_publications = grouped.size().reset_index(name='Total Publications')
-                open_access_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='OA Publications')
-                df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
-                df_oa_overtime
+                open_access_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited Publications')
+                df_cited_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
+                df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['OA Publications']/df_cited_overtime['Total Publications'], 3)*100
 
                 col1, col2 = st.columns([7,2])
                 with col1:
