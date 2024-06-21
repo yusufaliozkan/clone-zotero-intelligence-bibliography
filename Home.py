@@ -209,6 +209,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
     
+    aaa = df_dedup[['OA status']]
+    aaa
     grouped = df_dedup.groupby('Publication_year')
     total_publications = grouped.size().reset_index(name='TotalPublications')
     open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OpenAccessPublications')
