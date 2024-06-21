@@ -2795,12 +2795,56 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 max_year = df_cited_overtime["Date year"].max()
                 last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
-                fig = px.bar(last_20_years, x="Date year", y=["%Cited Publications", "%Non-Cited Publications"],
-                            labels={"Date year": "Publication Year", "value": "Percentage (%)", "variable": "Type"},
-                            title="Open Access Publications Ratio Over the Last 20 Years",
-                            color_discrete_map={"%Cited Publications": "blue", "%Non-Cited Publications": "orange"},
-                            barmode="stack", hover_data=["Cited Publications", 'Non-cited Publications'])
-                st.plotly_chart(fig, use_container_width = True)
+                fig = go.Figure()
+
+                # Add bars for %Cited Publications and %Non-Cited Publications
+                fig.add_trace(go.Bar(
+                    x=last_20_years["Date year"],
+                    y=last_20_years["%Cited Publications"],
+                    name="%Cited Publications",
+                    marker_color="blue"
+                ))
+
+                fig.add_trace(go.Bar(
+                    x=last_20_years["Date year"],
+                    y=last_20_years["%Non-Cited Publications"],
+                    name="%Non-Cited Publications",
+                    marker_color="orange"
+                ))
+
+                # Add line for total citations
+                fig.add_trace(go.Scatter(
+                    x=last_20_years["Date year"],
+                    y=last_20_years["Citation"],
+                    name="Total Citations",
+                    mode="lines+markers",
+                    marker=dict(color="green"),
+                    yaxis="y2"
+                ))
+
+                # Update layout for secondary y-axis
+                fig.update_layout(
+                    title="Open Access Publications Ratio and Total Citations Over the Last 20 Years",
+                    xaxis=dict(title="Publication Year"),
+                    yaxis=dict(
+                        title="Percentage (%)",
+                        titlefont=dict(color="blue"),
+                        tickfont=dict(color="blue")
+                    ),
+                    yaxis2=dict(
+                        title="Total Citations",
+                        titlefont=dict(color="green"),
+                        tickfont=dict(color="green"),
+                        overlaying="y",
+                        side="right"
+                    ),
+                    barmode="stack",
+                    legend=dict(x=0.1, y=1.1, orientation="h"),
+                    hovermode="x unified"
+                )
+
+                # Display the plot using Streamlit
+                st.plotly_chart(fig, use_container_width=True)
         
 
                 df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
