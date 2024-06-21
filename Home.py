@@ -2737,7 +2737,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 )
                 df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
                 df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
-                df_dedup
                 df_dedup_v2 = df_dedup.dropna(subset='OA status')
 
                 df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
@@ -2749,6 +2748,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 result = filtered_df.groupby(df_dedup_v2['Date year'])['OA status'].count()
                 result=result.reset_index()
                 result.columns = ['Date year', 'Cited OA papers']
+                result
                 total_citations = grouped.size().reset_index(name='Total Publications')
                 cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited papers')
                 df_cited_papers = pd.merge(total_citations, cited_publications, on='Date year', how='left')
