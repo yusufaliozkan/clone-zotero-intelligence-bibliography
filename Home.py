@@ -209,7 +209,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
     
-    aaa = df_dedup[['OA status']]
+    aaa = df_dedup[['Publication_year']==2023]
+    aaa = aaa[['OA status']]
     aaa= aaa.dropna()
     aaa = len(aaa)
     aaa
