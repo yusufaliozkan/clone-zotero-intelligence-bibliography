@@ -224,7 +224,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_dedup_v2 = df_dedup.dropna(subset='OA status')
     bbb = len(df_dedup_v2)
     bbb
-    grouped = df_dedup.groupby('Date year')
+    grouped = df_dedup_v2.groupby('Date year')
     total_publications = grouped.size().reset_index(name='TotalPublications')
     open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OpenAccessPublications')
     open_access_publications
