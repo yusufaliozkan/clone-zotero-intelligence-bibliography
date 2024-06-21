@@ -208,7 +208,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
-    df_dedup
+
     df_dedup['Date published2'] = (
         df_dedup['Date published']
         .str.strip()
@@ -220,10 +220,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     aaa = aaa[['OA status']]
     aaa= aaa.dropna()
     aaa = len(aaa)
-    aaa
     df_dedup_v2 = df_dedup.dropna(subset='OA status')
     bbb = len(df_dedup_v2)
-    bbb
     grouped = df_dedup_v2.groupby('Date year')
     total_publications = grouped.size().reset_index(name='TotalPublications')
     open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OpenAccessPublications')
@@ -1728,9 +1726,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             total_count = df_all[['OA status']]
                             total_count = total_count.dropna().reset_index(drop=True)
                             total_count = len(total_count)
-                            total_count
                             true_count = len(df_all[df_all['OA status']==True])
-                            true_count
                             # total_count = len(df_all[df_all['Publication type']=='Journal article'])
                             if total_count == 0:
                                 oa_ratio = 0.0
