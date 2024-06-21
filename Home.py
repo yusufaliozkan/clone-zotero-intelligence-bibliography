@@ -2758,7 +2758,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 df_oa_overtime
                 max_year = df_oa_overtime["Date year"].max()
-                last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
+                last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 10)]
                 fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
                             labels={"Date year": "Publication Year", "value": "Percentage (%)", "variable": "Type"},
                             title="Open Access Publications Ratio Over the Last 20 Years",
