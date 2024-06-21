@@ -2743,7 +2743,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
                 grouped = df_dedup_v2.groupby('Date year')
 
-                filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) | (df_dedup_v2['Citation status'] == False)  & (df['OA status'] == True)]
+                filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) & (df['OA status'] == True)]
 
                 # Group by 'Date year' and count the number of rows in each group
                 result = filtered_df.groupby(df_dedup_v2['Date year'])['OA status'].count()
