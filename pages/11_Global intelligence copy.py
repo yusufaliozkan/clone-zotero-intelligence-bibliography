@@ -116,7 +116,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
             st.metric(label='Number of authors', value=int(author_no))
             st.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
-           
+            
+            df_collections['FirstName2'] = df_collections['FirstName2'].astype(str)
+            df_collections['multiple_authors'] = df_collections['FirstName2'].apply(lambda x: ',' in x)          
             if len(df_collections) == 0:
                 collaboration_ratio=0
             else:
