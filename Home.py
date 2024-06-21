@@ -1728,7 +1728,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             df_all
                             true_count = df_all[['OA status']]
                             true_count = true_count.dropna().reset_index(drop=True)
-                            true_count
                             true_count = len(true_count)
                             true_count
                             total_count = len(df_all[df_all['Publication type']=='Journal article'])
