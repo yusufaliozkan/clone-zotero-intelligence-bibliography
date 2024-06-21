@@ -2740,9 +2740,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_dedup_v2 = df_dedup.dropna(subset='OA status')
 
                 df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
-
                 df_dedup_v2
                 grouped = df_dedup_v2.groupby('Date year')
+                total_citations = grouped.size().reset_index(name='Total Publications')
+                cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited papers')
+                test = pd.merge(total_citations, cited_publications, on='Date year')
+                test
+
                 df_citation_counts = df_dedup_v2.copy()
                 df_citation_counts["Citations from OA outputs"] = df_citation_counts.apply(lambda row: row["Citation"] if row["OA status"] == True else 0, axis=1)
                 df_citation_counts = df_citation_counts.groupby("Date year").agg({"Citation": "sum", "Citations from OA outputs": "sum"}).reset_index()
