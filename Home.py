@@ -2764,6 +2764,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             title="Open Access Publications Ratio Over the Last 20 Years",
                             color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
                             barmode="stack", hover_data=["OA Publications", 'Non-OA Publications'])
+                fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Citations from OA outputs"], 
+                                mode='lines+markers', name='%Citations from OA outputs', line=dict(color='blue'))
+                fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Citations from non-OA outputs"], 
+                                mode='lines+markers', name='%Citations from non-OA outputs', line=dict(color='red'))
+
                 st.plotly_chart(fig, use_container_width = True)
 
                 col1, col2 = st.columns([7,2])
