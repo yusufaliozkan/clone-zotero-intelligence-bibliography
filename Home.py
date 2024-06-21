@@ -225,7 +225,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
     grouped = df_dedup_v2.groupby('Date year')
     total_publications = grouped.size().reset_index(name='TotalPublications')
     open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OpenAccessPublications')
-    open_access_publications
     df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
     df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OpenAccessPublications']/df_oa_overtime['TotalPublications'], 3)*100
     df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
