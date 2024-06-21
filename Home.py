@@ -2758,7 +2758,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_cited_papers['Cited non-OA papers'] = df_cited_papers['Cited papers']-df_cited_papers['Cited OA papers']
                 df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
                 df_cited_papers['%Cited non-OA papers'] = round(df_cited_papers['Cited non-OA papers']/df_cited_papers['Cited papers'], 3)*100
-                df_cited_papers
 
                 total_publications = grouped.size().reset_index(name='Total Publications')
                 open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OA Publications')
@@ -2767,7 +2766,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OA Publications']/df_oa_overtime['Total Publications'], 3)*100
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
                 df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
-                df_oa_overtime
 
                 max_year = df_oa_overtime["Date year"].max()
                 last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
@@ -2782,7 +2780,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                     mode='lines+markers', name='%Cited OA papers', line=dict(color='blue'))
                     fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited non-OA papers"], 
                                     mode='lines+markers', name='%Cited non-OA papers', line=dict(color='red'))
-
 
                 st.plotly_chart(fig, use_container_width = True)
 
