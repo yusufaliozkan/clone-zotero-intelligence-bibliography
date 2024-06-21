@@ -2746,7 +2746,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_citation_counts["%Citations from OA outputs"] = round(df_citation_counts['Citations from OA outputs']/df_citation_counts['Citation'], 3)*100
                 df_citation_counts["%Citations from non-OA outputs"] = round(df_citation_counts['Citations from non-OA outputs']/df_citation_counts['Citation'], 3)*100
                 df_citation_counts = df_citation_counts[['Date year', '%Citations from OA outputs', '%Citations from non-OA outputs']]
-                df_citation_counts
 
                 total_publications = grouped.size().reset_index(name='Total Publications')
                 open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OA Publications')
@@ -2756,18 +2755,19 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
                 df_oa_overtime = pd.merge(df_oa_overtime, df_citation_counts, on='Date year')
 
-                df_oa_overtime
                 max_year = df_oa_overtime["Date year"].max()
                 last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 10)]
+                citation_ratio = st.checkbox('Add citation ratio')
                 fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
                             labels={"Date year": "Publication Year", "value": "Percentage (%)", "variable": "Type"},
                             title="Open Access Publications Ratio Over the Last 20 Years",
                             color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
                             barmode="stack", hover_data=["OA Publications", 'Non-OA Publications'])
-                fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Citations from OA outputs"], 
-                                mode='lines+markers', name='%Citations from OA outputs', line=dict(color='blue'))
-                fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Citations from non-OA outputs"], 
-                                mode='lines+markers', name='%Citations from non-OA outputs', line=dict(color='red'))
+                if citation_ratio:
+                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Citations from OA outputs"], 
+                                    mode='lines+markers', name='%Citations from OA outputs', line=dict(color='blue'))
+                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Citations from non-OA outputs"], 
+                                    mode='lines+markers', name='%Citations from non-OA outputs', line=dict(color='red'))
 
                 st.plotly_chart(fig, use_container_width = True)
 
