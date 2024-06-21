@@ -217,15 +217,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_oa_overtime
 
     max_year = df_oa_overtime["Publication_year"].max()
-    last_20_years = df_oa_overtime[df_oa_overtime["Publication_year"] >= (max_year - 20)]
-    # Plotting
-    plt.figure(figsize=(12, 6))
-    plt.bar(last_20_years["Publication_year"], last_20_years["OA ratio"], color='blue')
-    plt.ylim(0, 100)
-    plt.xlabel("Publication Year")
-    plt.ylabel("OA Ratio (%)")
-    plt.title("OA Ratio Over the Last 20 Years")
-    st.pyplot(plt)
+    last_20_years = df[df["Publication_year"] >= (max_year - 20)]
+    fig = px.bar(last_20_years, x="Publication_year", y="OA ratio", labels={"Publication_year": "Publication Year", "OA ratio": "OA Ratio (%)"}, title="OA Ratio Over the Last 20 Years")
+    fig.update_yaxes(range=[0, 100])
+    st.plotly_chart(fig)
 
     col1, col2, col3 = st.columns([3,5,8])
     with col3:
