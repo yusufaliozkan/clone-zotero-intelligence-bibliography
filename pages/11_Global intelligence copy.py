@@ -273,6 +273,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     container_author_no.metric(label='Number of authors', value=int(author_no))
                     container_country.metric(label='Number of country', value=unique_items_count-1)
                     container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
+                    
+                    df_collections['FirstName2'] = df_collections['FirstName2'].astype(str)
+                    df_collections['multiple_authors'] = df_collections['FirstName2'].apply(lambda x: ',' in x)                    
                     if len(df_collections) == 0:
                         collaboration_ratio=0
                     else:
