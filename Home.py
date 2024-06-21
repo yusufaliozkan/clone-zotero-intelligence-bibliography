@@ -2789,7 +2789,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_cited_overtime['Non-cited Publications'] = df_cited_overtime['Total Publications']-df_cited_overtime['Cited Publications']
                 df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['Cited Publications']/df_cited_overtime['Total Publications'], 3)*100
                 df_cited_overtime['%Non-Cited Publications'] = round(df_cited_overtime['Non-cited Publications']/df_cited_overtime['Total Publications'], 3)*100
-                df_cited_overtime
 
                 max_year = df_cited_overtime["Date year"].max()
                 last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
@@ -2799,6 +2798,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             color_discrete_map={"%Cited Publications": "blue", "%Non-Cited Publications": "orange"},
                             barmode="stack", hover_data=["Cited Publications", 'Non-cited Publications'])
                 st.plotly_chart(fig, use_container_width = True)
+        
+                filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
+                # Group by 'Date year' and count the number of rows in each group
+                df_cited_papers = filtered_df2.groupby(df_dedup_v2['Date year'])['Citation'].count()
+                df_cited_papers
 
                 col1, col2 = st.columns([7,2])
                 with col1:
