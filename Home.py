@@ -2740,6 +2740,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_dedup_v2 = df_dedup.dropna(subset='OA status')
                 df_dedup_v2
                 grouped = df_dedup_v2.groupby('Date year')
+                grouped
                 total_publications = grouped.size().reset_index(name='Total Publications')
                 open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OA Publications')
                 df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
