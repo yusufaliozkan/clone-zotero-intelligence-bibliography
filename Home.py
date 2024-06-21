@@ -222,7 +222,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     fig = px.bar(last_20_years, x="Publication_year", y=["OA publication ratio", "Non-OA publication ratio"],
                 labels={"Publication_year": "Publication Year", "value": "Percentage (%)", "variable": "Type"},
                 title="OA vs Non-OA Publications Ratio Over the Last 20 Years",
-                color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "orange"},
+                color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "grey"},
                 barmode="stack")
 
     # Display the plot in Streamlit
