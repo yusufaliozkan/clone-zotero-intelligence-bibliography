@@ -2818,7 +2818,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     y=last_20_years["Citation"],
                     name="Total Citations",
                     mode="lines+markers",
-                    marker=dict(color="green"),
+                    marker=dict(color="red"),
                     yaxis="y2"
                 ))
 
