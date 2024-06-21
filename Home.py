@@ -2796,7 +2796,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 fig = px.bar(last_20_years, x="Date year", y=["%Cited Publications", "%Non-Cited Publications"],
                             labels={"Date year": "Publication Year", "value": "Percentage (%)", "variable": "Type"},
                             title="Open Access Publications Ratio Over the Last 20 Years",
-                            color_discrete_map={"%Cited Publications": "green", "%Non-Cited Publications": "#D3D3D3"},
+                            color_discrete_map={"%Cited Publications": "blue", "%Non-Cited Publications": "orange"},
                             barmode="stack", hover_data=["Cited Publications", 'Non-cited Publications'])
                 st.plotly_chart(fig, use_container_width = True)
 
