@@ -2759,7 +2759,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 # Replace NaN with 0 in 'OA Citations' column
                 df_oa_overtime['OA Citations'] = df_oa_overtime['OA Citations'].fillna(0)
-
+                df_oa_overtime
                 df_oa_overtime['Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['OA Publications']
                 df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OA Publications']/df_oa_overtime['Total Publications'], 3)*100
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
