@@ -182,6 +182,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 container_author_no = st.container()
                 container_country = st.container()
                 container_author_pub_ratio = st.container()
+                container_publication_ratio = st.container()
         with col3:
             with st.popover('Filters and more'):
                 col31, col32 = st.columns(2)
@@ -263,6 +264,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     container_author_no.metric(label='Number of authors', value=int(author_no))
                     container_country.metric(label='Number of country', value=unique_items_count-1)
                     container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
+                    if len(df_collections) == 0:
+                        collaboration_ratio=0
+                    else:
+                        multiple_authored_papers = df_collections['multiple_authors'].sum()
+                        collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
+                        container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
                     # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
