@@ -218,8 +218,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     max_year = df_oa_overtime["Publication_year"].max()
     last_20_years = df_oa_overtime[df_oa_overtime["Publication_year"] >= (max_year - 20)]
-    fig = px.bar(last_20_years, x="Publication_year", y="OA ratio", labels={"Publication_year": "Publication Year", "OA ratio": "OA Ratio (%)"}, title="OA Ratio Over the Last 20 Years")
-    fig.update_yaxes(range=[0, 100])
+    fig = px.bar(last_20_years, x="Publication_year", y=["OA ratio", "NonOA ratio"],
+                labels={"Publication_year": "Publication Year", "value": "Percentage (%)", "variable": "Type"},
+                title="OA vs Non-OA Publications Ratio Over the Last 20 Years",
+                color_discrete_map={"OA ratio": "blue", "NonOA ratio": "red"},
+                barmode="stack")
+
+    # Display the plot in Streamlit
     st.plotly_chart(fig)
 
     col1, col2, col3 = st.columns([3,5,8])
