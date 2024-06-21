@@ -219,7 +219,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     max_year = df_oa_overtime["Publication_year"].max()
     last_20_years = df_oa_overtime[df_oa_overtime["Publication_year"] >= (max_year - 20)]
-    fig = px.bar(last_20_years, x="Publication_year", y=["OA ratio", "Non-OA publication ratio"],
+    fig = px.bar(last_20_years, x="Publication_year", y=["OA publication ratio", "Non-OA publication ratio"],
                 labels={"Publication_year": "Publication Year", "value": "Percentage (%)", "variable": "Type"},
                 title="OA vs Non-OA Publications Ratio Over the Last 20 Years",
                 color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "orange"},
