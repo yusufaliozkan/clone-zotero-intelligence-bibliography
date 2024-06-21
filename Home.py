@@ -1957,8 +1957,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         help=f'''Out of the **{non_nan_id}** items measured for citations, **{number_of_items}** received at least 1 citation.
                         ''')
                     with colcit2:
-                        true_count = df_cited[df_cited['Publication type']=='Journal article']['OA status'].sum()
-                        total_count = len(df_cited[df_cited['Publication type']=='Journal article'])
+                        total_count = df_cited[['OA status']]
+                        total_count = total_count.dropna().reset_index(drop=True)
+                        total_count = len(total_count)
+                        true_count = len(df_cited[df_cited['OA status']==True])
                         if total_count == 0:
                             oa_ratio = 0.0
                         else:
