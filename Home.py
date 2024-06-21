@@ -2742,6 +2742,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
                 df_dedup_v2
                 grouped = df_dedup_v2.groupby('Date year')
+
+                filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) & (df['OA status'] == True)]
+
+                # Group by 'Date year' and count the number of rows in each group
+                filtered_df
+
                 total_citations = grouped.size().reset_index(name='Total Publications')
                 cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited papers')
                 test = pd.merge(total_citations, cited_publications, on='Date year')
