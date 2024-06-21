@@ -2755,7 +2755,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_cited_papers.columns = ['Date year', 'Cited papers']
                 df_cited_papers = pd.merge(df_cited_papers, df_cited_oa_papers, on='Date year', how='left')
                 df_cited_papers['Cited OA papers'] = df_cited_papers['Cited OA papers'].fillna(0)
+                df_cited_papers['Cited non-OA papers'] = df_cited_papers['Cited papers']-df_cited_papers['Cited OA papers']
                 df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
+                df_cited_papers['%Cited non-OA papers'] = round(df_cited_papers['Cited non-OA papers']/df_cited_papers['Cited papers'], 3)*100
                 df_cited_papers
 
                 total_publications = grouped.size().reset_index(name='Total Publications')
