@@ -212,6 +212,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     grouped = df_dedup.groupby('Publication_year')
     total_publications = grouped.size().reset_index(name='TotalPublications')
     open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OpenAccessPublications')
+    open_access_publications
     df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Publication_year')
     df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OpenAccessPublications']/df_oa_overtime['TotalPublications'], 3)*100
     df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
@@ -1724,7 +1725,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             st.metric(label=f"The number of sources published between **{int(years[0])}** and **{int(years[1])}**", value=f'{number_of_items}', label_visibility='visible', 
                             help=f'({breakdown_string})')    
                         with colyear22:
-                            true_count = df_all['OA status'].sum()
+                            true_count = df_all[df_all['Publication type']=='Journal article']['OA status'].sum()
                             total_count = len(df_all[df_all['Publication type']=='Journal article'])
                             if total_count == 0:
                                 oa_ratio = 0.0
