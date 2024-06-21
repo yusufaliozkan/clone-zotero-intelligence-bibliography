@@ -2749,11 +2749,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 result = filtered_df.groupby(df_dedup_v2['Date year'])['OA status'].count()
                 result=result.reset_index()
                 result.columns = ['Year', 'Cited OA Papers']
-                result
 
                 total_citations = grouped.size().reset_index(name='Total Publications')
                 cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited papers')
                 test = pd.merge(total_citations, cited_publications, on='Date year')
+                test = pd.merge(test, result, on='Date year')
                 test
 
                 df_citation_counts = df_dedup_v2.copy()
