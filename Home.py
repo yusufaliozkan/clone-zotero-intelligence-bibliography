@@ -2752,8 +2752,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited papers')
                 df_cited_papers = pd.merge(total_citations, cited_publications, on='Date year')
                 df_cited_papers = pd.merge(df_cited_papers, result, on='Date year')
-                df_cited_papers
                 df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
+                df_cited_papers = df_cited_papers.drop(columns=['Total publications'])
                 df_cited_papers
 
                 total_publications = grouped.size().reset_index(name='Total Publications')
