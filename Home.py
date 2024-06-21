@@ -2738,6 +2738,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
                 df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
                 df_dedup_v2 = df_dedup.dropna(subset='OA status')
+                df_dedup_v2
                 grouped = df_dedup_v2.groupby('Date year')
                 df_citation_counts = df_dedup_v2.copy()
                 df_citation_counts["Citations from OA outputs"] = df_citation_counts.apply(lambda row: row["Citation"] if row["OA status"] == True else 0, axis=1)
