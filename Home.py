@@ -2737,13 +2737,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 )
                 df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
                 df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
-                df_dedup_v2 = df_dedup.dropna(subset='OA status')
-                df_dedup_v2
-                grouped = df_dedup_v2.groupby('Date year')
-                total_publications = grouped.size().reset_index(name='Total Publications')
-                open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OA Publications')
-                df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
-                df_oa_overtime
+                df_dedup_v2 = df_dedup.dropna(subset=['OA status'])
+
+                # Grouping by 'Date year' and calculating total citations and OA citations
+                grouped = df_dedup_v2.groupby('Date year').agg(
+                    Total_Citations=('Citation', 'sum'),
+                    Total_OA_Citations=('OA status', lambda x: df_dedup_v2.loc[x.index, 'Citation'].sum() if x.any() else 0)
+                ).reset_index()
                 df_oa_overtime['Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['OA Publications']
                 df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OA Publications']/df_oa_overtime['Total Publications'], 3)*100
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
