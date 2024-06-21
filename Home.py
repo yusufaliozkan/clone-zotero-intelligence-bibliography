@@ -2782,13 +2782,16 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 st.plotly_chart(fig, use_container_width = True)
 
+                df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
                 grouped = df_dedup_v2.groupby('Date year')
                 total_publications = grouped.size().reset_index(name='Total Publications')
                 cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited Publications')
                 df_cited_overtime = pd.merge(total_publications, cited_publications, on='Date year')
+                df_cited_overtime = pd.merge(df_cited_overtime, df_cited_papers, on='Date year')
                 df_cited_overtime['Non-cited Publications'] = df_cited_overtime['Total Publications']-df_cited_overtime['Cited Publications']
                 df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['Cited Publications']/df_cited_overtime['Total Publications'], 3)*100
                 df_cited_overtime['%Non-Cited Publications'] = round(df_cited_overtime['Non-cited Publications']/df_cited_overtime['Total Publications'], 3)*100
+                df_cited_overtime
 
                 max_year = df_cited_overtime["Date year"].max()
                 last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
