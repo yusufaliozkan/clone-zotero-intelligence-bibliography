@@ -2756,14 +2756,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
                 df_cited_papers
 
-                df_citation_counts = df_dedup_v2.copy()
-                df_citation_counts["Citations from OA outputs"] = df_citation_counts.apply(lambda row: row["Citation"] if row["OA status"] == True else 0, axis=1)
-                df_citation_counts = df_citation_counts.groupby("Date year").agg({"Citation": "sum", "Citations from OA outputs": "sum"}).reset_index()
-                df_citation_counts["Citations from non-OA outputs"] = df_citation_counts['Citation']-df_citation_counts["Citations from OA outputs"]
-                df_citation_counts["%Citations from OA outputs"] = round(df_citation_counts['Citations from OA outputs']/df_citation_counts['Citation'], 3)*100
-                df_citation_counts["%Citations from non-OA outputs"] = round(df_citation_counts['Citations from non-OA outputs']/df_citation_counts['Citation'], 3)*100
-                df_citation_counts = df_citation_counts[['Date year', '%Citations from OA outputs', '%Citations from non-OA outputs']]
-
                 total_publications = grouped.size().reset_index(name='Total Publications')
                 open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OA Publications')
                 df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
@@ -2771,6 +2763,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OA Publications']/df_oa_overtime['Total Publications'], 3)*100
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
                 df_oa_overtime = pd.merge(df_oa_overtime, df_citation_counts, on='Date year')
+                df_oa_overtime
 
                 max_year = df_oa_overtime["Date year"].max()
                 last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
