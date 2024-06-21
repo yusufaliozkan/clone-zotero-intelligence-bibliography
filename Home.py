@@ -2747,13 +2747,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OpenAccessPublications']/df_oa_overtime['TotalPublications'], 3)*100
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
                 max_year = df_oa_overtime["Date year"].max()
-                df_oa_overtime
                 last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
                 fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
                             labels={"Date year": "Publication Year", "value": "Percentage (%)", "variable": "Type"},
                             title="Open Access Publications Ratio Over the Last 20 Years",
                             color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
-                            barmode="stack")
+                            barmode="stack", hover_name="OpenAccessPublications")
                 st.plotly_chart(fig, use_container_width = True)
 
                 col1, col2 = st.columns([7,2])
