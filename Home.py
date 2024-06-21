@@ -2737,18 +2737,29 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 )
                 df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
                 df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
-                df_dedup_v2 = df_dedup.dropna(subset=['OA status'])
+                df_dedup_v2 = df_dedup.dropna(subset='OA status')
+                grouped = df_dedup_v2.groupby('Date year')
 
-                # Grouping by 'Date year' and calculating total citations and OA citations
-                grouped = df_dedup_v2.groupby('Date year').agg(
-                    Total_Citations=('Citation', 'sum'),
-                    Total_OA_Citations=('OA status', lambda x: df_dedup_v2.loc[x.index, 'Citation'].sum() if x.any() else 0)
-                ).reset_index()
-                df_dedup_v2
-                # grouped = df_dedup_v2.groupby('Date year')
+                # Calculate total publications per year
                 total_publications = grouped.size().reset_index(name='Total Publications')
+
+                # Calculate open access publications per year
                 open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OA Publications')
+
+                # Calculate total citations per year
+                total_citations = grouped['Citation_list'].apply(lambda x: x.str.len().sum()).reset_index(name='Total Citations')
+
+                # Calculate total citations for open access publications per year
+                oa_citations = df_dedup_v2[df_dedup_v2['OA status'] == True].groupby('Date year')['Citation_list'].apply(lambda x: x.str.len().sum()).reset_index(name='OA Citations')
+
+                # Merge all the results into a single data frame
                 df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
+                df_oa_overtime = pd.merge(df_oa_overtime, total_citations, on='Date year')
+                df_oa_overtime = pd.merge(df_oa_overtime, oa_citations, on='Date year', how='left')
+
+                # Replace NaN with 0 in 'OA Citations' column
+                df_oa_overtime['OA Citations'] = df_oa_overtime['OA Citations'].fillna(0)
+
                 df_oa_overtime['Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['OA Publications']
                 df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OA Publications']/df_oa_overtime['Total Publications'], 3)*100
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
