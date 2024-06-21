@@ -2743,7 +2743,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_citation_counts["Citations from OA outputs"] = df_citation_counts.apply(lambda row: row["Citation"] if row["OA status"] == True else 0, axis=1)
                 df_citation_counts = df_citation_counts.groupby("Publication_year").agg({"Citation": "sum", "Citations from OA outputs": "sum"}).reset_index()
                 df_citation_counts["Citations from non-OA outputs"] = df_citation_counts['Citation']-df_citation_counts["Citations from OA outputs"]
-                df_citation_counts["%Citations from OA outputs"] = round(df_citation_counts['Citations from OA outputs']/df_oa_overtime['Citation'], 3)*100
+                df_citation_counts["%Citations from OA outputs"] = round(df_citation_counts['Citations from OA outputs']/df_citation_counts['Citation'], 3)*100
+                df_citation_counts["%Citations from non-OA outputs"] = round(df_citation_counts['Citations from non-OA outputs']/df_citation_counts['Citation'], 3)*100
                 df_citation_counts
 
                 total_publications = grouped.size().reset_index(name='Total Publications')
