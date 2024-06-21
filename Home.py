@@ -2788,6 +2788,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_cited_overtime = pd.merge(total_publications, cited_publications, on='Date year')
                 df_cited_overtime['Non-cited Publications'] = df_cited_overtime['Total Publications']-df_cited_overtime['Cited Publications']
                 df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['Cited Publications']/df_cited_overtime['Total Publications'], 3)*100
+                df_cited_overtime['%Non-Cited Publications'] = round(df_cited_overtime['Non-cited Publications']/df_cited_overtime['Total Publications'], 3)*100
                 df_cited_overtime
 
                 max_year = df_cited_overtime["Date year"].max()
