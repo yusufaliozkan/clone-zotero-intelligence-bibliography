@@ -1730,7 +1730,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             st.metric(label=f"The number of sources published between **{int(years[0])}** and **{int(years[1])}**", value=f'{number_of_items}', label_visibility='visible', 
                             help=f'({breakdown_string})')    
                         with colyear22:
-                            true_count = df_all['OA status'].sum()
+                            true_count = df_all['OA status'].dropna().sum()
                             true_count
                             total_count = len(df_all[df_all['Publication type']=='Journal article'])
                             if total_count == 0:
