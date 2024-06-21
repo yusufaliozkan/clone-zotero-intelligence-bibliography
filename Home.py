@@ -2803,14 +2803,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         x=last_20_years["Date year"],
                         y=last_20_years["%Cited Publications"],
                         name="%Cited Publications",
-                        marker_color="blue"
+                        marker_color="green"
                     ))
 
                     fig.add_trace(go.Bar(
                         x=last_20_years["Date year"],
                         y=last_20_years["%Non-Cited Publications"],
                         name="%Non-Cited Publications",
-                        marker_color="orange"
+                        marker_color="#D3D3D3"
                     ))
 
                     # Add line for total citations
@@ -2819,7 +2819,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         y=last_20_years["Citation"],
                         name="Total Citations",
                         mode="lines+markers",
-                        marker=dict(color="red"),
+                        marker=dict(color="blue"),
                         yaxis="y2"
                     ))
 
