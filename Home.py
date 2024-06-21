@@ -2846,10 +2846,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     # Display the plot using Streamlit
                     col2.plotly_chart(fig, use_container_width=True)
-        
-
-                df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
-                df_cited_papers
 
                 col1, col2 = st.columns([7,2])
                 with col1:
