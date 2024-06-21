@@ -209,6 +209,18 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
     df_dedup
+    grouped = df_dedup.groupby('Publication_year')
+
+    # Count total number of publications each year
+    total_publications = grouped.size().reset_index(name='TotalPublications')
+
+    # Count number of open access publications each year
+    open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OpenAccessPublications')
+
+    # Merge the two results
+    result = pd.merge(total_publications, open_access_publications, on='Publication_year')
+    result
+
     col1, col2, col3 = st.columns([3,5,8])
     with col3:
         with st.expander('Introduction'):
