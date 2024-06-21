@@ -2745,7 +2745,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_citation_counts["Citations from non-OA outputs"] = df_citation_counts['Citation']-df_citation_counts["Citations from OA outputs"]
                 df_citation_counts["%Citations from OA outputs"] = round(df_citation_counts['Citations from OA outputs']/df_citation_counts['Citation'], 3)*100
                 df_citation_counts["%Citations from non-OA outputs"] = round(df_citation_counts['Citations from non-OA outputs']/df_citation_counts['Citation'], 3)*100
-                # df_citation_counts = df_citation_counts[['%Citations from OA outputs', '%Citations from non-OA outputs']]
+                df_citation_counts = df_citation_counts[['Publication_year', '%Citations from OA outputs', '%Citations from non-OA outputs']]
                 df_citation_counts
 
                 total_publications = grouped.size().reset_index(name='Total Publications')
