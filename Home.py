@@ -216,10 +216,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     )
     df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
     df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
-    aaa = df_dedup[df_dedup['Date year']==2023]
-    aaa = aaa[['OA status']]
-    aaa= aaa.dropna()
-    aaa = len(aaa)
+
     df_dedup_v2 = df_dedup.dropna(subset='OA status')
     bbb = len(df_dedup_v2)
     grouped = df_dedup_v2.groupby('Date year')
