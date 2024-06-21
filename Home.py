@@ -2786,8 +2786,19 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 total_publications = grouped.size().reset_index(name='Total Publications')
                 cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited Publications')
                 df_cited_overtime = pd.merge(total_publications, cited_publications, on='Date year')
+                df_cited_overtime['Non-cited Publications'] = df_cited_overtime['Total Publications']-df_cited_overtime['Cited Publications']
                 df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['Cited Publications']/df_cited_overtime['Total Publications'], 3)*100
                 df_cited_overtime
+
+                max_year = df_cited_overtime["Date year"].max()
+                last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
+                citation_ratio = st.checkbox('Add citation ratio')
+                fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
+                            labels={"Date year": "Publication Year", "value": "Percentage (%)", "variable": "Type"},
+                            title="Open Access Publications Ratio Over the Last 20 Years",
+                            color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
+                            barmode="stack", hover_data=["OA Publications", 'Non-OA Publications'])
+                st.plotly_chart(fig, use_container_width = True)
 
                 col1, col2 = st.columns([7,2])
                 with col1:
