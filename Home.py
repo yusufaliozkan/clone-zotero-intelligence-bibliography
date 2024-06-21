@@ -2774,10 +2774,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
                             barmode="stack", hover_data=["OA Publications", 'Non-OA Publications'])
                 if citation_ratio:
-                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Citations from OA outputs"], 
-                                    mode='lines+markers', name='%Citations from OA outputs', line=dict(color='blue'))
-                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Citations from non-OA outputs"], 
-                                    mode='lines+markers', name='%Citations from non-OA outputs', line=dict(color='red'))
+                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited OA papers"], 
+                                    mode='lines+markers', name='%Cited OA papers', line=dict(color='blue'))
+
 
                 st.plotly_chart(fig, use_container_width = True)
 
