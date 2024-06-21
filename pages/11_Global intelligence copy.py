@@ -116,6 +116,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
             st.metric(label='Number of authors', value=int(author_no))
             st.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
+           
+            if len(df_collections) == 0:
+                collaboration_ratio=0
+            else:
+                multiple_authored_papers = df_collections['multiple_authors'].sum()
+                collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
+                st.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
             container_metric = container_metric.metric(label='Number of items', value=num_items_collections, help=f'sources found for **{unique_items_count-1}** countries.')
 
