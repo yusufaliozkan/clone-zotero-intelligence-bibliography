@@ -2760,6 +2760,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                         "Non-OA publication ratio": True,
                                         "OpenAccessPublications": True,
                                         "NonOpenAccessPublications": True})
+                st.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
                 with col1:
