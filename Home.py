@@ -2758,8 +2758,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             hover_data={
                                 "OA publication ratio": True,
                                 "Non-OA publication ratio": True,
-                                "OpenAccessPublications": last_20_years["OpenAccessPublications"],
-                                "NonOpenAccessPublications": last_20_years["NonOpenAccessPublications"]
+                                "OpenAccessPublications": "OpenAccessPublications",
+                                "NonOpenAccessPublications": "NonOpenAccessPublications"
                             })
 
                 # Display the chart in Streamlit
