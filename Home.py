@@ -1715,7 +1715,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             st.metric(label=f"The number of sources published in **{int(years[0])}**", value=f'{number_of_items}', label_visibility='visible', 
                             help=f'({breakdown_string})')
                         with colyear2: 
-                            true_count = df_all['OA status'].sum()
+                            true_count = df_all[['OA status']]
+                            true_count = true_count.dropna()
+                            true_count = len(true_count)
                             true_count
                             total_count = len(df_all[df_all['Publication type']=='Journal article'])
                             if total_count == 0:
