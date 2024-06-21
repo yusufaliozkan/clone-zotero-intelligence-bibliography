@@ -2746,8 +2746,15 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 # Group by 'Date year' and count the number of rows in each group
                 result = filtered_df.groupby(df_dedup_v2['Date year'])['OA status'].count()
                 result=result.reset_index()
-                # result.columns = ['Date year', 'Cited OA papers']
+                result.columns = ['Date year', 'Cited OA papers']
                 result
+
+                filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
+                # Group by 'Date year' and count the number of rows in each group
+                result2 = filtered_df2.groupby(df_dedup_v2['Date year'])['OA status'].count()
+                result2=result2.reset_index()
+                result2.columns = ['Date year', 'Cited OA papers']
+                result2
 
                 total_citations = grouped.size().reset_index(name='Total Publications')
                 cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited papers')
