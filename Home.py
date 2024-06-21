@@ -209,16 +209,16 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
     df_dedup
-    aaa = df_dedup[df_dedup['Publication_year']==2023]
+    aaa = df_dedup[df_dedup['Date year']==2023]
     aaa = aaa[['OA status']]
     aaa= aaa.dropna()
     aaa = len(aaa)
     aaa
-    grouped = df_dedup.groupby('Publication_year')
+    grouped = df_dedup.groupby('Date year')
     total_publications = grouped.size().reset_index(name='TotalPublications')
     open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OpenAccessPublications')
     open_access_publications
-    df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Publication_year')
+    df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
     df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OpenAccessPublications']/df_oa_overtime['TotalPublications'], 3)*100
     df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
     df_oa_overtime
