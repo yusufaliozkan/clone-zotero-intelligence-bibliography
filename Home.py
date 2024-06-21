@@ -2729,41 +2729,41 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             for i in range(row_nu_collections):
                                 st.caption(df_journal['Journal'].iloc[i]
                                 )
-            
-                            df_dedup['Date published2'] = (
-                                df_dedup['Date published']
-                                .str.strip()
-                                .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                            )
-                            df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
-                            df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
-                            df_dedup_v2 = df_dedup.dropna(subset=['OA status'])
-                            bbb = len(df_dedup_v2)
-                            grouped = df_dedup_v2.groupby('Date year')
-                            total_publications = grouped.size().reset_index(name='TotalPublications')
-                            open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OpenAccessPublications')
-                            df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
-                            df_oa_overtime['NonOpenAccessPublications'] = df_oa_overtime['TotalPublications'] - df_oa_overtime['OpenAccessPublications']
-                            df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OpenAccessPublications'] / df_oa_overtime['TotalPublications'], 3) * 100
-                            df_oa_overtime['Non-OA publication ratio'] = 100 - df_oa_overtime['OA publication ratio']
-                            max_year = df_oa_overtime["Date year"].max()
-                            last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
+        
+                df_dedup['Date published2'] = (
+                    df_dedup['Date published']
+                    .str.strip()
+                    .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                )
+                df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
+                df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
+                df_dedup_v2 = df_dedup.dropna(subset=['OA status'])
+                bbb = len(df_dedup_v2)
+                grouped = df_dedup_v2.groupby('Date year')
+                total_publications = grouped.size().reset_index(name='TotalPublications')
+                open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OpenAccessPublications')
+                df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
+                df_oa_overtime['NonOpenAccessPublications'] = df_oa_overtime['TotalPublications'] - df_oa_overtime['OpenAccessPublications']
+                df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OpenAccessPublications'] / df_oa_overtime['TotalPublications'], 3) * 100
+                df_oa_overtime['Non-OA publication ratio'] = 100 - df_oa_overtime['OA publication ratio']
+                max_year = df_oa_overtime["Date year"].max()
+                last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
 
-                            # Create the bar chart with tooltips
-                            fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
-                                        labels={"Date year": "Publication Year", "value": "Percentage (%)", "variable": "Type"},
-                                        title="Open Access Publications Ratio Over the Last 20 Years",
-                                        color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
-                                        barmode="stack",
-                                        hover_data={
-                                            "OA publication ratio": True,
-                                            "Non-OA publication ratio": True,
-                                            "OpenAccessPublications": last_20_years["OpenAccessPublications"],
-                                            "NonOpenAccessPublications": last_20_years["NonOpenAccessPublications"]
-                                        })
+                # Create the bar chart with tooltips
+                fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
+                            labels={"Date year": "Publication Year", "value": "Percentage (%)", "variable": "Type"},
+                            title="Open Access Publications Ratio Over the Last 20 Years",
+                            color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
+                            barmode="stack",
+                            hover_data={
+                                "OA publication ratio": True,
+                                "Non-OA publication ratio": True,
+                                "OpenAccessPublications": last_20_years["OpenAccessPublications"],
+                                "NonOpenAccessPublications": last_20_years["NonOpenAccessPublications"]
+                            })
 
-            # Display the chart in Streamlit
-            st.plotly_chart(fig, use_container_width=True)
+                # Display the chart in Streamlit
+                st.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
                 with col1:
