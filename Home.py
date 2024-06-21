@@ -2801,7 +2801,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         
                 filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
                 # Group by 'Date year' and count the number of rows in each group
-                df_cited_papers = df_dedup_v2.groupby(df_dedup_v2['Date year'])['Citation'].count()
+                df_cited_papers = df_dedup_v2.groupby(['Date year'])['Citation'].count()
                 df_cited_papers
 
                 col1, col2 = st.columns([7,2])
