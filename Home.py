@@ -2756,7 +2756,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             barmode="stack",   
                             hover_data={"OA publication ratio": True,
                             "Non-OA publication ratio": True,
-                            "OA publications": True,
+                            "OpenAccessPublications": True,
                             "NonOpenAccessPublications": True})
                 st.plotly_chart(fig, use_container_width = True)
 
