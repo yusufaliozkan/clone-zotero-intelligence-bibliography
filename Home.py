@@ -2739,7 +2739,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
                 df_dedup_v2 = df_dedup.dropna(subset='OA status')
                 grouped = df_dedup_v2.groupby('Date year')
-                df_citation_counts = df_dedup_v2.groupby("Publication_year")["Citation"].sum().reset_index()
+
+                df["OA_Citations"] = df.apply(lambda row: row["Citation"] if row["OA status"] == "TRUE" else 0, axis=1)
+
+                # Group by Publication_year and sum the Citation and OA_Citations
+                df_citation_counts = df.groupby("Publication_year").agg({"Citation": "sum", "OA_Citations": "sum"}).reset_index()
+
                 df_citation_counts
                 total_publications = grouped.size().reset_index(name='Total Publications')
                 open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OA Publications')
