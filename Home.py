@@ -2743,16 +2743,17 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 grouped = df_dedup_v2.groupby('Date year')
 
                 filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) & (df['OA status'] == True)]
-
                 # Group by 'Date year' and count the number of rows in each group
                 result = filtered_df.groupby(df_dedup_v2['Date year'])['OA status'].count()
                 result=result.reset_index()
-                result.columns = ['Date year', 'Cited OA papers']
+                # result.columns = ['Date year', 'Cited OA papers']
                 result
+
                 total_citations = grouped.size().reset_index(name='Total Publications')
                 cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited papers')
                 df_cited_papers = pd.merge(total_citations, cited_publications, on='Date year', how='left')
                 df_cited_papers
+
                 df_cited_papers = pd.merge(df_cited_papers, result, on='Date year')
                 df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
                 # df_cited_papers = df_cited_papers.drop(columns=['Total Publications'])
