@@ -2773,8 +2773,33 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             title="Open Access Publications Ratio Over the Last 20 Years",
                             color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
                             barmode="stack", hover_data=["OA Publications", 'Non-OA Publications'])
-                fig.add_hline('%Citations from OA outputs')
-                st.plotly_chart(fig, use_container_width = True)
+                line_fig = go.Figure()
+                line_fig.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['%Citations from OA outputs'],
+                                            mode='lines+markers', name='%Citations from OA outputs',
+                                            line=dict(color='blue')))
+                line_fig.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['%Citations from non-OA outputs'],
+                                            mode='lines+markers', name='%Citations from non-OA outputs',
+                                            line=dict(color='red')))
+
+                # Combine bar and line plots
+                fig.add_traces(line_fig.data)
+
+                # Update layout to add secondary y-axis
+                fig.update_layout(
+                    yaxis2=dict(
+                        title="Percentage of Citations (%)",
+                        overlaying='y',
+                        side='right'
+                    ),
+                    legend=dict(
+                        x=1.1,
+                        y=1,
+                        bgcolor='rgba(255,255,255,0.5)'
+                    )
+                )
+
+                # Plot in Streamlit
+                st.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
                 with col1:
