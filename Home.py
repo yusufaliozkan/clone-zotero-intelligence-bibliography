@@ -213,7 +213,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     total_publications = grouped.size().reset_index(name='TotalPublications')
     open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OpenAccessPublications')
     df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Publication_year')
-    df_oa_overtime['OA ratio'] = f'{round(df_oa_overtime['OpenAccessPublications']/df_oa_overtime['TotalPublications'], 2)*100}%
+    df_oa_overtime['OA ratio'] = round(df_oa_overtime['OpenAccessPublications']/df_oa_overtime['TotalPublications'], 2)*100
     df_oa_overtime
 
     col1, col2, col3 = st.columns([3,5,8])
