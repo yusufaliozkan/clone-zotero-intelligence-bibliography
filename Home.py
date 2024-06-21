@@ -209,8 +209,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
     df_dedup
-    df_all['Date published2'] = (
-        df_all['Date published']
+    df_dedup['Date published2'] = (
+        df_dedup['Date published']
         .str.strip()
         .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
     )
