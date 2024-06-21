@@ -2757,7 +2757,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             hover_data={"OA publication ratio": True,
                             "Non-OA publication ratio": True,
                             "OA publications": True,
-                            "Non-OA publications": True})
+                            "NonOpenAccessPublications": True})
                 st.plotly_chart(fig, use_container_width = True)
 
                 col1, col2 = st.columns([7,2])
