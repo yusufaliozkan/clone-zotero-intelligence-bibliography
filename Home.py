@@ -225,7 +225,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     plt.xlabel("Publication Year")
     plt.ylabel("OA Ratio (%)")
     plt.title("OA Ratio Over the Last 20 Years")
-    st.show()
+    st.plt.show()
 
     col1, col2, col3 = st.columns([3,5,8])
     with col3:
