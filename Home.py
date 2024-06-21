@@ -2740,7 +2740,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_dedup_v2 = df_dedup.dropna(subset='OA status')
 
                 df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
-                df_dedup_v2
                 grouped = df_dedup_v2.groupby('Date year')
 
                 filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) & (df['OA status'] == True)]
@@ -2751,9 +2750,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 result.columns = ['Date year', 'Cited OA Papers']
                 total_citations = grouped.size().reset_index(name='Total Publications')
                 cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited papers')
-                test = pd.merge(total_citations, cited_publications, on='Date year')
-                test = pd.merge(test, result, on='Date year')
-                test
+                df_cited_papers = pd.merge(total_citations, cited_publications, on='Date year')
+                df_cited_papers = pd.merge(df_cited_papers, result, on='Date year')
+                df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
+                df_cited_papers
 
                 df_citation_counts = df_dedup_v2.copy()
                 df_citation_counts["Citations from OA outputs"] = df_citation_counts.apply(lambda row: row["Citation"] if row["OA status"] == True else 0, axis=1)
