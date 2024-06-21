@@ -220,7 +220,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     last_20_years = df_oa_overtime[df_oa_overtime["Publication_year"] >= (max_year - 20)]
     # Plotting
     plt.figure(figsize=(12, 6))
-    plt.bar(last_20_years["Publication_year"], last_20_years["OA ratio"], color='blue')
+    st.bar(last_20_years["Publication_year"], last_20_years["OA ratio"], color='blue')
     plt.ylim(0, 100)
     plt.xlabel("Publication Year")
     plt.ylabel("OA Ratio (%)")
