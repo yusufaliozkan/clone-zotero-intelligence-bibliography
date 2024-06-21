@@ -1729,7 +1729,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             total_count = total_count.dropna().reset_index(drop=True)
                             total_count = len(total_count)
                             total_count
-                            true_count = df_all[df_all['OA status']==True]
+                            true_count = len(df_all[df_all['OA status']==True])
                             true_count
                             # total_count = len(df_all[df_all['Publication type']=='Journal article'])
                             if total_count == 0:
