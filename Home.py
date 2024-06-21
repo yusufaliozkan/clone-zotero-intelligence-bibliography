@@ -210,6 +210,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
     
     aaa = df_dedup[['OA status']]
+    aaa= aaa.dropna()
     aaa = len(aaa)
     aaa
     grouped = df_dedup.groupby('Publication_year')
