@@ -1715,6 +1715,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             st.metric(label=f"The number of sources published in **{int(years[0])}**", value=f'{number_of_items}', label_visibility='visible', 
                             help=f'({breakdown_string})')
                         with colyear2: 
+                            df_all
                             true_count = df_all[['OA status']]
                             true_count = true_count.dropna().reset_index(drop=True)
                             true_count
