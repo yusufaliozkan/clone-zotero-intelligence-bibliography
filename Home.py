@@ -1716,7 +1716,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             help=f'({breakdown_string})')
                         with colyear2: 
                             true_count = df_all[['OA status']]
-                            true_count = true_count.dropna()
+                            true_count = true_count.dropna().reset_index(drop=True)
                             true_count
                             true_count = len(true_count)
                             true_count
