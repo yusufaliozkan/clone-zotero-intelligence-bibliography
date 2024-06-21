@@ -2738,35 +2738,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
                 df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
                 df_dedup_v2 = df_dedup.dropna(subset='OA status')
+                df_dedup_v2
                 grouped = df_dedup_v2.groupby('Date year')
-
-                # Calculate total publications per year
                 total_publications = grouped.size().reset_index(name='Total Publications')
-
-                # Calculate open access publications per year
                 open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OA Publications')
-
-                # Calculate total citations per year
-                total_citations = grouped['Citation_list'].apply(lambda x: x.str.len().sum()).reset_index(name='Total Citations')
-
-                # Calculate total citations for open access publications per year
-                oa_citations = df_dedup_v2[df_dedup_v2['OA status'] == True].groupby('Date year')['Citation_list'].apply(lambda x: x.str.len().sum()).reset_index(name='Citations from OA outputs')
-
-                # Merge all the results into a single data frame
                 df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
-                df_oa_overtime = pd.merge(df_oa_overtime, total_citations, on='Date year')
-                df_oa_overtime = pd.merge(df_oa_overtime, oa_citations, on='Date year', how='left')
-
-                # Replace NaN with 0 in 'OA Citations' column
-                df_oa_overtime['Citations from OA outputs'] = df_oa_overtime['Citations from OA outputs'].fillna(0)
-                df_oa_overtime['Citations from non-OA outputs'] = df_oa_overtime['Total Citations'] - df_oa_overtime['Citations from OA outputs']
-                df_oa_overtime['%Citations from OA outputs'] = round(df_oa_overtime['Citations from OA outputs']/df_oa_overtime['Total Citations'], 3)*100
-                df_oa_overtime['%Citations from non-OA outputs'] = round(df_oa_overtime['Citations from non-OA outputs']/df_oa_overtime['Total Citations'], 3)*100
                 df_oa_overtime['Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['OA Publications']
                 df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OA Publications']/df_oa_overtime['Total Publications'], 3)*100
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
-                df_oa_overtime
-
                 max_year = df_oa_overtime["Date year"].max()
                 last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
                 fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
@@ -2774,33 +2753,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             title="Open Access Publications Ratio Over the Last 20 Years",
                             color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
                             barmode="stack", hover_data=["OA Publications", 'Non-OA Publications'])
-                line_fig = go.Figure()
-                line_fig.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['%Citations from OA outputs'],
-                                            mode='lines+markers', name='%Citations from OA outputs',
-                                            line=dict(color='blue')))
-                line_fig.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['%Citations from non-OA outputs'],
-                                            mode='lines+markers', name='%Citations from non-OA outputs',
-                                            line=dict(color='red')))
-
-                # Combine bar and line plots
-                fig.add_traces(line_fig.data)
-
-                # Update layout to add secondary y-axis
-                fig.update_layout(
-                    yaxis2=dict(
-                        title="Percentage of Citations (%)",
-                        overlaying='y',
-                        side='right'
-                    ),
-                    legend=dict(
-                        x=1.1,
-                        y=1,
-                        bgcolor='rgba(255,255,255,0.5)'
-                    )
-                )
-
-                # Plot in Streamlit
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width = True)
 
                 col1, col2 = st.columns([7,2])
                 with col1:
