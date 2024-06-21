@@ -2756,7 +2756,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_oa_overtime = pd.merge(df_oa_overtime, df_citation_counts, on='Date year')
 
                 max_year = df_oa_overtime["Date year"].max()
-                last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 10)]
+                last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
                 citation_ratio = st.checkbox('Add citation ratio')
                 fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
                             labels={"Date year": "Publication Year", "value": "Percentage (%)", "variable": "Type"},
