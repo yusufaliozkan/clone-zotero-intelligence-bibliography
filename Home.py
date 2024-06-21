@@ -2760,6 +2760,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 # Replace NaN with 0 in 'OA Citations' column
                 df_oa_overtime['Citations from OA outputs'] = df_oa_overtime['Citations from OA outputs'].fillna(0)
                 df_oa_overtime['Citations from non-OA outputs'] = df_oa_overtime['Total Citations'] - df_oa_overtime['Citations from OA outputs']
+                df_oa_overtime['%Citations from OA outputs'] = round(df_oa_overtime['Citations from OA outputs']/df_oa_overtime['Total Citations'], 3)*100
+                df_oa_overtime['%Citations from non-OA outputs'] = round(df_oa_overtime['Citations from non-OA outputs']/df_oa_overtime['Total Citations'], 3)*100
                 df_oa_overtime
                 df_oa_overtime['Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['OA Publications']
                 df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OA Publications']/df_oa_overtime['Total Publications'], 3)*100
