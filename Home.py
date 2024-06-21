@@ -208,7 +208,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
-
+    df_dedup
     col1, col2, col3 = st.columns([3,5,8])
     with col3:
         with st.expander('Introduction'):
