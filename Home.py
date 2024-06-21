@@ -736,7 +736,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                                     return highlighted_text
                                 if view == 'Basic list':
-                                # Display the numbered list using Markdown syntax
+                                    # Display the numbered list using Markdown syntax
                                     for i, article in enumerate(articles_list, start=1):
                                         # Display the article with highlighted search terms
                                         highlighted_article = highlight_terms(article, search_tokens)
