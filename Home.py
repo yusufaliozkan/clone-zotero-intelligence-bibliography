@@ -2744,27 +2744,17 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) & (df['OA status'] == True)]
                 # Group by 'Date year' and count the number of rows in each group
-                result = filtered_df.groupby(df_dedup_v2['Date year'])['OA status'].count()
-                result=result.reset_index()
-                result.columns = ['Date year', 'Cited OA papers']
-                result
+                df_cited_oa_papers = filtered_df.groupby(df_dedup_v2['Date year'])['OA status'].count()
+                df_cited_oa_papers=df_cited_oa_papers.reset_index()
+                df_cited_oa_papers.columns = ['Date year', 'Cited OA papers']
 
                 filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
                 # Group by 'Date year' and count the number of rows in each group
-                result2 = filtered_df2.groupby(df_dedup_v2['Date year'])['OA status'].count()
-                result2=result2.reset_index()
-                result2.columns = ['Date year', 'Cited papers']
-                result2 = pd.merge(result2, result, on='Date year', how='left')
-                result2
-
-                total_citations = grouped.size().reset_index(name='Total Publications')
-                cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited papers')
-                df_cited_papers = pd.merge(total_citations, cited_publications, on='Date year', how='left')
-                df_cited_papers
-
-                df_cited_papers = pd.merge(df_cited_papers, result, on='Date year')
+                df_cited_papers = filtered_df2.groupby(df_dedup_v2['Date year'])['OA status'].count()
+                df_cited_papers=df_cited_papers.reset_index()
+                df_cited_papers.columns = ['Date year', 'Cited papers']
+                df_cited_papers = pd.merge(df_cited_papers, df_cited_oa_papers, on='Date year', how='left')
                 df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
-                # df_cited_papers = df_cited_papers.drop(columns=['Total Publications'])
                 df_cited_papers
 
                 total_publications = grouped.size().reset_index(name='Total Publications')
