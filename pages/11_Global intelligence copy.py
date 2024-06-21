@@ -454,6 +454,15 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     container_author_no.metric(label='Number of authors', value=int(author_no))
                     container_country.metric(label='Number of country', value=unique_items_count-1)
                     container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
+                   
+                    df_countries['FirstName2'] = df_countries['FirstName2'].astype(str)
+                    df_countries['multiple_authors'] = df_countries['FirstName2'].apply(lambda x: ',' in x)                    
+                    if len(df_countries) == 0:
+                        collaboration_ratio=0
+                    else:
+                        multiple_authored_papers = df_countries['multiple_authors'].sum()
+                        collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
+                        container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
                         
                     if view == 'Basic list':    
