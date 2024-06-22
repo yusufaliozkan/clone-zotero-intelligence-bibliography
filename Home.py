@@ -2845,7 +2845,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             xanchor='left', # Ensure the legend box starts at x=1
                             y=0.5,       # Position the legend at the center of the y-axis
                             yanchor='middle'  # Ensure the legend box is centered vertically
-                        )
+                        ),
                         hovermode="x unified"
                     )
 
