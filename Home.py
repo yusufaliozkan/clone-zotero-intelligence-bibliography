@@ -2840,7 +2840,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             side="right"
                         ),
                         barmode="stack",
-                        legend=dict(x=0.1, y=1.1),
+                        legend=dict(
+                            x=1,         # Position the legend at the right side
+                            xanchor='left', # Ensure the legend box starts at x=1
+                            y=0.5,       # Position the legend at the center of the y-axis
+                            yanchor='middle'  # Ensure the legend box is centered vertically
+                        )
                         hovermode="x unified"
                     )
 
