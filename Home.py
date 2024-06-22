@@ -2825,7 +2825,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     # Update layout for secondary y-axis
                     fig.update_layout(
-                        title="Open Access Publications Ratio and Total Citations Over the Last 20 Years",
+                        title="Cited papers ratio and # Citations",
                         xaxis=dict(title="Publication Year"),
                         yaxis=dict(
                             title="Percentage (%)",
@@ -2840,7 +2840,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             side="right"
                         ),
                         barmode="stack",
-                        legend=dict(x=0.1, y=1.1, orientation="h"),
+                        legend=dict(x=0.1, y=1.1),
                         hovermode="x unified"
                     )
 
