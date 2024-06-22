@@ -2843,7 +2843,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         legend=dict(
                             x=1,         # Position the legend at the right side
                             xanchor='left', # Ensure the legend box starts at x=1
-                            y=0.5,       # Position the legend at the center of the y-axis
+                            y=0.2,       # Position the legend at the center of the y-axis
                             yanchor='middle'  # Ensure the legend box is centered vertically
                         ),
                         hovermode="x unified"
