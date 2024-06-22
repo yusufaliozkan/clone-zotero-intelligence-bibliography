@@ -2834,8 +2834,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         ),
                         yaxis2=dict(
                             title="Total Citations",
-                            titlefont=dict(color="green"),
-                            tickfont=dict(color="green"),
+                            titlefont=dict(color="goldenrod"),
+                            tickfont=dict(color="goldenrod"),
                             overlaying="y",
                             side="right"
                         ),
