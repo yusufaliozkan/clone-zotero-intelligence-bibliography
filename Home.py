@@ -2819,8 +2819,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         y=last_20_years["Citation"],
                         name="Total Citations",
                         mode="lines+markers",
-                        marker=dict(color="red"),
-                        yaxis="y2"
+                        marker=dict(color="yellow"),
+                        yaxis="y2" 
                     ))
 
                     # Update layout for secondary y-axis
@@ -2834,8 +2834,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         ),
                         yaxis2=dict(
                             title="Total Citations",
-                            titlefont=dict(color="red"),
-                            tickfont=dict(color="red"),
+                            titlefont=dict(color="yellow"),
+                            tickfont=dict(color="yellow"),
                             overlaying="y",
                             side="right"
                         ),
