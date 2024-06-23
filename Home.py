@@ -2858,6 +2858,39 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_citation_count['%Citation count (OA papers)'] = round(df_citation_count['#Citations (OA papers)']/df_citation_count['#Citations (all)'], 3)*100
                 df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
                 df_citation_count
+                fig = go.Figure()
+
+                fig.add_trace(go.Bar(
+                    x=df_citation_count['Date year'],
+                    y=df_citation_count['%Citation count (OA papers)'],
+                    name='%Citation count (OA papers)',
+                    text=df_citation_count['#Citations (OA papers)'],
+                    textposition='auto',
+                    marker_color='indianred'
+                ))
+
+                fig.add_trace(go.Bar(
+                    x=df_citation_count['Date year'],
+                    y=df_citation_count['%Citation count (non-OA papers)'],
+                    name='%Citation count (non-OA papers)',
+                    text=df_citation_count['#Citations (non-OA papers)'],
+                    textposition='auto',
+                    marker_color='lightsalmon'
+                ))
+
+                # Update layout
+                fig.update_layout(
+                    title='Citation Counts and Percentages for OA and non-OA Papers by Year',
+                    xaxis_title='Year',
+                    yaxis_title='Percentage Citation Count',
+                    yaxis=dict(range=[0, 100]),  # The maximum value is set to 100
+                    barmode='group',
+                    legend_title='Citation Type',
+                    template='plotly_white'
+                )
+
+                # Show the plot
+                fig.show()
 
                 # Display the plot using Streamlit
                 st.plotly_chart(fig, use_container_width=True)
