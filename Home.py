@@ -2774,7 +2774,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             labels={"Date year": "Publication Year", "value": "OA status (%)", "variable": "Type"},
                             title="Open Access Publications Ratio Over the Last 20 Years",
                             color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
-                            barmode="stack", hover_data=["#OA Publications", '#Non-OA Publications'])
+                            barmode="stack")
                 if citation_ratio:
                     fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited OA papers"], 
                                     mode='lines+markers', name='%Cited OA papers', line=dict(color='blue'))
