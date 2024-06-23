@@ -2848,6 +2848,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     ),
                     hovermode="x unified"
                 )
+                st.plotly_chart(fig, use_container_width=True)
 
                 df_oa_papers_citation_count = filtered_df.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
                 df_oa_papers_citation_count.columns = ['Date year', '#Citations (OA papers)']
@@ -2857,30 +2858,33 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_citation_count['#Citations (non-OA papers)'] = df_citation_count['#Citations (all)'] - df_citation_count['#Citations (OA papers)']
                 df_citation_count['%Citation count (OA papers)'] = round(df_citation_count['#Citations (OA papers)']/df_citation_count['#Citations (all)'], 3)*100
                 df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
-                df_citation_count
+                max_year = df_citation_count["Date year"].max()
+                last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
+
+                # Step 3: Create the bar chart
                 fig = go.Figure()
 
                 fig.add_trace(go.Bar(
-                    x=df_citation_count['Date year'],
-                    y=df_citation_count['%Citation count (OA papers)'],
+                    x=last_20_years['Date year'],
+                    y=last_20_years['%Citation count (OA papers)'],
                     name='%Citation count (OA papers)',
-                    text=df_citation_count['#Citations (OA papers)'],
+                    text=last_20_years['#Citations (OA papers)'],
                     textposition='auto',
                     marker_color='indianred'
                 ))
 
                 fig.add_trace(go.Bar(
-                    x=df_citation_count['Date year'],
-                    y=df_citation_count['%Citation count (non-OA papers)'],
+                    x=last_20_years['Date year'],
+                    y=last_20_years['%Citation count (non-OA papers)'],
                     name='%Citation count (non-OA papers)',
-                    text=df_citation_count['#Citations (non-OA papers)'],
+                    text=last_20_years['#Citations (non-OA papers)'],
                     textposition='auto',
                     marker_color='lightsalmon'
                 ))
 
                 # Update layout
                 fig.update_layout(
-                    title='Citation Counts and Percentages for OA and non-OA Papers by Year',
+                    title='Citation Counts and Percentages for OA and non-OA Papers by Year (Last 20 Years)',
                     xaxis_title='Year',
                     yaxis_title='Percentage Citation Count',
                     yaxis=dict(range=[0, 100]),  # The maximum value is set to 100
