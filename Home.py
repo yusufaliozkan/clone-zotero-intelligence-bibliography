@@ -2852,6 +2852,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 df_oa_papers_citation_count = filtered_df.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
                 df_oa_papers_citation_count.columns = ['Date year', '#Citations (OA papers)']
+                df_oa_papers_citation_count['#Citations (OA papers)'] = df_oa_papers_citation_count['#Citations (OA papers)'].fillna(0)
                 df_oa_papers_citation_count
                 df_citation_count = filtered_df2.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
                 df_citation_count.columns = ['Date year', '#Citations (all)']
