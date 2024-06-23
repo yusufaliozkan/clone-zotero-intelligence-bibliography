@@ -2750,7 +2750,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
                 # Group by 'Date year' and count the number of rows in each group
                 df_cited_papers = filtered_df2.groupby(df_dedup_v2['Date year'])['OA status'].count()
-                df_cited_papers
                 df_cited_papers=df_cited_papers.reset_index()
                 df_cited_papers.columns = ['Date year', 'Cited papers']
                 df_cited_papers = pd.merge(df_cited_papers, df_cited_oa_papers, on='Date year', how='left')
@@ -2765,6 +2764,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_citation_count.columns = ['Date year', '#Citations (all)']
                 df_citation_count = pd.merge(df_citation_count, df_oa_papers_citation_count, on='Date year', how='left')
                 df_citation_count['#Citations (non-OA papers)'] = df_citation_count['#Citations (all)'] - df_citation_count['#Citations (OA papers)']
+                df_citation_count['%Citation count (OA papers)'] = round(df_citation_count['#Citations (OA papers)']/df_citation_count['#Citations (all)'], 3)*100
+                df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
                 df_citation_count
 
                 grouped = df_dedup_v2.groupby('Date year')
