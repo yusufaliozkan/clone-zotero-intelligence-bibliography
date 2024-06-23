@@ -2810,7 +2810,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         x=last_20_years["Date year"],
                         y=last_20_years["%Non-Cited Publications"],
                         name="%Non-Cited Publications",
-                        marker_color="#bcbd22"
+                        marker_color="#D3D3D3"
                     ))
 
                     # Add line for total citations
