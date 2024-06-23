@@ -2829,8 +2829,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         xaxis=dict(title="Publication Year"),
                         yaxis=dict(
                             title="Percentage (%)",
-                            titlefont=dict(color="orange"),
-                            tickfont=dict(color="orange")
+                            titlefont=dict(color="#17becf"),
+                            tickfont=dict(color="#17becf")
                         ),
                         yaxis2=dict(
                             title="Total Citations",
