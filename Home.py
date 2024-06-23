@@ -2764,6 +2764,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_citation_count = filtered_df2.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
                 df_citation_count.columns = ['Date year', '#Citations (all)']
                 df_citation_count = pd.merge(df_citation_count, df_oa_papers_citation_count, on='Date year', how='left')
+                df_citation_count['#Citations (non-OA papers)'] = df_citation_count['#Citations (all)'] - df_citation_count['#Citations (OA papers)']
                 df_citation_count
 
                 grouped = df_dedup_v2.groupby('Date year')
