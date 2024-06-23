@@ -2760,10 +2760,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 grouped = df_dedup_v2.groupby('Date year')
                 total_publications = grouped.size().reset_index(name='Total Publications')
-                open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OA Publications')
+                open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='#OA Publications')
                 df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
-                df_oa_overtime['Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['OA Publications']
-                df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OA Publications']/df_oa_overtime['Total Publications'], 3)*100
+                df_oa_overtime['#Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['#OA Publications']
+                df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['#OA Publications']/df_oa_overtime['Total Publications'], 3)*100
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
                 df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
 
@@ -2774,7 +2774,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             labels={"Date year": "Publication Year", "value": "OA status (%)", "variable": "Type"},
                             title="Open Access Publications Ratio Over the Last 20 Years",
                             color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
-                            barmode="stack", hover_data=["OA Publications", 'Non-OA Publications'])
+                            barmode="stack", hover_data=["#OA Publications", '#Non-OA Publications'])
                 if citation_ratio:
                     fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited OA papers"], 
                                     mode='lines+markers', name='%Cited OA papers', line=dict(color='blue'))
