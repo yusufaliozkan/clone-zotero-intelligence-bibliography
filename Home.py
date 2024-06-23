@@ -2729,128 +2729,128 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             for i in range(row_nu_collections):
                                 st.caption(df_journal['Journal'].iloc[i]
                                 )
-                col1, col2 = st.columns(2)
-                with col1:
-                    df_dedup['Date published2'] = (
-                        df_dedup['Date published']
-                        .str.strip()
-                        .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                    )
-                    df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
-                    df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
-                    df_dedup_v2 = df_dedup.dropna(subset='OA status')
-                    df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
+                # col1, col2 = st.columns(2)
+                # with col1:
+                df_dedup['Date published2'] = (
+                    df_dedup['Date published']
+                    .str.strip()
+                    .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                )
+                df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
+                df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
+                df_dedup_v2 = df_dedup.dropna(subset='OA status')
+                df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
 
-                    filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) & (df['OA status'] == True)]
-                    # Group by 'Date year' and count the number of rows in each group
-                    df_cited_oa_papers = filtered_df.groupby(df_dedup_v2['Date year'])['OA status'].count()
-                    df_cited_oa_papers=df_cited_oa_papers.reset_index()
-                    df_cited_oa_papers.columns = ['Date year', 'Cited OA papers']
+                filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) & (df['OA status'] == True)]
+                # Group by 'Date year' and count the number of rows in each group
+                df_cited_oa_papers = filtered_df.groupby(df_dedup_v2['Date year'])['OA status'].count()
+                df_cited_oa_papers=df_cited_oa_papers.reset_index()
+                df_cited_oa_papers.columns = ['Date year', 'Cited OA papers']
 
-                    filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
-                    # Group by 'Date year' and count the number of rows in each group
-                    df_cited_papers = filtered_df2.groupby(df_dedup_v2['Date year'])['OA status'].count()
-                    df_cited_papers=df_cited_papers.reset_index()
-                    df_cited_papers.columns = ['Date year', 'Cited papers']
-                    df_cited_papers = pd.merge(df_cited_papers, df_cited_oa_papers, on='Date year', how='left')
-                    df_cited_papers['Cited OA papers'] = df_cited_papers['Cited OA papers'].fillna(0)
-                    df_cited_papers['Cited non-OA papers'] = df_cited_papers['Cited papers']-df_cited_papers['Cited OA papers']
-                    df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
-                    df_cited_papers['%Cited non-OA papers'] = round(df_cited_papers['Cited non-OA papers']/df_cited_papers['Cited papers'], 3)*100
+                filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
+                # Group by 'Date year' and count the number of rows in each group
+                df_cited_papers = filtered_df2.groupby(df_dedup_v2['Date year'])['OA status'].count()
+                df_cited_papers=df_cited_papers.reset_index()
+                df_cited_papers.columns = ['Date year', 'Cited papers']
+                df_cited_papers = pd.merge(df_cited_papers, df_cited_oa_papers, on='Date year', how='left')
+                df_cited_papers['Cited OA papers'] = df_cited_papers['Cited OA papers'].fillna(0)
+                df_cited_papers['Cited non-OA papers'] = df_cited_papers['Cited papers']-df_cited_papers['Cited OA papers']
+                df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
+                df_cited_papers['%Cited non-OA papers'] = round(df_cited_papers['Cited non-OA papers']/df_cited_papers['Cited papers'], 3)*100
 
-                    grouped = df_dedup_v2.groupby('Date year')
-                    total_publications = grouped.size().reset_index(name='Total Publications')
-                    open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OA Publications')
-                    df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
-                    df_oa_overtime['Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['OA Publications']
-                    df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OA Publications']/df_oa_overtime['Total Publications'], 3)*100
-                    df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
-                    df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
+                grouped = df_dedup_v2.groupby('Date year')
+                total_publications = grouped.size().reset_index(name='Total Publications')
+                open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='OA Publications')
+                df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
+                df_oa_overtime['Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['OA Publications']
+                df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['OA Publications']/df_oa_overtime['Total Publications'], 3)*100
+                df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
+                df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
 
-                    max_year = df_oa_overtime["Date year"].max()
-                    last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
-                    citation_ratio = st.checkbox('Add citation ratio')
-                    fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
-                                labels={"Date year": "Publication Year", "value": "% OA vs non-OA Publications", "variable": "Type"},
-                                title="Open Access Publications Ratio Over the Last 20 Years",
-                                color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
-                                barmode="stack", hover_data=["OA Publications", 'Non-OA Publications'])
-                    if citation_ratio:
-                        fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited OA papers"], 
-                                        mode='lines+markers', name='%Cited OA papers', line=dict(color='blue'))
-                        fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited non-OA papers"], 
-                                        mode='lines+markers', name='%Cited non-OA papers', line=dict(color='red'))
+                max_year = df_oa_overtime["Date year"].max()
+                last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
+                citation_ratio = st.checkbox('Add citation ratio')
+                fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
+                            labels={"Date year": "Publication Year", "value": "% OA vs non-OA Publications", "variable": "Type"},
+                            title="Open Access Publications Ratio Over the Last 20 Years",
+                            color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
+                            barmode="stack", hover_data=["OA Publications", 'Non-OA Publications'])
+                if citation_ratio:
+                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited OA papers"], 
+                                    mode='lines+markers', name='%Cited OA papers', line=dict(color='blue'))
+                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited non-OA papers"], 
+                                    mode='lines+markers', name='%Cited non-OA papers', line=dict(color='red'))
 
-                    col1.plotly_chart(fig, use_container_width = True)
+                col1.plotly_chart(fig, use_container_width = True)
 
-                with col2:
-                    df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
-                    grouped = df_dedup_v2.groupby('Date year')
-                    total_publications = grouped.size().reset_index(name='Total Publications')
-                    cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited Publications')
-                    df_cited_overtime = pd.merge(total_publications, cited_publications, on='Date year')
-                    df_cited_overtime = pd.merge(df_cited_overtime, df_cited_papers, on='Date year')
-                    df_cited_overtime['Non-cited Publications'] = df_cited_overtime['Total Publications']-df_cited_overtime['Cited Publications']
-                    df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['Cited Publications']/df_cited_overtime['Total Publications'], 3)*100
-                    df_cited_overtime['%Non-Cited Publications'] = round(df_cited_overtime['Non-cited Publications']/df_cited_overtime['Total Publications'], 3)*100
+                # with col2:
+                df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
+                grouped = df_dedup_v2.groupby('Date year')
+                total_publications = grouped.size().reset_index(name='Total Publications')
+                cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited Publications')
+                df_cited_overtime = pd.merge(total_publications, cited_publications, on='Date year')
+                df_cited_overtime = pd.merge(df_cited_overtime, df_cited_papers, on='Date year')
+                df_cited_overtime['Non-cited Publications'] = df_cited_overtime['Total Publications']-df_cited_overtime['Cited Publications']
+                df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['Cited Publications']/df_cited_overtime['Total Publications'], 3)*100
+                df_cited_overtime['%Non-Cited Publications'] = round(df_cited_overtime['Non-cited Publications']/df_cited_overtime['Total Publications'], 3)*100
 
-                    max_year = df_cited_overtime["Date year"].max()
-                    last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
-                    fig = go.Figure()
+                max_year = df_cited_overtime["Date year"].max()
+                last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
+                fig = go.Figure()
 
-                    # Add bars for %Cited Publications and %Non-Cited Publications
-                    fig.add_trace(go.Bar(
-                        x=last_20_years["Date year"],
-                        y=last_20_years["%Cited Publications"],
-                        name="%Cited Publications",
-                        marker_color="#17becf"
-                    ))
+                # Add bars for %Cited Publications and %Non-Cited Publications
+                fig.add_trace(go.Bar(
+                    x=last_20_years["Date year"],
+                    y=last_20_years["%Cited Publications"],
+                    name="%Cited Publications",
+                    marker_color="#17becf"
+                ))
 
-                    fig.add_trace(go.Bar(
-                        x=last_20_years["Date year"],
-                        y=last_20_years["%Non-Cited Publications"],
-                        name="%Non-Cited Publications",
-                        marker_color="#D3D3D3"
-                    ))
+                fig.add_trace(go.Bar(
+                    x=last_20_years["Date year"],
+                    y=last_20_years["%Non-Cited Publications"],
+                    name="%Non-Cited Publications",
+                    marker_color="#D3D3D3"
+                ))
 
-                    # Add line for total citations
-                    fig.add_trace(go.Scatter(
-                        x=last_20_years["Date year"],
-                        y=last_20_years["Citation"],
-                        name="#Citations",
-                        mode="lines+markers",
-                        marker=dict(color="green"),
-                        yaxis="y2" 
-                    ))
+                # Add line for total citations
+                fig.add_trace(go.Scatter(
+                    x=last_20_years["Date year"],
+                    y=last_20_years["Citation"],
+                    name="#Citations",
+                    mode="lines+markers",
+                    marker=dict(color="green"),
+                    yaxis="y2" 
+                ))
 
-                    # Update layout for secondary y-axis
-                    fig.update_layout(
-                        title="Cited papers ratio and # Citations",
-                        xaxis=dict(title="Publication Year"),
-                        yaxis=dict(
-                            title="%Cited Publications",
-                            titlefont=dict(color="#17becf"),
-                            tickfont=dict(color="#17becf")
-                        ),
-                        yaxis2=dict(
-                            title="#Citations",
-                            titlefont=dict(color="green"),
-                            tickfont=dict(color="green"),
-                            overlaying="y",
-                            side="right"
-                        ),
-                        barmode="stack",
-                        legend=dict(
-                            x=1,         # Position the legend at the right side
-                            xanchor='left', # Ensure the legend box starts at x=1
-                            y=0.2,       # Position the legend at the center of the y-axis
-                            yanchor='middle'  # Ensure the legend box is centered vertically
-                        ),
-                        hovermode="x unified"
-                    )
+                # Update layout for secondary y-axis
+                fig.update_layout(
+                    title="Cited papers ratio and # Citations",
+                    xaxis=dict(title="Publication Year"),
+                    yaxis=dict(
+                        title="%Cited Publications",
+                        titlefont=dict(color="#17becf"),
+                        tickfont=dict(color="#17becf")
+                    ),
+                    yaxis2=dict(
+                        title="#Citations",
+                        titlefont=dict(color="green"),
+                        tickfont=dict(color="green"),
+                        overlaying="y",
+                        side="right"
+                    ),
+                    barmode="stack",
+                    legend=dict(
+                        x=1,         # Position the legend at the right side
+                        xanchor='left', # Ensure the legend box starts at x=1
+                        y=0.2,       # Position the legend at the center of the y-axis
+                        yanchor='middle'  # Ensure the legend box is centered vertically
+                    ),
+                    hovermode="x unified"
+                )
 
-                    # Display the plot using Streamlit
-                    col2.plotly_chart(fig, use_container_width=True)
+                # Display the plot using Streamlit
+                col2.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
                 with col1:
