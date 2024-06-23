@@ -2781,7 +2781,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited non-OA papers"], 
                                     mode='lines+markers', name='%Cited non-OA papers', line=dict(color='red'))
 
-                col1.plotly_chart(fig, use_container_width = True)
+                st.plotly_chart(fig, use_container_width = True)
 
                 # with col2:
                 df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
@@ -2850,7 +2850,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 )
 
                 # Display the plot using Streamlit
-                col2.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
                 with col1:
