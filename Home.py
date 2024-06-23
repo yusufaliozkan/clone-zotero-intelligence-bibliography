@@ -2817,7 +2817,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     fig.add_trace(go.Scatter(
                         x=last_20_years["Date year"],
                         y=last_20_years["Citation"],
-                        name="Total Citations",
+                        name="#Citations",
                         mode="lines+markers",
                         marker=dict(color="green"),
                         yaxis="y2" 
@@ -2833,7 +2833,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             tickfont=dict(color="#17becf")
                         ),
                         yaxis2=dict(
-                            title="Total Citations",
+                            title="#Citations",
                             titlefont=dict(color="green"),
                             tickfont=dict(color="green"),
                             overlaying="y",
