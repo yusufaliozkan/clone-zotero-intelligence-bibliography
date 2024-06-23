@@ -2819,7 +2819,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         y=last_20_years["Citation"],
                         name="Total Citations",
                         mode="lines+markers",
-                        marker=dict(color="#87CEEB"),
+                        marker=dict(color="orange"),
                         yaxis="y2" 
                     ))
 
@@ -2834,8 +2834,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         ),
                         yaxis2=dict(
                             title="Total Citations",
-                            titlefont=dict(color="#87CEEB"),
-                            tickfont=dict(color="#87CEEB"),
+                            titlefont=dict(color="orange"),
+                            tickfont=dict(color="orange"),
                             overlaying="y",
                             side="right"
                         ),
