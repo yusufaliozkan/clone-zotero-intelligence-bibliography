@@ -2758,16 +2758,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
                 df_cited_papers['%Cited non-OA papers'] = round(df_cited_papers['Cited non-OA papers']/df_cited_papers['Cited papers'], 3)*100
 
-                df_oa_papers_citation_count = filtered_df.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
-                df_oa_papers_citation_count.columns = ['Date year', '#Citations (OA papers)']
-                df_citation_count = filtered_df2.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
-                df_citation_count.columns = ['Date year', '#Citations (all)']
-                df_citation_count = pd.merge(df_citation_count, df_oa_papers_citation_count, on='Date year', how='left')
-                df_citation_count['#Citations (non-OA papers)'] = df_citation_count['#Citations (all)'] - df_citation_count['#Citations (OA papers)']
-                df_citation_count['%Citation count (OA papers)'] = round(df_citation_count['#Citations (OA papers)']/df_citation_count['#Citations (all)'], 3)*100
-                df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
-                df_citation_count
-
                 grouped = df_dedup_v2.groupby('Date year')
                 total_publications = grouped.size().reset_index(name='Total Publications')
                 open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='#OA Publications')
@@ -2858,6 +2848,16 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     ),
                     hovermode="x unified"
                 )
+
+                df_oa_papers_citation_count = filtered_df.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
+                df_oa_papers_citation_count.columns = ['Date year', '#Citations (OA papers)']
+                df_citation_count = filtered_df2.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
+                df_citation_count.columns = ['Date year', '#Citations (all)']
+                df_citation_count = pd.merge(df_citation_count, df_oa_papers_citation_count, on='Date year', how='left')
+                df_citation_count['#Citations (non-OA papers)'] = df_citation_count['#Citations (all)'] - df_citation_count['#Citations (OA papers)']
+                df_citation_count['%Citation count (OA papers)'] = round(df_citation_count['#Citations (OA papers)']/df_citation_count['#Citations (all)'], 3)*100
+                df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
+                df_citation_count
 
                 # Display the plot using Streamlit
                 st.plotly_chart(fig, use_container_width=True)
