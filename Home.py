@@ -2803,7 +2803,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         x=last_20_years["Date year"],
                         y=last_20_years["%Cited Publications"],
                         name="%Cited Publications",
-                        marker_color="#2ca02c"
+                        marker_color="#666666"
                     ))
 
                     fig.add_trace(go.Bar(
