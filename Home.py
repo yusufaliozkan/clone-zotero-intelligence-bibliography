@@ -2863,16 +2863,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
                 max_year = df_citation_count["Date year"].max()
                 last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
-
-                # Step 3: Create the bar chart
                 fig = go.Figure()
 
                 fig.add_trace(go.Bar(
                     x=last_20_years['Date year'],
                     y=last_20_years['%Citation count (OA papers)'],
                     name='%Citation count (OA papers)',
-                    text=last_20_years['#Citations (OA papers)'],
-                    textposition='auto',
+                    text=[f'{oa} OA' for oa in last_20_years['#Citations (OA papers)']],
+                    textposition='inside',
                     marker_color='indianred'
                 ))
 
@@ -2880,8 +2878,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     x=last_20_years['Date year'],
                     y=last_20_years['%Citation count (non-OA papers)'],
                     name='%Citation count (non-OA papers)',
-                    text=last_20_years['#Citations (non-OA papers)'],
-                    textposition='auto',
+                    text=[f'{non_oa} non-OA' for non_oa in last_20_years['#Citations (non-OA papers)']],
+                    textposition='inside',
                     marker_color='lightsalmon'
                 ))
 
@@ -2891,15 +2889,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     xaxis_title='Year',
                     yaxis_title='Percentage Citation Count',
                     yaxis=dict(range=[0, 100]),  # The maximum value is set to 100
-                    barmode='group',
+                    barmode='stack',
                     legend_title='Citation Type',
                     template='plotly_white'
                 )
 
                 # Show the plot
                 fig.show()
-
-                # Display the plot using Streamlit
                 st.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
