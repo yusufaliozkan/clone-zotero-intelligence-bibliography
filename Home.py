@@ -2852,7 +2852,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     values=values,
                     names=labels,
                     title='OA vs Non-OA Publications',
-                    color_discrete_sequence=px.colors.sequential.RdBu
                 )
 
                 # Display the pie chart with Streamlit
