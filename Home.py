@@ -2844,19 +2844,20 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_oa_overtime
                 oa_total = df_oa_overtime['#OA Publications'].sum()
                 non_oa_total = df_oa_overtime['#Non-OA Publications'].sum()
-                labels = 'OA Publications', 'Non-OA Publications'
-                sizes = [oa_total, non_oa_total]
-                colors = ['gold', 'lightcoral']
-                explode = (0.1, 0)  # explode 1st slice (OA Publications)
+                labels = ['OA Publications', 'Non-OA Publications']
+                values = [oa_total, non_oa_total]
 
-                # Plot
-                plt.figure(figsize=(8, 8))
-                plt.pie(sizes, explode=explode, labels=labels, colors=colors,
-                autopct='%1.1f%%', shadow=True, startangle=140)
+                # Create the pie chart with Plotly
+                fig = px.pie(
+                    values=values,
+                    names=labels,
+                    title='OA vs Non-OA Publications',
+                    color_discrete_sequence=px.colors.sequential.RdBu
+                )
 
-                plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-                plt.title('OA vs Non-OA Publications')
-                plt.show()
+                # Display the pie chart with Streamlit
+                st.title('Publication Analysis')
+                st.plotly_chart(fig)
 
                 @st.experimental_fragment
                 def fragment2():
