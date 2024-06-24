@@ -2608,7 +2608,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     num_authors = st.slider('Select number of authors to display:', 5, min(30, max_authors), 20, key='author2')
                     col1, col2 = st.columns(2)
                     with col1:
-                            table_view = st.checkbox('Table view')
+                            table_view = st.checkbox('Table view', key='author')
                             df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
                             df_authors = df_authors[df_authors['Author_name'] != 'nan']
                             df_authors = df_authors['Author_name'].value_counts().head(num_authors)
