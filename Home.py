@@ -2864,7 +2864,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 fig = px.bar(last_20_years, x="Date year", y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
                             labels={"Date year": "Publication Year", "value": "%Citation count (Oa/non-OA papers)", "variable": "Type"},
                             title="OA vs non-OA Papers Citation Count Ratio Over the Last 20 Years",
-                            color_discrete_map={"%Citation count (OA papers)": "green", "%Citation count (non-OA papers)": "#D3D3D3"},
+                            color_discrete_map={"%Citation count (OA papers)": "goldenrod", "%Citation count (non-OA papers)": "#D3D3D3"},
                             barmode="stack", hover_data=["#Citations (OA papers)", '#Citations (non-OA papers)'])
                 st.plotly_chart(fig, use_container_width=True)
 
