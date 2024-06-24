@@ -2693,7 +2693,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                         log2 = st.checkbox('Show in log scale', key='log2')
                         leg2 = st.checkbox('Disable legend', key='leg2')
-                        table_view_journal = st.checkbox('Table view')
+                        table_view_journal = st.checkbox('Table view', key='journal')
 
                         if table_view_journal:
                             df_journal
