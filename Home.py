@@ -2749,58 +2749,43 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
                 # Group by 'Date year' and count the number of rows in each group
-                df_cited_papers = filtered_df2.groupby(df_dedup_v2['Date year'])['OA status'].count()
-                df_cited_papers=df_cited_papers.reset_index()
-                df_cited_papers.columns = ['Date year', 'Cited papers']
-                df_cited_papers = pd.merge(df_cited_papers, df_cited_oa_papers, on='Date year', how='left')
-                df_cited_papers['Cited OA papers'] = df_cited_papers['Cited OA papers'].fillna(0)
-                df_cited_papers['Cited non-OA papers'] = df_cited_papers['Cited papers']-df_cited_papers['Cited OA papers']
-                df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
-                df_cited_papers['%Cited non-OA papers'] = round(df_cited_papers['Cited non-OA papers']/df_cited_papers['Cited papers'], 3)*100
 
-                grouped = df_dedup_v2.groupby('Date year')
-                total_publications = grouped.size().reset_index(name='Total Publications')
-                open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='#OA Publications')
-                df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
-                df_oa_overtime['#Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['#OA Publications']
-                df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['#OA Publications']/df_oa_overtime['Total Publications'], 3)*100
-                df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
-                df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
-
-                max_year = df_oa_overtime["Date year"].max()
-                last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
-                fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
-                            labels={"Date year": "Publication Year", "value": "OA status (%)", "variable": "Type"},
-                            title="Open Access Publications Ratio Over the Last 20 Years",
-                            color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
-                            barmode="stack", hover_data=["#OA Publications", '#Non-OA Publications'])
                 @st.experimental_fragment
                 def fragment2():
-                    citation_ratio = st.checkbox('Add citation ratio')
-                    
-                    if citation_ratio:
-                        # Check if the columns exist in the DataFrame
-                        if '%Cited OA papers' in last_20_years.columns and '%Cited non-OA papers' in last_20_years.columns:
-                            fig.add_scatter(
-                                x=last_20_years["Date year"], 
-                                y=last_20_years["%Cited OA papers"], 
-                                mode='lines+markers', 
-                                name='%Cited OA papers', 
-                                line=dict(color='blue')
-                            )
-                            fig.add_scatter(
-                                x=last_20_years["Date year"], 
-                                y=last_20_years["%Cited non-OA papers"], 
-                                mode='lines+markers', 
-                                name='%Cited non-OA papers', 
-                                line=dict(color='red')
-                            )
-                        else:
-                            st.error("Columns '%Cited OA papers' or '%Cited non-OA papers' not found in the dataset.")
-                    
-                    st.plotly_chart(fig, use_container_width=True)
+                    df_cited_papers = filtered_df2.groupby(df_dedup_v2['Date year'])['OA status'].count()
+                    df_cited_papers=df_cited_papers.reset_index()
+                    df_cited_papers.columns = ['Date year', 'Cited papers']
+                    df_cited_papers = pd.merge(df_cited_papers, df_cited_oa_papers, on='Date year', how='left')
+                    df_cited_papers['Cited OA papers'] = df_cited_papers['Cited OA papers'].fillna(0)
+                    df_cited_papers['Cited non-OA papers'] = df_cited_papers['Cited papers']-df_cited_papers['Cited OA papers']
+                    df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
+                    df_cited_papers['%Cited non-OA papers'] = round(df_cited_papers['Cited non-OA papers']/df_cited_papers['Cited papers'], 3)*100
 
-                # Call the fragment
+                    grouped = df_dedup_v2.groupby('Date year')
+                    total_publications = grouped.size().reset_index(name='Total Publications')
+                    open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='#OA Publications')
+                    df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
+                    df_oa_overtime['#Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['#OA Publications']
+                    df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['#OA Publications']/df_oa_overtime['Total Publications'], 3)*100
+                    df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
+                    df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
+
+                    max_year = df_oa_overtime["Date year"].max()
+                    last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
+                    fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
+                                labels={"Date year": "Publication Year", "value": "OA status (%)", "variable": "Type"},
+                                title="Open Access Publications Ratio Over the Last 20 Years",
+                                color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
+                                barmode="stack", hover_data=["#OA Publications", '#Non-OA Publications'])
+                    citation_ratio = st.checkbox('Add citation ratio')
+                    if citation_ratio:
+                        fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited OA papers"], 
+                                        mode='lines+markers', name='%Cited OA papers', line=dict(color='blue'))
+                        fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited non-OA papers"], 
+                                        mode='lines+markers', name='%Cited non-OA papers', line=dict(color='red'))
+                        st.plotly_chart(fig, use_container_width = True)
+                    else:
+                        st.plotly_chart(fig, use_container_width = True)
                 fragment2()
                 
 
