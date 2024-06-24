@@ -2842,11 +2842,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
                 df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
                 df_oa_overtime
-                oa_total = df_oa_overtime['#OA Publications']
-                non_oa_total = df_oa_overtime['#Non-OA Publications']
+                oa_total = df_oa_overtime['#OA Publications'].sum()
+                non_oa_total = df_oa_overtime['#Non-OA Publications'].sum()
                 labels = 'OA Publications', 'Non-OA Publications'
-                sizes = [oa_total, non_oa_total].sum()
-                colors = ['gold', 'lightcoral'].sum()
+                sizes = [oa_total, non_oa_total]
+                colors = ['gold', 'lightcoral']
                 explode = (0.1, 0)  # explode 1st slice (OA Publications)
 
                 # Plot
