@@ -2622,7 +2622,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             )
                             st.plotly_chart(fig)
                     with col2:
-
+                            selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
+                            df_authors = df_csv.copy()              
+                            df_authors = df_authors[df_authors['Publication type']==selected_type]
+                            df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
+                            df_authors = df_authors.explode('Author_name')
+                            df_authors.reset_index(drop=True)
                             df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
                             df_authors = df_authors[df_authors['Author_name'] != 'nan']
                             df_authors = df_authors['Author_name'].value_counts().head(num_authors)
