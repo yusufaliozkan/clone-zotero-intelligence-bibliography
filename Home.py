@@ -2861,17 +2861,39 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 max_year = df_citation_count["Date year"].max()
                 last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
                 last_20_years
-                # fig = px.bar(last_20_years, x="Date year", y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
-                #             labels={"Date year": "Publication Year", "value": "%Citation count (Oa/non-OA papers)", "variable": "Type"},
-                #             title="OA vs non-OA Papers Citation Count Ratio Over the Last 20 Years",
-                #             color_discrete_map={"%Citation count (OA papers)": "goldenrod", "%Citation count (non-OA papers)": "#D3D3D3"},
-                #             barmode="stack", hover_data=["#Citations (OA papers)", '#Citations (non-OA papers)'])
+                fig_bar = px.bar(
+                    last_20_years, 
+                    x="Date year", 
+                    y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
+                    labels={
+                        "Date year": "Publication Year", 
+                        "value": "%Citation count (OA/non-OA papers)", 
+                        "variable": "Type"
+                    },
+                    title="OA vs non-OA Papers Citation Count Ratio Over the Last 20 Years",
+                    color_discrete_map={
+                        "%Citation count (OA papers)": "goldenrod", 
+                        "%Citation count (non-OA papers)": "#D3D3D3"
+                    },
+                    barmode="stack", 
+                    hover_data=["#Citations (OA papers)", '#Citations (non-OA papers)']
+                )
 
-                fig2.add_scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
-                                mode='lines+markers', name='#Citations (OA papers)', line=dict(color='yellow'))
-                fig2.add_scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (non-OA papers)"], 
-                                mode='lines+markers', name='#Citations (non-OA papers)', line=dict(color='green'))
-                st.plotly_chart(fig2, use_container_width=True)
+                # Line Chart
+                fig_line = go.Figure()
+                fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
+                                            mode='lines+markers', name='#Citations (OA papers)', line=dict(color='yellow')))
+                fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (non-OA papers)"], 
+                                            mode='lines+markers', name='#Citations (non-OA papers)', line=dict(color='green')))
+                fig_line.update_layout(
+                    title="Citation Counts for OA and non-OA Papers Over the Last 20 Years",
+                    xaxis_title="Publication Year",
+                    yaxis_title="Citation Count",
+                )
+
+                # Display the charts
+                st.plotly_chart(fig_bar, use_container_width=True)
+                st.plotly_chart(fig_line, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
                 with col1:
