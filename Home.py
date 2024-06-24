@@ -2782,7 +2782,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                         mode='lines+markers', name='%Cited OA papers', line=dict(color='blue'))
                         fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited non-OA papers"], 
                                         mode='lines+markers', name='%Cited non-OA papers', line=dict(color='red'))
-                        st.plotly_chart(fig, use_container_width = True)
                     else:
                         st.plotly_chart(fig, use_container_width = True)
                 fragment2()
@@ -2883,10 +2882,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     barmode="stack", 
                     hover_data=["#Citations (OA papers)", '#Citations (non-OA papers)']
                 )
-
-                # if "app_runs" not in st.session_state:
-                #     st.session_state.app_runs = 0
-                #     st.session_state.fragment_runs = 0
 
                 @st.experimental_fragment
                 def fragment():
