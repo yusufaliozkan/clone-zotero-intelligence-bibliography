@@ -2600,6 +2600,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         )
                         col2.plotly_chart(fig)
                         df_authors
+                        num_authors
                     author_chart()
 
                     
