@@ -2601,6 +2601,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             xaxis_tickangle=-45,
                         )
                         col2.plotly_chart(fig)
+                        num_authors
                     author_chart()
 
                     
