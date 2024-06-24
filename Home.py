@@ -2578,10 +2578,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     col1.plotly_chart(fig, use_container_width = True)
 
                 with col2:
-                    df_authors = df_csv.copy()
+                    
 
                     @st.experimental_fragment
-                    def author_chart():                        
+                    def author_chart():
+                        df_authors = df_csv.copy()                 
                         df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                         df_authors = df_authors.explode('Author_name')
                         df_authors.reset_index(drop=True, inplace=True)
