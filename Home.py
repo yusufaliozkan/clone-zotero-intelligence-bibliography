@@ -2880,11 +2880,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         "#Citations (non-OA papers)": True
                     }
                 )
-
-                # Update y-axis range to have a maximum value of 100
-                fig.update_yaxes(range=[0, 100])
-
-                # Plot the graph using Streamlit
                 st.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
