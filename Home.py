@@ -2774,6 +2774,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             title="Open Access Publications Ratio Over the Last 20 Years",
                             color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
                             barmode="stack", hover_data=["#OA Publications", '#Non-OA Publications'])
+                st.plotly_chart(fig, use_container_width = True)
                 @st.experimental_fragment
                 def fragment2():
                     citation_ratio = st.checkbox('Add citation ratio')
