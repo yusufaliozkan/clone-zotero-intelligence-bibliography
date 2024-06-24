@@ -2600,14 +2600,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 st.subheader('Publications by author', anchor=False) 
                 @st.experimental_fragment
                 def author_chart():
+                    max_authors = len(df_authors['Author_name'].unique())
+                    num_authors = st.slider('Select number of authors to display:', 5, min(30, max_authors), 20, key='author2')
                     col1, col2 = st.columns(2)
                     with col1:                
                             df_authors = df_csv.copy()                 
                             df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                             df_authors = df_authors.explode('Author_name')
                             df_authors.reset_index(drop=True)
-                            max_authors = len(df_authors['Author_name'].unique())
-                            num_authors = st.slider('Select number of authors to display:', 5, min(30, max_authors), 20, key='author1')
                             df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
                             df_authors = df_authors[df_authors['Author_name'] != 'nan']
                             df_authors = df_authors['Author_name'].value_counts().head(num_authors)
@@ -2628,9 +2628,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                             df_authors = df_authors.explode('Author_name')
                             df_authors.reset_index(drop=True)
-                            # max_authors = len(df_authors['Author_name'].unique())
-                            # num_authors = st.slider('Select number of authors to display:', 5, min(30, max_authors), 20, key='author2')
-                            num_authors = 20
                             df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
                             df_authors = df_authors[df_authors['Author_name'] != 'nan']
                             df_authors = df_authors['Author_name'].value_counts().head(num_authors)
