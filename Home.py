@@ -2388,49 +2388,49 @@ with st.spinner('Retrieving data & updating dashboard...'):
         
         if on_main_dashboard:
 
+            df_csv = df_duplicated.copy()
+            df_collections_2 =df_csv.copy()
+
+            df_csv = df_dedup.copy()
+            df_csv = df_csv.reset_index(drop=True)
+
+            df_csv['Date published'] = (
+                df_csv['Date published']
+                .str.strip()
+                .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+            )
+            
+            # df_csv['Date published'] = pd.to_datetime(df_csv['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
+            df_csv['Date year'] = df_csv['Date published'].dt.strftime('%Y')
+            df_csv['Date year'] = df_csv['Date year'].fillna('No date')
+
+            df = df_csv.copy()
+            df_year=df_csv['Date year'].value_counts()
+            df_year=df_year.reset_index()
+            df_year=df_year.rename(columns={'index':'Publication year','Date year':'Count'})
+
+            # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
+            df_year.columns = ['Publication year', 'Count']
+            # TEMP SOLUTION ENDS
+
+            df_year.drop(df_year[df_year['Publication year']== 'No date'].index, inplace = True)
+            df_year=df_year.sort_values(by='Publication year', ascending=True)
+            df_year=df_year.reset_index(drop=True)
+            max_y = int(df_year['Publication year'].max())
+            min_y = int(df_year['Publication year'].min())
+
+            df_collections_2['Date published'] = (
+                df_collections_2['Date published']
+                .str.strip()
+                .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+            )
+            
+            # df_collections_2['Date published'] = pd.to_datetime(df_collections_2['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
+            df_collections_2['Date year'] = df_collections_2['Date published'].dt.strftime('%Y')
+            df_collections_2['Date year'] = df_collections_2['Date year'].fillna('No date') 
 
             @st.experimental_fragment
             def fragment_filter():
-                df_csv = df_duplicated.copy()
-                df_collections_2 =df_csv.copy()
-
-                df_csv = df_dedup.copy()
-                df_csv = df_csv.reset_index(drop=True)
-
-                df_csv['Date published'] = (
-                    df_csv['Date published']
-                    .str.strip()
-                    .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                )
-                
-                # df_csv['Date published'] = pd.to_datetime(df_csv['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
-                df_csv['Date year'] = df_csv['Date published'].dt.strftime('%Y')
-                df_csv['Date year'] = df_csv['Date year'].fillna('No date')
-
-                df = df_csv.copy()
-                df_year=df_csv['Date year'].value_counts()
-                df_year=df_year.reset_index()
-                df_year=df_year.rename(columns={'index':'Publication year','Date year':'Count'})
-
-                # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
-                df_year.columns = ['Publication year', 'Count']
-                # TEMP SOLUTION ENDS
-
-                df_year.drop(df_year[df_year['Publication year']== 'No date'].index, inplace = True)
-                df_year=df_year.sort_values(by='Publication year', ascending=True)
-                df_year=df_year.reset_index(drop=True)
-                max_y = int(df_year['Publication year'].max())
-                min_y = int(df_year['Publication year'].min())
-
-                df_collections_2['Date published'] = (
-                    df_collections_2['Date published']
-                    .str.strip()
-                    .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                )
-                
-                # df_collections_2['Date published'] = pd.to_datetime(df_collections_2['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
-                df_collections_2['Date year'] = df_collections_2['Date published'].dt.strftime('%Y')
-                df_collections_2['Date year'] = df_collections_2['Date year'].fillna('No date') 
                 with st.expander('**Select filters**', expanded=False):
                     types = st.multiselect('Publication type', df_csv['Publication type'].unique(), df_csv['Publication type'].unique())
 
