@@ -2495,7 +2495,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     number0 = st.slider('Select a number collections', 3,30,15, key='slider01')
                     col1, col2 = st.columns(2)
                     with col1:
-                        collection_bar_legend_check = st.checkbox('Show legend')
+                        collection_bar_legend_check = st.checkbox('Show legend', key='collection_bar_legend_check')
                         if collection_bar_legend_check:
                             collection_bar_legend=True
                         else:
@@ -2511,7 +2511,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
                         st.plotly_chart(fig, use_container_width = True)
                     with col2:
-                        collection_line_legend_check = st.checkbox('Show legend')
+                        collection_line_legend_check = st.checkbox('Show legend', key='collection_line_legend_check')
                         if collection_line_legend_check:
                             collection_line_legend=True
                         else:
