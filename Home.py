@@ -2594,14 +2594,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         filter = (df_year['Publication year'].astype(int)>=years[0]) & (df_year['Publication year'].astype(int)<years[1])
                         df_year = df_year.loc[filter]
                         df_year
-                        fig = px.bar(df_year, x='Publication year', y='Count')
-                        fig.update_xaxes(tickangle=-70)
-                        fig.update_layout(
-                            autosize=False,
-                            width=1200,
-                            height=600,)
-                        fig.update_layout(title={'text':'All items in the library by publication year', 'yanchor':'top'})
-                        st.plotly_chart(fig, use_container_width = True)
+                        # fig = px.bar(df_year, x='Publication year', y='Count')
+                        # fig.update_xaxes(tickangle=-70)
+                        # fig.update_layout(
+                        #     autosize=False,
+                        #     width=1200,
+                        #     height=600,)
+                        # fig.update_layout(title={'text':'All items in the library by publication year', 'yanchor':'top'})
+                        # st.plotly_chart(fig, use_container_width = True)
                 types_pubyears()
 
                 col1, col2 = st.columns(2)
