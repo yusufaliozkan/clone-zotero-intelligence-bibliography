@@ -2886,9 +2886,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 def fragment():
                     fig_line = go.Figure()
                     fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
-                                                mode='lines+markers', name='#Citations (OA papers)', line=dict(color='yellow')))
+                                                mode='lines+markers', name='#Citations (OA papers)', line=dict(color='#D3D3D3')))
                     fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (non-OA papers)"], 
-                                                mode='lines+markers', name='#Citations (non-OA papers)', line=dict(color='green')))
+                                                mode='lines+markers', name='#Citations (non-OA papers)', line=dict(color='goldenrod')))
                     fig_line.update_layout(
                         title="Citation Counts for OA and non-OA Papers Over the Last 20 Years",
                         xaxis_title="Publication Year",
