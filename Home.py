@@ -2511,7 +2511,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
                         st.plotly_chart(fig, use_container_width = True)
                     with col2:
-                        collection_line_legend_check = st.checkbox('Show legend', key='collection_line_legend_check')
+                        collection_line_legend_check = st.checkbox('Show legend', key='collection_line_legend_check', disabled=True)
                         if collection_line_legend_check:
                             collection_line_legend=True
                         else:
