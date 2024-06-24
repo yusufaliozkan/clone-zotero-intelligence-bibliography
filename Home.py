@@ -2614,15 +2614,16 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             df_authors = df_authors.rename(columns={'index':'Author','Author_name':'Number of Publications'})
                             fig = px.bar(df_authors, x=df_authors['Author'], y=df_authors['Number of Publications'])
                             fig.update_layout(
-                                title=f'Top {num_authors} Authors by Publication Count',
+                                title=f'Top {num_authors} Authors by Publication Count (all items)',
                                 xaxis_title='Author',
                                 yaxis_title='Number of Publications',
                                 xaxis_tickangle=-45,
                             )
                             st.plotly_chart(fig)
-                    with col2:                
+                    with col2:
+                            selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter', 'Newspaper article', 'Blog post'])
                             df_authors = df_csv.copy()              
-                            df_authors = df_authors[df_authors['Publication type']=='Journal article']
+                            df_authors = df_authors[df_authors['Publication type']==selected_type]
                             df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                             df_authors = df_authors.explode('Author_name')
                             df_authors.reset_index(drop=True)
