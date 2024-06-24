@@ -2862,10 +2862,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 max_year = df_citation_count["Date year"].max()
                 last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
                 fig = px.line(last_20_years, x="Date year", y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
-                            labels={"Date year": "Publication Year", "value": "%Citation count (Oa/non-OA papers)", "variable": "Type"},
+                            labels={"Date year": "Publication Year", "value": "%Citation count (OA/non-OA papers)", "variable": "Type"},
                             title="OA vs non-OA Papers Citation Count Ratio Over the Last 20 Years",
                             color_discrete_map={"%Citation count (OA papers)": "green", "%Citation count (non-OA papers)": "#D3D3D3"},
-                            barmode="stack", hover_data=["#Citations (OA papers)", '#Citations (non-OA papers)'])
+                            hover_data={"Date year": True, "%Citation count (OA papers)": True, "%Citation count (non-OA papers)": True, "#Citations (OA papers)": True, "#Citations (non-OA papers)": True})
                 st.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
