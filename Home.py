@@ -2588,6 +2588,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         # filter = (df_year['Date year'].astype(int)>=years[0]) & (df_year['Date year'].astype(int)<years[1])
                         # df_year = df_year.loc[filter]
                         df_year
+                        max_y = int(df_year['Publication year'].max())
+                        max_y
                         fig = px.bar(df_year, x='Publication year', y='Count')
                         fig.update_xaxes(tickangle=-70)
                         fig.update_layout(
