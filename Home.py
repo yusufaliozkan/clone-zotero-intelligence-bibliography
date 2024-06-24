@@ -2592,6 +2592,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         df_authors = df_authors[df_authors['Author_name'] != 'nan']
                         df_authors = df_authors['Author_name'].value_counts().head(num_authors)
                         df_authors.reset_index(inplace=True)
+                        df_authors.columns=['Author', 'Number of Publications']
                         fig = px.bar(df_authors, x=df_authors.index, y=df_authors.values)
                         fig.update_layout(
                             title=f'Top {num_authors} Authors by Publication Count',
