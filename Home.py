@@ -2585,8 +2585,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         max_y = int(df_year['Publication year'].max())
                         min_y = int(df_year['Publication year'].min())
                         years = st.slider('Publication years between:', min_y, max_y, (min_y,max_y), key='years3')
-                        df_year = df_year[(df_year['Publication year'] >= years[0]) & (df_year['Publication year'] <= years[1])]
-                        fig = px.bar(df_year, x='Publication year', y='Count')
+                        df_year_updated = df_year[(df_year['Publication year'] >= years[0]) & (df_year['Publication year'] <= years[1])]
+                        fig = px.bar(df_year_updated, x='Publication year', y='Count')
                         fig.update_xaxes(tickangle=-70)
                         fig.update_layout(
                             autosize=False,
