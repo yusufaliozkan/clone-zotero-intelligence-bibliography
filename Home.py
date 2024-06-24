@@ -2484,7 +2484,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         filter_collection = (df_collections_2['Date year'].astype(int)>=years[0]) & (df_collections_2['Date year'].astype(int)<years[1])
                         df_collections_2 = df_collections_2.loc[filter_collection]
                 filters_fragment()
-            if df_csv['Title'].any() in ("", [], None, 0, False):
+            if df_collections_2['Title'].any() in ("", [], None, 0, False):
                 st.warning('No data to visualise. Select a correct parameter.')
 
             else:                
