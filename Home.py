@@ -2597,8 +2597,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             yaxis_title='Number of Publications',
                             xaxis_tickangle=-45,
                         )
-                        col2.plotly_chart(fig)
+                        
                     author_chart()
+                    col2.plotly_chart(fig)
                 col1, col2 = st.columns(2)
                 with col1:
                     number = st.slider('Select a number of publishers', 0, 30, 10)
