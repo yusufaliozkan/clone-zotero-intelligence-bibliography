@@ -2627,7 +2627,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             if df_publisher['Publisher'].any() in ("", [], None, 0, False):
                                 st.write('No publisher to display')
                             else:
-                                df_publisher
                                 if log1:
                                     if leg1:
                                         fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=True)
@@ -2699,11 +2698,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         if table_view_journal:
                             df_journal
                         else:
-                            df_journal
                             if df_journal['Journal'].any() in ("", [], None, 0, False):
                                 st.write('No journal to display')
                             else:
-                                df_journal
                                 if log2:
                                     if leg2:
                                         fig = px.bar(df_journal, x='Journal', y='Count', color='Journal', log_y=True)
