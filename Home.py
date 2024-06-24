@@ -2702,6 +2702,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             if df_journal['Journal'].any() in ("", [], None, 0, False):
                                 st.write('No journal to display')
                             else:
+                                df_journal
                                 if log2:
                                     if leg2:
                                         fig = px.bar(df_journal, x='Journal', y='Count', color='Journal', log_y=True)
