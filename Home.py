@@ -2495,8 +2495,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     number0 = st.slider('Select a number collections', 3,30,15, key='slider01')
                     col1, col2 = st.columns(2)
                     with col1:
-                        collection_legend = st.checkbox('Show legend')
-                        if collection_legend:
+                        collection_bar_legend = st.checkbox('Show legend')
+                        if collection_bar_legend:
                             collection_bar_legend=True
                         else:
                             collection_bar_legend=False
