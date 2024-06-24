@@ -2850,43 +2850,62 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 )
                 st.plotly_chart(fig, use_container_width=True)
 
-                df_oa_papers_citation_count = filtered_df.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
-                df_oa_papers_citation_count.columns = ['Date year', '#Citations (OA papers)']
-                df_citation_count = filtered_df2.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
-                df_citation_count.columns = ['Date year', '#Citations (all)']
                 df_citation_count = pd.merge(df_citation_count, df_oa_papers_citation_count, on='Date year', how='left')
                 df_citation_count['#Citations (OA papers)'] = df_citation_count['#Citations (OA papers)'].fillna(0)
+
+                # Calculate citations for non-OA papers
                 df_citation_count['#Citations (non-OA papers)'] = df_citation_count['#Citations (all)'] - df_citation_count['#Citations (OA papers)']
-                df_citation_count['%Citation count (OA papers)'] = round(df_citation_count['#Citations (OA papers)']/df_citation_count['#Citations (all)'], 3)*100
-                df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
+
+                # Calculate the percentage of citations for OA and non-OA papers
+                df_citation_count['%Citation count (OA papers)'] = round(df_citation_count['#Citations (OA papers)'] / df_citation_count['#Citations (all)'], 3) * 100
+                df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)'] / df_citation_count['#Citations (all)'], 3) * 100
+
+                # Ensure 'Date year' is an integer
+                df_citation_count['Date year'] = df_citation_count['Date year'].astype(int)
+
+                # Debugging: Print the merged dataframe with percentages
+                print("Merged DataFrame with Percentages:")
+                print(df_citation_count.head())
+
+                # Filter data for the last 20 years
                 max_year = df_citation_count["Date year"].max()
                 last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
-                last_20_years
-                fig = px.line(
-                    last_20_years,
-                    x="Date year",
-                    y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
-                    title="OA vs non-OA Papers Citation Count Ratio Over the Last 20 Years",
-                    color_discrete_map={
-                        "%Citation count (OA papers)": "green",
-                        "%Citation count (non-OA papers)": "#D3D3D3"
-                    },
-                    hover_data={
-                        "Date year": True,
-                        "%Citation count (OA papers)": True,
-                        "%Citation count (non-OA papers)": True,
-                        "#Citations (OA papers)": True,
-                        "#Citations (non-OA papers)": True
-                    }
-                )
 
-                # Update y-axis range to have a maximum value of 100
-                fig.update_yaxes(range=[0, 100])
+                # Debugging: Print the last 20 years data
+                print("Last 20 Years Data:")
+                print(last_20_years.head())
 
-                # Ensure the x-axis range starts from the minimum year
-                fig.update_xaxes(range=[last_20_years["Date year"].min(), last_20_years["Date year"].max()])
+                # Check if last_20_years is empty
+                if last_20_years.empty:
+                    print("No data available for the last 20 years.")
+                else:
+                    # Create the line graph
+                    fig = px.line(
+                        last_20_years,
+                        x="Date year",
+                        y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
+                        title="OA vs non-OA Papers Citation Count Ratio Over the Last 20 Years",
+                        color_discrete_map={
+                            "%Citation count (OA papers)": "green",
+                            "%Citation count (non-OA papers)": "#D3D3D3"
+                        },
+                        hover_data={
+                            "Date year": True,
+                            "%Citation count (OA papers)": True,
+                            "%Citation count (non-OA papers)": True,
+                            "#Citations (OA papers)": True,
+                            "#Citations (non-OA papers)": True
+                        }
+                    )
 
-                st.plotly_chart(fig, use_container_width=True)
+                    # Update y-axis range to have a maximum value of 100
+                    fig.update_yaxes(range=[0, 100])
+
+                    # Ensure the x-axis range starts from the minimum year
+                    fig.update_xaxes(range=[last_20_years["Date year"].min(), last_20_years["Date year"].max()])
+
+                    # Plot the graph using Streamlit
+                    st.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
                 with col1:
