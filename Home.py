@@ -2767,20 +2767,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
                 df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
 
-
-                df_oa_papers_citation_count = filtered_df.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
-                df_oa_papers_citation_count.columns = ['Date year', '#Citations (OA papers)']
-                df_citation_count = filtered_df2.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
-                df_citation_count.columns = ['Date year', '#Citations (all)']
-                df_citation_count = pd.merge(df_citation_count, df_oa_papers_citation_count, on='Date year', how='left')
-                df_citation_count['#Citations (OA papers)'] = df_citation_count['#Citations (OA papers)'].fillna(0)
-                df_citation_count['#Citations (non-OA papers)'] = df_citation_count['#Citations (all)'] - df_citation_count['#Citations (OA papers)']
-                df_citation_count['%Citation count (OA papers)'] = round(df_citation_count['#Citations (OA papers)']/df_citation_count['#Citations (all)'], 3)*100
-                df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
-
-                df_oa_overtime = pd.merge(df_oa_overtime, df_citation_count, on='Date year')
-                df_oa_overtime
-
                 max_year = df_oa_overtime["Date year"].max()
                 last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
                 citation_ratio = st.checkbox('Add citation ratio')
@@ -2794,10 +2780,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                     mode='lines+markers', name='%Cited OA papers', line=dict(color='blue'))
                     fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited non-OA papers"], 
                                     mode='lines+markers', name='%Cited non-OA papers', line=dict(color='red'))
-                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
-                                    mode='lines+markers', name='#Citations (OA papers)', line=dict(color='yellow'))
-                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (non-OA papers)"], 
-                                    mode='lines+markers', name='#Citations (non-OA papers)', line=dict(color='green'))
                 st.plotly_chart(fig, use_container_width = True)
 
                 # with col2:
@@ -2879,16 +2861,16 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 max_year = df_citation_count["Date year"].max()
                 last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
                 last_20_years
-                # fig = px.bar(last_20_years, x="Date year", y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
-                #             labels={"Date year": "Publication Year", "value": "%Citation count (Oa/non-OA papers)", "variable": "Type"},
-                #             title="OA vs non-OA Papers Citation Count Ratio Over the Last 20 Years",
-                #             color_discrete_map={"%Citation count (OA papers)": "goldenrod", "%Citation count (non-OA papers)": "#D3D3D3"},
-                #             barmode="stack", hover_data=["#Citations (OA papers)", '#Citations (non-OA papers)'])
-                fig = px.bar(last_20_years, x="Date year", y=["#Citations (OA papers)", "#Citations (non-OA papers)"],
-                            labels={"Date year": "Publication Year", "value": "#Citation count (Oa/non-OA papers)", "variable": "Type"},
+                fig = px.bar(last_20_years, x="Date year", y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
+                            labels={"Date year": "Publication Year", "value": "%Citation count (Oa/non-OA papers)", "variable": "Type"},
                             title="OA vs non-OA Papers Citation Count Ratio Over the Last 20 Years",
-                            color_discrete_map={"#Citations (OA papers)": "goldenrod", "#Citations (non-OA papers)": "#D3D3D3"},
+                            color_discrete_map={"%Citation count (OA papers)": "goldenrod", "%Citation count (non-OA papers)": "#D3D3D3"},
                             barmode="stack", hover_data=["#Citations (OA papers)", '#Citations (non-OA papers)'])
+
+                fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
+                                mode='lines+markers', name='#Citations (OA papers)', line=dict(color='yellow'))
+                fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (non-OA papers)"], 
+                                mode='lines+markers', name='#Citations (non-OA papers)', line=dict(color='green'))
                 st.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
