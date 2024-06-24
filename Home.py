@@ -2944,132 +2944,132 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         else:
                             st.plotly_chart(fig_bar, use_container_width=True)
                     fragment()
-                filters_fragment()
+            filters_fragment()
 
-                col1, col2 = st.columns([7,2])
-                with col1:
-                    df_countries = pd.read_csv('countries.csv')
-                    fig = px.choropleth(df_countries, locations='Country', locationmode='country names', color='Count', 
-                                title='Country mentions in titles', color_continuous_scale='Viridis',
-                                width=900, height=700) # Adjust the size of the map here
-                    # Display the map
-                    fig.show()
-                    st.plotly_chart(fig, use_container_width=True) 
-                with col2:
-                    st.markdown('##### Top 15 country names mentioned in titles')
-                    fig = px.bar(df_countries.head(15), x='Count', y='Country', orientation='h', height=600)
-                    col2.plotly_chart(fig, use_container_width=True)
-                
-                st.write('---')
-                st.subheader('Named Entity Recognition analysis', anchor=False, divider='blue')
-                st.caption('[What is Named Entity Recognition?](https://medium.com/mysuperai/what-is-named-entity-recognition-ner-and-how-can-i-use-it-2b68cf6f545d)')
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    gpe_counts = pd.read_csv('gpe.csv')
-                    fig = px.bar(gpe_counts.head(15), x='GPE', y='count', height=600, title="Top 15 locations mentioned Title and abstract")
-                    fig.update_xaxes(tickangle=-65)
-                    col1.plotly_chart(fig, use_container_width=True)
-                with col2:
-                    person_counts = pd.read_csv('person.csv')
-                    fig = px.bar(person_counts.head(15), x='PERSON', y='count', height=600, title="Top 15 person mentioned Title and abstract")
-                    fig.update_xaxes(tickangle=-65)
-                    col2.plotly_chart(fig, use_container_width=True)
-                with col3:
-                    org_counts = pd.read_csv('org.csv')
-                    fig = px.bar(org_counts.head(15), x='ORG', y='count', height=600, title="Top 15 organisations mentioned Title and abstract")
-                    fig.update_xaxes(tickangle=-65)
-                    col3.plotly_chart(fig, use_container_width=True)
+            col1, col2 = st.columns([7,2])
+            with col1:
+                df_countries = pd.read_csv('countries.csv')
+                fig = px.choropleth(df_countries, locations='Country', locationmode='country names', color='Count', 
+                            title='Country mentions in titles', color_continuous_scale='Viridis',
+                            width=900, height=700) # Adjust the size of the map here
+                # Display the map
+                fig.show()
+                st.plotly_chart(fig, use_container_width=True) 
+            with col2:
+                st.markdown('##### Top 15 country names mentioned in titles')
+                fig = px.bar(df_countries.head(15), x='Count', y='Country', orientation='h', height=600)
+                col2.plotly_chart(fig, use_container_width=True)
+            
+            st.write('---')
+            st.subheader('Named Entity Recognition analysis', anchor=False, divider='blue')
+            st.caption('[What is Named Entity Recognition?](https://medium.com/mysuperai/what-is-named-entity-recognition-ner-and-how-can-i-use-it-2b68cf6f545d)')
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                gpe_counts = pd.read_csv('gpe.csv')
+                fig = px.bar(gpe_counts.head(15), x='GPE', y='count', height=600, title="Top 15 locations mentioned Title and abstract")
+                fig.update_xaxes(tickangle=-65)
+                col1.plotly_chart(fig, use_container_width=True)
+            with col2:
+                person_counts = pd.read_csv('person.csv')
+                fig = px.bar(person_counts.head(15), x='PERSON', y='count', height=600, title="Top 15 person mentioned Title and abstract")
+                fig.update_xaxes(tickangle=-65)
+                col2.plotly_chart(fig, use_container_width=True)
+            with col3:
+                org_counts = pd.read_csv('org.csv')
+                fig = px.bar(org_counts.head(15), x='ORG', y='count', height=600, title="Top 15 organisations mentioned Title and abstract")
+                fig.update_xaxes(tickangle=-65)
+                col3.plotly_chart(fig, use_container_width=True)
 
-                st.write('---')
-                df=df_csv.copy()
-                def clean_text (text):
-                    text = text.lower() # lowercasing
-                    text = re.sub(r'[^\w\s]', ' ', text) # this removes punctuation
-                    text = re.sub('[0-9_]', ' ', text) # this removes numbers
-                    text = re.sub('[^a-z_]', ' ', text) # removing all characters except lowercase letters
-                    return text
-                df['clean_title'] = df['Title'].apply(clean_text)
-                df['clean_abstract'] = df['Abstract'].astype(str).apply(clean_text)
-                df_abs_no = df.dropna(subset=['clean_abstract'])
-                df['clean_title'] = df['clean_title'].apply(lambda x: ' '.join ([w for w in x.split() if len (w)>2])) # this function removes words less than 2 words
-                df['clean_abstract'] = df['clean_abstract'].apply(lambda x: ' '.join ([w for w in x.split() if len (w)>2])) # this function removes words less than 2 words
+            st.write('---')
+            df=df_csv.copy()
+            def clean_text (text):
+                text = text.lower() # lowercasing
+                text = re.sub(r'[^\w\s]', ' ', text) # this removes punctuation
+                text = re.sub('[0-9_]', ' ', text) # this removes numbers
+                text = re.sub('[^a-z_]', ' ', text) # removing all characters except lowercase letters
+                return text
+            df['clean_title'] = df['Title'].apply(clean_text)
+            df['clean_abstract'] = df['Abstract'].astype(str).apply(clean_text)
+            df_abs_no = df.dropna(subset=['clean_abstract'])
+            df['clean_title'] = df['clean_title'].apply(lambda x: ' '.join ([w for w in x.split() if len (w)>2])) # this function removes words less than 2 words
+            df['clean_abstract'] = df['clean_abstract'].apply(lambda x: ' '.join ([w for w in x.split() if len (w)>2])) # this function removes words less than 2 words
 
-                def tokenization(text):
-                    text = re.split('\W+', text)
-                    return text
-                df['token_title']=df['clean_title'].apply(tokenization)
-                df['token_abstract']=df['clean_abstract'].apply(tokenization)
-                stopword = nltk.corpus.stopwords.words('english')
+            def tokenization(text):
+                text = re.split('\W+', text)
+                return text
+            df['token_title']=df['clean_title'].apply(tokenization)
+            df['token_abstract']=df['clean_abstract'].apply(tokenization)
+            stopword = nltk.corpus.stopwords.words('english')
 
-                SW = ['york', 'intelligence', 'security', 'pp', 'war','world', 'article', 'twitter', 'nan',
-                    'new', 'isbn', 'book', 'also', 'yet', 'matter', 'erratum', 'commentary', 'studies',
-                    'volume', 'paper', 'study', 'question', 'editorial', 'welcome', 'introduction', 'editorial', 'reader',
-                    'university', 'followed', 'particular', 'based', 'press', 'examine', 'show', 'may', 'result', 'explore',
-                    'examines', 'become', 'used', 'journal', 'london', 'review']
-                stopword.extend(SW)
+            SW = ['york', 'intelligence', 'security', 'pp', 'war','world', 'article', 'twitter', 'nan',
+                'new', 'isbn', 'book', 'also', 'yet', 'matter', 'erratum', 'commentary', 'studies',
+                'volume', 'paper', 'study', 'question', 'editorial', 'welcome', 'introduction', 'editorial', 'reader',
+                'university', 'followed', 'particular', 'based', 'press', 'examine', 'show', 'may', 'result', 'explore',
+                'examines', 'become', 'used', 'journal', 'london', 'review']
+            stopword.extend(SW)
 
-                def remove_stopwords(text):
-                    text = [i for i in text if i] # this part deals with getting rid of spaces as it treads as a string
-                    text = [word for word in text if word not in stopword] #keep the word if it is not in stopword
-                    return text
-                df['stopword']=df['token_title'].apply(remove_stopwords)
-                df['stopword_abstract']=df['token_abstract'].apply(remove_stopwords)
+            def remove_stopwords(text):
+                text = [i for i in text if i] # this part deals with getting rid of spaces as it treads as a string
+                text = [word for word in text if word not in stopword] #keep the word if it is not in stopword
+                return text
+            df['stopword']=df['token_title'].apply(remove_stopwords)
+            df['stopword_abstract']=df['token_abstract'].apply(remove_stopwords)
 
-                wn = nltk.WordNetLemmatizer()
-                def lemmatizer(text):
-                    text = [wn.lemmatize(word) for word in text]
-                    return text
+            wn = nltk.WordNetLemmatizer()
+            def lemmatizer(text):
+                text = [wn.lemmatize(word) for word in text]
+                return text
 
-                df['lemma_title'] = df['stopword'].apply(lemmatizer) # error occurs in this line
-                df['lemma_abstract'] = df['stopword_abstract'].apply(lemmatizer) # error occurs in this line
+            df['lemma_title'] = df['stopword'].apply(lemmatizer) # error occurs in this line
+            df['lemma_abstract'] = df['stopword_abstract'].apply(lemmatizer) # error occurs in this line
 
-                listdf = df['lemma_title']
-                listdf_abstract = df['lemma_abstract']
+            listdf = df['lemma_title']
+            listdf_abstract = df['lemma_abstract']
 
-                st.subheader('Wordcloud', anchor=False, divider='blue')
-                wordcloud_opt = st.radio('Wordcloud of:', ('Titles', 'Abstracts'))
-                if wordcloud_opt=='Titles':
-                    df_list = [item for sublist in listdf for item in sublist]
-                    string = pd.Series(df_list).str.cat(sep=' ')
-                    wordcloud_texts = string
-                    wordcloud_texts_str = str(wordcloud_texts)
-                    wordcloud = WordCloud(stopwords=stopword, width=1500, height=750, background_color='white', collocations=False, colormap='magma').generate(wordcloud_texts_str)
-                    plt.figure(figsize=(20,8))
-                    plt.axis('off')
-                    plt.title('Top words in title (Intelligence bibliography collection)')
-                    plt.imshow(wordcloud)
-                    plt.axis("off")
-                    plt.show()
-                    st.set_option('deprecation.showPyplotGlobalUse', False)
-                    st.pyplot() 
-                else:
-                    st.warning('Please bear in mind that not all items listed in this bibliography have an abstract. Therefore, this wordcloud should not be considered as authoritative. The number of items that have an abstract is ' + str(len(df_abs_no))+'.')
-                    df_list_abstract = [item for sublist in listdf_abstract for item in sublist]
-                    string = pd.Series(df_list_abstract).str.cat(sep=' ')
-                    wordcloud_texts = string
-                    wordcloud_texts_str = str(wordcloud_texts)
-                    wordcloud = WordCloud(stopwords=stopword, width=1500, height=750, background_color='white', collocations=False, colormap='magma').generate(wordcloud_texts_str)
-                    plt.figure(figsize=(20,8))
-                    plt.axis('off')
-                    plt.title('Top words in abstract (Intelligence bibliography collection)')
-                    plt.imshow(wordcloud)
-                    plt.axis("off")
-                    plt.show()
-                    st.set_option('deprecation.showPyplotGlobalUse', False)
-                    st.pyplot() 
+            st.subheader('Wordcloud', anchor=False, divider='blue')
+            wordcloud_opt = st.radio('Wordcloud of:', ('Titles', 'Abstracts'))
+            if wordcloud_opt=='Titles':
+                df_list = [item for sublist in listdf for item in sublist]
+                string = pd.Series(df_list).str.cat(sep=' ')
+                wordcloud_texts = string
+                wordcloud_texts_str = str(wordcloud_texts)
+                wordcloud = WordCloud(stopwords=stopword, width=1500, height=750, background_color='white', collocations=False, colormap='magma').generate(wordcloud_texts_str)
+                plt.figure(figsize=(20,8))
+                plt.axis('off')
+                plt.title('Top words in title (Intelligence bibliography collection)')
+                plt.imshow(wordcloud)
+                plt.axis("off")
+                plt.show()
+                st.set_option('deprecation.showPyplotGlobalUse', False)
+                st.pyplot() 
+            else:
+                st.warning('Please bear in mind that not all items listed in this bibliography have an abstract. Therefore, this wordcloud should not be considered as authoritative. The number of items that have an abstract is ' + str(len(df_abs_no))+'.')
+                df_list_abstract = [item for sublist in listdf_abstract for item in sublist]
+                string = pd.Series(df_list_abstract).str.cat(sep=' ')
+                wordcloud_texts = string
+                wordcloud_texts_str = str(wordcloud_texts)
+                wordcloud = WordCloud(stopwords=stopword, width=1500, height=750, background_color='white', collocations=False, colormap='magma').generate(wordcloud_texts_str)
+                plt.figure(figsize=(20,8))
+                plt.axis('off')
+                plt.title('Top words in abstract (Intelligence bibliography collection)')
+                plt.imshow(wordcloud)
+                plt.axis("off")
+                plt.show()
+                st.set_option('deprecation.showPyplotGlobalUse', False)
+                st.pyplot() 
 
-                # Bring everything in the library
+            # Bring everything in the library
 
-                df_types = pd.DataFrame(df_csv['Publication type'].value_counts())
-                df_types = df_types.reset_index()
-                df_types.columns = ['Publication type', 'Count']
+            df_types = pd.DataFrame(df_csv['Publication type'].value_counts())
+            df_types = df_types.reset_index()
+            df_types.columns = ['Publication type', 'Count']
 
-                st.header('Items in the library by type: ', anchor=False)
-                
-                df_types = df_types.sort_values(['Count'], ascending=[False])
-                plot2= df_types.head(10)
+            st.header('Items in the library by type: ', anchor=False)
+            
+            df_types = df_types.sort_values(['Count'], ascending=[False])
+            plot2= df_types.head(10)
 
-                st.bar_chart(plot2, height=600, width=600, use_container_width=True, x='Publication type')
+            st.bar_chart(plot2, height=600, width=600, use_container_width=True, x='Publication type')
 
 
             st.header('Item inclusion history', anchor=False)
