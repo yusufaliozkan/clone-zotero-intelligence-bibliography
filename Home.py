@@ -2769,7 +2769,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 max_year = df_oa_overtime["Date year"].max()
                 last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
-                citation_ratio = st.checkbox('Add citation ratio')
                 fig = px.bar(last_20_years, x="Date year", y=["OA publication ratio", "Non-OA publication ratio"],
                             labels={"Date year": "Publication Year", "value": "OA status (%)", "variable": "Type"},
                             title="Open Access Publications Ratio Over the Last 20 Years",
@@ -2777,6 +2776,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             barmode="stack", hover_data=["#OA Publications", '#Non-OA Publications'])
                 @st.experimental_fragment
                 def fragment():
+                    citation_ratio = st.checkbox('Add citation ratio')
                     if citation_ratio:
                         fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited OA papers"], 
                                         mode='lines+markers', name='%Cited OA papers', line=dict(color='blue'))
