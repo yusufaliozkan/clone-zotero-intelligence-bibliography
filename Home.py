@@ -2495,8 +2495,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     number0 = st.slider('Select a number collections', 3,30,15, key='slider01')
                     col1, col2 = st.columns(2)
                     with col1:
-                        collection_bar_legend = st.checkbox('Show legend')
-                        if collection_bar_legend:
+                        collection_bar_legend_check = st.checkbox('Show legend')
+                        if collection_bar_legend_check:
                             collection_bar_legend=True
                         else:
                             collection_bar_legend=False
@@ -2511,6 +2511,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
                         st.plotly_chart(fig, use_container_width = True)
                     with col2:
+                        collection_line_legend_check = st.checkbox('Show legend')
+                        if collection_line_legend_check:
+                            collection_line_legend=True
+                        else:
+                            collection_line_legend=False
                         df_collections_22 = df_collections_2.copy()
                         collection_counts = df_collections_22.groupby(['Date year', 'Collection_Name']).size().unstack().fillna(0)
                         collection_counts = collection_counts.reset_index()
@@ -2529,7 +2534,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         fig = px.line(collection_counts_filtered, x='Date year', y=selected_collections, 
                                     markers=True, line_shape='linear', labels={'value': 'Cumulative Count'},
                                     title='Cumulative changes in collection over years')
-                        fig.update_layout(showlegend=False)
+                        fig.update_layout(showlegend=collection_line_legend)
                         # Display the plot in the Streamlit app
                         st.plotly_chart(fig, use_container_width=True)
 
