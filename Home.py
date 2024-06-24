@@ -2897,10 +2897,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     line_show = st.checkbox("Show Line Chart")
                     if line_show:
                         st.plotly_chart(fig_line, use_container_width=True)
-                    
+                    else:
+                        st.plotly_chart(fig_bar, use_container_width=True)
                 fragment()
-
-                st.plotly_chart(fig_bar, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
                 with col1:
