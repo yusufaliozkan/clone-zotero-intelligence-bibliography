@@ -2884,9 +2884,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 @st.experimental_fragment
                 def fragment():
-                    st.session_state.fragment_runs += 1
-                    
-                    # Line Chart
                     fig_line = go.Figure()
                     fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
                                                 mode='lines+markers', name='#Citations (OA papers)', line=dict(color='yellow')))
@@ -2899,8 +2896,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     )
                     
                     st.plotly_chart(fig_line, use_container_width=True)
+                    st.checkbox("Show Line Chart")
+                fragment()
 
-                st.session_state.app_runs += 1
                 st.plotly_chart(fig_bar, use_container_width=True)
 
                 if st.checkbox("Show Line Chart"):
