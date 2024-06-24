@@ -2515,9 +2515,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         column_to_exclude = '01 Intelligence history'
                         if column_to_exclude in selected_collections:
                             selected_collections.remove(column_to_exclude)
-                        # Streamlit app
-                        st.markdown(f'#### Cumulative changes in collection over years')
-
                         collection_counts_filtered = collection_counts[['Date year'] + selected_collections]
                         collection_counts_filtered['Date year'] = pd.to_numeric(collection_counts_filtered['Date year'], errors='coerce')
                         collection_counts_filtered = collection_counts_filtered.sort_values(by=['Date year'] + selected_collections, ascending=True)
