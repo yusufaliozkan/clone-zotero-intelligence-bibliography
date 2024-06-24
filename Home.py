@@ -2588,6 +2588,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         # filter = (df_year['Date year'].astype(int)>=years[0]) & (df_year['Date year'].astype(int)<years[1])
                         # df_year = df_year.loc[filter]
                         df_year
+                        df_year['Publication year'] = df_year['Publication year'].astype(int)
                         max_y = int(df_year['Publication year'].max())
                         min_y = int(df_year['Publication year'].min())
                         years = st.slider('Publication years between:', min_y, max_y, (min_y,max_y), key='years3')
