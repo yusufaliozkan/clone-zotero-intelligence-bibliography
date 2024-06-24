@@ -2846,12 +2846,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 non_oa_total = df_oa_overtime['#Non-OA Publications'].sum()
                 labels = ['OA Publications', 'Non-OA Publications']
                 values = [oa_total, non_oa_total]
-
-                # Create the pie chart with Plotly
+                custom_colors = ['green', '#D3D3D3'] 
                 fig = px.pie(
                     values=values,
                     names=labels,
                     title='OA vs Non-OA Publications',
+                    color_discrete_sequence=px.colors.sequential.RdBu
                 )
 
                 # Display the pie chart with Streamlit
