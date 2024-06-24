@@ -2906,10 +2906,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 if st.checkbox("Show Line Chart"):
                     fragment()
 
-                st.button("Rerun full app")
-                st.write(f"Full app says it ran {st.session_state.app_runs} times.")
-                st.write(f"Full app sees that fragment ran {st.session_state.fragment_runs} times.")
-
                 col1, col2 = st.columns([7,2])
                 with col1:
                     df_countries = pd.read_csv('countries.csv')
