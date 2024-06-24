@@ -2539,6 +2539,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         st.plotly_chart(fig, use_container_width=True)
                 collection_chart()
 
+                st.divider()
                 st.subheader('Publications by type and year', anchor=False) 
                 @st.experimental_fragment
                 def types_pubyears():
