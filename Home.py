@@ -2539,41 +2539,46 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         st.plotly_chart(fig, use_container_width=True)
                 collection_chart()
 
-                # PUBLICATION TYPES
-                df_types = pd.DataFrame(df_csv['Publication type'].value_counts())
-                df_types = df_types.sort_values(['Publication type'], ascending=[False])
-                df_types=df_types.reset_index()
-                df_types = df_types.rename(columns={'index':'Publication type','Publication type':'Count'})
-                # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
-                df_types.columns = ['Publication type', 'Count']
-                # TEMP SOLUTION ENDS
+                @st.experimental_fragment
+                def types_pubyears():
+                    # PUBLICATION TYPES
+                    df_types = pd.DataFrame(df_csv['Publication type'].value_counts())
+                    df_types = df_types.sort_values(['Publication type'], ascending=[False])
+                    df_types=df_types.reset_index()
+                    df_types = df_types.rename(columns={'index':'Publication type','Publication type':'Count'})
+                    # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
+                    df_types.columns = ['Publication type', 'Count']
+                    # TEMP SOLUTION ENDS
 
-                col1, col2 = st.columns(2)
-                with col1:
-                    log0 = st.checkbox('Show in log scale', key='log0')
+                    chart_type = st.radio('Choose visual type', ['Bar chart', 'Pie chart'])
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        if chart_type == 'Bar chart':
+                            log0 = st.checkbox('Show in log scale', key='log0')
 
-                    if log0:
-                        fig = px.bar(df_types, x='Publication type', y='Count', color='Publication type', log_y=True)
-                        fig.update_layout(
-                            autosize=False,
-                            width=1200,
-                            height=600,)
-                        fig.update_xaxes(tickangle=-70)
-                        fig.update_layout(title={'text':'Item types in log scale', 'y':0.95, 'x':0.4, 'yanchor':'top'})
-                        col1.plotly_chart(fig, use_container_width = True)
-                    else:
-                        fig = px.bar(df_types, x='Publication type', y='Count', color='Publication type')
-                        fig.update_layout(
-                            autosize=False,
-                            width=1200,
-                            height=600,)
-                        fig.update_xaxes(tickangle=-70)
-                        fig.update_layout(title={'text':'Item types', 'y':0.95, 'x':0.4, 'yanchor':'top'})
-                        col1.plotly_chart(fig, use_container_width = True)
-                with col2:
-                    fig = px.pie(df_types, values='Count', names='Publication type')
-                    fig.update_layout(title={'text':'Item types',  'yanchor':'top'})
-                    col2.plotly_chart(fig, use_container_width = True)
+                            if log0:
+                                fig = px.bar(df_types, x='Publication type', y='Count', color='Publication type', log_y=True)
+                                fig.update_layout(
+                                    autosize=False,
+                                    width=1200,
+                                    height=600,)
+                                fig.update_xaxes(tickangle=-70)
+                                fig.update_layout(title={'text':'Item types in log scale', 'y':0.95, 'x':0.4, 'yanchor':'top'})
+                                col1.plotly_chart(fig, use_container_width = True)
+                            else:
+                                fig = px.bar(df_types, x='Publication type', y='Count', color='Publication type')
+                                fig.update_layout(
+                                    autosize=False,
+                                    width=1200,
+                                    height=600,)
+                                fig.update_xaxes(tickangle=-70)
+                                fig.update_layout(title={'text':'Item types', 'y':0.95, 'x':0.4, 'yanchor':'top'})
+                                col1.plotly_chart(fig, use_container_width = True)
+                    with col2:
+                        fig = px.pie(df_types, values='Count', names='Publication type')
+                        fig.update_layout(title={'text':'Item types',  'yanchor':'top'})
+                        col2.plotly_chart(fig, use_container_width = True)
+                types_pubyears()
 
                 col1, col2 = st.columns(2)
                 with col1:
