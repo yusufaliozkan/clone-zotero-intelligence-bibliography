@@ -2901,9 +2901,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 st.plotly_chart(fig_bar, use_container_width=True)
 
-                if st.checkbox("Show Line Chart"):
-                    fragment()
-
                 col1, col2 = st.columns([7,2])
                 with col1:
                     df_countries = pd.read_csv('countries.csv')
