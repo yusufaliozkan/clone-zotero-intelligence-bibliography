@@ -2804,8 +2804,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             #         st.caption(df_journal['Journal'].iloc[i]
                             #         )
                     journal_chart()
-                # col1, col2 = st.columns(2)
-                # with col1:
+
+                st.divider()
+                st.subheader('Publications by open access status', anchor=False)   
                 df_dedup['Date published2'] = (
                     df_dedup['Date published']
                     .str.strip()
