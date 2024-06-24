@@ -2767,11 +2767,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
                 df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
 
-                max_year = df_oa_overtime["Date year"].max()
-                last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
+
 
                 @st.experimental_fragment
                 def fragment2():
+                    max_year = df_oa_overtime["Date year"].max()
+                    last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
                     citation_ratio = st.checkbox('Add citation ratio')
                     
                     # Always start with the bar chart
