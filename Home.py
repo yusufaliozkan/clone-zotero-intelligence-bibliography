@@ -2842,6 +2842,21 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
                 df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
                 df_oa_overtime
+                oa_total = df_oa_overtime['#OA Publications']
+                non_oa_total = df_oa_overtime['#Non-OA Publications']
+                labels = 'OA Publications', 'Non-OA Publications'
+                sizes = [oa_total, non_oa_total]
+                colors = ['gold', 'lightcoral']
+                explode = (0.1, 0)  # explode 1st slice (OA Publications)
+
+                # Plot
+                plt.figure(figsize=(8, 8))
+                plt.pie(sizes, explode=explode, labels=labels, colors=colors,
+                autopct='%1.1f%%', shadow=True, startangle=140)
+
+                plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+                plt.title('OA vs Non-OA Publications')
+                plt.show()
 
                 @st.experimental_fragment
                 def fragment2():
