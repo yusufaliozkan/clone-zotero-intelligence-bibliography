@@ -2767,8 +2767,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
                 df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
 
-
-
                 @st.experimental_fragment
                 def fragment2():
                     max_year = df_oa_overtime["Date year"].max()
