@@ -2841,62 +2841,60 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['#OA Publications']/df_oa_overtime['Total Publications'], 3)*100
                 df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
                 df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
-                df_oa_overtime
-                oa_total = df_oa_overtime['#OA Publications'].sum()
-                non_oa_total = df_oa_overtime['#Non-OA Publications'].sum()
-                labels = ['OA Publications', 'Non-OA Publications']
-                values = [oa_total, non_oa_total]
-                custom_colors = ['green', '#D3D3D3'] 
-                fig = px.pie(
-                    values=values,
-                    names=labels,
-                    title='OA vs Non-OA Publications',
-                    color_discrete_sequence=custom_colors
-                )
+                col1, col2 = st.columns(2)
+                with col1:
+                    @st.experimental_fragment
+                    def fragment2():
+                        max_year = df_oa_overtime["Date year"].max()
+                        last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
+                        citation_ratio = st.checkbox('Add citation ratio')
+                        
+                        # Always start with the bar chart
+                        fig = px.bar(
+                            last_20_years, 
+                            x="Date year", 
+                            y=["OA publication ratio", "Non-OA publication ratio"],
+                            labels={"Date year": "Publication Year", "value": "OA status (%)", "variable": "Type"},
+                            title="Open Access Publications Ratio Over the Last 20 Years",
+                            color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
+                            barmode="stack", 
+                            hover_data=["#OA Publications", '#Non-OA Publications']
+                        )
+                        
+                        # Add scatter plots if checkbox is checked
+                        if citation_ratio:
+                            fig.add_scatter(
+                                x=last_20_years["Date year"], 
+                                y=last_20_years["%Cited OA papers"], 
+                                mode='lines+markers', 
+                                name='%Cited OA papers', 
+                                line=dict(color='blue')
+                            )
+                            fig.add_scatter(
+                                x=last_20_years["Date year"], 
+                                y=last_20_years["%Cited non-OA papers"], 
+                                mode='lines+markers', 
+                                name='%Cited non-OA papers', 
+                                line=dict(color='red')
+                            )
+                        
+                        # Always plot the figure
+                        st.plotly_chart(fig, use_container_width=True)
 
-                # Display the pie chart with Streamlit
-                st.title('Publication Analysis')
-                st.plotly_chart(fig)
-
-                @st.experimental_fragment
-                def fragment2():
-                    max_year = df_oa_overtime["Date year"].max()
-                    last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
-                    citation_ratio = st.checkbox('Add citation ratio')
-                    
-                    # Always start with the bar chart
-                    fig = px.bar(
-                        last_20_years, 
-                        x="Date year", 
-                        y=["OA publication ratio", "Non-OA publication ratio"],
-                        labels={"Date year": "Publication Year", "value": "OA status (%)", "variable": "Type"},
-                        title="Open Access Publications Ratio Over the Last 20 Years",
-                        color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
-                        barmode="stack", 
-                        hover_data=["#OA Publications", '#Non-OA Publications']
+                    fragment2()
+                with col2:
+                    oa_total = df_oa_overtime['#OA Publications'].sum()
+                    non_oa_total = df_oa_overtime['#Non-OA Publications'].sum()
+                    labels = ['OA Publications', 'Non-OA Publications']
+                    values = [oa_total, non_oa_total]
+                    custom_colors = ['green', '#D3D3D3'] 
+                    fig = px.pie(
+                        values=values,
+                        names=labels,
+                        title='OA vs Non-OA Publications (all items)',
+                        color_discrete_sequence=custom_colors
                     )
-                    
-                    # Add scatter plots if checkbox is checked
-                    if citation_ratio:
-                        fig.add_scatter(
-                            x=last_20_years["Date year"], 
-                            y=last_20_years["%Cited OA papers"], 
-                            mode='lines+markers', 
-                            name='%Cited OA papers', 
-                            line=dict(color='blue')
-                        )
-                        fig.add_scatter(
-                            x=last_20_years["Date year"], 
-                            y=last_20_years["%Cited non-OA papers"], 
-                            mode='lines+markers', 
-                            name='%Cited non-OA papers', 
-                            line=dict(color='red')
-                        )
-                    
-                    # Always plot the figure
-                    st.plotly_chart(fig, use_container_width=True)
-
-                fragment2()
+                    st.plotly_chart(fig)
                 
 
                 # with col2:
