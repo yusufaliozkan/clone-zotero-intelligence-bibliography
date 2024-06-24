@@ -2599,7 +2599,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             xaxis_tickangle=-45,
                         )
                         col2.plotly_chart(fig)
+                        df_authors
                     author_chart()
+
                     
                 col1, col2 = st.columns(2)
                 with col1:
