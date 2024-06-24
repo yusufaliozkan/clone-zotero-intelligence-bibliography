@@ -2524,8 +2524,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         # Plotting the line graph using Plotly Express
                         fig = px.line(collection_counts_filtered, x='Date year', y=selected_collections, 
                                     markers=True, line_shape='linear', labels={'value': 'Cumulative Count'},
-                                    title='Cumulative changes in collection over years', showlegend=False)
-
+                                    title='Cumulative changes in collection over years')
+                        fig.update_layout(showlegend=False)
                         # Display the plot in the Streamlit app
                         st.plotly_chart(fig, use_container_width=True)
 
