@@ -2894,9 +2894,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         xaxis_title="Publication Year",
                         yaxis_title="Citation Count",
                     )
+                    st.checkbox("Show Line Chart")
                     
                     st.plotly_chart(fig_line, use_container_width=True)
-                    st.checkbox("Show Line Chart")
+                    
                 fragment()
 
                 st.plotly_chart(fig_bar, use_container_width=True)
