@@ -2488,6 +2488,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 ## COLLECTIONS IN THE LIBRARY
                 
                 st.markdown(f'#### Intelligence studies bibliography dashboard (publications between {years[0]} and {years[1]})')
+                st.subheader('Publications by collection', anchor=None)
 
                 @st.experimental_fragment
                 def collection_chart():
