@@ -2486,11 +2486,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             else:                
                 ## COLLECTIONS IN THE LIBRARY
-                st.subheader('Publications by collection', anchor=False)
-                col1, col2 = st.columns(2)
-                with col1:
-                    @st.experimental_fragment
-                    def collection_chart():
+                st.subheader('Publications by collection', anchor=False)                
+                @st.experimental_fragment
+                def collection_chart():
+                    col1, col2 = st.columns(2)
+                    with col1:
                         df_collections_21 = df_collections_2.copy()
                         df_collections_21 = df_collections_21['Collection_Name'].value_counts().reset_index()
                         df_collections_21.columns = ['Collection_Name', 'Number_of_Items']
@@ -2504,8 +2504,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             height=600,)
                         fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
                         st.plotly_chart(fig, use_container_width = True)
-
-                with col2:
+                    with col2:
                         df_collections_22 = df_collections_2.copy()
                         collection_counts = df_collections_22.groupby(['Date year', 'Collection_Name']).size().unstack().fillna(0)
                         collection_counts = collection_counts.reset_index()
