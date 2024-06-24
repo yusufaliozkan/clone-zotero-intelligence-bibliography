@@ -2581,7 +2581,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             fig.update_layout(title={'text':'Item types',  'yanchor':'top'})
                             st.plotly_chart(fig, use_container_width = True)
                     with col2:
-                        st.write('Other chart (pub year)')
+                        fig = px.bar(df_year, x='Publication year', y='Count')
+                        fig.update_xaxes(tickangle=-70)
+                        fig.update_layout(
+                            autosize=False,
+                            width=1200,
+                            height=600,)
+                        fig.update_layout(title={'text':'All items in the library by publication year', 'yanchor':'top'})
+                        col2.plotly_chart(fig, use_container_width = True)
                 types_pubyears()
 
                 col1, col2 = st.columns(2)
