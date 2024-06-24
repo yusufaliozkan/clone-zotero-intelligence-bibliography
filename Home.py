@@ -2445,7 +2445,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_collections_2['Date year'] = df_collections_2['Date published'].dt.strftime('%Y')
             df_collections_2['Date year'] = df_collections_2['Date year'].fillna('No date') 
 
-            with st.expander('**Select filters**', expanded=False):
+            with st.expander('**Select filters**', expanded=False): 
                 @st.experimental_fragment
                 def filter_fragment():
                     types = st.multiselect('Publication type', df_csv['Publication type'].unique(), df_csv['Publication type'].unique())
