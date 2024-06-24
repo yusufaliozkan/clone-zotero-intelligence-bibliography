@@ -2581,19 +2581,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             fig.update_layout(title={'text':'Item types',  'yanchor':'top'})
                             st.plotly_chart(fig, use_container_width = True)
                     with col2:
-                        # df_year
-                        # max_y = int(df_year['Publication year'].max())
-                        # min_y = int(df_year['Publication year'].min())
-                        # years = st.slider('Publication years between:', min_y, max_y+1, (min_y,max_y+1), key='years3')
-                        # filter = (df_year['Date year'].astype(int)>=years[0]) & (df_year['Date year'].astype(int)<years[1])
-                        # df_year = df_year.loc[filter]
-                        df_year
                         df_year['Publication year'] = df_year['Publication year'].astype(int)
                         max_y = int(df_year['Publication year'].max())
                         min_y = int(df_year['Publication year'].min())
                         years = st.slider('Publication years between:', min_y, max_y, (min_y,max_y), key='years3')
-                        df_year_updated = df_year[(df_year['Publication year'] >= years[0]) & (df_year['Publication year'] <= years[1])]
-                        fig = px.bar(df_year_updated, x='Publication year', y='Count')
+                        df_year = df_year[(df_year['Publication year'] >= years[0]) & (df_year['Publication year'] <= years[1])]
+                        fig = px.bar(df_year, x='Publication year', y='Count')
                         fig.update_xaxes(tickangle=-70)
                         fig.update_layout(
                             autosize=False,
