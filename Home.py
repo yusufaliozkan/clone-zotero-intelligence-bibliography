@@ -2454,8 +2454,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 unique_journals_sorted = journal_counts.index.tolist()
                 journals = st.multiselect('Select a journal', unique_journals_sorted, key='big_dashboard_journals')                 
 
-                years = st.slider('Publication years between:', min_y, max_y+1, (min_y,max_y+1), key='years2')
+                
                 if st.button('Update dashboard'):
+                    years = st.slider('Publication years between:', min_y, max_y+1, (min_y,max_y+1), key='years2')
                     df_csv = df_csv[df_csv['Publication type'].isin(types)]
                     if journals:
                         df_csv = df_csv[df_csv['Journal'].isin(journals)]
@@ -2566,7 +2567,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         fig.update_layout(title={'text':'Item types',  'yanchor':'top'})
                         col2.plotly_chart(fig, use_container_width = True)
                 collection_chart()
-                
                 col1, col2 = st.columns(2)
                 with col1:
                     fig = px.bar(df_year, x='Publication year', y='Count')
