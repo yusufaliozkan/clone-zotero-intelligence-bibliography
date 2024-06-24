@@ -2867,11 +2867,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     last_20_years,
                     x="Date year",
                     y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
-                    # labels={
-                    #     "Date year": "Publication Year",
-                    #     "value": "%Citation count (OA/non-OA papers)",
-                    #     "variable": "Type"
-                    # },
                     title="OA vs non-OA Papers Citation Count Ratio Over the Last 20 Years",
                     color_discrete_map={
                         "%Citation count (OA papers)": "green",
@@ -2889,6 +2884,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 # Update y-axis range to have a maximum value of 100
                 fig.update_yaxes(range=[0, 100])
 
+                # Plot the graph using Streamlit
                 st.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
