@@ -2861,6 +2861,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
                 max_year = df_citation_count["Date year"].max()
                 last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
+                # Create the line graph
                 fig = px.line(
                     last_20_years,
                     x="Date year",
@@ -2884,8 +2885,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     }
                 )
 
-                # Plot the graph using Streamlit
-                st.plotly_chart(fig, use_container_width=True)
+                # Update y-axis range to have a maximum value of 100
+                fig.update_yaxes(range=[0, 100])
+
                 st.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
