@@ -2596,7 +2596,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         st.plotly_chart(fig, use_container_width = True)
                 types_pubyears()
 
-
+                st.divider()
+                st.subheader('Publications by author', anchor=False) 
                 @st.experimental_fragment
                 def author_chart():
                     col1, col2 = st.columns(2)
