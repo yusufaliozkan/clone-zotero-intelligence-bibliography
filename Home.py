@@ -2485,7 +2485,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             filters_fragment()
 
-            if df_collections_2['Title'].any() in ("", [], None, 0, False):
+            if df_csv['Title'].any() in ("", [], None, 0, False):
                 st.warning('No data to visualise. Select a correct parameter.')
 
             else:                
