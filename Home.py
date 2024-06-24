@@ -2489,11 +2489,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 st.subheader('Publications by collection', anchor=False)                
                 @st.experimental_fragment
                 def collection_chart():
-                    col1, col2 = st.columns(2)
                     df_collections_21 = df_collections_2.copy()
                     df_collections_21 = df_collections_21['Collection_Name'].value_counts().reset_index()
                     df_collections_21.columns = ['Collection_Name', 'Number_of_Items']
                     number0 = st.slider('Select a number collections', 3,30,15, key='slider01')
+                    col1, col2 = st.columns(2)
                     with col1:
 
                         plot= df_collections_21.head(number0+1)
