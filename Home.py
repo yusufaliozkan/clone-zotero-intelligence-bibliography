@@ -2845,8 +2845,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 oa_total = df_oa_overtime['#OA Publications']
                 non_oa_total = df_oa_overtime['#Non-OA Publications']
                 labels = 'OA Publications', 'Non-OA Publications'
-                sizes = [oa_total, non_oa_total]
-                colors = ['gold', 'lightcoral']
+                sizes = [oa_total, non_oa_total].sum()
+                colors = ['gold', 'lightcoral'].sum()
                 explode = (0.1, 0)  # explode 1st slice (OA Publications)
 
                 # Plot
