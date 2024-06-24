@@ -2862,7 +2862,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 max_year = df_citation_count["Date year"].max()
                 last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
                 last_20_years
-                fig2 = px.line(
+                fig = px.line(
                     last_20_years,
                     x="Date year",
                     y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
@@ -2881,12 +2881,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 )
 
                 # Update y-axis range to have a maximum value of 100
-                fig2.update_yaxes(range=[0, 100])
+                fig.update_yaxes(range=[0, 100])
 
                 # Ensure the x-axis range starts from the minimum year
-                fig2.update_xaxes(range=[last_20_years["Date year"].min(), last_20_years["Date year"].max()])
+                fig.update_xaxes(range=[last_20_years["Date year"].min(), last_20_years["Date year"].max()])
 
-                st.plotly_chart(fig2, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
                 with col1:
