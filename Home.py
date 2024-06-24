@@ -2388,6 +2388,21 @@ with st.spinner('Retrieving data & updating dashboard...'):
         
         if on_main_dashboard:
 
+            # number0 = st.slider('Select a number collections', 3,30,15)
+            # df_collections_2.set_index('Name', inplace=True)
+            # df_collections_2 = df_collections_2.sort_values(['Number'], ascending=[False])
+            # plot= df_collections_2.head(number0+1)
+            # # st.bar_chart(plot['Number'].sort_values(), height=600, width=600, use_container_width=True)
+            # plot = plot.reset_index()
+
+            # plot = plot[plot['Name']!='01 Intelligence history']
+            # fig = px.bar(plot, x='Name', y='Number', color='Name')
+            # fig.update_layout(
+            #     autosize=False,
+            #     width=600,
+            #     height=600,)
+            # fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
+            # st.plotly_chart(fig, use_container_width = True)
 
             df_csv = df_duplicated.copy()
             df_collections_2 =df_csv.copy()
@@ -2430,46 +2445,42 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_collections_2['Date year'] = df_collections_2['Date published'].dt.strftime('%Y')
             df_collections_2['Date year'] = df_collections_2['Date year'].fillna('No date') 
 
-            @st.experimental_fragment
-            def fragment_filter():
-                global df_csv, df_collections_2, min_y, max_y, df_dedup
+            with st.expander('**Select filters**', expanded=False):
+                types = st.multiselect('Publication type', df_csv['Publication type'].unique(), df_csv['Publication type'].unique())
 
-                with st.expander('**Select filters**', expanded=False):
-                    types = st.multiselect('Publication type', df_csv['Publication type'].unique(), df_csv['Publication type'].unique())
+                df_journals = df_dedup.copy()
+                df_journals = df_journals[df_journals['Publication type'] == 'Journal article']
+                journal_counts = df_journals['Journal'].value_counts()
+                unique_journals_sorted = journal_counts.index.tolist()
+                journals = st.multiselect('Select a journal', unique_journals_sorted, key='big_dashboard_journals')                 
 
-                    df_journals = df_dedup.copy()
-                    df_journals = df_journals[df_journals['Publication type'] == 'Journal article']
-                    journal_counts = df_journals['Journal'].value_counts()
-                    unique_journals_sorted = journal_counts.index.tolist()
-                    journals = st.multiselect('Select a journal', unique_journals_sorted, key='big_dashboard_journals')                 
+                years = st.slider('Publication years between:', min_y, max_y+1, (min_y,max_y+1), key='years2')
+                if st.button('Update dashboard'):
+                    df_csv = df_csv[df_csv['Publication type'].isin(types)]
+                    if journals:
+                        df_csv = df_csv[df_csv['Journal'].isin(journals)]
+                    else:
+                        df_csv = df_csv.copy()
+                    df_csv = df_csv[df_csv['Date year'] !='No date']
+                    filter = (df_csv['Date year'].astype(int)>=years[0]) & (df_csv['Date year'].astype(int)<years[1])
 
-                    years = st.slider('Publication years between:', min_y, max_y+1, (min_y,max_y+1), key='years2')
-                    if st.button('Update dashboard'):
-                        df_csv = df_csv[df_csv['Publication type'].isin(types)]
-                        if journals:
-                            df_csv = df_csv[df_csv['Journal'].isin(journals)]
-                        else:
-                            df_csv = df_csv.copy()
-                        df_csv = df_csv[df_csv['Date year'] !='No date']
-                        filter = (df_csv['Date year'].astype(int)>=years[0]) & (df_csv['Date year'].astype(int)<years[1])
+                    df_csv = df_csv.loc[filter]
+                    df_year=df_csv['Date year'].value_counts()
+                    df_year=df_year.reset_index()
+                    df_year=df_year.rename(columns={'index':'Publication year','Date year':'Count'})
+                    df_year.drop(df_year[df_year['Publication year']== 'No date'].index, inplace = True)
+                    df_year=df_year.sort_values(by='Publication year', ascending=True)
+                    df_year=df_year.reset_index(drop=True)
 
-                        df_csv = df_csv.loc[filter]
-                        df_year=df_csv['Date year'].value_counts()
-                        df_year=df_year.reset_index()
-                        df_year=df_year.rename(columns={'index':'Publication year','Date year':'Count'})
-                        df_year.drop(df_year[df_year['Publication year']== 'No date'].index, inplace = True)
-                        df_year=df_year.sort_values(by='Publication year', ascending=True)
-                        df_year=df_year.reset_index(drop=True)
+                    df_collections_2 = df_collections_2[df_collections_2['Publication type'].isin(types)]
+                    if journals:
+                        df_collections_2 = df_collections_2[df_collections_2['Journal'].isin(journals)]
+                    else:
+                        df_collections_2 = df_collections_2.copy()                    
+                    df_collections_2 = df_collections_2[df_collections_2['Date year'] !='No date']
+                    filter_collection = (df_collections_2['Date year'].astype(int)>=years[0]) & (df_collections_2['Date year'].astype(int)<years[1])
+                    df_collections_2 = df_collections_2.loc[filter_collection]
 
-                        df_collections_2 = df_collections_2[df_collections_2['Publication type'].isin(types)]
-                        if journals:
-                            df_collections_2 = df_collections_2[df_collections_2['Journal'].isin(journals)]
-                        else:
-                            df_collections_2 = df_collections_2.copy()                    
-                        df_collections_2 = df_collections_2[df_collections_2['Date year'] !='No date']
-                        filter_collection = (df_collections_2['Date year'].astype(int)>=years[0]) & (df_collections_2['Date year'].astype(int)<years[1])
-                        df_collections_2 = df_collections_2.loc[filter_collection]
-            fragment_filter()
             if df_csv['Title'].any() in ("", [], None, 0, False):
                 st.warning('No data to visualise. Select a correct parameter.')
 
