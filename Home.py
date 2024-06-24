@@ -2794,10 +2794,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                     mode='lines+markers', name='%Cited OA papers', line=dict(color='blue'))
                     fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Cited non-OA papers"], 
                                     mode='lines+markers', name='%Cited non-OA papers', line=dict(color='red'))
-                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Citation count (OA papers)"], 
-                                    mode='lines+markers', name='%Citation count (OA papers)', line=dict(color='yellow'))
-                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["%Citation count (non-OA papers)"], 
-                                    mode='lines+markers', name='%Citation count (non-OA papers)', line=dict(color='green'))
+                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
+                                    mode='lines+markers', name='#Citations (OA papers)', line=dict(color='yellow'))
+                    fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (non-OA papers)"], 
+                                    mode='lines+markers', name='#Citations (non-OA papers)', line=dict(color='green'))
                 st.plotly_chart(fig, use_container_width = True)
 
                 # with col2:
