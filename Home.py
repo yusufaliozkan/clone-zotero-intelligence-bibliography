@@ -2699,6 +2699,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         if table_view_journal:
                             df_journal
                         else:
+                            df_journal
                             if df_journal['Journal'].any() in ("", [], None, 0, False):
                                 st.write('No journal to display')
                             else:
