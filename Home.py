@@ -2860,7 +2860,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
                 max_year = df_citation_count["Date year"].max()
                 last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
-                last_20_years
                 fig_bar = px.bar(
                     last_20_years, 
                     x="Date year", 
@@ -2879,21 +2878,37 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     hover_data=["#Citations (OA papers)", '#Citations (non-OA papers)']
                 )
 
-                # Line Chart
-                fig_line = go.Figure()
-                fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
-                                            mode='lines+markers', name='#Citations (OA papers)', line=dict(color='yellow')))
-                fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (non-OA papers)"], 
-                                            mode='lines+markers', name='#Citations (non-OA papers)', line=dict(color='green')))
-                fig_line.update_layout(
-                    title="Citation Counts for OA and non-OA Papers Over the Last 20 Years",
-                    xaxis_title="Publication Year",
-                    yaxis_title="Citation Count",
-                )
+                if "app_runs" not in st.session_state:
+                    st.session_state.app_runs = 0
+                    st.session_state.fragment_runs = 0
 
-                # Display the charts
+                @st.experimental_fragment
+                def fragment():
+                    st.session_state.fragment_runs += 1
+                    
+                    # Line Chart
+                    fig_line = go.Figure()
+                    fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
+                                                mode='lines+markers', name='#Citations (OA papers)', line=dict(color='yellow')))
+                    fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (non-OA papers)"], 
+                                                mode='lines+markers', name='#Citations (non-OA papers)', line=dict(color='green')))
+                    fig_line.update_layout(
+                        title="Citation Counts for OA and non-OA Papers Over the Last 20 Years",
+                        xaxis_title="Publication Year",
+                        yaxis_title="Citation Count",
+                    )
+                    
+                    st.plotly_chart(fig_line, use_container_width=True)
+
+                st.session_state.app_runs += 1
                 st.plotly_chart(fig_bar, use_container_width=True)
-                st.plotly_chart(fig_line, use_container_width=True)
+
+                if st.checkbox("Show Line Chart"):
+                    fragment()
+
+                st.button("Rerun full app")
+                st.write(f"Full app says it ran {st.session_state.app_runs} times.")
+                st.write(f"Full app sees that fragment ran {st.session_state.fragment_runs} times.")
 
                 col1, col2 = st.columns([7,2])
                 with col1:
