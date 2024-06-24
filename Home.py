@@ -2599,6 +2599,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     years = st.slider('Publication years between:', min_y, max_y+1, (min_y,max_y+1), key='years3')
                     filter = (df_year['Date year'].astype(int)>=years[0]) & (df_year['Date year'].astype(int)<years[1])
                     df_year = df_year.loc[filter]
+                    df_year
                     fig = px.bar(df_year, x='Publication year', y='Count')
                     fig.update_xaxes(tickangle=-70)
                     fig.update_layout(
@@ -2606,7 +2607,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         width=1200,
                         height=600,)
                     fig.update_layout(title={'text':'All items in the library by publication year', 'yanchor':'top'})
-                    col1.plotly_chart(fig, use_container_width = True)
+                    st.plotly_chart(fig, use_container_width = True)
 
                 with col2:                
                     @st.experimental_fragment
