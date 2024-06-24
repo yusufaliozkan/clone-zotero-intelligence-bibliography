@@ -2515,30 +2515,30 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     column_to_exclude = '01 Intelligence history'
                     if column_to_exclude in selected_collections:
                         selected_collections.remove(column_to_exclude)
+                    # Streamlit app
+                    st.markdown(f'#### Cumulative changes in collection over years')
+
+                    collection_counts_filtered = collection_counts[['Date year'] + selected_collections]
+                    collection_counts_filtered['Date year'] = pd.to_numeric(collection_counts_filtered['Date year'], errors='coerce')
+                    collection_counts_filtered = collection_counts_filtered.sort_values(by=['Date year'] + selected_collections, ascending=True)
+
+                    # Plotting the line graph using Plotly Express
+                    fig = px.line(collection_counts_filtered, x='Date year', y=selected_collections, 
+                                markers=True, line_shape='linear', labels={'value': 'Cumulative Count'},
+                                title='Cumulative changes in collection over years')
+
+                    # Display the plot in the Streamlit app
+                    st.plotly_chart(fig, use_container_width=True)
+
+                    # PUBLICATION TYPES
+                    df_types = pd.DataFrame(df_csv['Publication type'].value_counts())
+                    df_types = df_types.sort_values(['Publication type'], ascending=[False])
+                    df_types=df_types.reset_index()
+                    df_types = df_types.rename(columns={'index':'Publication type','Publication type':'Count'})
+                    # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
+                    df_types.columns = ['Publication type', 'Count']
+                    # TEMP SOLUTION ENDS
                 collection_chart()
-                # Streamlit app
-                st.markdown(f'#### Cumulative changes in collection over years')
-
-                collection_counts_filtered = collection_counts[['Date year'] + selected_collections]
-                collection_counts_filtered['Date year'] = pd.to_numeric(collection_counts_filtered['Date year'], errors='coerce')
-                collection_counts_filtered = collection_counts_filtered.sort_values(by=['Date year'] + selected_collections, ascending=True)
-
-                # Plotting the line graph using Plotly Express
-                fig = px.line(collection_counts_filtered, x='Date year', y=selected_collections, 
-                            markers=True, line_shape='linear', labels={'value': 'Cumulative Count'},
-                            title='Cumulative changes in collection over years')
-
-                # Display the plot in the Streamlit app
-                st.plotly_chart(fig, use_container_width=True)
-
-                # PUBLICATION TYPES
-                df_types = pd.DataFrame(df_csv['Publication type'].value_counts())
-                df_types = df_types.sort_values(['Publication type'], ascending=[False])
-                df_types=df_types.reset_index()
-                df_types = df_types.rename(columns={'index':'Publication type','Publication type':'Count'})
-                # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
-                df_types.columns = ['Publication type', 'Count']
-                # TEMP SOLUTION ENDS
 
 
                 col1, col2 = st.columns(2)
