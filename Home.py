@@ -2483,471 +2483,469 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         filter_collection = (df_collections_2['Date year'].astype(int)>=years[0]) & (df_collections_2['Date year'].astype(int)<years[1])
                         df_collections_2 = df_collections_2.loc[filter_collection]
 
-                return df_csv, df_collections_2, years, df_year
 
-            df_csv, df_collections_2, years, df_year = filters_fragment()
+                if df_csv['Title'].any() in ("", [], None, 0, False):
+                    st.warning('No data to visualise. Select a correct parameter.')
 
-            if df_csv['Title'].any() in ("", [], None, 0, False):
-                st.warning('No data to visualise. Select a correct parameter.')
+                else:                
+                    ## COLLECTIONS IN THE LIBRARY
+                    
+                    st.markdown(f'#### Intelligence studies bibliography dashboard (publications between {years[0]} and {years[1]})')
 
-            else:                
-                ## COLLECTIONS IN THE LIBRARY
-                
-                st.markdown(f'#### Intelligence studies bibliography dashboard (publications between {years[0]} and {years[1]})')
+                    @st.experimental_fragment
+                    def collection_chart():
+                        df_collections_21 = df_collections_2.copy()
+                        df_collections_21 = df_collections_21['Collection_Name'].value_counts().reset_index()
+                        df_collections_21.columns = ['Collection_Name', 'Number_of_Items']
+                        number0 = st.slider('Select a number collections', 3,30,15, key='slider01')
+                        plot= df_collections_21.head(number0+1)
+                        plot = plot[plot['Collection_Name']!='01 Intelligence history']
+                        fig = px.bar(plot, x='Collection_Name', y='Number_of_Items', color='Collection_Name')
+                        fig.update_layout(
+                            autosize=False,
+                            width=600,
+                            height=600,)
+                        fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
+                        st.plotly_chart(fig, use_container_width = True)
 
-                @st.experimental_fragment
-                def collection_chart():
-                    df_collections_21 = df_collections_2.copy()
-                    df_collections_21 = df_collections_21['Collection_Name'].value_counts().reset_index()
-                    df_collections_21.columns = ['Collection_Name', 'Number_of_Items']
-                    number0 = st.slider('Select a number collections', 3,30,15, key='slider01')
-                    plot= df_collections_21.head(number0+1)
-                    plot = plot[plot['Collection_Name']!='01 Intelligence history']
-                    fig = px.bar(plot, x='Collection_Name', y='Number_of_Items', color='Collection_Name')
+                        df_collections_22 = df_collections_2.copy()
+                        collection_counts = df_collections_22.groupby(['Date year', 'Collection_Name']).size().unstack().fillna(0)
+                        collection_counts = collection_counts.reset_index()
+                        collection_counts.iloc[:, 1:] = collection_counts.iloc[:, 1:].cumsum()
+
+                        selected_collections = df_collections_21.head(number0 + 1)['Collection_Name'].tolist()
+                        collection_counts_filtered = collection_counts[['Date year'] + selected_collections]
+                        column_to_exclude = '01 Intelligence history'
+                        if column_to_exclude in selected_collections:
+                            selected_collections.remove(column_to_exclude)
+                        # Streamlit app
+                        st.markdown(f'#### Cumulative changes in collection over years')
+
+                        collection_counts_filtered = collection_counts[['Date year'] + selected_collections]
+                        collection_counts_filtered['Date year'] = pd.to_numeric(collection_counts_filtered['Date year'], errors='coerce')
+                        collection_counts_filtered = collection_counts_filtered.sort_values(by=['Date year'] + selected_collections, ascending=True)
+
+                        # Plotting the line graph using Plotly Express
+                        fig = px.line(collection_counts_filtered, x='Date year', y=selected_collections, 
+                                    markers=True, line_shape='linear', labels={'value': 'Cumulative Count'},
+                                    title='Cumulative changes in collection over years')
+
+                        # Display the plot in the Streamlit app
+                        st.plotly_chart(fig, use_container_width=True)
+
+                    collection_chart()
+                    # PUBLICATION TYPES
+                    df_types = pd.DataFrame(df_csv['Publication type'].value_counts())
+                    df_types = df_types.sort_values(['Publication type'], ascending=[False])
+                    df_types=df_types.reset_index()
+                    df_types = df_types.rename(columns={'index':'Publication type','Publication type':'Count'})
+                    # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
+                    df_types.columns = ['Publication type', 'Count']
+                    # TEMP SOLUTION ENDS
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        log0 = st.checkbox('Show in log scale', key='log0')
+
+                        if log0:
+                            fig = px.bar(df_types, x='Publication type', y='Count', color='Publication type', log_y=True)
+                            fig.update_layout(
+                                autosize=False,
+                                width=1200,
+                                height=600,)
+                            fig.update_xaxes(tickangle=-70)
+                            fig.update_layout(title={'text':'Item types in log scale', 'y':0.95, 'x':0.4, 'yanchor':'top'})
+                            col1.plotly_chart(fig, use_container_width = True)
+                        else:
+                            fig = px.bar(df_types, x='Publication type', y='Count', color='Publication type')
+                            fig.update_layout(
+                                autosize=False,
+                                width=1200,
+                                height=600,)
+                            fig.update_xaxes(tickangle=-70)
+                            fig.update_layout(title={'text':'Item types', 'y':0.95, 'x':0.4, 'yanchor':'top'})
+                            col1.plotly_chart(fig, use_container_width = True)
+                    with col2:
+                        fig = px.pie(df_types, values='Count', names='Publication type')
+                        fig.update_layout(title={'text':'Item types',  'yanchor':'top'})
+                        col2.plotly_chart(fig, use_container_width = True)
+                    
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        fig = px.bar(df_year, x='Publication year', y='Count')
+                        fig.update_xaxes(tickangle=-70)
+                        fig.update_layout(
+                            autosize=False,
+                            width=1200,
+                            height=600,)
+                        fig.update_layout(title={'text':'All items in the library by publication year', 'yanchor':'top'})
+                        col1.plotly_chart(fig, use_container_width = True)
+
+                    with col2:                
+                        @st.experimental_fragment
+                        def author_chart():
+                            df_authors = df_csv.copy()                 
+                            df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
+                            df_authors = df_authors.explode('Author_name')
+                            df_authors.reset_index(drop=True)
+                            max_authors = len(df_authors['Author_name'].unique())
+                            num_authors = st.slider('Select number of authors to display:', 5, min(30, max_authors), 20)
+                            df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
+                            df_authors = df_authors[df_authors['Author_name'] != 'nan']
+                            df_authors = df_authors['Author_name'].value_counts().head(num_authors)
+                            df_authors = df_authors.reset_index()
+                            df_authors = df_authors.rename(columns={'index':'Author','Author_name':'Number of Publications'})
+                            fig = px.bar(df_authors, x=df_authors['Author'], y=df_authors['Number of Publications'])
+                            fig.update_layout(
+                                title=f'Top {num_authors} Authors by Publication Count',
+                                xaxis_title='Author',
+                                yaxis_title='Number of Publications',
+                                xaxis_tickangle=-45,
+                            )
+                            st.plotly_chart(fig)
+                        author_chart()
+
+                        
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        @st.experimental_fragment
+                        def publisher_chart():
+                            number = st.slider('Select a number of publishers', 0, 30, 10)
+                            df_publisher = pd.DataFrame(df_csv['Publisher'].value_counts())
+                            df_publisher = df_publisher.sort_values(['Publisher'], ascending=[False])
+                            df_publisher = df_publisher.reset_index()
+                            df_publisher = df_publisher.rename(columns={'index':'Publisher','Publisher':'Count'})
+                            # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
+                            df_publisher.columns = ['Publisher', 'Count']
+                            # TEMP SOLUTION ENDS
+                            df_publisher = df_publisher.sort_values(['Count'], ascending=[False])
+                            df_publisher = df_publisher.head(number)
+
+                            log1 = st.checkbox('Show in log scale', key='log1')
+                            leg1 = st.checkbox('Disable legend', key='leg1', disabled=False)
+                            table_view_publisher = st.checkbox('Table view')
+
+                            if table_view_publisher:
+                                df_publisher
+                            else:
+                                if df_publisher['Publisher'].any() in ("", [], None, 0, False):
+                                    st.write('No publisher to display')
+                                else:
+                                    if log1:
+                                        if leg1:
+                                            fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=True)
+                                            fig.update_layout(
+                                                autosize=False,
+                                                width=1200,
+                                                height=700,
+                                                showlegend=False)
+                                            fig.update_xaxes(tickangle=-70)
+                                            fig.update_layout(title={'text':'Top ' + str(number) + ' publishers (in log scale)', 'yanchor':'top'})
+                                            st.plotly_chart(fig, use_container_width = True)
+                                        else:
+                                            fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=True)
+                                            fig.update_layout(
+                                                autosize=False,
+                                                width=1200,
+                                                height=700,
+                                                showlegend=True)
+                                            fig.update_xaxes(tickangle=-70)
+                                            fig.update_layout(title={'text':'Top ' + str(number) + ' publishers (in log scale)', 'yanchor':'top'})
+                                            st.plotly_chart(fig, use_container_width = True)
+                                    else:
+                                        if leg1:
+                                            fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=False)
+                                            fig.update_layout(
+                                                autosize=False,
+                                                width=1200,
+                                                height=700,
+                                                showlegend=False)
+                                            fig.update_xaxes(tickangle=-70)
+                                            fig.update_layout(title={'text':'Top ' + str(number) + ' publishers', 'yanchor':'top'})
+                                            st.plotly_chart(fig, use_container_width = True)
+                                        else:
+                                            fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=False)
+                                            fig.update_layout(
+                                                autosize=False,
+                                                width=1200,
+                                                height=700,
+                                                showlegend=True)
+                                            fig.update_xaxes(tickangle=-70)
+                                            fig.update_layout(title={'text':'Top ' + str(number) + ' publishers','yanchor':'top'})
+                                            st.plotly_chart(fig, use_container_width = True)
+                                # with st.expander('See publishers'):
+                                #     row_nu_collections = len(df_publisher.index)        
+                                #     for i in range(row_nu_collections):
+                                #         st.caption(df_publisher['Publisher'].iloc[i]
+                                #         )
+                        publisher_chart()
+
+                    with col2:
+                        @st.experimental_fragment
+                        def journal_chart():
+                            number2 = st.slider('Select a number of journals', 0,30,10)
+                            df_journal = df_csv.loc[df_csv['Publication type']=='Journal article']
+                            df_journal = pd.DataFrame(df_journal['Journal'].value_counts())
+                            df_journal = df_journal.sort_values(['Journal'], ascending=[False])
+                            df_journal = df_journal.reset_index()
+                            df_journal = df_journal.rename(columns={'index':'Journal','Journal':'Count'})
+                            # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
+                            df_journal.columns = ['Journal', 'Count']
+                            # TEMP SOLUTION ENDS
+                            df_journal = df_journal.sort_values(['Count'], ascending=[False])
+                            df_journal = df_journal.head(number2)
+
+                            log2 = st.checkbox('Show in log scale', key='log2')
+                            leg2 = st.checkbox('Disable legend', key='leg2')
+                            table_view_journal = st.checkbox('Table view', key='journal')
+
+                            if table_view_journal:
+                                df_journal
+                            else:
+                                if df_journal['Journal'].any() in ("", [], None, 0, False):
+                                    st.write('No journal to display')
+                                else:
+                                    if log2:
+                                        if leg2:
+                                            fig = px.bar(df_journal, x='Journal', y='Count', color='Journal', log_y=True)
+                                            fig.update_layout(
+                                                autosize=False,
+                                                width=1200,
+                                                height=700,
+                                                showlegend=False)
+                                            fig.update_xaxes(tickangle=-70)
+                                            fig.update_layout(title={'text':'Top ' + str(number2) + ' journals that publish intelligence articles (in log scale)','yanchor':'top'})
+                                            st.plotly_chart(fig, use_container_width = True)
+                                        else:
+                                            fig = px.bar(df_journal, x='Journal', y='Count', color='Journal', log_y=True)
+                                            fig.update_layout(
+                                                autosize=False,
+                                                width=1200,
+                                                height=700,
+                                                showlegend=True)
+                                            fig.update_xaxes(tickangle=-70)
+                                            fig.update_layout(title={'text':'Top ' + str(number2) + ' journals that publish intelligence articles (in log scale)', 'yanchor':'top'})
+                                            st.plotly_chart(fig, use_container_width = True)
+                                    else:
+                                        if leg2:
+                                            fig = px.bar(df_journal, x='Journal', y='Count', color='Journal', log_y=False)
+                                            fig.update_layout(
+                                                autosize=False,
+                                                width=1200,
+                                                height=700,
+                                                showlegend=False)
+                                            fig.update_xaxes(tickangle=-70)
+                                            fig.update_layout(title={'text':'Top ' + str(number2) + ' journals that publish intelligence articles', 'yanchor':'top'})
+                                            st.plotly_chart(fig, use_container_width = True)
+                                        else:
+                                            fig = px.bar(df_journal, x='Journal', y='Count', color='Journal', log_y=False)
+                                            fig.update_layout(
+                                                autosize=False,
+                                                width=1200,
+                                                height=700,
+                                                showlegend=True)
+                                            fig.update_xaxes(tickangle=-70)
+                                            fig.update_layout(title={'text':'Top ' + str(number2) + ' journals that publish intelligence articles', 'yanchor':'top'})
+                                            st.plotly_chart(fig, use_container_width = True)
+                                # with st.expander('See journals'):
+                                #     row_nu_collections = len(df_journal.index)        
+                                #     for i in range(row_nu_collections):
+                                #         st.caption(df_journal['Journal'].iloc[i]
+                                #         )
+                        journal_chart()
+                    # col1, col2 = st.columns(2)
+                    # with col1:
+                    df_dedup['Date published2'] = (
+                        df_dedup['Date published']
+                        .str.strip()
+                        .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                    )
+                    df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
+                    df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
+                    df_dedup_v2 = df_dedup.dropna(subset='OA status')
+                    df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
+
+                    filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) & (df['OA status'] == True)]
+                    # Group by 'Date year' and count the number of rows in each group
+                    df_cited_oa_papers = filtered_df.groupby(df_dedup_v2['Date year'])['OA status'].count()
+                    df_cited_oa_papers=df_cited_oa_papers.reset_index()
+                    df_cited_oa_papers.columns = ['Date year', 'Cited OA papers']
+
+                    filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
+                    # Group by 'Date year' and count the number of rows in each group
+                    df_cited_papers = filtered_df2.groupby(df_dedup_v2['Date year'])['OA status'].count()
+                    df_cited_papers=df_cited_papers.reset_index()
+                    df_cited_papers.columns = ['Date year', 'Cited papers']
+                    df_cited_papers = pd.merge(df_cited_papers, df_cited_oa_papers, on='Date year', how='left')
+                    df_cited_papers['Cited OA papers'] = df_cited_papers['Cited OA papers'].fillna(0)
+                    df_cited_papers['Cited non-OA papers'] = df_cited_papers['Cited papers']-df_cited_papers['Cited OA papers']
+                    df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
+                    df_cited_papers['%Cited non-OA papers'] = round(df_cited_papers['Cited non-OA papers']/df_cited_papers['Cited papers'], 3)*100
+
+                    grouped = df_dedup_v2.groupby('Date year')
+                    total_publications = grouped.size().reset_index(name='Total Publications')
+                    open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='#OA Publications')
+                    df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
+                    df_oa_overtime['#Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['#OA Publications']
+                    df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['#OA Publications']/df_oa_overtime['Total Publications'], 3)*100
+                    df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
+                    df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
+
+                    @st.experimental_fragment
+                    def fragment2():
+                        max_year = df_oa_overtime["Date year"].max()
+                        last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
+                        citation_ratio = st.checkbox('Add citation ratio')
+                        
+                        # Always start with the bar chart
+                        fig = px.bar(
+                            last_20_years, 
+                            x="Date year", 
+                            y=["OA publication ratio", "Non-OA publication ratio"],
+                            labels={"Date year": "Publication Year", "value": "OA status (%)", "variable": "Type"},
+                            title="Open Access Publications Ratio Over the Last 20 Years",
+                            color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
+                            barmode="stack", 
+                            hover_data=["#OA Publications", '#Non-OA Publications']
+                        )
+                        
+                        # Add scatter plots if checkbox is checked
+                        if citation_ratio:
+                            fig.add_scatter(
+                                x=last_20_years["Date year"], 
+                                y=last_20_years["%Cited OA papers"], 
+                                mode='lines+markers', 
+                                name='%Cited OA papers', 
+                                line=dict(color='blue')
+                            )
+                            fig.add_scatter(
+                                x=last_20_years["Date year"], 
+                                y=last_20_years["%Cited non-OA papers"], 
+                                mode='lines+markers', 
+                                name='%Cited non-OA papers', 
+                                line=dict(color='red')
+                            )
+                        
+                        # Always plot the figure
+                        st.plotly_chart(fig, use_container_width=True)
+
+                    fragment2()
+                    
+
+                    # with col2:
+                    df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
+                    grouped = df_dedup_v2.groupby('Date year')
+                    total_publications = grouped.size().reset_index(name='Total Publications')
+                    cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited Publications')
+                    df_cited_overtime = pd.merge(total_publications, cited_publications, on='Date year')
+                    df_cited_overtime = pd.merge(df_cited_overtime, df_cited_papers, on='Date year')
+                    df_cited_overtime['Non-cited Publications'] = df_cited_overtime['Total Publications']-df_cited_overtime['Cited Publications']
+                    df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['Cited Publications']/df_cited_overtime['Total Publications'], 3)*100
+                    df_cited_overtime['%Non-Cited Publications'] = round(df_cited_overtime['Non-cited Publications']/df_cited_overtime['Total Publications'], 3)*100
+
+                    max_year = df_cited_overtime["Date year"].max()
+                    last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
+                    fig = go.Figure()
+
+                    # Add bars for %Cited Publications and %Non-Cited Publications
+                    fig.add_trace(go.Bar(
+                        x=last_20_years["Date year"],
+                        y=last_20_years["%Cited Publications"],
+                        name="%Cited Publications",
+                        marker_color="#17becf"
+                    ))
+
+                    fig.add_trace(go.Bar(
+                        x=last_20_years["Date year"],
+                        y=last_20_years["%Non-Cited Publications"],
+                        name="%Non-Cited Publications",
+                        marker_color="#D3D3D3"
+                    ))
+
+                    # Add line for total citations
+                    fig.add_trace(go.Scatter(
+                        x=last_20_years["Date year"],
+                        y=last_20_years["Citation"],
+                        name="#Citations",
+                        mode="lines+markers",
+                        marker=dict(color="green"),
+                        yaxis="y2" 
+                    ))
+
+                    # Update layout for secondary y-axis
                     fig.update_layout(
-                        autosize=False,
-                        width=600,
-                        height=600,)
-                    fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
-                    st.plotly_chart(fig, use_container_width = True)
-
-                    df_collections_22 = df_collections_2.copy()
-                    collection_counts = df_collections_22.groupby(['Date year', 'Collection_Name']).size().unstack().fillna(0)
-                    collection_counts = collection_counts.reset_index()
-                    collection_counts.iloc[:, 1:] = collection_counts.iloc[:, 1:].cumsum()
-
-                    selected_collections = df_collections_21.head(number0 + 1)['Collection_Name'].tolist()
-                    collection_counts_filtered = collection_counts[['Date year'] + selected_collections]
-                    column_to_exclude = '01 Intelligence history'
-                    if column_to_exclude in selected_collections:
-                        selected_collections.remove(column_to_exclude)
-                    # Streamlit app
-                    st.markdown(f'#### Cumulative changes in collection over years')
-
-                    collection_counts_filtered = collection_counts[['Date year'] + selected_collections]
-                    collection_counts_filtered['Date year'] = pd.to_numeric(collection_counts_filtered['Date year'], errors='coerce')
-                    collection_counts_filtered = collection_counts_filtered.sort_values(by=['Date year'] + selected_collections, ascending=True)
-
-                    # Plotting the line graph using Plotly Express
-                    fig = px.line(collection_counts_filtered, x='Date year', y=selected_collections, 
-                                markers=True, line_shape='linear', labels={'value': 'Cumulative Count'},
-                                title='Cumulative changes in collection over years')
-
-                    # Display the plot in the Streamlit app
+                        title="Cited papers ratio and # Citations",
+                        xaxis=dict(title="Publication Year"),
+                        yaxis=dict(
+                            title="%Cited Publications",
+                            titlefont=dict(color="#17becf"),
+                            tickfont=dict(color="#17becf")
+                        ),
+                        yaxis2=dict(
+                            title="#Citations",
+                            titlefont=dict(color="green"),
+                            tickfont=dict(color="green"),
+                            overlaying="y",
+                            side="right"
+                        ),
+                        barmode="stack",
+                        legend=dict(
+                            x=1,         # Position the legend at the right side
+                            xanchor='left', # Ensure the legend box starts at x=1
+                            y=0.2,       # Position the legend at the center of the y-axis
+                            yanchor='middle'  # Ensure the legend box is centered vertically
+                        ),
+                        hovermode="x unified"
+                    )
                     st.plotly_chart(fig, use_container_width=True)
 
-                collection_chart()
-                # PUBLICATION TYPES
-                df_types = pd.DataFrame(df_csv['Publication type'].value_counts())
-                df_types = df_types.sort_values(['Publication type'], ascending=[False])
-                df_types=df_types.reset_index()
-                df_types = df_types.rename(columns={'index':'Publication type','Publication type':'Count'})
-                # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
-                df_types.columns = ['Publication type', 'Count']
-                # TEMP SOLUTION ENDS
-                col1, col2 = st.columns(2)
-                with col1:
-                    log0 = st.checkbox('Show in log scale', key='log0')
-
-                    if log0:
-                        fig = px.bar(df_types, x='Publication type', y='Count', color='Publication type', log_y=True)
-                        fig.update_layout(
-                            autosize=False,
-                            width=1200,
-                            height=600,)
-                        fig.update_xaxes(tickangle=-70)
-                        fig.update_layout(title={'text':'Item types in log scale', 'y':0.95, 'x':0.4, 'yanchor':'top'})
-                        col1.plotly_chart(fig, use_container_width = True)
-                    else:
-                        fig = px.bar(df_types, x='Publication type', y='Count', color='Publication type')
-                        fig.update_layout(
-                            autosize=False,
-                            width=1200,
-                            height=600,)
-                        fig.update_xaxes(tickangle=-70)
-                        fig.update_layout(title={'text':'Item types', 'y':0.95, 'x':0.4, 'yanchor':'top'})
-                        col1.plotly_chart(fig, use_container_width = True)
-                with col2:
-                    fig = px.pie(df_types, values='Count', names='Publication type')
-                    fig.update_layout(title={'text':'Item types',  'yanchor':'top'})
-                    col2.plotly_chart(fig, use_container_width = True)
-                
-                col1, col2 = st.columns(2)
-                with col1:
-                    fig = px.bar(df_year, x='Publication year', y='Count')
-                    fig.update_xaxes(tickangle=-70)
-                    fig.update_layout(
-                        autosize=False,
-                        width=1200,
-                        height=600,)
-                    fig.update_layout(title={'text':'All items in the library by publication year', 'yanchor':'top'})
-                    col1.plotly_chart(fig, use_container_width = True)
-
-                with col2:                
-                    @st.experimental_fragment
-                    def author_chart():
-                        df_authors = df_csv.copy()                 
-                        df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
-                        df_authors = df_authors.explode('Author_name')
-                        df_authors.reset_index(drop=True)
-                        max_authors = len(df_authors['Author_name'].unique())
-                        num_authors = st.slider('Select number of authors to display:', 5, min(30, max_authors), 20)
-                        df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
-                        df_authors = df_authors[df_authors['Author_name'] != 'nan']
-                        df_authors = df_authors['Author_name'].value_counts().head(num_authors)
-                        df_authors = df_authors.reset_index()
-                        df_authors = df_authors.rename(columns={'index':'Author','Author_name':'Number of Publications'})
-                        fig = px.bar(df_authors, x=df_authors['Author'], y=df_authors['Number of Publications'])
-                        fig.update_layout(
-                            title=f'Top {num_authors} Authors by Publication Count',
-                            xaxis_title='Author',
-                            yaxis_title='Number of Publications',
-                            xaxis_tickangle=-45,
-                        )
-                        st.plotly_chart(fig)
-                    author_chart()
-
-                    
-                col1, col2 = st.columns(2)
-                with col1:
-                    @st.experimental_fragment
-                    def publisher_chart():
-                        number = st.slider('Select a number of publishers', 0, 30, 10)
-                        df_publisher = pd.DataFrame(df_csv['Publisher'].value_counts())
-                        df_publisher = df_publisher.sort_values(['Publisher'], ascending=[False])
-                        df_publisher = df_publisher.reset_index()
-                        df_publisher = df_publisher.rename(columns={'index':'Publisher','Publisher':'Count'})
-                        # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
-                        df_publisher.columns = ['Publisher', 'Count']
-                        # TEMP SOLUTION ENDS
-                        df_publisher = df_publisher.sort_values(['Count'], ascending=[False])
-                        df_publisher = df_publisher.head(number)
-
-                        log1 = st.checkbox('Show in log scale', key='log1')
-                        leg1 = st.checkbox('Disable legend', key='leg1', disabled=False)
-                        table_view_publisher = st.checkbox('Table view')
-
-                        if table_view_publisher:
-                            df_publisher
-                        else:
-                            if df_publisher['Publisher'].any() in ("", [], None, 0, False):
-                                st.write('No publisher to display')
-                            else:
-                                if log1:
-                                    if leg1:
-                                        fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=True)
-                                        fig.update_layout(
-                                            autosize=False,
-                                            width=1200,
-                                            height=700,
-                                            showlegend=False)
-                                        fig.update_xaxes(tickangle=-70)
-                                        fig.update_layout(title={'text':'Top ' + str(number) + ' publishers (in log scale)', 'yanchor':'top'})
-                                        st.plotly_chart(fig, use_container_width = True)
-                                    else:
-                                        fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=True)
-                                        fig.update_layout(
-                                            autosize=False,
-                                            width=1200,
-                                            height=700,
-                                            showlegend=True)
-                                        fig.update_xaxes(tickangle=-70)
-                                        fig.update_layout(title={'text':'Top ' + str(number) + ' publishers (in log scale)', 'yanchor':'top'})
-                                        st.plotly_chart(fig, use_container_width = True)
-                                else:
-                                    if leg1:
-                                        fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=False)
-                                        fig.update_layout(
-                                            autosize=False,
-                                            width=1200,
-                                            height=700,
-                                            showlegend=False)
-                                        fig.update_xaxes(tickangle=-70)
-                                        fig.update_layout(title={'text':'Top ' + str(number) + ' publishers', 'yanchor':'top'})
-                                        st.plotly_chart(fig, use_container_width = True)
-                                    else:
-                                        fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=False)
-                                        fig.update_layout(
-                                            autosize=False,
-                                            width=1200,
-                                            height=700,
-                                            showlegend=True)
-                                        fig.update_xaxes(tickangle=-70)
-                                        fig.update_layout(title={'text':'Top ' + str(number) + ' publishers','yanchor':'top'})
-                                        st.plotly_chart(fig, use_container_width = True)
-                            # with st.expander('See publishers'):
-                            #     row_nu_collections = len(df_publisher.index)        
-                            #     for i in range(row_nu_collections):
-                            #         st.caption(df_publisher['Publisher'].iloc[i]
-                            #         )
-                    publisher_chart()
-
-                with col2:
-                    @st.experimental_fragment
-                    def journal_chart():
-                        number2 = st.slider('Select a number of journals', 0,30,10)
-                        df_journal = df_csv.loc[df_csv['Publication type']=='Journal article']
-                        df_journal = pd.DataFrame(df_journal['Journal'].value_counts())
-                        df_journal = df_journal.sort_values(['Journal'], ascending=[False])
-                        df_journal = df_journal.reset_index()
-                        df_journal = df_journal.rename(columns={'index':'Journal','Journal':'Count'})
-                        # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
-                        df_journal.columns = ['Journal', 'Count']
-                        # TEMP SOLUTION ENDS
-                        df_journal = df_journal.sort_values(['Count'], ascending=[False])
-                        df_journal = df_journal.head(number2)
-
-                        log2 = st.checkbox('Show in log scale', key='log2')
-                        leg2 = st.checkbox('Disable legend', key='leg2')
-                        table_view_journal = st.checkbox('Table view', key='journal')
-
-                        if table_view_journal:
-                            df_journal
-                        else:
-                            if df_journal['Journal'].any() in ("", [], None, 0, False):
-                                st.write('No journal to display')
-                            else:
-                                if log2:
-                                    if leg2:
-                                        fig = px.bar(df_journal, x='Journal', y='Count', color='Journal', log_y=True)
-                                        fig.update_layout(
-                                            autosize=False,
-                                            width=1200,
-                                            height=700,
-                                            showlegend=False)
-                                        fig.update_xaxes(tickangle=-70)
-                                        fig.update_layout(title={'text':'Top ' + str(number2) + ' journals that publish intelligence articles (in log scale)','yanchor':'top'})
-                                        st.plotly_chart(fig, use_container_width = True)
-                                    else:
-                                        fig = px.bar(df_journal, x='Journal', y='Count', color='Journal', log_y=True)
-                                        fig.update_layout(
-                                            autosize=False,
-                                            width=1200,
-                                            height=700,
-                                            showlegend=True)
-                                        fig.update_xaxes(tickangle=-70)
-                                        fig.update_layout(title={'text':'Top ' + str(number2) + ' journals that publish intelligence articles (in log scale)', 'yanchor':'top'})
-                                        st.plotly_chart(fig, use_container_width = True)
-                                else:
-                                    if leg2:
-                                        fig = px.bar(df_journal, x='Journal', y='Count', color='Journal', log_y=False)
-                                        fig.update_layout(
-                                            autosize=False,
-                                            width=1200,
-                                            height=700,
-                                            showlegend=False)
-                                        fig.update_xaxes(tickangle=-70)
-                                        fig.update_layout(title={'text':'Top ' + str(number2) + ' journals that publish intelligence articles', 'yanchor':'top'})
-                                        st.plotly_chart(fig, use_container_width = True)
-                                    else:
-                                        fig = px.bar(df_journal, x='Journal', y='Count', color='Journal', log_y=False)
-                                        fig.update_layout(
-                                            autosize=False,
-                                            width=1200,
-                                            height=700,
-                                            showlegend=True)
-                                        fig.update_xaxes(tickangle=-70)
-                                        fig.update_layout(title={'text':'Top ' + str(number2) + ' journals that publish intelligence articles', 'yanchor':'top'})
-                                        st.plotly_chart(fig, use_container_width = True)
-                            # with st.expander('See journals'):
-                            #     row_nu_collections = len(df_journal.index)        
-                            #     for i in range(row_nu_collections):
-                            #         st.caption(df_journal['Journal'].iloc[i]
-                            #         )
-                    journal_chart()
-                # col1, col2 = st.columns(2)
-                # with col1:
-                df_dedup['Date published2'] = (
-                    df_dedup['Date published']
-                    .str.strip()
-                    .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                )
-                df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
-                df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
-                df_dedup_v2 = df_dedup.dropna(subset='OA status')
-                df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
-
-                filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) & (df['OA status'] == True)]
-                # Group by 'Date year' and count the number of rows in each group
-                df_cited_oa_papers = filtered_df.groupby(df_dedup_v2['Date year'])['OA status'].count()
-                df_cited_oa_papers=df_cited_oa_papers.reset_index()
-                df_cited_oa_papers.columns = ['Date year', 'Cited OA papers']
-
-                filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
-                # Group by 'Date year' and count the number of rows in each group
-                df_cited_papers = filtered_df2.groupby(df_dedup_v2['Date year'])['OA status'].count()
-                df_cited_papers=df_cited_papers.reset_index()
-                df_cited_papers.columns = ['Date year', 'Cited papers']
-                df_cited_papers = pd.merge(df_cited_papers, df_cited_oa_papers, on='Date year', how='left')
-                df_cited_papers['Cited OA papers'] = df_cited_papers['Cited OA papers'].fillna(0)
-                df_cited_papers['Cited non-OA papers'] = df_cited_papers['Cited papers']-df_cited_papers['Cited OA papers']
-                df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
-                df_cited_papers['%Cited non-OA papers'] = round(df_cited_papers['Cited non-OA papers']/df_cited_papers['Cited papers'], 3)*100
-
-                grouped = df_dedup_v2.groupby('Date year')
-                total_publications = grouped.size().reset_index(name='Total Publications')
-                open_access_publications = grouped['OA status'].apply(lambda x: (x == True).sum()).reset_index(name='#OA Publications')
-                df_oa_overtime = pd.merge(total_publications, open_access_publications, on='Date year')
-                df_oa_overtime['#Non-OA Publications'] = df_oa_overtime['Total Publications']-df_oa_overtime['#OA Publications']
-                df_oa_overtime['OA publication ratio'] = round(df_oa_overtime['#OA Publications']/df_oa_overtime['Total Publications'], 3)*100
-                df_oa_overtime['Non-OA publication ratio'] = 100-df_oa_overtime['OA publication ratio']
-                df_oa_overtime = pd.merge(df_oa_overtime, df_cited_papers, on='Date year')
-
-                @st.experimental_fragment
-                def fragment2():
-                    max_year = df_oa_overtime["Date year"].max()
-                    last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
-                    citation_ratio = st.checkbox('Add citation ratio')
-                    
-                    # Always start with the bar chart
-                    fig = px.bar(
+                    df_oa_papers_citation_count = filtered_df.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
+                    df_oa_papers_citation_count.columns = ['Date year', '#Citations (OA papers)']
+                    df_citation_count = filtered_df2.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
+                    df_citation_count.columns = ['Date year', '#Citations (all)']
+                    df_citation_count = pd.merge(df_citation_count, df_oa_papers_citation_count, on='Date year', how='left')
+                    df_citation_count['#Citations (OA papers)'] = df_citation_count['#Citations (OA papers)'].fillna(0)
+                    df_citation_count['#Citations (non-OA papers)'] = df_citation_count['#Citations (all)'] - df_citation_count['#Citations (OA papers)']
+                    df_citation_count['%Citation count (OA papers)'] = round(df_citation_count['#Citations (OA papers)']/df_citation_count['#Citations (all)'], 3)*100
+                    df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
+                    max_year = df_citation_count["Date year"].max()
+                    last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
+                    fig_bar = px.bar(
                         last_20_years, 
                         x="Date year", 
-                        y=["OA publication ratio", "Non-OA publication ratio"],
-                        labels={"Date year": "Publication Year", "value": "OA status (%)", "variable": "Type"},
-                        title="Open Access Publications Ratio Over the Last 20 Years",
-                        color_discrete_map={"OA publication ratio": "green", "Non-OA publication ratio": "#D3D3D3"},
+                        y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
+                        labels={
+                            "Date year": "Publication Year", 
+                            "value": "%Citation count (OA/non-OA papers)", 
+                            "variable": "Type"
+                        },
+                        title="OA vs non-OA Papers Citation Count Ratio Over the Last 20 Years",
+                        color_discrete_map={
+                            "%Citation count (OA papers)": "goldenrod", 
+                            "%Citation count (non-OA papers)": "#D3D3D3"
+                        },
                         barmode="stack", 
-                        hover_data=["#OA Publications", '#Non-OA Publications']
+                        hover_data=["#Citations (OA papers)", '#Citations (non-OA papers)']
                     )
-                    
-                    # Add scatter plots if checkbox is checked
-                    if citation_ratio:
-                        fig.add_scatter(
-                            x=last_20_years["Date year"], 
-                            y=last_20_years["%Cited OA papers"], 
-                            mode='lines+markers', 
-                            name='%Cited OA papers', 
-                            line=dict(color='blue')
+
+                    @st.experimental_fragment
+                    def fragment():
+                        fig_line = go.Figure()
+                        fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
+                                                    mode='lines+markers', name='#Citations (OA papers)', line=dict(color='goldenrod')))
+                        fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (non-OA papers)"], 
+                                                    mode='lines+markers', name='#Citations (non-OA papers)', line=dict(color='#D3D3D3')))
+                        fig_line.update_layout(
+                            title="Citation Counts for OA and non-OA Papers Over the Last 20 Years",
+                            xaxis_title="Publication Year",
+                            yaxis_title="Citation Count",
                         )
-                        fig.add_scatter(
-                            x=last_20_years["Date year"], 
-                            y=last_20_years["%Cited non-OA papers"], 
-                            mode='lines+markers', 
-                            name='%Cited non-OA papers', 
-                            line=dict(color='red')
-                        )
-                    
-                    # Always plot the figure
-                    st.plotly_chart(fig, use_container_width=True)
-
-                fragment2()
-                
-
-                # with col2:
-                df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
-                grouped = df_dedup_v2.groupby('Date year')
-                total_publications = grouped.size().reset_index(name='Total Publications')
-                cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited Publications')
-                df_cited_overtime = pd.merge(total_publications, cited_publications, on='Date year')
-                df_cited_overtime = pd.merge(df_cited_overtime, df_cited_papers, on='Date year')
-                df_cited_overtime['Non-cited Publications'] = df_cited_overtime['Total Publications']-df_cited_overtime['Cited Publications']
-                df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['Cited Publications']/df_cited_overtime['Total Publications'], 3)*100
-                df_cited_overtime['%Non-Cited Publications'] = round(df_cited_overtime['Non-cited Publications']/df_cited_overtime['Total Publications'], 3)*100
-
-                max_year = df_cited_overtime["Date year"].max()
-                last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
-                fig = go.Figure()
-
-                # Add bars for %Cited Publications and %Non-Cited Publications
-                fig.add_trace(go.Bar(
-                    x=last_20_years["Date year"],
-                    y=last_20_years["%Cited Publications"],
-                    name="%Cited Publications",
-                    marker_color="#17becf"
-                ))
-
-                fig.add_trace(go.Bar(
-                    x=last_20_years["Date year"],
-                    y=last_20_years["%Non-Cited Publications"],
-                    name="%Non-Cited Publications",
-                    marker_color="#D3D3D3"
-                ))
-
-                # Add line for total citations
-                fig.add_trace(go.Scatter(
-                    x=last_20_years["Date year"],
-                    y=last_20_years["Citation"],
-                    name="#Citations",
-                    mode="lines+markers",
-                    marker=dict(color="green"),
-                    yaxis="y2" 
-                ))
-
-                # Update layout for secondary y-axis
-                fig.update_layout(
-                    title="Cited papers ratio and # Citations",
-                    xaxis=dict(title="Publication Year"),
-                    yaxis=dict(
-                        title="%Cited Publications",
-                        titlefont=dict(color="#17becf"),
-                        tickfont=dict(color="#17becf")
-                    ),
-                    yaxis2=dict(
-                        title="#Citations",
-                        titlefont=dict(color="green"),
-                        tickfont=dict(color="green"),
-                        overlaying="y",
-                        side="right"
-                    ),
-                    barmode="stack",
-                    legend=dict(
-                        x=1,         # Position the legend at the right side
-                        xanchor='left', # Ensure the legend box starts at x=1
-                        y=0.2,       # Position the legend at the center of the y-axis
-                        yanchor='middle'  # Ensure the legend box is centered vertically
-                    ),
-                    hovermode="x unified"
-                )
-                st.plotly_chart(fig, use_container_width=True)
-
-                df_oa_papers_citation_count = filtered_df.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
-                df_oa_papers_citation_count.columns = ['Date year', '#Citations (OA papers)']
-                df_citation_count = filtered_df2.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
-                df_citation_count.columns = ['Date year', '#Citations (all)']
-                df_citation_count = pd.merge(df_citation_count, df_oa_papers_citation_count, on='Date year', how='left')
-                df_citation_count['#Citations (OA papers)'] = df_citation_count['#Citations (OA papers)'].fillna(0)
-                df_citation_count['#Citations (non-OA papers)'] = df_citation_count['#Citations (all)'] - df_citation_count['#Citations (OA papers)']
-                df_citation_count['%Citation count (OA papers)'] = round(df_citation_count['#Citations (OA papers)']/df_citation_count['#Citations (all)'], 3)*100
-                df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
-                max_year = df_citation_count["Date year"].max()
-                last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
-                fig_bar = px.bar(
-                    last_20_years, 
-                    x="Date year", 
-                    y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
-                    labels={
-                        "Date year": "Publication Year", 
-                        "value": "%Citation count (OA/non-OA papers)", 
-                        "variable": "Type"
-                    },
-                    title="OA vs non-OA Papers Citation Count Ratio Over the Last 20 Years",
-                    color_discrete_map={
-                        "%Citation count (OA papers)": "goldenrod", 
-                        "%Citation count (non-OA papers)": "#D3D3D3"
-                    },
-                    barmode="stack", 
-                    hover_data=["#Citations (OA papers)", '#Citations (non-OA papers)']
-                )
-
-                @st.experimental_fragment
-                def fragment():
-                    fig_line = go.Figure()
-                    fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
-                                                mode='lines+markers', name='#Citations (OA papers)', line=dict(color='goldenrod')))
-                    fig_line.add_trace(go.Scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (non-OA papers)"], 
-                                                mode='lines+markers', name='#Citations (non-OA papers)', line=dict(color='#D3D3D3')))
-                    fig_line.update_layout(
-                        title="Citation Counts for OA and non-OA Papers Over the Last 20 Years",
-                        xaxis_title="Publication Year",
-                        yaxis_title="Citation Count",
-                    )
-                    line_show = st.toggle("See citation count")
-                    if line_show:
-                        st.plotly_chart(fig_line, use_container_width=True)
-                    else:
-                        st.plotly_chart(fig_bar, use_container_width=True)
-                fragment()
+                        line_show = st.toggle("See citation count")
+                        if line_show:
+                            st.plotly_chart(fig_line, use_container_width=True)
+                        else:
+                            st.plotly_chart(fig_bar, use_container_width=True)
+                    fragment()
+            filters_fragment()
 
                 col1, col2 = st.columns([7,2])
                 with col1:
