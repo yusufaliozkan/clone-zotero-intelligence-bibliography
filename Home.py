@@ -2483,7 +2483,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         filter_collection = (df_collections_2['Date year'].astype(int)>=years[0]) & (df_collections_2['Date year'].astype(int)<years[1])
                         df_collections_2 = df_collections_2.loc[filter_collection]
 
-
                 if df_csv['Title'].any() in ("", [], None, 0, False):
                     st.warning('No data to visualise. Select a correct parameter.')
 
@@ -2945,7 +2944,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         else:
                             st.plotly_chart(fig_bar, use_container_width=True)
                     fragment()
-            filters_fragment()
+                filters_fragment()
 
                 col1, col2 = st.columns([7,2])
                 with col1:
