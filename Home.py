@@ -2625,6 +2625,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 )
                                 st.plotly_chart(fig)
                             else:
+                                df_authors = df_authors.rename(column={'index':'Author name', 'Author_name':'Publication count'})
                                 df_authors
                     with col2:
                             selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
@@ -2648,6 +2649,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 )
                                 st.plotly_chart(fig)
                             else:
+                                df_authors = df_authors.rename(column={'index':'Author name', 'Author_name':'Publication count'})
                                 df_authors
                 author_chart()
 
