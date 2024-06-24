@@ -2861,7 +2861,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
                 max_year = df_citation_count["Date year"].max()
                 last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
-                fig = px.bar(last_20_years, x="Date year", y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
+                fig = px.line(last_20_years, x="Date year", y=["%Citation count (OA papers)", "%Citation count (non-OA papers)"],
                             labels={"Date year": "Publication Year", "value": "%Citation count (Oa/non-OA papers)", "variable": "Type"},
                             title="OA vs non-OA Papers Citation Count Ratio Over the Last 20 Years",
                             color_discrete_map={"%Citation count (OA papers)": "green", "%Citation count (non-OA papers)": "#D3D3D3"},
