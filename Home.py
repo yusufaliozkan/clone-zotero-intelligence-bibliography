@@ -2591,7 +2591,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
                         df_authors
                         df_authors = df_authors[df_authors['Author_name'] != 'nan']
-                        df_authors = df_authors['Author_name'].value_counts().head(num_authors)
+                        # df_authors = df_authors['Author_name'].value_counts().head(num_authors)
                         df_authors = df_authors.reset_index()
                         df_authors = df_authors.rename(columns={'index':'Author','Author_name':'Number of Publications'})
                         df_authors
