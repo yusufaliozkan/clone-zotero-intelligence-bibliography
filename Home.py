@@ -2861,6 +2861,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_citation_count['%Citation count (non-OA papers)'] = round(df_citation_count['#Citations (non-OA papers)']/df_citation_count['#Citations (all)'], 3)*100
                 max_year = df_citation_count["Date year"].max()
                 last_20_years = df_citation_count[df_citation_count["Date year"] >= (max_year - 20)]
+                last_20_years
                 # Create the line graph
                 fig = px.line(
                     last_20_years,
