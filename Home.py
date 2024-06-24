@@ -2482,15 +2482,15 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         df_collections_2 = df_collections_2[df_collections_2['Date year'] !='No date']
                         filter_collection = (df_collections_2['Date year'].astype(int)>=years[0]) & (df_collections_2['Date year'].astype(int)<years[1])
                         df_collections_2 = df_collections_2.loc[filter_collection]
-                        st.markdown(f'#### Intelligence studies bibliography dashboard (publications between {years[0]} and {years[1]})')
                 filter_fragment()
+
             if df_csv['Title'].any() in ("", [], None, 0, False):
                 st.warning('No data to visualise. Select a correct parameter.')
 
             else:                
                 ## COLLECTIONS IN THE LIBRARY
                 
-                
+                # st.markdown(f'#### Intelligence studies bibliography dashboard (publications between {years[0]} and {years[1]})')
 
                 @st.experimental_fragment
                 def collection_chart():
