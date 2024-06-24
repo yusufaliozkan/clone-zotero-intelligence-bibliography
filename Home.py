@@ -2633,12 +2633,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                             df_authors = df_authors.explode('Author_name')
                             df_authors.reset_index(drop=True)
+                            df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
+                            df_authors = df_authors[df_authors['Author_name'] != 'nan']
+                            df_authors = df_authors['Author_name'].value_counts().head(num_authors)
+                            df_authors = df_authors.reset_index()
                             if not table_view: 
-
-                                df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
-                                df_authors = df_authors[df_authors['Author_name'] != 'nan']
-                                df_authors = df_authors['Author_name'].value_counts().head(num_authors)
-                                df_authors = df_authors.reset_index()
                                 df_authors = df_authors.rename(columns={'index':'Author','Author_name':'Number of Publications'})
                                 fig = px.bar(df_authors, x=df_authors['Author'], y=df_authors['Number of Publications'])
                                 fig.update_layout(
