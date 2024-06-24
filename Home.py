@@ -2655,7 +2655,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 df_authors
                 author_chart()
 
-                    
+                st.divider()
+                st.subheader('Publishers and Journals', anchor=False)                  
                 col1, col2 = st.columns(2)
                 with col1:
                     @st.experimental_fragment
