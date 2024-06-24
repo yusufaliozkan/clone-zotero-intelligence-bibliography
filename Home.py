@@ -2649,6 +2649,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 )
                                 st.plotly_chart(fig)
                             else:
+                                st.markdown(f'#### Top {num_authors} Authors by Publication Count (academic publications - {selected_type})')
                                 df_authors.columns = ['Author name', 'Publication count']
                                 df_authors
                 author_chart()
