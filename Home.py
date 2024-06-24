@@ -2489,31 +2489,33 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 
                 st.markdown(f'#### Intelligence studies bibliography dashboard (publications between {years[0]} and {years[1]})')
 
-                df_collections_21 = df_collections_2.copy()
-                df_collections_21 = df_collections_21['Collection_Name'].value_counts().reset_index()
-                df_collections_21.columns = ['Collection_Name', 'Number_of_Items']
-                number0 = st.slider('Select a number collections', 3,30,15, key='slider01')
-                plot= df_collections_21.head(number0+1)
-                plot = plot[plot['Collection_Name']!='01 Intelligence history']
-                fig = px.bar(plot, x='Collection_Name', y='Number_of_Items', color='Collection_Name')
-                fig.update_layout(
-                    autosize=False,
-                    width=600,
-                    height=600,)
-                fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
-                st.plotly_chart(fig, use_container_width = True)
+                @st.experimental_fragment
+                def collection_chart():
+                    df_collections_21 = df_collections_2.copy()
+                    df_collections_21 = df_collections_21['Collection_Name'].value_counts().reset_index()
+                    df_collections_21.columns = ['Collection_Name', 'Number_of_Items']
+                    number0 = st.slider('Select a number collections', 3,30,15, key='slider01')
+                    plot= df_collections_21.head(number0+1)
+                    plot = plot[plot['Collection_Name']!='01 Intelligence history']
+                    fig = px.bar(plot, x='Collection_Name', y='Number_of_Items', color='Collection_Name')
+                    fig.update_layout(
+                        autosize=False,
+                        width=600,
+                        height=600,)
+                    fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
+                    st.plotly_chart(fig, use_container_width = True)
 
-                df_collections_22 = df_collections_2.copy()
-                collection_counts = df_collections_22.groupby(['Date year', 'Collection_Name']).size().unstack().fillna(0)
-                collection_counts = collection_counts.reset_index()
-                collection_counts.iloc[:, 1:] = collection_counts.iloc[:, 1:].cumsum()
+                    df_collections_22 = df_collections_2.copy()
+                    collection_counts = df_collections_22.groupby(['Date year', 'Collection_Name']).size().unstack().fillna(0)
+                    collection_counts = collection_counts.reset_index()
+                    collection_counts.iloc[:, 1:] = collection_counts.iloc[:, 1:].cumsum()
 
-                selected_collections = df_collections_21.head(number0 + 1)['Collection_Name'].tolist()
-                collection_counts_filtered = collection_counts[['Date year'] + selected_collections]
-                column_to_exclude = '01 Intelligence history'
-                if column_to_exclude in selected_collections:
-                    selected_collections.remove(column_to_exclude)
-
+                    selected_collections = df_collections_21.head(number0 + 1)['Collection_Name'].tolist()
+                    collection_counts_filtered = collection_counts[['Date year'] + selected_collections]
+                    column_to_exclude = '01 Intelligence history'
+                    if column_to_exclude in selected_collections:
+                        selected_collections.remove(column_to_exclude)
+                collection_chart()
                 # Streamlit app
                 st.markdown(f'#### Cumulative changes in collection over years')
 
