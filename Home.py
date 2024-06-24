@@ -2633,7 +2633,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                         showlegend=False)
                                     fig.update_xaxes(tickangle=-70)
                                     fig.update_layout(title={'text':'Top ' + str(number) + ' publishers (in log scale)', 'yanchor':'top'})
-                                    col1.plotly_chart(fig, use_container_width = True)
+                                    st.plotly_chart(fig, use_container_width = True)
                                 else:
                                     fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=True)
                                     fig.update_layout(
@@ -2643,7 +2643,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                         showlegend=True)
                                     fig.update_xaxes(tickangle=-70)
                                     fig.update_layout(title={'text':'Top ' + str(number) + ' publishers (in log scale)', 'yanchor':'top'})
-                                    col1.plotly_chart(fig, use_container_width = True)
+                                    st.plotly_chart(fig, use_container_width = True)
                             else:
                                 if leg1:
                                     fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=False)
@@ -2654,7 +2654,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                         showlegend=False)
                                     fig.update_xaxes(tickangle=-70)
                                     fig.update_layout(title={'text':'Top ' + str(number) + ' publishers', 'yanchor':'top'})
-                                    col1.plotly_chart(fig, use_container_width = True)
+                                    st.plotly_chart(fig, use_container_width = True)
                                 else:
                                     fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=False)
                                     fig.update_layout(
@@ -2664,13 +2664,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                         showlegend=True)
                                     fig.update_xaxes(tickangle=-70)
                                     fig.update_layout(title={'text':'Top ' + str(number) + ' publishers','yanchor':'top'})
-                                    col1.plotly_chart(fig, use_container_width = True)
+                                    st.plotly_chart(fig, use_container_width = True)
                             with st.expander('See publishers'):
                                 row_nu_collections = len(df_publisher.index)        
                                 for i in range(row_nu_collections):
                                     st.caption(df_publisher['Publisher'].iloc[i]
                                     )
                     publisher_chart()
+
                 with col2:
                     number2 = st.slider('Select a number of journals', 0,30,10)
                     df_journal = df_csv.loc[df_csv['Publication type']=='Journal article']
