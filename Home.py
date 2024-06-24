@@ -2622,25 +2622,32 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             )
                             st.plotly_chart(fig)
                     with col2:
-                            selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
-                            df_authors = df_csv.copy()              
-                            df_authors = df_authors[df_authors['Publication type']==selected_type]
-                            df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
-                            df_authors = df_authors.explode('Author_name')
-                            df_authors.reset_index(drop=True)
-                            df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
-                            df_authors = df_authors[df_authors['Author_name'] != 'nan']
-                            df_authors = df_authors['Author_name'].value_counts().head(num_authors)
-                            df_authors = df_authors.reset_index()
-                            df_authors = df_authors.rename(columns={'index':'Author','Author_name':'Number of Publications'})
-                            fig = px.bar(df_authors, x=df_authors['Author'], y=df_authors['Number of Publications'])
-                            fig.update_layout(
-                                title=f'Top {num_authors} Authors by Publication Count (academic publications - {selected_type})',
-                                xaxis_title='Author',
-                                yaxis_title='Number of Publications',
-                                xaxis_tickangle=-45,
-                            )
-                            st.plotly_chart(fig)
+                            col11, col12 = st.columns(2)
+                            with col11:
+                                selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
+                            with col2:
+                                table_view = st.checkbox('Table view')
+                            if not table_view:
+                                df_authors = df_csv.copy()              
+                                df_authors = df_authors[df_authors['Publication type']==selected_type]
+                                df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
+                                df_authors = df_authors.explode('Author_name')
+                                df_authors.reset_index(drop=True)
+                                df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
+                                df_authors = df_authors[df_authors['Author_name'] != 'nan']
+                                df_authors = df_authors['Author_name'].value_counts().head(num_authors)
+                                df_authors = df_authors.reset_index()
+                                df_authors = df_authors.rename(columns={'index':'Author','Author_name':'Number of Publications'})
+                                fig = px.bar(df_authors, x=df_authors['Author'], y=df_authors['Number of Publications'])
+                                fig.update_layout(
+                                    title=f'Top {num_authors} Authors by Publication Count (academic publications - {selected_type})',
+                                    xaxis_title='Author',
+                                    yaxis_title='Number of Publications',
+                                    xaxis_tickangle=-45,
+                                )
+                                st.plotly_chart(fig)
+                            else:
+                                df_authors
                 author_chart()
 
                     
