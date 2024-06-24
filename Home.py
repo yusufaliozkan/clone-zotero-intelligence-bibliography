@@ -2446,18 +2446,20 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_collections_2['Date year'] = df_collections_2['Date year'].fillna('No date') 
 
             with st.expander('**Select filters**', expanded=False):
-                types = st.multiselect('Publication type', df_csv['Publication type'].unique(), df_csv['Publication type'].unique())
-
-                df_journals = df_dedup.copy()
-                df_journals = df_journals[df_journals['Publication type'] == 'Journal article']
-                journal_counts = df_journals['Journal'].value_counts()
-                unique_journals_sorted = journal_counts.index.tolist()
-                journals = st.multiselect('Select a journal', unique_journals_sorted, key='big_dashboard_journals')                 
-
-                years = st.slider('Publication years between:', min_y, max_y+1, (min_y,max_y+1), key='years2')
+                def filters_fragment():                
 
                 @st.experimental_fragment
-                def filters_fragment():                
+
+                    types = st.multiselect('Publication type', df_csv['Publication type'].unique(), df_csv['Publication type'].unique())
+
+                    df_journals = df_dedup.copy()
+                    df_journals = df_journals[df_journals['Publication type'] == 'Journal article']
+                    journal_counts = df_journals['Journal'].value_counts()
+                    unique_journals_sorted = journal_counts.index.tolist()
+                    journals = st.multiselect('Select a journal', unique_journals_sorted, key='big_dashboard_journals')                 
+
+                    years = st.slider('Publication years between:', min_y, max_y+1, (min_y,max_y+1), key='years2')
+
                     if st.button('Update dashboard'):
                         df_csv = df_csv[df_csv['Publication type'].isin(types)]
                         if journals:
