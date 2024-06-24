@@ -2537,6 +2537,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         fig.update_layout(showlegend=collection_line_legend)
                         # Display the plot in the Streamlit app
                         st.plotly_chart(fig, use_container_width=True)
+                collection_chart()
 
                     # PUBLICATION TYPES
                     df_types = pd.DataFrame(df_csv['Publication type'].value_counts())
@@ -2573,7 +2574,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         fig = px.pie(df_types, values='Count', names='Publication type')
                         fig.update_layout(title={'text':'Item types',  'yanchor':'top'})
                         col2.plotly_chart(fig, use_container_width = True)
-                collection_chart()
+
                 col1, col2 = st.columns(2)
                 with col1:
                     fig = px.bar(df_year, x='Publication year', y='Count')
