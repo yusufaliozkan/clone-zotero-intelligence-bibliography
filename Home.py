@@ -2867,11 +2867,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 #             color_discrete_map={"%Citation count (OA papers)": "goldenrod", "%Citation count (non-OA papers)": "#D3D3D3"},
                 #             barmode="stack", hover_data=["#Citations (OA papers)", '#Citations (non-OA papers)'])
 
-                fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
+                fig2.add_scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (OA papers)"], 
                                 mode='lines+markers', name='#Citations (OA papers)', line=dict(color='yellow'))
-                fig.add_scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (non-OA papers)"], 
+                fig2.add_scatter(x=last_20_years["Date year"], y=last_20_years["#Citations (non-OA papers)"], 
                                 mode='lines+markers', name='#Citations (non-OA papers)', line=dict(color='green'))
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig2, use_container_width=True)
 
                 col1, col2 = st.columns([7,2])
                 with col1:
