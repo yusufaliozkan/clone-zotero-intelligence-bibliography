@@ -2388,6 +2388,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         
         if on_main_dashboard:
 
+
             df_csv = df_duplicated.copy()
             df_collections_2 =df_csv.copy()
 
@@ -2431,10 +2432,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             @st.experimental_fragment
             def fragment_filter():
+                global df_csv, df_collections_2, min_y, max_y, df_dedup
+
                 with st.expander('**Select filters**', expanded=False):
                     types = st.multiselect('Publication type', df_csv['Publication type'].unique(), df_csv['Publication type'].unique())
 
-                    df_journals = df_csv.copy()
+                    df_journals = df_dedup.copy()
                     df_journals = df_journals[df_journals['Publication type'] == 'Journal article']
                     journal_counts = df_journals['Journal'].value_counts()
                     unique_journals_sorted = journal_counts.index.tolist()
@@ -2466,7 +2469,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         df_collections_2 = df_collections_2[df_collections_2['Date year'] !='No date']
                         filter_collection = (df_collections_2['Date year'].astype(int)>=years[0]) & (df_collections_2['Date year'].astype(int)<years[1])
                         df_collections_2 = df_collections_2.loc[filter_collection]
-            fragment_filter(df_csv, df_collections_2, min_y, max_y)
+            fragment_filter()
             if df_csv['Title'].any() in ("", [], None, 0, False):
                 st.warning('No data to visualise. Select a correct parameter.')
 
