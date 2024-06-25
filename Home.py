@@ -3030,15 +3030,15 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             st.plotly_chart(fig_bar, use_container_width=True)
                     fragment()
                     df_citation_count
-                    oa_cited_total = df_cited_overtime['Cited Publications'].sum()
-                    non_oa_cited_total = df_cited_overtime['Non-cited Publications'].sum() 
-                    labels = ['Cited Publications', 'Non-cited Publications']
-                    values = [cited_total, non_cited_total]
+                    oa_cited_total = df_citation_count['#Citations (OA papers)'].sum()
+                    non_oa_cited_total = df_citation_count['#Citations (non-OA papers)'].sum() 
+                    labels = ['#Citations (OA papers)', '#Citations (non-OA papers)']
+                    values = [oa_cited_total, non_oa_cited_total]
                     custom_colors = ['green', '#D3D3D3'] 
                     fig = px.pie(
                         values=values,
                         names=labels,
-                        title='Cited vs Non-cited Publications (all items)',
+                        title='OA vs non-OA cited publications (all items)',
                         color_discrete_sequence=custom_colors
                     )
                     st.plotly_chart(fig)
