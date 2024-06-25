@@ -2897,7 +2897,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         non_oa_total = df_oa_overtime['#Non-OA Publications'].sum()
                         labels = ['OA Publications', 'Non-OA Publications']
                         values = [oa_total, non_oa_total]
-                        custom_colors = ['green', '#D3D3D3'] 
+                        custom_colors = ['#D3D3D3', 'green'] 
                         fig = px.pie(
                             values=values,
                             names=labels,
