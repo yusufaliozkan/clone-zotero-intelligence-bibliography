@@ -2905,7 +2905,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             color_discrete_sequence=custom_colors
                         )
                         st.plotly_chart(fig)
-                        df_oa_overtime
+                        df_cited_papers
                 fragment2()
 
                 st.divider()
