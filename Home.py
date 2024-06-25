@@ -2905,7 +2905,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             color_discrete_sequence=custom_colors
                         )
                         st.plotly_chart(fig)
-                        df_cited_papers
+                        df_dedup_v2
                 fragment2()
 
                 st.divider()
