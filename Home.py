@@ -2910,7 +2910,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 st.subheader('Publications by citation status', anchor=False, divider='blue')
                 @st.experimental_fragment
                 def fragment_cited_papers():
-                    df_dedup = df_collections_2.copy()
+                    # df_dedup = df_collections_2.copy()
                     df_dedup['Date published2'] = (
                         df_dedup['Date published']
                         # .str.strip()
