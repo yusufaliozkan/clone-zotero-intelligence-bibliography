@@ -2608,7 +2608,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     multiple_authored_papers = grouped['multiple_authors'].apply(lambda x: (x == True).sum()).reset_index(name='Multiple authored papers')
                     multiple_authored_papers
                     df_multiple_authors = pd.merge(total_publications, multiple_authored_papers, on='Date year')
-                    multiple_authored_papers
+                    df_multiple_authors
                     df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                     df_authors = df_authors.explode('Author_name')
                     df_authors.reset_index(drop=True)
