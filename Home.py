@@ -3143,7 +3143,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 listdf = df['lemma_title']
                 listdf_abstract = df['lemma_abstract']
-                listdf
 
                 st.subheader('Wordcloud', anchor=False, divider='blue')
                 wordcloud_opt = st.radio('Wordcloud of:', ('Titles', 'Abstracts'))
