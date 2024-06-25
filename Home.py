@@ -2810,10 +2810,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 st.divider()
                 st.subheader('Publications by open access status', anchor=False, divider='blue')
-                df_collections_2
                 df_dedup = df_collections_2.copy()
                 df_dedup = df_dedup.drop_duplicates(subset='Zotero link')
-                df_dedup
                 # df_dedup['Date published2'] = (
                 #     df_dedup['Date published']
                 #     .str.strip()
@@ -2822,7 +2820,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_dedup['Date year'] = df_dedup['Date published'].dt.strftime('%Y')
                 df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
                 df_dedup_v2 = df_dedup.dropna(subset='OA status')
-                df_dedup_v2
                 df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
                 filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) & (df['OA status'] == True)]                    
                 # Group by 'Date year' and count the number of rows in each group
@@ -2830,6 +2827,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_cited_oa_papers=df_cited_oa_papers.reset_index()
                 df_cited_oa_papers.columns = ['Date year', 'Cited OA papers']
                 filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
+                filtered_df2
 
                 @st.experimental_fragment
                 def fragment2():
