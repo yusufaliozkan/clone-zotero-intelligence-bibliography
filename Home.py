@@ -2970,22 +2970,25 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             hovermode="x unified"
                         )
                         st.plotly_chart(fig, use_container_width=True)
-                    fragment_cited_papers()
 
-                    max_year_2 = df_cited_overtime["Date year"].max()
-                    df_cited_overtime = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year_2 - 5)]
-                    cited_total = df_cited_overtime['Cited Publications'].sum()
-                    non_cited_total = df_cited_overtime['Non-cited Publications'].sum() 
-                    labels = ['Cited Publications', 'Non-cited Publications']
-                    values = [cited_total, non_cited_total]
-                    custom_colors = ['green', '#D3D3D3'] 
-                    fig = px.pie(
-                        values=values,
-                        names=labels,
-                        title='Cited vs Non-cited Publications (all items)',
-                        color_discrete_sequence=custom_colors
-                    )
-                    st.plotly_chart(fig)
+                        last_5_year = st.checkbox('Limit to last 5 years')
+                        if last_5_year:
+                            max_year = df_cited_overtime["Date year"].max()
+                            df_cited_overtime = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 5)]
+                           
+                        cited_total = df_cited_overtime['Cited Publications'].sum()
+                        non_cited_total = df_cited_overtime['Non-cited Publications'].sum() 
+                        labels = ['Cited Publications', 'Non-cited Publications']
+                        values = [cited_total, non_cited_total]
+                        custom_colors = ['green', '#D3D3D3'] 
+                        fig = px.pie(
+                            values=values,
+                            names=labels,
+                            title='Cited vs Non-cited Publications (all items)',
+                            color_discrete_sequence=custom_colors
+                        )
+                        st.plotly_chart(fig)
+                    fragment_cited_papers()
 
                 with col2:
                     df_oa_papers_citation_count = filtered_df.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
