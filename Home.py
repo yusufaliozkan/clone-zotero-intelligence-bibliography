@@ -2932,14 +2932,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     ))
 
                     # Add line for total citations
-                    fig.add_trace(go.Scatter(
-                        x=last_20_years["Date year"],
-                        y=last_20_years["Citation"],
-                        # name="#Citations",
-                        mode="lines+markers",
-                        marker=dict(color="green"),
-                        yaxis="y2" 
-                    ))
+                    # fig.add_trace(go.Scatter(
+                    #     x=last_20_years["Date year"],
+                    #     y=last_20_years["Citation"],
+                    #     name="#Citations",
+                    #     mode="lines+markers",
+                    #     marker=dict(color="green"),
+                    #     yaxis="y2" 
+                    # ))
 
                     # Update layout for secondary y-axis
                     fig.update_layout(
