@@ -2634,27 +2634,28 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             df_authors = df_authors[df_authors['Publication type']==selected_type]
                             if len(df_authors) == 0:
                                 st.write('No data to visualize')
-                            df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
-                            df_authors = df_authors.explode('Author_name')
-                            df_authors.reset_index(drop=True)
-                            df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
-                            df_authors = df_authors[df_authors['Author_name'] != 'nan']
-                            df_authors = df_authors['Author_name'].value_counts().head(num_authors)
-                            df_authors = df_authors.reset_index()
-                            if table_view == 'Bar chart': 
-                                df_authors = df_authors.rename(columns={'index':'Author','Author_name':'Number of Publications'})
-                                fig = px.bar(df_authors, x=df_authors['Author'], y=df_authors['Number of Publications'])
-                                fig.update_layout(
-                                    title=f'Top {num_authors} Authors by Publication Count (academic publications - {selected_type})',
-                                    xaxis_title='Author',
-                                    yaxis_title='Number of Publications',
-                                    xaxis_tickangle=-45,
-                                )
-                                st.plotly_chart(fig)
                             else:
-                                st.markdown(f'###### Top {num_authors} Authors by Publication Count (academic publications - {selected_type})')
-                                df_authors.columns = ['Author name', 'Publication count']
-                                df_authors
+                                df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
+                                df_authors = df_authors.explode('Author_name')
+                                df_authors.reset_index(drop=True)
+                                df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
+                                df_authors = df_authors[df_authors['Author_name'] != 'nan']
+                                df_authors = df_authors['Author_name'].value_counts().head(num_authors)
+                                df_authors = df_authors.reset_index()
+                                if table_view == 'Bar chart': 
+                                    df_authors = df_authors.rename(columns={'index':'Author','Author_name':'Number of Publications'})
+                                    fig = px.bar(df_authors, x=df_authors['Author'], y=df_authors['Number of Publications'])
+                                    fig.update_layout(
+                                        title=f'Top {num_authors} Authors by Publication Count (academic publications - {selected_type})',
+                                        xaxis_title='Author',
+                                        yaxis_title='Number of Publications',
+                                        xaxis_tickangle=-45,
+                                    )
+                                    st.plotly_chart(fig)
+                                else:
+                                    st.markdown(f'###### Top {num_authors} Authors by Publication Count (academic publications - {selected_type})')
+                                    df_authors.columns = ['Author name', 'Publication count']
+                                    df_authors
                 author_chart()
 
                 st.divider()
