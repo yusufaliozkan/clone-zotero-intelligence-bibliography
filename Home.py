@@ -2815,7 +2815,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_dedup
                 df_dedup['Date published2'] = (
                     df_dedup['Date published']
-                    # .str.strip()
+                    .str.strip()
                     .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
                 )
                 df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
