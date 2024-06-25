@@ -2727,6 +2727,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         else:
                             st.plotly_chart(fig2, use_container_width=True)
                     with col2:
+                        last_5_year_author = st.checkbox('Limit to last 5 years', key='last5yearsauthor')
+                        if last_5_year_author:
+                            max_year = df_multiple_authors_3["Date year"].max()
+                            df_multiple_authors_3 = df_multiple_authors_3[df_multiple_authors_3["Date year"] >= (max_year - 5)]
                         multiple_authored = df_multiple_authors_3['# Multiple Authored Publications'].sum()
                         single_authored = df_multiple_authors_3['# Single Authored Publications'].sum()
                         labels = ['Multiple Authored Publications', 'Single Authored Publications']
