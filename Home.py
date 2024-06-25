@@ -2632,6 +2632,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
                             df_authors = df_csv.copy()              
                             df_authors = df_authors[df_authors['Publication type']==selected_type]
+                            if len(df_authors) == 0:
+                                st.write('No data to visualize')
                             df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                             df_authors = df_authors.explode('Author_name')
                             df_authors.reset_index(drop=True)
@@ -2814,7 +2816,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 #     .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
                 # )
                 # df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
-                df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
+                # df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
                 df_dedup_v2 = df_dedup.dropna(subset='OA status')
                 df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
                 filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) & (df['OA status'] == True)]                    
