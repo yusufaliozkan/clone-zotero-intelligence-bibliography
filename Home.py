@@ -2970,8 +2970,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         )
                         st.plotly_chart(fig, use_container_width=True)
 
-                        last_5_year = st.checkbox('Limit to last 5 years')
-                        if last_5_year:
+                        last_5_year_1 = st.checkbox('Limit to last 5 years', key='last5years1')
+                        if last_5_year_1:
                             max_year = df_cited_overtime["Date year"].max()
                             df_cited_overtime = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 5)]
                            
@@ -3034,6 +3034,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             st.plotly_chart(fig_line, use_container_width=True)
                         else:
                             st.plotly_chart(fig_bar, use_container_width=True)
+
+                        last_5_year_2 = st.checkbox('Limit to last 5 years', key='last5years2')
+                        if last_5_year_2:
+                            max_year = df_cited_overtime["Date year"].max()
+                            df_cited_overtime = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 5)]
 
                         oa_cited_total = df_citation_count['#Citations (OA papers)'].sum()
                         non_oa_cited_total = df_citation_count['#Citations (non-OA papers)'].sum() 
