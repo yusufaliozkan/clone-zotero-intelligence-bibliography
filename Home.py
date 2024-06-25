@@ -2625,8 +2625,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_multiple_authors
 
                     fig1 = go.Figure()
-                    fig1.add_trace(go.Scatter(x=df['Date year'], y=df_multiple_authors['# Multiple Authored Publications'], mode='lines+markers', name='# Multiple Authored Publications'))
-                    fig1.add_trace(go.Scatter(x=df['Date year'], y=df_multiple_authors['# Single Authored Publications'], mode='lines+markers', name='# Single Authored Publications'))
+                    fig1.add_trace(go.Scatter(x=df_multiple_authors['Date year'], y=df_multiple_authors['# Multiple Authored Publications'], mode='lines+markers', name='# Multiple Authored Publications'))
+                    fig1.add_trace(go.Scatter(x=df_multiple_authors['Date year'], y=df_multiple_authors['# Single Authored Publications'], mode='lines+markers', name='# Single Authored Publications'))
 
                     fig1.update_layout(title='Publications Over the Years',
                                     xaxis_title='Year',
