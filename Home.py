@@ -2726,6 +2726,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             title='Single vs Multiple Authored Papers',
                             color_discrete_sequence=custom_colors
                         )
+                        fig.update_layout(
+                            legend=dict(
+                                orientation='h',  # Place legend horizontally
+                                yanchor='top',    # Anchor legend to the top
+                                y=-0.1            # Position the legend slightly below the chart
+                            )
+                        )
                         st.plotly_chart(fig)
                 author_chart()
 
@@ -2974,13 +2981,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             names=labels,
                             title='OA vs Non-OA Publications (last 5 years)' if last_5_year_0 else 'OA vs Non-OA Publications (all items)',
                             color_discrete_sequence=custom_colors
-                        )
-                        fig.update_layout(
-                            legend=dict(
-                                orientation='h',  # Place legend horizontally
-                                yanchor='top',    # Anchor legend to the top
-                                y=-0.1            # Position the legend slightly below the chart
-                            )
                         )
                         st.plotly_chart(fig)
                 fragment2()
