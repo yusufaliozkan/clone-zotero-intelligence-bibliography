@@ -2634,6 +2634,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                     template='plotly_white')
 
                     # Second line graph: Percentages
+                    st.plotly_chart(fig1, use_container_width=True)
                     fig2 = go.Figure()
 
                     df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
