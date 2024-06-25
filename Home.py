@@ -2912,11 +2912,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 max_year = df_cited_overtime["Date year"].max()
                 last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
-                check_citation_count = st.checkbox('Add citation count')
                 col1, col2 = st.columns(2)
                 with col1:
                     @st.experimental_fragment
                     def fragment_cited_papers():
+                        check_citation_count = st.checkbox('Add citation count')
+
                         fig = go.Figure()
 
                         # Add bars for %Cited Publications and %Non-Cited Publications
