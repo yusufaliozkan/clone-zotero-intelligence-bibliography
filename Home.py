@@ -2601,7 +2601,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 @st.experimental_fragment
                 def author_chart():
                     df_authors = df_csv.copy()
-                    df_authors 
+                    df_multiple_authors = df_authors[df_authors['multiple_authors']==True]
+                    df_multiple_authors 
                     df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                     df_authors = df_authors.explode('Author_name')
                     df_authors.reset_index(drop=True)
