@@ -2835,14 +2835,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     # Group by 'Date year' and count the number of rows in each group
                     df_cited_papers = filtered_df2.groupby(df_dedup_v2['Date year'])['OA status'].count()
                     df_cited_papers=df_cited_papers.reset_index()
-                    df_cited_papers
                     df_cited_papers.columns = ['Date year', 'Cited papers']
                     df_cited_papers = pd.merge(df_cited_papers, df_cited_oa_papers, on='Date year', how='left')
                     df_cited_papers['Cited OA papers'] = df_cited_papers['Cited OA papers'].fillna(0)
                     df_cited_papers['Cited non-OA papers'] = df_cited_papers['Cited papers']-df_cited_papers['Cited OA papers']
                     df_cited_papers['%Cited OA papers'] = round(df_cited_papers['Cited OA papers']/df_cited_papers['Cited papers'], 3)*100
                     df_cited_papers['%Cited non-OA papers'] = round(df_cited_papers['Cited non-OA papers']/df_cited_papers['Cited papers'], 3)*100
-                    df_cited_papers
 
                     grouped = df_dedup_v2.groupby('Date year')
                     total_publications = grouped.size().reset_index(name='Total Publications')
