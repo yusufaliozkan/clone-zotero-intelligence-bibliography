@@ -3010,7 +3010,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             xaxis_title="Publication Year",
                             yaxis_title="Citation Count",
                         )
-                        line_show = st.toggle("See citation count")
+                        line_show = st.toggle("Citation count graph")
                         if line_show:
                             st.plotly_chart(fig_line, use_container_width=True)
                         else:
