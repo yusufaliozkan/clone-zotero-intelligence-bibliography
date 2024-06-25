@@ -2486,7 +2486,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             else:                
                 ## COLLECTIONS IN THE LIBRARY
-                st.subheader('Publications by collection', anchor=False)                
+                st.subheader('Publications by collection', anchor=False, divider='blue')                
                 @st.experimental_fragment
                 def collection_chart():
                     df_collections_21 = df_collections_2.copy()
@@ -2540,7 +2540,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 collection_chart()
 
                 st.divider()
-                st.subheader('Publications by type and year', anchor=False) 
+                st.subheader('Publications by type and year', anchor=False, divider='blue')
                 @st.experimental_fragment
                 def types_pubyears():
                     # PUBLICATION TYPES
@@ -2597,7 +2597,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 types_pubyears()
 
                 st.divider()
-                st.subheader('Publications by author', anchor=False) 
+                st.subheader('Publications by author', anchor=False, divider='blue')
                 @st.experimental_fragment
                 def author_chart():
                     df_authors = df_csv.copy()                 
@@ -2656,7 +2656,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 author_chart()
 
                 st.divider()
-                st.subheader('Publishers and Journals', anchor=False)                  
+                st.subheader('Publishers and Journals', anchor=False, divider='blue')                
                 col1, col2 = st.columns(2)
                 with col1:
                     @st.experimental_fragment
@@ -2806,7 +2806,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     journal_chart()
 
                 st.divider()
-                st.subheader('Publications by open access status', anchor=False)   
+                st.subheader('Publications by open access status', anchor=False, divider='blue')
                 df_dedup['Date published2'] = (
                     df_dedup['Date published']
                     .str.strip()
