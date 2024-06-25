@@ -3037,8 +3037,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                         last_5_year_2 = st.checkbox('Limit to last 5 years', key='last5years2')
                         if last_5_year_2:
-                            max_year = df_cited_overtime["Date year"].max()
-                            df_cited_overtime = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 5)]
+                            max_year = df_citation_count["Date year"].max()
+                            df_citation_count = df_citation_count[df_citation_count["Date year"] >= (max_year - 5)]
 
                         oa_cited_total = df_citation_count['#Citations (OA papers)'].sum()
                         non_oa_cited_total = df_citation_count['#Citations (non-OA papers)'].sum() 
