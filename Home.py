@@ -2602,7 +2602,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 def author_chart():
                     df_authors = df_csv.copy()
                     # df_multiple_authors = df_authors[df_authors['multiple_authors']==True]
-                    grouped = df_authors.groupby('Date year')
+                    grouped= df_collections_2.copy()
+                    grouped = grouped.groupby('Date year')
                     total_publications = grouped.size().reset_index(name='Total Publications')
                     multiple_authored_papers = grouped['multiple_authors'].apply(lambda x: (x == True).sum()).reset_index(name='Multiple Authored Publications')
                     df_multiple_authors = pd.merge(total_publications, multiple_authored_papers, on='Date year')
