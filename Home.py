@@ -2896,7 +2896,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         fig = px.pie(
                             values=values,
                             names=labels,
-                            title='OA vs Non-OA Publications (last 5 years)' if df_oa_overtime else 'OA vs Non-OA Publications (all items)',
+                            title='OA vs Non-OA Publications (last 5 years)' if last_5_year_0 else 'OA vs Non-OA Publications (all items)',
                             color_discrete_sequence=custom_colors
                         )
                         st.plotly_chart(fig)
