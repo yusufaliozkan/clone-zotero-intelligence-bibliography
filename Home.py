@@ -2822,7 +2822,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_cited_oa_papers=df_cited_oa_papers.reset_index()
                 df_cited_oa_papers.columns = ['Date year', 'Cited OA papers']
                 filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
-                
+
                 @st.experimental_fragment
                 def fragment2():
 
@@ -2883,6 +2883,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             st.plotly_chart(fig, use_container_width=True)
 
                     with col2:
+                        last_5_year_0 = st.checkbox('Limit to last 5 years', key='last5years0')
+                        if last_5_year_0:
+                            max_year = df_oa_overtime["Date year"].max()
+                            df_oa_overtime = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 5)]
+
                         oa_total = df_oa_overtime['#OA Publications'].sum()
                         non_oa_total = df_oa_overtime['#Non-OA Publications'].sum()
                         labels = ['OA Publications', 'Non-OA Publications']
