@@ -3075,9 +3075,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     fig = px.bar(df_countries.head(15), x='Count', y='Country', orientation='h', height=600)
                     col2.plotly_chart(fig, use_container_width=True)
                 
-                st.write('---')
-                st.subheader('Named Entity Recognition analysis', anchor=False, divider='blue')
-                st.caption('[What is Named Entity Recognition?](https://medium.com/mysuperai/what-is-named-entity-recognition-ner-and-how-can-i-use-it-2b68cf6f545d)')
+                st.divider()
+                st.subheader('Locations, People, and Organisations', anchor=False, divider='blue')
+                st.info('''
+                Named Entity Recognition (NER) is used to retrieve locations, people, and organisations from titles and abstracts.
+                [What is Named Entity Recognition?](https://medium.com/mysuperai/what-is-named-entity-recognition-ner-and-how-can-i-use-it-2b68cf6f545d)
+                ''')
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     gpe_counts = pd.read_csv('gpe.csv')
