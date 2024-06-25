@@ -2624,9 +2624,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_multiple_authors = df_multiple_authors[df_multiple_authors['Date year']<=current_year]
                     df_multiple_authors
 
+                    max_year = df_multiple_authors["Date year"].max()
+                    last_20_years = df_multiple_authors[df_multiple_authors["Date year"] >= (max_year - 20)]
+
                     fig1 = go.Figure()
-                    fig1.add_trace(go.Scatter(x=df_multiple_authors['Date year'], y=df_multiple_authors['# Multiple Authored Publications'], mode='lines+markers', name='# Multiple Authored Publications'))
-                    fig1.add_trace(go.Scatter(x=df_multiple_authors['Date year'], y=df_multiple_authors['# Single Authored Publications'], mode='lines+markers', name='# Single Authored Publications'))
+                    fig1.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['# Multiple Authored Publications'], mode='lines+markers', name='# Multiple Authored Publications'))
+                    fig1.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['# Single Authored Publications'], mode='lines+markers', name='# Single Authored Publications'))
 
                     fig1.update_layout(title='Publications Over the Years',
                                     xaxis_title='Year',
