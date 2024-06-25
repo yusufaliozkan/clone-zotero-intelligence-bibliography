@@ -2660,7 +2660,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                     df_authors.columns = ['Author name', 'Publication count']
                                     df_authors
 
-                    col1, col2 = st.columns([3,1])
+                    col1, col2 = st.columns([4,1])
                     with col1:
                         df_authors3 = df_authors2.copy()
                         grouped_3 = df_authors3.groupby('Date year')
