@@ -3059,6 +3059,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         st.plotly_chart(fig)
                 fragment_cited_papers()
 
+                st.divider()
+                st.subheader('Country mentions in titles', anchor=False, divider='blue')
                 col1, col2 = st.columns([7,2])
                 with col1:
                     df_countries = pd.read_csv('countries.csv')
