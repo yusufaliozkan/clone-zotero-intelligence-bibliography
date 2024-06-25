@@ -2702,8 +2702,20 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                         template='plotly_white')
 
                         fig2 = go.Figure()
-                        fig2.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['% Multiple Authored Publications'], mode='lines+markers', name='% Multiple Authored Publications'))
-                        fig2.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['% Single Authored Publications'], mode='lines+markers', name='% Single Authored Publications'))
+                        fig2.add_trace(go.Scatter(
+                            x=last_20_years['Date year'], 
+                            y=last_20_years['% Multiple Authored Publications'], 
+                            mode='lines+markers', 
+                            name='% Multiple Authored Publications',
+                            line=dict(color='goldenrod')
+                            ))
+                        fig2.add_trace(go.Scatter(
+                            x=last_20_years['Date year'], 
+                            y=last_20_years['% Single Authored Publications'], 
+                            mode='lines+markers', 
+                            name='% Single Authored Publications',
+                            line=dict(color='green')
+                            ))
 
                         fig2.update_layout(title='% Single vs Multiple Authored Publications Over the Years',
                                         xaxis_title='Publication Year',
@@ -2719,7 +2731,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         single_authored = df_multiple_authors_3['# Single Authored Publications'].sum()
                         labels = ['Multiple Authored Publications', 'Single Authored Publications']
                         values = [multiple_authored, single_authored]
-                        custom_colors = ['blue', 'green'] 
+                        custom_colors = ['goldenrod', 'green'] 
                         fig = px.pie(
                             values=values,
                             names=labels,
