@@ -2918,6 +2918,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     )
                     df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
                     df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
+                    df_dedup_v2 = df_dedup.dropna(subset='OA status')
                     df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
                     grouped = df_dedup_v2.groupby('Date year')
                     total_publications = grouped.size().reset_index(name='Total Publications')
