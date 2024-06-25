@@ -2909,7 +2909,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_cited_overtime['Non-cited Publications'] = df_cited_overtime['Total Publications']-df_cited_overtime['Cited Publications']
                 df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['Cited Publications']/df_cited_overtime['Total Publications'], 3)*100
                 df_cited_overtime['%Non-Cited Publications'] = round(df_cited_overtime['Non-cited Publications']/df_cited_overtime['Total Publications'], 3)*100
-                df_cited_overtime
 
                 max_year = df_cited_overtime["Date year"].max()
                 last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
@@ -2969,15 +2968,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     )
                     st.plotly_chart(fig, use_container_width=True)
 
-                    cited_total = df_oa_overtime['#OA Publications'].sum()
-                    non_cited_total = df_oa_overtime['#Non-OA Publications'].sum()
-                    labels = ['OA Publications', 'Non-OA Publications']
-                    values = [oa_total, non_oa_total]
+                    cited_total = df_cited_overtime['Cited publications'].sum()
+                    non_cited_total = df_cited_overtime['Non-cited publications'].sum()
+                    values = [cited_total, non_cited_total]
                     custom_colors = ['green', '#D3D3D3'] 
                     fig = px.pie(
                         values=values,
                         names=labels,
-                        title='OA vs Non-OA Publications (all items)',
+                        title='Cited vs Non-cited Publications (all items)',
                         color_discrete_sequence=custom_colors
                     )
                     st.plotly_chart(fig)
