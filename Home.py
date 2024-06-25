@@ -2983,7 +2983,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         fig = px.pie(
                             values=values,
                             names=labels,
-                            title='Cited vs Non-cited Publications (last 5 years)' if last_5_year_2 else 'Cited vs Non-cited Publications (all items)',
+                            title='Cited vs Non-cited Publications (last 5 years)' if last_5_year_1 else 'Cited vs Non-cited Publications (all items)',
                             color_discrete_sequence=custom_colors
                         )
                         st.plotly_chart(fig)
