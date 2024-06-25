@@ -2604,11 +2604,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     # df_multiple_authors = df_authors[df_authors['multiple_authors']==True]
 
                     df_authors2 = df_authors.copy()
-                    df_authors2['Date published2'] = (
-                        df_authors2['Date published']
-                        .str.strip()
-                        .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                    )
+                    # df_authors2['Date published2'] = (
+                    #     df_authors2['Date published']
+                    #     # .str.strip()
+                    #     .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                    # )
                     df_authors2['Date year'] = df_authors2['Date published'].dt.strftime('%Y')
                     df_authors2['Date year'] = pd.to_numeric(df_authors2['Date year'], errors='coerce', downcast='integer')
 
