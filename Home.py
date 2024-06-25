@@ -3176,7 +3176,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     st.set_option('deprecation.showPyplotGlobalUse', False)
                     st.pyplot() 
 
-            st.header('Item inclusion history', anchor=False)
+            st.divider()
+            st.subheader('Item inclusion history', anchor=False, divider='blue')
             @st.experimental_fragment
             def fragment_item_inclusion():
                 df_added = df_dedup.copy()
