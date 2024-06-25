@@ -2811,13 +2811,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 st.divider()
                 st.subheader('Publications by open access status', anchor=False, divider='blue')
                 df_dedup = df_collections_2.copy()
-                df_dedup['Date published2'] = (
-                    df_dedup['Date published']
-                    # .str.strip()
-                    .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                )
-                df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
-                df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
+                # df_dedup['Date published2'] = (
+                #     df_dedup['Date published']
+                #     .str.strip()
+                #     .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                # )
+                # df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
+                # df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
                 df_dedup_v2 = df_dedup.dropna(subset='OA status')
                 df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
                 filtered_df = df_dedup_v2[(df_dedup_v2['Citation status'] == True) & (df['OA status'] == True)]                    
@@ -2910,19 +2910,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 st.subheader('Publications by citation status', anchor=False, divider='blue')
                 @st.experimental_fragment
                 def fragment_cited_papers():
-                    # df_dedup = df_collections_2.copy()
-                    df_dedup['Date published2'] = (
-                        df_dedup['Date published']
-                        .str.strip()
-                        .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                    )
-                    df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
-                    df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
-                    df_dedup_v2 = df_dedup.dropna(subset='OA status')
                     df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
                     grouped = df_dedup_v2.groupby('Date year')
                     total_publications = grouped.size().reset_index(name='Total Publications')
-                    df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
                     cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited Publications')
                     df_cited_overtime = pd.merge(total_publications, cited_publications, on='Date year')
                     df_cited_overtime = pd.merge(df_cited_overtime, df_cited_papers, on='Date year')
