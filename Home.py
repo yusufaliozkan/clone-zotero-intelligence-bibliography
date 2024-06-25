@@ -2813,6 +2813,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_dedup = df_collections_2.copy()
                 df_dedup['Date published2'] = (
                     df_dedup['Date published']
+                    # .str.strip()
                     .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
                 )
                 df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
@@ -2909,6 +2910,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 st.subheader('Publications by citation status', anchor=False, divider='blue')
                 @st.experimental_fragment
                 def fragment_cited_papers():
+                    df_dedup = df_collections_2.copy()
+                    df_dedup['Date published2'] = (
+                        df_dedup['Date published']
+                        # .str.strip()
+                        .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                    )
+                    df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
+                    df_dedup['Date year'] = pd.to_numeric(df_dedup['Date year'], errors='coerce', downcast='integer')
                     df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
                     grouped = df_dedup_v2.groupby('Date year')
                     total_publications = grouped.size().reset_index(name='Total Publications')
