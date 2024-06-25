@@ -2987,7 +2987,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             color_discrete_sequence=custom_colors
                         )
                         st.plotly_chart(fig)
-                    fragment_cited_papers()
+                fragment_cited_papers()
 
                 with col2:
                     df_oa_papers_citation_count = filtered_df.groupby(df_dedup_v2['Date year'])['Citation'].sum().reset_index()
