@@ -2707,6 +2707,20 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     else:
                         st.plotly_chart(fig2, use_container_width=True)
 
+                    multiple_authored = df_multiple_authors['# Multiple Authored Publications'].sum()
+                    single_authored = df_multiple_authors['# Single Authored Publications'].sum()
+                    labels = ['Multiple Authored Publications', 'Single Authored Publications']
+                    values = [multiple_authored, single_authored]
+                    custom_colors = ['#D3D3D3', 'green'] 
+                    fig = px.pie(
+                        values=values,
+                        names=labels,
+                        title='Single vs Multiple Authored Papers',
+                        color_discrete_sequence=custom_colors
+                    )
+                    st.plotly_chart(fig)
+
+
                 author_chart()
 
                 st.divider()
