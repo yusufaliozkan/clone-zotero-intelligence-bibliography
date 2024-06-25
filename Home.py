@@ -2602,7 +2602,17 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 def author_chart():
                     df_authors = df_csv.copy()
                     # df_multiple_authors = df_authors[df_authors['multiple_authors']==True]
-                    grouped = df_authors.groupby('Date year')
+
+                    df_authors2 = df_authors.copy()
+                    df_authors2['Date published2'] = (
+                        df_authors2['Date published']
+                        .str.strip()
+                        .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                    )
+                    df_authors2['Date year'] = df_authors2['Date published'].dt.strftime('%Y')
+                    df_authors2['Date year'] = pd.to_numeric(df_authors2['Date year'], errors='coerce', downcast='integer')
+
+                    grouped = df_authors2.groupby('Date year')
                     total_publications = grouped.size().reset_index(name='Total Publications')
                     multiple_authored_papers = grouped['multiple_authors'].apply(lambda x: (x == True).sum()).reset_index(name='# Multiple Authored Publications')
                     df_multiple_authors = pd.merge(total_publications, multiple_authored_papers, on='Date year')
@@ -2613,6 +2623,19 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     current_year = datetime.datetime.now().year
                     df_multiple_authors = df_multiple_authors[df_multiple_authors['Date year']<=current_year]
                     df_multiple_authors
+
+                    fig1 = go.Figure()
+                    fig1.add_trace(go.Scatter(x=df['Date year'], y=df_multiple_authors['# Multiple Authored Publications'], mode='lines+markers', name='# Multiple Authored Publications'))
+                    fig1.add_trace(go.Scatter(x=df['Date year'], y=df_multiple_authors['# Single Authored Publications'], mode='lines+markers', name='# Single Authored Publications'))
+
+                    fig1.update_layout(title='Publications Over the Years',
+                                    xaxis_title='Year',
+                                    yaxis_title='Number of Publications',
+                                    template='plotly_white')
+
+                    # Second line graph: Percentages
+                    fig2 = go.Figure()
+
                     df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                     df_authors = df_authors.explode('Author_name')
                     df_authors.reset_index(drop=True)
