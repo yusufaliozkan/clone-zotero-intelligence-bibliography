@@ -2976,7 +2976,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     custom_colors = ['green', '#D3D3D3'] 
                     fig = px.pie(
                         values=values,
-                        names=labels,
                         title='Cited vs Non-cited Publications (all items)',
                         color_discrete_sequence=custom_colors
                     )
