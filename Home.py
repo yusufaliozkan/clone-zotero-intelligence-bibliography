@@ -2601,6 +2601,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 @st.experimental_fragment
                 def author_chart():
                     df_authors = df_csv.copy()
+                    df_authors2 = df_csv.copy()
                     # df_multiple_authors = df_authors[df_authors['multiple_authors']==True]
 
                     df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
@@ -2659,7 +2660,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                     df_authors.columns = ['Author name', 'Publication count']
                                     df_authors
 
-                    df_authors2 = df_authors.copy()
+                    df_authors2 = df_authors2.copy()
                     # df_authors2['Date published2'] = (
                     #     df_authors2['Date published']
                     #     # .str.strip()
