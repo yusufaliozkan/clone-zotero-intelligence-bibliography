@@ -2693,8 +2693,19 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         see_number_pubs = st.toggle('See number of publications')
 
                         fig1 = go.Figure()
-                        fig1.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['# Multiple Authored Publications'], mode='lines+markers', name='# Multiple Authored Publications'))
-                        fig1.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['# Single Authored Publications'], mode='lines+markers', name='# Single Authored Publications'))
+                        fig1.add_trace(go.Scatter(
+                            x=last_20_years['Date year'], 
+                            y=last_20_years['# Multiple Authored Publications'], 
+                            mode='lines+markers', 
+                            name='# Multiple Authored Publications',
+                            line=dict(color='goldenrod')
+                            ))
+                        fig1.add_trace(go.Scatter(x=last_20_years['Date year'], 
+                        y=last_20_years['# Single Authored Publications'], 
+                        mode='lines+markers', 
+                        name='# Single Authored Publications',
+                        line=dict(color='green')
+                        ))
 
                         fig1.update_layout(title='# Single vs Multiple Authored Publications Over the Years',
                                         xaxis_title='Year',
