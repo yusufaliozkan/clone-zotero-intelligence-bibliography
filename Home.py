@@ -2899,20 +2899,19 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 
                 st.divider()
                 st.subheader('Publications by citation status', anchor=False, divider='blue')
-                # with col2:
-                df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
-                grouped = df_dedup_v2.groupby('Date year')
-                total_publications = grouped.size().reset_index(name='Total Publications')
-                cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited Publications')
-                df_cited_overtime = pd.merge(total_publications, cited_publications, on='Date year')
-                df_cited_overtime = pd.merge(df_cited_overtime, df_cited_papers, on='Date year')
-                df_cited_overtime['Non-cited Publications'] = df_cited_overtime['Total Publications']-df_cited_overtime['Cited Publications']
-                df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['Cited Publications']/df_cited_overtime['Total Publications'], 3)*100
-                df_cited_overtime['%Non-Cited Publications'] = round(df_cited_overtime['Non-cited Publications']/df_cited_overtime['Total Publications'], 3)*100
-                col1, col2 = st.columns(2)
-                with col1:
-                    @st.experimental_fragment
-                    def fragment_cited_papers():
+                @st.experimental_fragment
+                def fragment_cited_papers():
+                    df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
+                    grouped = df_dedup_v2.groupby('Date year')
+                    total_publications = grouped.size().reset_index(name='Total Publications')
+                    cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited Publications')
+                    df_cited_overtime = pd.merge(total_publications, cited_publications, on='Date year')
+                    df_cited_overtime = pd.merge(df_cited_overtime, df_cited_papers, on='Date year')
+                    df_cited_overtime['Non-cited Publications'] = df_cited_overtime['Total Publications']-df_cited_overtime['Cited Publications']
+                    df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['Cited Publications']/df_cited_overtime['Total Publications'], 3)*100
+                    df_cited_overtime['%Non-Cited Publications'] = round(df_cited_overtime['Non-cited Publications']/df_cited_overtime['Total Publications'], 3)*100
+                    col1, col2 = st.columns(2)
+                    with col1:
                         max_year = df_cited_overtime["Date year"].max()
                         last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
                         check_citation_count = st.checkbox('Add citation count')
