@@ -2622,7 +2622,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_multiple_authors['% Single Authored Publications'] = round(df_multiple_authors['# Single Authored Publications']/df_multiple_authors['Total Publications'], 3)*100
                     current_year = datetime.datetime.now().year
                     df_multiple_authors = df_multiple_authors[df_multiple_authors['Date year']<=current_year]
-                    df_multiple_authors
 
                     max_year = df_multiple_authors["Date year"].max()
                     last_20_years = df_multiple_authors[df_multiple_authors["Date year"] >= (max_year - 20)]
@@ -2631,14 +2630,22 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     fig1.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['# Multiple Authored Publications'], mode='lines+markers', name='# Multiple Authored Publications'))
                     fig1.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['# Single Authored Publications'], mode='lines+markers', name='# Single Authored Publications'))
 
-                    fig1.update_layout(title='Publications Over the Years',
+                    fig1.update_layout(title='# Single vs Multiple Authored Publications Over the Years',
                                     xaxis_title='Year',
                                     yaxis_title='Number of Publications',
                                     template='plotly_white')
 
-                    # Second line graph: Percentages
-                    st.plotly_chart(fig1, use_container_width=True)
                     fig2 = go.Figure()
+                    fig2.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['% Multiple Authored Publications'], mode='lines+markers', name='% Multiple Authored Publications'))
+                    fig2.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['% Single Authored Publications'], mode='lines+markers', name='% Single Authored Publications'))
+
+                    fig2.update_layout(title='% Single vs Multiple Authored Publications Over the Years',
+                                    xaxis_title='Year',
+                                    yaxis_title='Number of Publications',
+                                    template='plotly_white')
+
+                    st.plotly_chart(fig1, use_container_width=True)
+                    st.plotly_chart(fig2, use_container_width=True)
 
                     df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                     df_authors = df_authors.explode('Author_name')
