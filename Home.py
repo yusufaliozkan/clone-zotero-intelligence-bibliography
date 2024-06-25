@@ -2913,7 +2913,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_dedup = df_collections_2.copy()
                     df_dedup['Date published2'] = (
                         df_dedup['Date published']
-                        .str.strip()
+                        # .str.strip()
                         .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
                     )
                     df_dedup['Date year'] = df_dedup['Date published2'].dt.strftime('%Y')
@@ -2922,6 +2922,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
                     grouped = df_dedup_v2.groupby('Date year')
                     total_publications = grouped.size().reset_index(name='Total Publications')
+                    df_dedup_v2['Citation status'] = df_dedup_v2['Citation'].apply(lambda x: False if pd.isna(x) or x == 0 else True)
                     cited_publications = grouped['Citation status'].apply(lambda x: (x == True).sum()).reset_index(name='Cited Publications')
                     df_cited_overtime = pd.merge(total_publications, cited_publications, on='Date year')
                     df_cited_overtime = pd.merge(df_cited_overtime, df_cited_papers, on='Date year')
