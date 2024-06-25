@@ -2729,6 +2729,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     with col2:
                         last_5_year_author = st.checkbox('Limit to last 5 years', key='last5yearsauthor')
                         if last_5_year_author:
+                            df_multiple_authors_3 = df_multiple_authors_2.copy()
                             max_year = df_multiple_authors_3["Date year"].max()
                             df_multiple_authors_3 = df_multiple_authors_3[df_multiple_authors_3["Date year"] >= (max_year - 5)]
                         multiple_authored = df_multiple_authors_3['# Multiple Authored Publications'].sum()
