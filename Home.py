@@ -2969,13 +2969,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     st.plotly_chart(fig, use_container_width=True)
 
                     df_cited_overtime
-                    cited_total = df_cited_overtime['Cited publications'].sum()
-                    non_cited_total = df_cited_overtime['Non-cited publications'].sum() 
+                    cited_total = df_cited_overtime['Cited Publications'].sum()
+                    non_cited_total = df_cited_overtime['Non-cited Publications'].sum() 
                     non_cited_total
                     values = [cited_total, non_cited_total]
                     custom_colors = ['green', '#D3D3D3'] 
                     fig = px.pie(
                         values=values,
+                        names=labels,
                         title='Cited vs Non-cited Publications (all items)',
                         color_discrete_sequence=custom_colors
                     )
