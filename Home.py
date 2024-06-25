@@ -2934,7 +2934,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             marker_color="#D3D3D3"
                         ))
                         if check_citation_count:
-                            Add line for total citations
+                            # Add line for total citations
                             fig.add_trace(go.Scatter(
                                 x=last_20_years["Date year"],
                                 y=last_20_years["Citation"],
