@@ -3033,7 +3033,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     non_oa_cited_total = df_citation_count['#Citations (non-OA papers)'].sum() 
                     labels = ['#Citations (OA papers)', '#Citations (non-OA papers)']
                     values = [oa_cited_total, non_oa_cited_total]
-                    custom_colors = ['goldenrod', '#D3D3D3'] 
+                    custom_colors = ['#D3D3D3', 'goldenrod'] 
                     fig = px.pie(
                         values=values,
                         names=labels,
