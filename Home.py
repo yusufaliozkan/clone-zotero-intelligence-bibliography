@@ -2660,6 +2660,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                     df_authors.columns = ['Author name', 'Publication count']
                                     df_authors
 
+                    df_authors3 = df_authors2.copy()
+                    grouped_3 = df_authors3.groupby('Date year')
+                    total_publications_3 = grouped.size().reset_index(name='Total Publications')
+                    multiple_authored_papers_3 = grouped_3['multiple_authors'].apply(lambda x: (x == True).sum()).reset_index(name='# Multiple Authored Publications')
+                    df_multiple_authors_3 = pd.merge(total_publications_3, multiple_authored_papers_3, on='Date year')
+                    df_multiple_authors['# Single Authored Publications'] = df_multiple_authors_3['Total Publications']- df_multiple_authors_3['# Multiple Authored Publications']
+
                     df_authors2 = df_authors2.copy()
                     # df_authors2['Date published2'] = (
                     #     df_authors2['Date published']
@@ -2668,7 +2675,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     # )
                     df_authors2['Date year'] = df_authors2['Date published'].dt.strftime('%Y')
                     df_authors2['Date year'] = pd.to_numeric(df_authors2['Date year'], errors='coerce', downcast='integer')
-
                     grouped = df_authors2.groupby('Date year')
                     total_publications = grouped.size().reset_index(name='Total Publications')
                     multiple_authored_papers = grouped['multiple_authors'].apply(lambda x: (x == True).sum()).reset_index(name='# Multiple Authored Publications')
@@ -2707,8 +2713,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     else:
                         st.plotly_chart(fig2, use_container_width=True)
 
-                    multiple_authored = df_multiple_authors['# Multiple Authored Publications'].sum()
-                    single_authored = df_multiple_authors['# Single Authored Publications'].sum()
+                    multiple_authored = df_multiple_authors_3['# Multiple Authored Publications'].sum()
+                    single_authored = df_multiple_authors_3['# Single Authored Publications'].sum()
                     labels = ['Multiple Authored Publications', 'Single Authored Publications']
                     values = [multiple_authored, single_authored]
                     custom_colors = ['#D3D3D3', 'green'] 
