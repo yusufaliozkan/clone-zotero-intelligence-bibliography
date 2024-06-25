@@ -2810,7 +2810,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 st.divider()
                 st.subheader('Publications by open access status', anchor=False, divider='blue')
-                df_dedup = df_collections_2.copy()
+                df_dedup = df_collections_2.drop_duplicates(subset='Zotero link').copy()
                 df_dedup
                 df_dedup['Date published2'] = (
                     df_dedup['Date published']
