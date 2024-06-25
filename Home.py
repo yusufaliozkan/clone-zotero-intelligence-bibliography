@@ -2968,6 +2968,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     )
                     st.plotly_chart(fig, use_container_width=True)
 
+                    df_cited_overtime
                     cited_total = df_cited_overtime['Cited publications'] 
                     non_cited_total = df_cited_overtime['Non-cited publications'] 
                     values = [cited_total, non_cited_total]
