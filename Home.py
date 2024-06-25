@@ -2603,53 +2603,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_authors = df_csv.copy()
                     # df_multiple_authors = df_authors[df_authors['multiple_authors']==True]
 
-                    df_authors2 = df_authors.copy()
-                    # df_authors2['Date published2'] = (
-                    #     df_authors2['Date published']
-                    #     # .str.strip()
-                    #     .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                    # )
-                    df_authors2['Date year'] = df_authors2['Date published'].dt.strftime('%Y')
-                    df_authors2['Date year'] = pd.to_numeric(df_authors2['Date year'], errors='coerce', downcast='integer')
-
-                    grouped = df_authors2.groupby('Date year')
-                    total_publications = grouped.size().reset_index(name='Total Publications')
-                    multiple_authored_papers = grouped['multiple_authors'].apply(lambda x: (x == True).sum()).reset_index(name='# Multiple Authored Publications')
-                    df_multiple_authors = pd.merge(total_publications, multiple_authored_papers, on='Date year')
-                    df_multiple_authors['# Single Authored Publications'] = df_multiple_authors['Total Publications']- df_multiple_authors['# Multiple Authored Publications']
-                    df_multiple_authors = df_multiple_authors[df_multiple_authors['Date year']!='No date']
-                    df_multiple_authors['% Multiple Authored Publications'] = round(df_multiple_authors['# Multiple Authored Publications']/df_multiple_authors['Total Publications'], 3)*100
-                    df_multiple_authors['% Single Authored Publications'] = round(df_multiple_authors['# Single Authored Publications']/df_multiple_authors['Total Publications'], 3)*100
-                    current_year = datetime.datetime.now().year
-                    df_multiple_authors = df_multiple_authors[df_multiple_authors['Date year']<=current_year]
-
-                    max_year = df_multiple_authors["Date year"].max()
-                    last_20_years = df_multiple_authors[df_multiple_authors["Date year"] >= (max_year - 20)]
-                    see_number_pubs = st.toggle('See number of publications')
-
-                    fig1 = go.Figure()
-                    fig1.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['# Multiple Authored Publications'], mode='lines+markers', name='# Multiple Authored Publications'))
-                    fig1.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['# Single Authored Publications'], mode='lines+markers', name='# Single Authored Publications'))
-
-                    fig1.update_layout(title='# Single vs Multiple Authored Publications Over the Years',
-                                    xaxis_title='Year',
-                                    yaxis_title='Number of Publications',
-                                    template='plotly_white')
-
-                    fig2 = go.Figure()
-                    fig2.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['% Multiple Authored Publications'], mode='lines+markers', name='% Multiple Authored Publications'))
-                    fig2.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['% Single Authored Publications'], mode='lines+markers', name='% Single Authored Publications'))
-
-                    fig2.update_layout(title='% Single vs Multiple Authored Publications Over the Years',
-                                    xaxis_title='Publication Year',
-                                    yaxis_title='% Publications',
-                                    template='plotly_white')
-
-                    if see_number_pubs:
-                        st.plotly_chart(fig1, use_container_width=True)
-                    else:
-                        st.plotly_chart(fig2, use_container_width=True)
-
                     df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                     df_authors = df_authors.explode('Author_name')
                     df_authors.reset_index(drop=True)
@@ -2705,6 +2658,54 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                     st.markdown(f'###### Top {num_authors} Authors by Publication Count (academic publications - {selected_type})')
                                     df_authors.columns = ['Author name', 'Publication count']
                                     df_authors
+
+                    df_authors2 = df_authors.copy()
+                    # df_authors2['Date published2'] = (
+                    #     df_authors2['Date published']
+                    #     # .str.strip()
+                    #     .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                    # )
+                    df_authors2['Date year'] = df_authors2['Date published'].dt.strftime('%Y')
+                    df_authors2['Date year'] = pd.to_numeric(df_authors2['Date year'], errors='coerce', downcast='integer')
+
+                    grouped = df_authors2.groupby('Date year')
+                    total_publications = grouped.size().reset_index(name='Total Publications')
+                    multiple_authored_papers = grouped['multiple_authors'].apply(lambda x: (x == True).sum()).reset_index(name='# Multiple Authored Publications')
+                    df_multiple_authors = pd.merge(total_publications, multiple_authored_papers, on='Date year')
+                    df_multiple_authors['# Single Authored Publications'] = df_multiple_authors['Total Publications']- df_multiple_authors['# Multiple Authored Publications']
+                    df_multiple_authors = df_multiple_authors[df_multiple_authors['Date year']!='No date']
+                    df_multiple_authors['% Multiple Authored Publications'] = round(df_multiple_authors['# Multiple Authored Publications']/df_multiple_authors['Total Publications'], 3)*100
+                    df_multiple_authors['% Single Authored Publications'] = round(df_multiple_authors['# Single Authored Publications']/df_multiple_authors['Total Publications'], 3)*100
+                    current_year = datetime.datetime.now().year
+                    df_multiple_authors = df_multiple_authors[df_multiple_authors['Date year']<=current_year]
+
+                    max_year = df_multiple_authors["Date year"].max()
+                    last_20_years = df_multiple_authors[df_multiple_authors["Date year"] >= (max_year - 20)]
+                    see_number_pubs = st.toggle('See number of publications')
+
+                    fig1 = go.Figure()
+                    fig1.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['# Multiple Authored Publications'], mode='lines+markers', name='# Multiple Authored Publications'))
+                    fig1.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['# Single Authored Publications'], mode='lines+markers', name='# Single Authored Publications'))
+
+                    fig1.update_layout(title='# Single vs Multiple Authored Publications Over the Years',
+                                    xaxis_title='Year',
+                                    yaxis_title='Number of Publications',
+                                    template='plotly_white')
+
+                    fig2 = go.Figure()
+                    fig2.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['% Multiple Authored Publications'], mode='lines+markers', name='% Multiple Authored Publications'))
+                    fig2.add_trace(go.Scatter(x=last_20_years['Date year'], y=last_20_years['% Single Authored Publications'], mode='lines+markers', name='% Single Authored Publications'))
+
+                    fig2.update_layout(title='% Single vs Multiple Authored Publications Over the Years',
+                                    xaxis_title='Publication Year',
+                                    yaxis_title='% Publications',
+                                    template='plotly_white')
+
+                    if see_number_pubs:
+                        st.plotly_chart(fig1, use_container_width=True)
+                    else:
+                        st.plotly_chart(fig2, use_container_width=True)
+
                 author_chart()
 
                 st.divider()
