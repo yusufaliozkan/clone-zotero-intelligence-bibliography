@@ -2828,6 +2828,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_cited_oa_papers=df_cited_oa_papers.reset_index()
                 df_cited_oa_papers.columns = ['Date year', 'Cited OA papers']
                 filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
+                filtered_df2
 
                 @st.experimental_fragment
                 def fragment2():
