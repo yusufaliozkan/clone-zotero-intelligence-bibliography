@@ -2972,8 +2972,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         st.plotly_chart(fig, use_container_width=True)
                     fragment_cited_papers()
 
-                    max_year = df_cited_overtime["Date year"].max()
-                    df_cited_overtime = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 5)]
+                    max_year_2 = df_cited_overtime["Date year"].max()
+                    df_cited_overtime = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year_2 - 5)]
                     cited_total = df_cited_overtime['Cited Publications'].sum()
                     non_cited_total = df_cited_overtime['Non-cited Publications'].sum() 
                     labels = ['Cited Publications', 'Non-cited Publications']
