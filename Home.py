@@ -2935,7 +2935,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     fig.add_trace(go.Scatter(
                         x=last_20_years["Date year"],
                         y=last_20_years["Citation"],
-                        name="#Citations",
+                        # name="#Citations",
                         mode="lines+markers",
                         marker=dict(color="green"),
                         yaxis="y2" 
@@ -2950,13 +2950,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             titlefont=dict(color="#17becf"),
                             tickfont=dict(color="#17becf")
                         ),
-                        # yaxis2=dict(
-                        #     title="#Citations",
-                        #     titlefont=dict(color="green"),
-                        #     tickfont=dict(color="green"),
-                        #     overlaying="y",
-                        #     side="right"
-                        # ),
+                        yaxis2=dict(
+                            title="#Citations",
+                            titlefont=dict(color="green"),
+                            tickfont=dict(color="green"),
+                            overlaying="y",
+                            side="right"
+                        ),
                         barmode="stack",
                         legend=dict(
                             x=1,         # Position the legend at the right side
