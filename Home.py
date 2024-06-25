@@ -3029,12 +3029,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         else:
                             st.plotly_chart(fig_bar, use_container_width=True)
                     fragment()
-                    df_citation_count
                     oa_cited_total = df_citation_count['#Citations (OA papers)'].sum()
                     non_oa_cited_total = df_citation_count['#Citations (non-OA papers)'].sum() 
                     labels = ['#Citations (OA papers)', '#Citations (non-OA papers)']
                     values = [oa_cited_total, non_oa_cited_total]
-                    custom_colors = ['green', '#D3D3D3'] 
+                    custom_colors = ['goldenrod', '#D3D3D3'] 
                     fig = px.pie(
                         values=values,
                         names=labels,
