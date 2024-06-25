@@ -277,6 +277,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_dedup['FirstName2'] = df_dedup['FirstName2'].astype(str)
             df_dedup['multiple_authors'] = df_dedup['FirstName2'].apply(lambda x: ',' in x)
             multiple_authored_papers = df_dedup['multiple_authors'].sum()
+            multiple_authored_papers
             collaboration_ratio = round(multiple_authored_papers / item_count * 100, 1)
             st.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
