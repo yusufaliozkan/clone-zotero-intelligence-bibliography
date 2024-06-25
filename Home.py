@@ -2909,13 +2909,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_cited_overtime['Non-cited Publications'] = df_cited_overtime['Total Publications']-df_cited_overtime['Cited Publications']
                 df_cited_overtime['%Cited Publications'] = round(df_cited_overtime['Cited Publications']/df_cited_overtime['Total Publications'], 3)*100
                 df_cited_overtime['%Non-Cited Publications'] = round(df_cited_overtime['Non-cited Publications']/df_cited_overtime['Total Publications'], 3)*100
-
-                max_year = df_cited_overtime["Date year"].max()
-                last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
                 col1, col2 = st.columns(2)
                 with col1:
                     @st.experimental_fragment
                     def fragment_cited_papers():
+                        max_year = df_cited_overtime["Date year"].max()
+                        last_20_years = df_cited_overtime[df_cited_overtime["Date year"] >= (max_year - 20)]
                         check_citation_count = st.checkbox('Add citation count')
 
                         fig = go.Figure()
