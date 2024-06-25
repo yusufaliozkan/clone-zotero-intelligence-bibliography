@@ -2950,7 +2950,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                         # Update layout for secondary y-axis
                         fig.update_layout(
-                            title="Cited papers ratio and # Citations" if check_citation_count else "Cited papers ratio",
+                            title="Cited papers ratio and # Citations (last 20 Years)" if check_citation_count else "Cited papers ratio (last 20 Years)",
                             xaxis=dict(title="Publication Year"),
                             yaxis=dict(
                                 title="%Cited Publications",
