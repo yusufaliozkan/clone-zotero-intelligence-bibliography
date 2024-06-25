@@ -3177,60 +3177,63 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     st.pyplot() 
 
             st.header('Item inclusion history', anchor=False)
-            df_added = df_dedup.copy()
-            time_interval = st.selectbox('Select time interval:', ['Monthly', 'Yearly'])
-            col11, col12 = st.columns(2)
-            with col11:
-                df_added['Date added'] = pd.to_datetime(df_added['Date added'])
-                df_added['YearMonth'] = df_added['Date added'].dt.to_period('M').astype(str)
-                monthly_counts = df_added.groupby('YearMonth').size()
-                monthly_counts.name = 'Number of items added'
-                if time_interval == 'Monthly':
-                    bar_chart = alt.Chart(monthly_counts.reset_index()).mark_bar().encode(
-                        x='YearMonth',
-                        y='Number of items added',
-                        tooltip=['YearMonth', 'Number of items added']
-                    ).properties(
-                        width=600,
-                        title='Number of Items Added per Month'
-                    )
-                    st.altair_chart(bar_chart, use_container_width=True)
-                else:
-                    df_added['Year'] = df_added['Date added'].dt.to_period('Y').astype(str)
-                    yearly_counts = df_added.groupby('Year').size()
-                    yearly_counts.name = 'Number of items added'
-                    bar_chart = alt.Chart(yearly_counts.reset_index()).mark_bar().encode(
-                        x='Year',
-                        y='Number of items added',
-                        tooltip=['Year', 'Number of items added']
-                    ).properties(
-                        width=600,
-                        title='Number of Items Added per Year'
-                    )
-                    st.altair_chart(bar_chart, use_container_width=True)
-            with col12:
-                if time_interval == 'Monthly':
-                    cumulative_counts = monthly_counts.cumsum()
-                    cumulative_chart = alt.Chart(pd.DataFrame({'YearMonth': cumulative_counts.index, 'Cumulative': cumulative_counts})).mark_line().encode(
-                        x='YearMonth',
-                        y='Cumulative',
-                        tooltip=['YearMonth', 'Cumulative']
-                    ).properties(
-                        width=600,
-                        title='Cumulative Number of Items Added'
-                    )
-                    st.altair_chart(cumulative_chart, use_container_width=True)
-                else:
-                    cumulative_counts_y = yearly_counts.cumsum()
-                    cumulative_chart = alt.Chart(pd.DataFrame({'Year': cumulative_counts_y.index, 'Cumulative': cumulative_counts_y})).mark_line().encode(
-                        x='Year',
-                        y='Cumulative',
-                        tooltip=['Year', 'Cumulative']
-                    ).properties(
-                        width=600,
-                        title='Cumulative Number of Items Added'
-                    )
-                    st.altair_chart(cumulative_chart, use_container_width=True)
+            @st.experimental_fragment
+            def fragment_item_inclusion():
+                df_added = df_dedup.copy()
+                time_interval = st.selectbox('Select time interval:', ['Monthly', 'Yearly'])
+                col11, col12 = st.columns(2)
+                with col11:
+                    df_added['Date added'] = pd.to_datetime(df_added['Date added'])
+                    df_added['YearMonth'] = df_added['Date added'].dt.to_period('M').astype(str)
+                    monthly_counts = df_added.groupby('YearMonth').size()
+                    monthly_counts.name = 'Number of items added'
+                    if time_interval == 'Monthly':
+                        bar_chart = alt.Chart(monthly_counts.reset_index()).mark_bar().encode(
+                            x='YearMonth',
+                            y='Number of items added',
+                            tooltip=['YearMonth', 'Number of items added']
+                        ).properties(
+                            width=600,
+                            title='Number of Items Added per Month'
+                        )
+                        st.altair_chart(bar_chart, use_container_width=True)
+                    else:
+                        df_added['Year'] = df_added['Date added'].dt.to_period('Y').astype(str)
+                        yearly_counts = df_added.groupby('Year').size()
+                        yearly_counts.name = 'Number of items added'
+                        bar_chart = alt.Chart(yearly_counts.reset_index()).mark_bar().encode(
+                            x='Year',
+                            y='Number of items added',
+                            tooltip=['Year', 'Number of items added']
+                        ).properties(
+                            width=600,
+                            title='Number of Items Added per Year'
+                        )
+                        st.altair_chart(bar_chart, use_container_width=True)
+                with col12:
+                    if time_interval == 'Monthly':
+                        cumulative_counts = monthly_counts.cumsum()
+                        cumulative_chart = alt.Chart(pd.DataFrame({'YearMonth': cumulative_counts.index, 'Cumulative': cumulative_counts})).mark_line().encode(
+                            x='YearMonth',
+                            y='Cumulative',
+                            tooltip=['YearMonth', 'Cumulative']
+                        ).properties(
+                            width=600,
+                            title='Cumulative Number of Items Added'
+                        )
+                        st.altair_chart(cumulative_chart, use_container_width=True)
+                    else:
+                        cumulative_counts_y = yearly_counts.cumsum()
+                        cumulative_chart = alt.Chart(pd.DataFrame({'Year': cumulative_counts_y.index, 'Cumulative': cumulative_counts_y})).mark_line().encode(
+                            x='Year',
+                            y='Cumulative',
+                            tooltip=['Year', 'Cumulative']
+                        ).properties(
+                            width=600,
+                            title='Cumulative Number of Items Added'
+                        )
+                        st.altair_chart(cumulative_chart, use_container_width=True)
+            fragment_item_inclusion()
         else:
             st.info('Toggle to see the dashboard!')
 
