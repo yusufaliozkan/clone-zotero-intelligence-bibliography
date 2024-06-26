@@ -2959,7 +2959,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     with col1:
                             max_year = df_oa_overtime["Date year"].max()
                             last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
-                            coloa1, coloa2 = st.columns([3,1])
+                            coloa1, coloa2 = st.columns(2)
                             with coloa1:
                                 citation_ratio = st.checkbox('Add citation ratio')
                             with coloa2:
