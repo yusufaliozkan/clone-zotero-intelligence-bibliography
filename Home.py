@@ -3291,6 +3291,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.subheader('Item inclusion history', anchor=False, divider='blue')
             @st.experimental_fragment
             def fragment_item_inclusion():
+                st.write('This part shows the number of items added to the bibliography over time.')
                 df_added = df_dedup.copy()
                 time_interval = st.selectbox('Select time interval:', ['Monthly', 'Yearly'])
                 col11, col12 = st.columns(2)
