@@ -2959,13 +2959,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     with col1:
                             max_year = df_oa_overtime["Date year"].max()
                             last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
-                            coloa1, coloa2 = st.columns(2)
-                            with coloa1:
-                                citation_ratio = st.checkbox('Add citation ratio')
-                            with coloa2:
-                                with st.popover('Help'):
-                                    st.info('Citation ratio shows the percentage of open access and non-open access publication for the given year.')
-                            
+                            citation_ratio = st.checkbox('Add citation ratio')
+                                                                
                             # Always start with the bar chart
                             fig = px.bar(
                                 last_20_years, 
@@ -2980,6 +2975,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             
                             # Add scatter plots if checkbox is checked
                             if citation_ratio:
+                                st.info('Citation ratio shows the percentage of open access and non-open access publication for the given year.')
+
                                 fig.add_scatter(
                                     x=last_20_years["Date year"], 
                                     y=last_20_years["%Cited OA papers"], 
