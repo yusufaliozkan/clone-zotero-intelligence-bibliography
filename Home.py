@@ -2961,7 +2961,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
                             citation_ratio = st.checkbox(
                                 'Add citation ratio', 
-                                help='Citation ratio shows the percentage of open access and non-open access publications for the given year.'
+                                help='Citation ratio shows the percentage (not the number) of open access and non-open access publications for the given period.'
                                 )
                                                                 
                             # Always start with the bar chart
