@@ -2978,7 +2978,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             
                             # Add scatter plots if checkbox is checked
                             if citation_ratio:
-                                st.caption('Citation ratio shows the percentage of open access and non-open access publications for the given year.')
 
                                 fig.add_scatter(
                                     x=last_20_years["Date year"], 
