@@ -2959,10 +2959,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     with col1:
                             max_year = df_oa_overtime["Date year"].max()
                             last_20_years = df_oa_overtime[df_oa_overtime["Date year"] >= (max_year - 20)]
-                            col1, col2 = st.columns(2)
-                            with col1:
+                            coloa1, coloa2 = st.columns(2)
+                            with coloa1:
                                 citation_ratio = st.checkbox('Add citation ratio')
-                            with col2:
+                            with coloa2:
                                 with st.popover('Help'):
                                     st.info('Citation ratio shows the percentage of open access and non-open access publication for the given year.')
                             
