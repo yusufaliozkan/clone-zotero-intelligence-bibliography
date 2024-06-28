@@ -50,14 +50,11 @@ st.set_page_config(layout = "wide",
                     initial_sidebar_state="auto") 
 pd.set_option('display.max_colwidth', None)
 
-def page2():
-    st.title("Second page")
-
 
 pg = st.navigation([
     st.Page('Home.py', title="Third page", icon=":material/favorite:"),
 
-    st.Page(page2, title="Second page", icon=":material/favorite:"),
+    st.Page('pages/1_Intelligence history.py', title="Second page", icon=":material/favorite:"),
 
 ])
 
