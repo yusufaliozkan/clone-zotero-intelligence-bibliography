@@ -5,12 +5,12 @@ from copyright import display_custom_license, cc_by_licence_image
 def sidebar_content():
     image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
 
+    def page2():
+        st.title("Second page")
     pg = st.navigation([
-        st.Page('Home.py', title='Home page'),
-        st.Page('Intelligence history.py', title='Intel hist')
+        st.Page(page2, title="Second page", icon=":material/favorite:"),
     ])
     pg.run()
-
     with st.sidebar:
         st.image(image, width=150)
         st.sidebar.markdown("# Intelligence studies network")
