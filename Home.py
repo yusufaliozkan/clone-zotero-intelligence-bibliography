@@ -3402,4 +3402,5 @@ with st.spinner('Retrieving data & updating dashboard...'):
         ''') 
 
     display_custom_license()
+st.navigation(pages)
 pg.run()
