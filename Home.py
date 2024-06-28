@@ -49,6 +49,8 @@ st.set_page_config(layout = "wide",
                     page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
                     initial_sidebar_state="auto") 
 pd.set_option('display.max_colwidth', None)
+StreamlitPage.run()
+
 
 pages = {
     'Home':[
