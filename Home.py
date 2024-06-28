@@ -60,8 +60,6 @@ pages = {
     ]
 }
 pg = st.navigation(pages)
-StreamlitPage.run()
-
 
 
 zot = zotero.Zotero(library_id, library_type)
