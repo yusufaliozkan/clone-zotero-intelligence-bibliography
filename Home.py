@@ -9,7 +9,7 @@ import altair as alt
 from datetime import date, timedelta  
 from datetime import datetime
 import datetime
-from streamlit_extras.switch_page_button import switch_page
+# from streamlit_extras.switch_page_button import switch_page
 import plotly.express as px
 import numpy as np
 import re
@@ -54,6 +54,8 @@ from format_entry import format_entry
 from authors_dict import df_authors, name_replacements
 from copyright import display_custom_license
 from sidebar_content import sidebar_content
+from streamlit_extras.switch_page_button import switch_page
+
 pages = {
     'Home':[
         st.Page('Home.py', title='Home page')
