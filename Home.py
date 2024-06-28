@@ -3406,4 +3406,4 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     display_custom_license()
 
-StreamlitPage.run()
+pg.run()
