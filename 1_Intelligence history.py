@@ -29,7 +29,7 @@ from streamlit_dynamic_filters import DynamicFilters
 import requests
 
 st.set_page_config(layout = "wide", 
-                    page_title='Intelligence studies network',
+                    page_title='Intelligence history',
                     page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
                     initial_sidebar_state="auto") 
 
