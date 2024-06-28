@@ -52,10 +52,10 @@ pd.set_option('display.max_colwidth', None)
 
 pages = {
     'Home':[
-        st.page('Home.py', title='Home page')
+        st.Page('Home.py', title='Home page')
     ],
     'Collections':[
-        st.page('1_Intelligence history.py', title='History')
+        st.Page('1_Intelligence history.py', title='History')
     ]
 }
 pg = st.navigation(pages)
