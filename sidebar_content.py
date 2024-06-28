@@ -7,9 +7,16 @@ def sidebar_content():
 
     def page2():
         st.title("Second page")
+
+
+    def page3():
+        st.title("Third page")
     pg = st.navigation([
         st.Page(page2, title="Second page", icon=":material/favorite:"),
+        st.Page(page3, title="Third page", icon=":material/favorite:"),
+
     ])
+
     pg.run()
     with st.sidebar:
         st.image(image, width=150)
