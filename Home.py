@@ -37,6 +37,11 @@ from format_entry import format_entry
 from streamlit_dynamic_filters import DynamicFilters
 # from rss_feed import df_podcast, df_magazines
 
+# Connecting Zotero with API 
+library_id = '2514686'
+library_type = 'group'
+api_key = '' # api_key is only needed for private groups and libraries
+
 # Bringing recently changed items
 
 st.set_page_config(layout = "wide", 
@@ -46,19 +51,14 @@ st.set_page_config(layout = "wide",
 pd.set_option('display.max_colwidth', None)
 
 
-# Connecting Zotero with API 
-library_id = '2514686'
-library_type = 'group'
-api_key = '' # api_key is only needed for private groups and libraries
+# pg = st.navigation([
+#     st.Page('Home.py', title="Third page", icon=":material/favorite:"),
 
-pg = st.navigation([
-    st.Page('Home.py', title="Third page", icon=":material/favorite:"),
+#     st.Page('pages/1_Intelligence history.py', title="Second page", icon=":material/favorite:"),
 
-    st.Page('pages/1_Intelligence history.py', title="Second page", icon=":material/favorite:"),
+# ])
 
-])
-
-pg.run()
+# pg.run()
 
 zot = zotero.Zotero(library_id, library_type)
 @st.cache_data(ttl=600)
