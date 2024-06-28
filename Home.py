@@ -55,7 +55,7 @@ pages = {
         st.Page('Home.py', title='Home page')
     ],
     'Collections':[
-        st.Page('pages/1_Intelligence history.py', title='History')
+        st.Page('pages/1_Intelligence history.py', title='History'),
         st.Page('pages/2_Intelligence studies', title='Intel studies')
     ]
 }
