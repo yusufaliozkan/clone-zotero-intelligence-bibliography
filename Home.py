@@ -53,11 +53,11 @@ pg = st.navigation({
     'Collections':[collection]
 })
 
-st.set_page_config(layout = "wide", 
-                    page_title='Intelligence studies network',
-                    page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
-                    initial_sidebar_state="auto") 
-pd.set_option('display.max_colwidth', None)
+# st.set_page_config(layout = "wide", 
+#                     page_title='Intelligence studies network',
+#                     page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
+#                     initial_sidebar_state="auto") 
+# pd.set_option('display.max_colwidth', None)
 
 
 zot = zotero.Zotero(library_id, library_type)
