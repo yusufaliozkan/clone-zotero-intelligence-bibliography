@@ -43,7 +43,7 @@ library_type = 'group'
 api_key = '' # api_key is only needed for private groups and libraries
 
 # Bringing recently changed items
-sidebar_content() 
+
 st.set_page_config(layout = "wide", 
                     page_title='Intelligence studies network',
                     page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
@@ -280,6 +280,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             collaboration_ratio = round(multiple_authored_papers / item_count * 100, 1)
             st.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
+    sidebar_content() 
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard']) #, '🔀 Surprise me'])
     with tab1:
