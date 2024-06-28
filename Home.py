@@ -56,6 +56,7 @@ pages = {
     ],
     'Collections':[
         st.Page('pages/1_Intelligence history.py', title='History')
+        st.page('pages/2_Intelligence studies', title='Intel studies')
     ]
 }
 pg = st.navigation(pages)
