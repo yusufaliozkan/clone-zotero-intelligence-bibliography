@@ -7,7 +7,7 @@ def sidebar_content():
 
     pg = st.navigation([
         st.Page('Home.py', title='Home page'),
-        st.Page('1_Intelligence history.py', title='Intel hist')
+        st.Page('Intelligence history.py', title='Intel hist')
     ])
     pg.run()
 
