@@ -53,7 +53,7 @@ pd.set_option('display.max_colwidth', None)
 
 pages = [
         st.Page('Home.py', title='Home page'),
-        st.Page('1_Intelligence history.py', title='History'),
+        st.Page('pages/1_Intelligence history.py', title='History'),
         st.Page('pages/2_Intelligence studies.py', title='Intel studies')
     ]
 
