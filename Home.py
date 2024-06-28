@@ -50,15 +50,13 @@ st.set_page_config(layout = "wide",
                     initial_sidebar_state="auto") 
 pd.set_option('display.max_colwidth', None)
 
-pages = {
-    'Home':[
-        st.Page('Home.py', title='Home page')
-    ],
-    'Collections':[
-        st.Page('pages/1_Intelligence history.py'),
-        st.Page('pages/2_Intelligence studies.py')
+
+pages = [
+        st.Page('Home.py', title='Home page'),
+        st.Page('pages/1_Intelligence history.py', title='History'),
+        st.Page('pages/2_Intelligence studies.py', title='Intel studies')
     ]
-}
+
 pg = st.navigation(pages)
 
 
