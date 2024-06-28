@@ -50,6 +50,19 @@ st.set_page_config(layout = "wide",
                     initial_sidebar_state="auto") 
 pd.set_option('display.max_colwidth', None)
 
+def page2():
+    st.title("Second page")
+
+
+pg = st.navigation([
+    st.Page('Home.py', title="Third page", icon=":material/favorite:"),
+
+    st.Page(page2, title="Second page", icon=":material/favorite:"),
+
+])
+
+pg.run()
+
 zot = zotero.Zotero(library_id, library_type)
 @st.cache_data(ttl=600)
 def zotero_data(library_id, library_type):
