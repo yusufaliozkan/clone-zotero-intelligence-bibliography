@@ -53,8 +53,8 @@ pd.set_option('display.max_colwidth', None)
 
 pages = [
         st.Page('Home.py', title='Home page'),
-        st.Page('/1_Intelligence history.py', title='History'),
-        st.Page('/2_Intelligence studies.py', title='Intel studies')
+        st.Page('1_Intelligence history.py', title='History'),
+        st.Page('2_Intelligence studies.py', title='Intel studies')
     ]
 
 pg = st.navigation(pages)
