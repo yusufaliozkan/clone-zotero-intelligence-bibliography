@@ -45,19 +45,19 @@ api_key = '' # api_key is only needed for private groups and libraries
 # Bringing recently changed items
 
 
-# st.set_page_config(layout = "wide", 
-#                     page_title='Intelligence studies network',
-#                     page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
-#                     initial_sidebar_state="auto") 
-# pd.set_option('display.max_colwidth', None)
+st.set_page_config(layout = "wide", 
+                    page_title='Intelligence studies network',
+                    page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
+                    initial_sidebar_state="auto") 
+pd.set_option('display.max_colwidth', None)
 
-page_home = st.Page('Home.py', title='Home page')
-collection = st.Page('pages/1_Intelligence history.py', title='History')
+# page_home = st.Page('Home.py', title='Home page')
+# collection = st.Page('pages/1_Intelligence history.py', title='History')
 
-pg = st.navigation({
-    'Home':[page_home],
-    'Collections':[collection]
-})
+# pg = st.navigation({
+#     'Home':[page_home],
+#     'Collections':[collection]
+# })
 
 zot = zotero.Zotero(library_id, library_type)
 @st.cache_data(ttl=600)
@@ -3401,4 +3401,4 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     display_custom_license()
 
-pg.run()
+# pg.run()
