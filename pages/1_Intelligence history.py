@@ -34,7 +34,7 @@ st.set_page_config(layout = "wide",
                     initial_sidebar_state="auto") 
 
 st.title("Intelligence history")
-st.Page('pages/1_Intelligence history.py', title='History').run()
+
 with st.spinner('Retrieving data & updating dashboard...'):
 
     # # Connecting Zotero with API
