@@ -9,7 +9,7 @@ import altair as alt
 from datetime import date, timedelta  
 from datetime import datetime
 import datetime
-# from streamlit_extras.switch_page_button import switch_page
+from streamlit_extras.switch_page_button import switch_page
 import plotly.express as px
 import numpy as np
 import re
@@ -27,13 +27,13 @@ import time
 import PIL
 from PIL import Image, ImageDraw, ImageFilter
 import json
-# from authors_dict import df_authors, name_replacements
-# from copyright import display_custom_license
-# from sidebar_content import sidebar_content
+from authors_dict import df_authors, name_replacements
+from copyright import display_custom_license
+from sidebar_content import sidebar_content
 import plotly.graph_objs as go
 import feedparser
 import requests
-# from format_entry import format_entry
+from format_entry import format_entry
 from streamlit_dynamic_filters import DynamicFilters
 # from rss_feed import df_podcast, df_magazines
 
@@ -50,12 +50,6 @@ st.set_page_config(layout = "wide",
                     initial_sidebar_state="auto") 
 pd.set_option('display.max_colwidth', None)
 
-from format_entry import format_entry
-from authors_dict import df_authors, name_replacements
-from copyright import display_custom_license
-from sidebar_content import sidebar_content
-from streamlit_extras.switch_page_button import switch_page
-
 pages = {
     'Home':[
         st.Page('Home.py', title='Home page')
@@ -65,7 +59,6 @@ pages = {
     ]
 }
 pg = st.navigation(pages)
-pg.run()
 
 zot = zotero.Zotero(library_id, library_type)
 @st.cache_data(ttl=600)
@@ -3408,3 +3401,4 @@ with st.spinner('Retrieving data & updating dashboard...'):
         ''') 
 
     display_custom_license()
+pg.run()
