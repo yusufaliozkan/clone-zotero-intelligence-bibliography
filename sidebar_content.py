@@ -4,8 +4,7 @@ from copyright import display_custom_license, cc_by_licence_image
 
 def sidebar_content():
     image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
-
-
+    
     with st.sidebar:
         st.image(image, width=150)
         st.sidebar.markdown("# Intelligence studies network")
