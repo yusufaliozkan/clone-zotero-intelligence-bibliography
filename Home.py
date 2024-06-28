@@ -50,15 +50,16 @@ st.set_page_config(layout = "wide",
                     initial_sidebar_state="auto") 
 pd.set_option('display.max_colwidth', None)
 
-
-# pg = st.navigation([
-#     st.Page('Home.py', title="Third page", icon=":material/favorite:"),
-
-#     st.Page('pages/1_Intelligence history.py', title="Second page", icon=":material/favorite:"),
-
-# ])
-
-# pg.run()
+pages = {
+    'Home':[
+        st.page('Home.py', title='Home page')
+    ],
+    'Collections':[
+        st.page('1_Intelligence history.py', title='History')
+    ]
+}
+pg = st.navigation(pages)
+pg.run()
 
 zot = zotero.Zotero(library_id, library_type)
 @st.cache_data(ttl=600)
