@@ -6,8 +6,8 @@ def sidebar_content():
     image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
 
     p1 = st.Page("Home.py")
-    p2 = st.Page('Intelligence history')
-    p3 = st.Page('Intelligence_studies.py')
+    p2 = st.Page('1_Intelligence history')
+    p3 = st.Page('2_Intelligence studies.py')
 
     pg = st.navigation({'Home':[p1], 'Collections':[p2, p3]})
     pg.run()
