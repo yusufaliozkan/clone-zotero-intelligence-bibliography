@@ -59,7 +59,7 @@ pages = {
     ]
 }
 pg = st.navigation(pages)
-# pg.run()
+pg.run()
 
 zot = zotero.Zotero(library_id, library_type)
 @st.cache_data(ttl=600)
