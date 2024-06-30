@@ -220,6 +220,7 @@ with col1:
             other_journals = final_df[~final_df['Journal'].isin(journals_with_filtered_items)]
 
             filtered_final_df = pd.concat([other_journals, historical_journal_filtered], ignore_index=True)
+            filtered_final_df
 
             ## DOI based filtering
             df_dedup = pd.read_csv('all_items.csv')
