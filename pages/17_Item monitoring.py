@@ -266,13 +266,12 @@ with col1:
             st.write('**Journal articles (published in last 30 days)**')
             items_not_in_df2['Publication Date'] = pd.to_datetime(items_not_in_df2['Publication Date'])
             current_date = datetime.datetime.now()
-            future_df = items_not_in_df2[items_not_in_df2['Publication Date']>current_date]
+            future_df = items_not_in_df2[items_not_in_df2['Publication Date']>=current_date]
             future_df = future_df.reset_index(drop=True)
             future_df
 
             ## Published in the last 30 days
             st.write('**Journal articles (published in last 30 days)**')
-            items_not_in_df2['Publication Date'] = pd.to_datetime(items_not_in_df2['Publication Date'])
             current_date = datetime.datetime.now()
             date_30_days_ago = current_date - timedelta(days=30)
             last_30_days_df = items_not_in_df2[(items_not_in_df2['Publication Date']<=current_date) & (items_not_in_df2['Publication Date']>=date_30_days_ago)]
