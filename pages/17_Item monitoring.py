@@ -234,6 +234,7 @@ with col1:
             df_titles = df_titles[[column_to_keep]]
             df_titles = df_titles.reset_index(drop=True)
 
+            st.write('**Journal articles (title based dedup)')
             merged_df_2 = pd.merge(filtered_final_df, df_titles[['Title']], on='Title', how='left', indicator=True)
             items_not_in_df3 = merged_df_2[merged_df_2['_merge'] == 'left_only']
             items_not_in_df3.drop('_merge', axis=1, inplace=True)
@@ -250,10 +251,8 @@ with col1:
             mask = ~items_not_in_df2['Title'].str.contains('|'.join(words_to_exclude), case=False)
             items_not_in_df2 = items_not_in_df2[mask]
             items_not_in_df2 = items_not_in_df2.reset_index(drop=True)
-            st.write('**Journal articles**')
+            st.write('**Journal articles (DOI based dedup)**')
             row_nu = len(items_not_in_df2.index)
-
-            st.write('test')
             if row_nu == 0:
                 st.write('No new podcast published!')
             else:
