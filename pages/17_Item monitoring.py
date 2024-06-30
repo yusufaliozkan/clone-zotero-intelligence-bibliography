@@ -255,7 +255,7 @@ with col1:
             df_titles = df_titles[[column_to_keep]]
             df_titles = df_titles.reset_index(drop=True)
 
-            merged_df_2 = pd.merge(filtered_final_df, df_titles[['Title']], on='Title', how='left', indicator=True)
+            merged_df_2 = pd.merge(items_not_in_df2, df_titles[['Title']], on='Title', how='left', indicator=True)
             items_not_in_df3 = merged_df_2[merged_df_2['_merge'] == 'left_only']
             items_not_in_df3.drop('_merge', axis=1, inplace=True)
             items_not_in_df3 = items_not_in_df3.sort_values(by=['Publication Date'], ascending=False)
