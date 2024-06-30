@@ -106,6 +106,8 @@ with col1:
                 'https://api.openalex.org/works?page=1&filter=primary_location.source.id:s2764608241&sort=publication_year:desc', #Michigan Journal of International Law
                 'https://api.openalex.org/works?page=1&filter=primary_location.source.id:s2735957470&sort=publication_year:desc', #Journal of Global Security Studies
                 'https://api.openalex.org/works?page=1&filter=primary_topic.id:t12572&sort=publication_year:desc', #Intelligence Studies and Analysis in Modern Context
+                'https://api.openalex.org/works?page=1&filter=concepts.id:c558872910&sort=publication_year:desc', #ConceptEspionage
+                'https://api.openalex.org/works?page=1&filter=concepts.id:c173127888&sort=publication_year:desc', #ConceptCounterintelligence
 
                 # Add more API links here
             ]
@@ -141,7 +143,7 @@ with col1:
 
                 if response.status_code == 200:
                     data = response.json()
-                    results = data['results']
+                    results = data.get('results', [])
 
                     titles = []
                     dois = []
@@ -149,45 +151,69 @@ with col1:
                     dois_without_https = []
                     journals = []
 
-                    future_titles = []
-                    future_dois = []
-                    future_publication_dates = []
-                    future_dois_without_https = []
-                    future_journals = []
-
-                    today = datetime.date.today()
-
                     today = datetime.datetime.today().date()
 
                     for result in results:
-                        pub_date = datetime.datetime.strptime(result['publication_date'], '%Y-%m-%d').date()
+                        if result is None:
+                            continue
+                        
+                        pub_date_str = result.get('publication_date')
+                        if pub_date_str is None:
+                            continue
+
+                        try:
+                            pub_date = datetime.datetime.strptime(pub_date_str, '%Y-%m-%d').date()
+                        except ValueError:
+                            continue  # Skip this result if the date is not in the expected format
 
                         if today - pub_date <= timedelta(days=90):
                             title = result.get('title')
                             
                             if title is not None and any(keyword in title.lower() for keyword in keywords):
                                 titles.append(title)
-                                dois.append(result['doi'])
-                                publication_dates.append(result['publication_date'])
-                                dois_without_https.append(result['ids']['doi'].split("https://doi.org/")[-1])
-                                journals.append(result['primary_location']['source']['display_name'])
+                                dois.append(result.get('doi', 'Unknown'))
+                                publication_dates.append(pub_date_str)
+                                
+                                # Ensure 'ids' and 'doi' are present before splitting
+                                ids = result.get('ids', {})
+                                doi_value = ids.get('doi', 'Unknown')
+                                if doi_value != 'Unknown':
+                                    dois_without_https.append(doi_value.split("https://doi.org/")[-1])
+                                else:
+                                    dois_without_https.append('Unknown')
 
+                                # Safely navigate through nested dictionaries using get
+                                primary_location = result.get('primary_location', {})
+                                source = primary_location.get('source')
+                                if source:
+                                    journal_name = source.get('display_name', 'Unknown')
+                                else:
+                                    journal_name = 'Unknown'
 
-                    df = pd.DataFrame({
-                        'Title': titles,
-                        'Link': dois,
-                        'Publication Date': publication_dates,
-                        'DOI': dois_without_https,
-                        'Journal': journals,
-                    })
+                                journals.append(journal_name)
 
-                    dfs.append(df)
+                    if titles:  # Ensure DataFrame creation only if there are titles
+                        df = pd.DataFrame({
+                            'Title': titles,
+                            'Link': dois,
+                            'Publication Date': publication_dates,
+                            'DOI': dois_without_https,
+                            'Journal': journals,
+                        })
 
+                        dfs.append(df)
 
-                else:
-                    print(f"Failed to fetch data from the API: {api_link}")
+            # Combine all DataFrames in dfs list into a single DataFrame
+            if dfs:
+                final_df = pd.concat(dfs, ignore_index=True)
+            else:
+                final_df = pd.DataFrame()  # Create an empty DataFrame if dfs is empty
+
+                # else:
+                #     print(f"Failed to fetch data from the API: {api_link}")
 
             final_df = pd.concat(dfs, ignore_index=True)
+            final_df = final_df.drop_duplicates(subset='Link')
 
             historical_journal_filtered = final_df[final_df['Journal'].isin(journals_with_filtered_items)]
 
@@ -202,6 +228,19 @@ with col1:
             df_dois = df_dois[[column_to_keep]]
             df_dois = df_dois.reset_index(drop=True) 
 
+            df_titles = df_dedup.copy()
+            df_titles.dropna(subset=['Title'], inplace=True)
+            column_to_keep = 'Title'
+            df_titles = df_titles[[column_to_keep]]
+            df_titles = df_titles.reset_index(drop=True)
+
+            merged_df_2 = pd.merge(filtered_final_df, df_titles[['Title']], on='Title', how='left', indicator=True)
+            items_not_in_df3 = merged_df_2[merged_df_2['_merge'] == 'left_only']
+            items_not_in_df3.drop('_merge', axis=1, inplace=True)
+            items_not_in_df3 = items_not_in_df3.sort_values(by=['Publication Date'], ascending=False)
+            items_not_in_df3 = items_not_in_df3.reset_index(drop=True)
+            items_not_in_df3
+
             merged_df = pd.merge(filtered_final_df, df_dois[['DOI']], on='DOI', how='left', indicator=True)
             items_not_in_df2 = merged_df[merged_df['_merge'] == 'left_only']
             items_not_in_df2.drop('_merge', axis=1, inplace=True)
@@ -213,13 +252,11 @@ with col1:
             items_not_in_df2 = items_not_in_df2.reset_index(drop=True)
             st.write('**Journal articles**')
             row_nu = len(items_not_in_df2.index)
-
-            st.write('test')
-
             if row_nu == 0:
                 st.write('No new podcast published!')
             else:
-                items_not_in_df2 = items_not_in_df2.sort_values(by=['Publication Date'], ascending=False).reset_index(drop=True)
+                items_not_in_df2 = items_not_in_df2.sort_values(by=['Publication Date'], ascending=False)
+                items_not_in_df2 = items_not_in_df2.reset_index(drop=True)
                 items_not_in_df2
 
             df_item_podcast = df_dedup.copy()
