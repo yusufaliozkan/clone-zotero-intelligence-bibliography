@@ -172,14 +172,6 @@ with col1:
                                 dois_without_https.append(result['ids']['doi'].split("https://doi.org/")[-1])
                                 journals.append(result['primary_location']['source']['display_name'])
 
-                            elif pub_date > today:
-                                # Future publications (published tomorrow onwards)
-                                future_titles.append(title)
-                                future_dois.append(result['doi'])
-                                future_publication_dates.append(result['publication_date'])
-                                future_dois_without_https.append(result['ids']['doi'].split("https://doi.org/")[-1])
-                                future_journals.append(result['primary_location']['source']['display_name'])
-
 
                     df = pd.DataFrame({
                         'Title': titles,
@@ -191,21 +183,11 @@ with col1:
 
                     dfs.append(df)
 
-                    future_df = pd.DataFrame({
-                        'Title': future_titles,
-                        'Link': future_dois,
-                        'Publication Date': future_publication_dates,
-                        'DOI': future_dois_without_https,
-                        'Journal': future_journals,
-                    })
-                    future_dfs.appends(future_df)
 
                 else:
                     print(f"Failed to fetch data from the API: {api_link}")
 
             final_df = pd.concat(dfs, ignore_index=True)
-
-            final_future_df = pd.concat(future_dfs, ignore_index=True)
 
             historical_journal_filtered = final_df[final_df['Journal'].isin(journals_with_filtered_items)]
 
