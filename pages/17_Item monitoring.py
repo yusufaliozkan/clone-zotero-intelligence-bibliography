@@ -259,8 +259,16 @@ with col1:
             items_not_in_df3.drop('_merge', axis=1, inplace=True)
             items_not_in_df3 = items_not_in_df3.sort_values(by=['Publication Date'], ascending=False)
             items_not_in_df3 = items_not_in_df3.reset_index(drop=True)
-            st.write('**Journal articles (title based filtering)**')
-            items_not_in_df3
+
+
+            st.write('**Journal articles (future publications)**')
+            ## Future publications
+            st.write('**Journal articles (published in last 30 days)**')
+            items_not_in_df2['Publication Date'] = pd.to_datetime(items_not_in_df2['Publication Date'])
+            current_date = datetime.datetime.now()
+            future_df = items_not_in_df2[items_not_in_df2['Publication Date']>current_date]
+            future_df = future_df.reset_index(drop=True)
+            future_df
 
             ## Published in the last 30 days
             st.write('**Journal articles (published in last 30 days)**')
