@@ -51,14 +51,6 @@ st.set_page_config(layout = "wide",
                     initial_sidebar_state="auto") 
 pd.set_option('display.max_colwidth', None)
 
-# page_home = st.Page('Home.py', title='Home page')
-# collection = st.Page('pages/1_Intelligence history.py', title='History')
-
-# pg = st.navigation({
-#     'Home':[page_home],
-#     'Collections':[collection]
-# })
-
 zot = zotero.Zotero(library_id, library_type)
 @st.cache_data(ttl=600)
 def zotero_data(library_id, library_type):
@@ -3400,5 +3392,3 @@ with st.spinner('Retrieving data & updating dashboard...'):
         ''') 
 
     display_custom_license()
-
-# pg.run()
