@@ -264,6 +264,7 @@ with col1:
             items_not_in_df3
 
             test_df = items_not_in_df2.merge(items_not_in_df3, on=['Title', 'Link', 'Publication Date', 'DOI', 'Journal'], how='left', indicator=True)
+            test_df
             test_df = test_df[test_df['_merge']=='left only']
             test_df
             test_df = test_df.drop(columns=['_merge'])
