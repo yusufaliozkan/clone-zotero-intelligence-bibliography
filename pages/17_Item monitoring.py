@@ -149,6 +149,14 @@ with col1:
                     dois_without_https = []
                     journals = []
 
+                    future_titles = []
+                    future_dois = []
+                    future_publication_dates = []
+                    future_dois_without_https = []
+                    future_journals = []
+
+                    today = datetime.date.today()
+
                     today = datetime.datetime.today().date()
 
                     for result in results:
@@ -164,6 +172,15 @@ with col1:
                                 dois_without_https.append(result['ids']['doi'].split("https://doi.org/")[-1])
                                 journals.append(result['primary_location']['source']['display_name'])
 
+                            elif pub_date > today:
+                                # Future publications (published tomorrow onwards)
+                                future_titles.append(title)
+                                future_dois.append(result['doi'])
+                                future_publication_dates.append(result['publication_date'])
+                                future_dois_without_https.append(result['ids']['doi'].split("https://doi.org/")[-1])
+                                future_journals.append(result['primary_location']['source']['display_name'])
+
+
                     df = pd.DataFrame({
                         'Title': titles,
                         'Link': dois,
@@ -174,10 +191,21 @@ with col1:
 
                     dfs.append(df)
 
+                    future_df = pd.DataFrame({
+                        'Title': future_titles,
+                        'Link': future_dois,
+                        'Publication Date': future_publication_dates,
+                        'DOI': future_dois_without_https,
+                        'Journal': future_journals,
+                    })
+                    future_dfs.appends(future_df)
+
                 else:
                     print(f"Failed to fetch data from the API: {api_link}")
 
             final_df = pd.concat(dfs, ignore_index=True)
+
+            final_future_df = pd.concat(future_dfs, ignore_index=True)
 
             historical_journal_filtered = final_df[final_df['Journal'].isin(journals_with_filtered_items)]
 
@@ -203,6 +231,9 @@ with col1:
             items_not_in_df2 = items_not_in_df2.reset_index(drop=True)
             st.write('**Journal articles**')
             row_nu = len(items_not_in_df2.index)
+
+            st.write('test')
+
             if row_nu == 0:
                 st.write('No new podcast published!')
             else:
