@@ -241,7 +241,7 @@ with col1:
             items_not_in_df3 = items_not_in_df3.reset_index(drop=True)
             items_not_in_df3
 
-            merged_df = pd.merge(filtered_final_df, df_dois[['DOI']], on='DOI', how='left', indicator=True)
+            merged_df = pd.merge(items_not_in_df3, df_dois[['DOI']], on='DOI', how='left', indicator=True)
             items_not_in_df2 = merged_df[merged_df['_merge'] == 'left_only']
             items_not_in_df2.drop('_merge', axis=1, inplace=True)
 
