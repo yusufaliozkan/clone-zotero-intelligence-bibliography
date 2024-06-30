@@ -280,7 +280,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
                     df_zotero_id = df_collections[['zotero_item_key']]
 
-                    def display_bibliographies(df):
+                    def display_bibliographies(df):#
+                        df['bibliography'] = df['bibliography'].fillna('').astype(str)
                         all_bibliographies = ""
                         for index, row in df.iterrows():
                             # Add a horizontal line between bibliographies
