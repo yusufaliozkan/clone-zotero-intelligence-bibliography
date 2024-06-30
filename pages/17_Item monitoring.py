@@ -220,7 +220,6 @@ with col1:
             other_journals = final_df[~final_df['Journal'].isin(journals_with_filtered_items)]
 
             filtered_final_df = pd.concat([other_journals, historical_journal_filtered], ignore_index=True)
-            filtered_final_df
 
             ## DOI based filtering
             df_dedup = pd.read_csv('all_items.csv')
@@ -268,6 +267,7 @@ with col1:
             current_date = datetime.datetime.now()
             date_30_days_ago = current_date - timedelta(days=30)
             last_30_days_df = items_not_in_df2[(items_not_in_df2['Publication Date']<=current_date) & (items_not_in_df2['Publication Date']>=date_30_days_ago)]
+            last_30_days_df = last_30_days_df.reset_index(drop=True)
             last_30_days_df
 
             # merged_df = pd.merge(filtered_final_df, df_dois[['DOI']], on='DOI', how='left', indicator=True)
