@@ -245,7 +245,8 @@ with col1:
             else:
                 items_not_in_df2 = items_not_in_df2.sort_values(by=['Publication Date'], ascending=False)
                 items_not_in_df2 = items_not_in_df2.reset_index(drop=True)
-                items_not_in_df2
+                with st.expander('All'):
+                    items_not_in_df2
 
             ## Title based filtering
             df_titles = df_dedup.copy()
