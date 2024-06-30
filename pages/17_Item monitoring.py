@@ -252,6 +252,8 @@ with col1:
             items_not_in_df2 = items_not_in_df2.reset_index(drop=True)
             st.write('**Journal articles**')
             row_nu = len(items_not_in_df2.index)
+
+            st.write('test')
             if row_nu == 0:
                 st.write('No new podcast published!')
             else:
