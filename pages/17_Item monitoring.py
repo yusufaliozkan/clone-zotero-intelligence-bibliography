@@ -249,6 +249,7 @@ with col1:
             else:
                 items_not_in_df2 = items_not_in_df2.sort_values(by=['Publication Date'], ascending=False)
                 items_not_in_df2 = items_not_in_df2.reset_index(drop=True)
+                items_not_in_df2
 
 
             st.write('**Journal articles (title based dedup)**')
