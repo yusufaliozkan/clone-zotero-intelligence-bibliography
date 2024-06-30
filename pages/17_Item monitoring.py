@@ -221,6 +221,7 @@ with col1:
 
             filtered_final_df = pd.concat([other_journals, historical_journal_filtered], ignore_index=True)
 
+            ## DOI based filtering
             df_dedup = pd.read_csv('all_items.csv')
             df_dois = df_dedup.copy() 
             df_dois.dropna(subset=['DOI'], inplace=True) 
@@ -237,7 +238,7 @@ with col1:
             mask = ~items_not_in_df2['Title'].str.contains('|'.join(words_to_exclude), case=False)
             items_not_in_df2 = items_not_in_df2[mask]
             items_not_in_df2 = items_not_in_df2.reset_index(drop=True)
-            st.write('**Journal articles (DOI based**')
+            st.write('**Journal articles (DOI based filtering)**')
             row_nu = len(items_not_in_df2.index)
             if row_nu == 0:
                 st.write('No new podcast published!')
@@ -246,6 +247,7 @@ with col1:
                 items_not_in_df2 = items_not_in_df2.reset_index(drop=True)
                 items_not_in_df2
 
+            ## Title based filtering
             df_titles = df_dedup.copy()
             df_titles.dropna(subset=['Title'], inplace=True)
             column_to_keep = 'Title'
@@ -257,6 +259,7 @@ with col1:
             items_not_in_df3.drop('_merge', axis=1, inplace=True)
             items_not_in_df3 = items_not_in_df3.sort_values(by=['Publication Date'], ascending=False)
             items_not_in_df3 = items_not_in_df3.reset_index(drop=True)
+            st.write('**Journal articles (title based filtering)**')
             items_not_in_df3
 
             # merged_df = pd.merge(filtered_final_df, df_dois[['DOI']], on='DOI', how='left', indicator=True)
