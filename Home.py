@@ -890,9 +890,7 @@ with st.spinner('Retrieving data...'):
                         item_type_no = filtered_collection_df_authors['Publication type'].nunique()
                         container_type.metric(label='Number of publication types', value=int(item_type_no))
 
-                        filtered_type_df['multiple_authors'] = filtered_type_df['FirstName2'].apply(
-                            lambda x: isinstance(x, str) and ',' in x
-                        )
+                        filtered_collection_df_authors['multiple_authors'] = filtered_collection_df_authors['FirstName2'].apply(lambda x: ',' in x)
                         multiple_authored_papers = filtered_collection_df_authors['multiple_authors'].sum()
                         if multiple_authored_papers == 0:
                             collaboration_ratio = 0
@@ -1319,7 +1317,9 @@ with st.spinner('Retrieving data...'):
                         container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
 
                         filtered_type_df
-                        filtered_type_df['multiple_authors'] = filtered_type_df['FirstName2'].apply(lambda x: ',' in x)
+                        filtered_type_df['multiple_authors'] = filtered_type_df['FirstName2'].apply(
+                            lambda x: isinstance(x, str) and ',' in x
+                        )
                         multiple_authored_papers = filtered_type_df['multiple_authors'].sum()
                         if multiple_authored_papers == 0:
                             collaboration_ratio = 0
