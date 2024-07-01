@@ -256,8 +256,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
             item_type_no = df_dedup['Publication type'].nunique()
             st.metric(label='Number of publication types', value=int(item_type_no))
 
-            # df_dedup = df_dedup[df_dedup['Publication type'] != 'Thesis']
-            # item_count = len(df_dedup)
+            df_dedup = df_dedup[df_dedup['Publication type'] != 'Thesis']
+            item_count = len(df_dedup)
             def split_and_expand(authors):
                 # Ensure the input is a string
                 if isinstance(authors, str):
@@ -275,7 +275,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
             else:
                 author_pub_ratio = round(author_no/item_count, 2)
             st.metric(label='Number of authors', value=int(author_no))
-            st.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
+            st.metric(
+                label='Author/publication ratio', 
+                value=author_pub_ratio, 
+                help='The average author number per publication (theses are excluded as they are inherently single-authored publications).'
+            )
 
 
             df_dedup = df_dedup[df_dedup['Publication type'] != 'Thesis']
