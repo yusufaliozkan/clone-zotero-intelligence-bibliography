@@ -2177,12 +2177,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 def format_row(row):
                     if row['Publication type'] == 'Book chapter' and row['Book_title']:
-                        return ('**' + row['Publication type'] + '**' + ': ' + row['Title'] + ', ' +
-                                ' (by ' + '*' + row['Authors'] + '*' + ') ' +
-                                ' (Published on: ' + row['Date published'] + ') ' +
-                                '[[Publication link]]' + '(' + row['Link to publication'] + ')' +
-                                "[[Zotero link]]" + '(' + row['Zotero link'] + ') ' +
-                                '(In: ' + row['Book_title'] + ')')  # Including Book Title for book chapters    
+                        return (
+                            f"**{row['Publication type']}**: "
+                            f"{row['Title']} "
+                            f"(by *{row['Authors']}*)"
+                            f"(Published on: {row['Date published']}"
+                            f"[[Publication link]]({row['Link to publication']})"
+                            f"[[Zotero link]]({row['Zotero link']})"
+                            f"(In: {row['Book_title']})"
                     elif row['Publication type'] == 'Thesis':
                         return ('**' + row['Publication type'] + '**' + ': ' +
                                 row['Title'] + ', ' +
