@@ -2187,13 +2187,16 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             f"(In: {row['Book_title']})"
                         )
                     elif row['Publication type'] == 'Thesis':
-                        return ('**' + row['Publication type'] + '**' + ': ' +
-                                row['Title'] + ', ' +
-                                ' (by ' + '*' + row['Authors'] + '*' + ') ' +
-                                ' (Published on: ' + row['Date published'] + ') ' +
-                                '[[Publication link]]' + '(' + row['Link to publication'] + ')' +
-                                "[[Zotero link]]" + '(' + row['Zotero link'] + ') ' +
-                                '('+ row['Thesis_type']+': ' + row['University'] + ')')           
+                        return (
+                            f"**{row['Publication type']}**: "
+                            f"{row['Title']}, "
+                            f"(by {row['Authors']})"
+                            f"({row['Thesis_type']}: *{row['University']}*) "
+                            f"(Published on: {row['Date published']})"
+                            f"[[Publication link]]({row['Link to publication']})"
+                            f"[[Zotero link]]({row['Zotero link']})"
+                        )
+      
                     else:
                         return ('**' + row['Publication type'] + '**' + ': ' + row['Title'] + ', ' +
                                 ' (by ' + '*' + row['Authors'] + '*' + ') ' +
