@@ -1290,7 +1290,9 @@ with st.spinner('Retrieving data...'):
                         with coltype1:
                             container_metric = st.container()
                         with coltype2:
-                            container_citation = st.container()
+                            with st.popover('More metrics'):
+                                container_citation = st.container()
+                                container_oa = st.container()
                         download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                         download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
                         download_types = download_types.reset_index(drop=True)
@@ -1311,6 +1313,7 @@ with st.spinner('Retrieving data...'):
                             oa_ratio = 0.0
                         else:
                             oa_ratio = true_count / total_count * 100
+                        container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
 
                         citation_count = filtered_type_df['Citation'].sum()
                         citation_mean = non_nan_cited_df_dedup['Citation'].mean()
