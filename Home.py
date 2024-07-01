@@ -2198,11 +2198,11 @@ with st.spinner('Retrieving data...'):
                         st.write(f"{i+1}) " + formatted_row)
 
                     elif publication_type == 'Thesis':
-                        thesis_type = df['Thesis_type'].iloc[i]
+                        thesis_type = f"{df['Thesis_type'].iloc[i]}: "
                         formatted_row = (
                             f"**{df['Publication type'].iloc[i]}**: "
                             f"{df['Title'].iloc[i]}"
-                            f" ({thesis_type if thesis_type else ''}: *{df['University'].iloc[i]}*)"
+                            f" ({thesis_type if thesis_type else ''}*{df['University'].iloc[i]}*)"
                             f" (by *{df['Authors'].iloc[i]}*)"
                             f" (Published on: {df['Date published'].iloc[i]})"
                             f" [[Publication link]]({df['Link to publication'].iloc[i]})"
