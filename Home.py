@@ -2214,7 +2214,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 #             '[[Publication link]]'+ '('+ df['Link to publication'] + ')' +
                 #             "[[Zotero link]]" +'('+ df['Zotero link'] + ')' 
                 #             )
-                
+                df_last
                 row_nu_1 = len(df_last)
                 for i in range(row_nu_1):
                     publication_type = df['Publication type'].iloc[i]
