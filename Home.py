@@ -1294,6 +1294,8 @@ with st.spinner('Retrieving data...'):
                                 container_citation = st.container()
                                 container_oa = st.container()
                                 container_collaboration_ratio = st.container()
+                                container_author_number
+                                container_author_ratio
                         download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                         download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
                         download_types = download_types.reset_index(drop=True)
@@ -1316,7 +1318,6 @@ with st.spinner('Retrieving data...'):
                             oa_ratio = true_count / total_count * 100
                         container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
 
-                        filtered_type_df
                         filtered_type_df['multiple_authors'] = filtered_type_df['FirstName2'].apply(
                             lambda x: isinstance(x, str) and ',' in x
                         )
@@ -1326,6 +1327,20 @@ with st.spinner('Retrieving data...'):
                         else:
                             collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
                         container_collaboration_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
+
+                        expanded_authors = filtered_type_df['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                        expanded_authors = expanded_authors.reset_index(name='Author')
+                        author_no = len(expanded_authors)
+                        if author_no == 0:
+                            author_pub_ratio=0.0
+                        else:
+                            author_pub_ratio = round(author_no/item_count, 2)
+                        container_author_number.metric(label='Number of authors', value=int(author_no))
+                        container_author_ratio.metric(
+                            label='Author/publication ratio', 
+                            value=author_pub_ratio, 
+                            help='The average author number per publication (theses are excluded as they are inherently single-authored publications).'
+                        )
 
                         citation_count = filtered_type_df['Citation'].sum()
                         citation_mean = non_nan_cited_df_dedup['Citation'].mean()
