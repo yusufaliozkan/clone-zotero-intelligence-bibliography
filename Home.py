@@ -1302,6 +1302,7 @@ with st.spinner('Retrieving data...'):
                                 if selected_type=='Thesis':
                                     unique_thesis_types = [''] + list(df_authors['Thesis_type'].unique())
                                     selected_thesis_type = st.selectbox('Select a publication type', unique_thesis_types)
+                                    filtered_type_df = filtered_type_df[filtered_type_df['Thesis_type']==selected_thesis_type]
                                     
                         download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                         download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
