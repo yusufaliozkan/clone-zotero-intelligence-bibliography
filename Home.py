@@ -2202,6 +2202,7 @@ with st.spinner('Retrieving data...'):
                             f"**{df['Publication type'].iloc[i]}**: "
                             f"{df['Title'].iloc[i]}"
                             result = f" ({df['Thesis_type'].iloc[i]}: *{df['University'].iloc[i]}*)" if df['Thesis_type'].iloc[i] else f" (*{df['University'].iloc[i]}*)"
+                            result
                             f" (by *{df['Authors'].iloc[i]}*)"
                             f" (Published on: {df['Date published'].iloc[i]})"
                             f" [[Publication link]]({df['Link to publication'].iloc[i]})"
