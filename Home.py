@@ -2165,8 +2165,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                     if publication_type in ["Journal article", "Magazine article", "Newspaper article"]:
                         formatted_row += f" (Published in: *{df['Pub_venue'].iloc[i]}*)"
-                    elif publication_type == 'Book chapter':
-                        formatted_row += f" (in: *{df['Book_title'].iloc[i]}*)"
+                    # elif publication_type == 'Book chapter':
+                    #     formatted_row += f" (in: *{df['Book_title'].iloc[i]}*)"
                     elif publication_type == 'Thesis':
                         # The necessary format is already handled in format_row function for Thesis
                         pass
