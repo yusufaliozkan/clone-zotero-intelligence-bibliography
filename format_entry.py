@@ -63,15 +63,14 @@ def format_entry(row, include_citation=True):
         # )
     else:
         return (
-            f"**{publication_type}**:"
-            f" {title}"
-            f" (in *{authors}*)"
-            f" (Publication date: {str(date_published)})"
-            f" ({published_by_or_in}: {published_source})" if published_by_or_in else ''
-            f" [[Publication link]]({link_to_publication})"
-            f" [[Zotero link]]({zotero_link})"
-            f"{oa_link_text if oa_link_text else ''}"
-            f"{citation_text if include_citation else ''}"
+            f"**{publication_type}**: {title} " \
+            f"(by *{authors}*) " \
+            f"(Publication date: {date_published}) " \
+            f"({published_by_or_in}: *{published_source}*) " if published_by_or_in else '' + \
+            f"[[Publication link]]({link_to_publication}) " \
+            f"[[Zotero link]]({zotero_link}) " \
+            f"{oa_link_text} " if oa_link_text else '' + \
+            f"{citation_text}" if include_citation else ''
         )
             # '**' + publication_type + '**' + ': ' +
             # title + ' ' +
