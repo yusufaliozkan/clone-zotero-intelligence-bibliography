@@ -2139,7 +2139,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     if row['Publication type'] == 'Book chapter' and row.get('Book_title'):
                         return (
                         f"**{row['Publication type']}**: {row['Title']}, "
-                        f"(in: *{'Book_title'}*)"
+                        f"(in: *{row['Book_title']}*)"
                         f"(by *{row['Authors']}*) "
                         f"(Published on: {row['Date published']}) "
                         f"[[Publication link]]({row['Link to publication']}) "
