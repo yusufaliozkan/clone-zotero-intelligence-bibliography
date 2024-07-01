@@ -2221,32 +2221,30 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         )
 
                         st.write(f"{i+1}) " + formatted_row)
-                    @st.experimental_fragment
-                    def abstract_themes():
-                        if display:
-                            a = ''
-                            b = ''
-                            c = ''
-                            if 'Name_x' in df:
-                                a = '[' + '[' + df['Name_x'].iloc[i] + ']' + '(' + df['Link_x'].iloc[i] + ')' + ']'
-                                # f"[{[df['Name_x'].iloc[i]](df['Link_x'].iloc[i])}]"
-                                if df['Name_x'].iloc[i] == '':
-                                    a = ''
-                            if 'Name_y' in df:
-                                b = '[' + '[' + df['Name_y'].iloc[i] + ']' + '(' + df['Link_y'].iloc[i] + ')' + ']'
-                                # f"[{[df['Name_y'].iloc[i]](df['Link_y'].iloc[i])}]"
-                                if df['Name_y'].iloc[i] == '':
-                                    b = ''
-                            if 'Name' in df:
-                                c ='[' + '[' + df['Name'].iloc[i] + ']' + '(' + df['Link'].iloc[i] + ')' + ']'
-                                if df['Name'].iloc[i] == '':
-                                    c = ''
-                            st.caption('Theme(s):  \n ' + a + ' ' + b + ' ' + c)
-                            if not any([a, b, c]):
-                                st.caption('No theme to display!')
-                            
-                            st.caption('Abstract: ' + df['Abstract'].iloc[i])
-                    abstract_themes()
+                    if display:
+                        a = ''
+                        b = ''
+                        c = ''
+                        if 'Name_x' in df:
+                            a = '[' + '[' + df['Name_x'].iloc[i] + ']' + '(' + df['Link_x'].iloc[i] + ')' + ']'
+                            # f"[{[df['Name_x'].iloc[i]](df['Link_x'].iloc[i])}]"
+                            if df['Name_x'].iloc[i] == '':
+                                a = ''
+                        if 'Name_y' in df:
+                            b = '[' + '[' + df['Name_y'].iloc[i] + ']' + '(' + df['Link_y'].iloc[i] + ')' + ']'
+                            # f"[{[df['Name_y'].iloc[i]](df['Link_y'].iloc[i])}]"
+                            if df['Name_y'].iloc[i] == '':
+                                b = ''
+                        if 'Name' in df:
+                            c ='[' + '[' + df['Name'].iloc[i] + ']' + '(' + df['Link'].iloc[i] + ')' + ']'
+                            if df['Name'].iloc[i] == '':
+                                c = ''
+                        st.caption('Theme(s):  \n ' + a + ' ' + b + ' ' + c)
+                        if not any([a, b, c]):
+                            st.caption('No theme to display!')
+                        
+                        st.caption('Abstract: ' + df['Abstract'].iloc[i])
+
             with tab12:
                 st.markdown('#### Recently published items')
                 display2 = st.checkbox('Display abstracts', key='recently_published')
