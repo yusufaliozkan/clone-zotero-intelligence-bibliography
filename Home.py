@@ -1299,6 +1299,10 @@ with st.spinner('Retrieving data...'):
                         with coltype3:
                             with st.popover('Filters and more'):
                                 container_download_types = st.container()
+                                if filtered_type_df['Publication type']=='Thesis':
+                                    unique_thesis_types = [''] + list(df_authors['Thesis_type'].unique())
+                                    selected_thesis_type = st.selectbox('Select a publication type', unique_thesis_types)
+                                    
                         download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                         download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
                         download_types = download_types.reset_index(drop=True)
