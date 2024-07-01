@@ -2153,8 +2153,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         formatted_row += f" (Published in: *{df['Pub_venue'].iloc[i]}*)"
                     elif publication_type == 'Book chapter':
                         formatted_row += f" (in: *{df['Book_title'].iloc[i]}*)"
-                    elif publication_type == 'Thesis':
-                        formatted_row += f" ({df['Thesis_type'].iloc[i]}: *{df['University'].iloc[i]}*)"
+                    # elif publication_type == 'Thesis':
+                    #     formatted_row += f" ({df['Thesis_type'].iloc[i]}: *{df['University'].iloc[i]}*)"
 
                     st.write(f"{i + 1}) {formatted_row}")
                 
