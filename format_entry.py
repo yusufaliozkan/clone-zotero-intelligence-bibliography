@@ -14,6 +14,8 @@ def format_entry(row, include_citation=True):
     citation = int(float(citation))
     citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
     citation_link = citation_link.replace('api.', '')
+    thesis_type = str(row['Thesis_type']) if pd.notnull(row['Thesis_type']) else ''
+    university = str(row['University']) if pd.notnull(row['University']) else ''
 
     published_by_or_in_dict = {
         'Journal article': 'Published in',
@@ -39,16 +41,25 @@ def format_entry(row, include_citation=True):
 
     if publication_type == 'Book chapter':
         return (
-            '**' + publication_type + '**' + ': ' +
-            title + ' ' +
-            '(in: ' + '*' + book_title + '*' + ') ' +
-            '(by ' + '*' + authors + '*' + ') ' +
-            '(Publication date: ' + str(date_published) + ') ' +
-            '[[Publication link]](' + link_to_publication + ') ' +
-            '[[Zotero link]](' + zotero_link + ') ' +
-            (oa_link_text + ' ' if oa_link_text else '') +
-            (citation_text if include_citation else '')
+            f"**{publication_type}**:"
+            f" title"
+            f" (in *{authors}*)"
+            f" (Publication date: {str(date_published)})"
+            f" [[Publication link]]({link_to_publication})"
+            f" [[Zotero link]]({zotero_link})"
+            f"{oa_link_text if oa_link_text else ''}"
+            f"{citation_text if include_citation else ''}"
         )
+        #     '**' + publication_type + '**' + ': ' +
+        #     title + ' ' +
+        #     '(in: ' + '*' + book_title + '*' + ') ' +
+        #     '(by ' + '*' + authors + '*' + ') ' +
+        #     '(Publication date: ' + str(date_published) + ') ' +
+        #     '[[Publication link]](' + link_to_publication + ') ' +
+        #     '[[Zotero link]](' + zotero_link + ') ' +
+        #     (oa_link_text + ' ' if oa_link_text else '') +
+        #     (citation_text if include_citation else '')
+        # )
     else:
         return (
             '**' + publication_type + '**' + ': ' +
