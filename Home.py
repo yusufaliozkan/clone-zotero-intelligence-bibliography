@@ -444,27 +444,30 @@ with st.spinner('Retrieving data & updating dashboard...'):
             search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
             if search_option == "Search keywords":
                 st.subheader('Search keywords', anchor=False)
-                @st.experimental_dialog("Search guide")
-                def guide(item):
-                    st.write('''
-                        The Intelligence Studies Bibliography supports basic-level searches with Boolean operators.
+                @st.experimental_fragment
+                def guide_0():
+                    @st.experimental_dialog("Search guide")
+                    def guide(item):
+                        st.write('''
+                            The Intelligence Studies Bibliography supports basic-level searches with Boolean operators.
 
-                        Available Boolean operators: **AND**, **OR**, **NOT** (e.g., "covert action" **NOT** British).
+                            Available Boolean operators: **AND**, **OR**, **NOT** (e.g., "covert action" **NOT** British).
 
-                        You can search using double quotes (e.g., "covert action").
+                            You can search using double quotes (e.g., "covert action").
 
-                        Multiple Boolean operators are allowed: (e.g. "covert action" **OR** "covert operation" **OR** "covert operations")
+                            Multiple Boolean operators are allowed: (e.g. "covert action" **OR** "covert operation" **OR** "covert operations")
 
-                        Please note: Search with parentheses is **not** available.
+                            Please note: Search with parentheses is **not** available.
 
-                        Note that the search function is limited: you will only find exact matches and cannot see search relevance.
+                            Note that the search function is limited: you will only find exact matches and cannot see search relevance.
 
-                        You can share the link of your search result. Try: https://intelligence.streamlit.app/?search_in=Title&query=cia+OR+mi6
-                        ''')
-                
-                if "guide" not in st.session_state:
-                    if st.button("Search guide"):
-                        guide("Search guide")
+                            You can share the link of your search result. Try: https://intelligence.streamlit.app/?search_in=Title&query=cia+OR+mi6
+                            ''')
+                    
+                    if "guide" not in st.session_state:
+                        if st.button("Search guide"):
+                            guide("Search guide")
+                guide_0()
                 container_refresh_button = st.container()
 
                 # if st.button('Search guide'):
