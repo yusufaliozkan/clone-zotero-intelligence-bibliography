@@ -1334,12 +1334,12 @@ with st.spinner('Retrieving data...'):
                         if author_no == 0:
                             author_pub_ratio=0.0
                         else:
-                            author_pub_ratio = round(author_no/item_count, 2)
+                            author_pub_ratio = round(author_no/num_items_collections, 2)
                         container_author_number.metric(label='Number of authors', value=int(author_no))
                         container_author_ratio.metric(
                             label='Author/publication ratio', 
                             value=author_pub_ratio, 
-                            help='The average author number per publication (theses are excluded as they are inherently single-authored publications).'
+                            help='The average author number per publication.'
                         )
 
                         citation_count = filtered_type_df['Citation'].sum()
