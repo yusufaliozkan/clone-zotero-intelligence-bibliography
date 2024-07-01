@@ -2228,23 +2228,20 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             f" [[Publication link]]({df['Link to publication'].iloc[i]})"
                             f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
                         )
-                        # '**'+ df['Publication type'].iloc[i]+ '**'+ ': ' + df['Title'].iloc[i] +', ' +                        
-                        #                 ' (by ' + '*' + df['Authors'].iloc[i] + '*' + ') ' +
-                        #                 ' (Published on: ' + df['Date published'].iloc[i]+') ' +
-                        #                 " (Published in: " + "*" + df['Pub_venue'].iloc[i] + "*" + ') '+
-                        #                 '[[Publication link]]'+ '('+ df['Link to publication'].iloc[i] + ')' +
-                        #                 "[[Zotero link]]" +'('+ df['Zotero link'].iloc[i] + ')' 
-                        #                 )
+
                         st.write(f"{i+1}) " + formatted_row)
                     
                     elif publication_type == 'Book chapter':
-                        formatted_row = ('**'+ df['Publication type'].iloc[i]+ '**'+ ': ' + df['Title'].iloc[i] + 
-                                        ' (in: ' + '*'+  df['Book_title'].iloc[i] + ')'+ '*'+ ', ' +                        
-                                        ' (by ' + '*' + df['Authors'].iloc[i] + '*' + ') ' +
-                                        ' (Published on: ' + df['Date published'].iloc[i]+') ' +
-                                        '[[Publication link]]'+ '('+ df['Link to publication'].iloc[i] + ')' +
-                                        "[[Zotero link]]" +'('+ df['Zotero link'].iloc[i] + ')'
-                                        )
+                        formatted_row = (
+                            f"**{df['Publication type'].iloc[i]}**: "
+                            f"{df['Title'].iloc[i]}"
+                            f"(in: *{df['Book_title'].iloc[i]}*)"
+                            f" (by *{df['Authors'].iloc[i]}*)"
+                            f" (Published on: {df['Date published'].iloc[i]})"
+                            f" [[Publication link]]({df['Link to publication'].iloc[i]})"
+                            f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
+                        )
+
                         st.write(f"{i+1}) " + formatted_row)
 
                     elif publication_type == 'Thesis':
