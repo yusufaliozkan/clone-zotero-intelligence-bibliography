@@ -256,6 +256,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
             item_type_no = df_dedup['Publication type'].nunique()
             st.metric(label='Number of publication types', value=int(item_type_no))
 
+            df_dedup = df_dedup[df_dedup['Publication type'] != 'Thesis']
+            item_count = len(df_dedup)
             def split_and_expand(authors):
                 # Ensure the input is a string
                 if isinstance(authors, str):
