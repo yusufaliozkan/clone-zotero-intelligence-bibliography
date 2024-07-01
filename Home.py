@@ -1261,7 +1261,6 @@ with st.spinner('Retrieving data...'):
                 unique_types = [''] + list(df_authors['Publication type'].unique())
                 # unique_types =  list(df_csv_types['Publication type'].unique())  # Adding an empty string as the first option The following bit was at the front [''] +
                 selected_type = st.selectbox('Select a publication type', unique_types)
-                selected_type
 
                 if not selected_type or selected_type == '':
                     st.write('Pick a publication type to see items')
@@ -1287,6 +1286,9 @@ with st.spinner('Retrieving data...'):
                         if selected_type == 'Thesis':
                             st.warning('Links to PhD theses catalouged by the British EThOS may not be working due to the [cyber incident at the British Library](https://www.bl.uk/cyber-incident/).')
                         
+                        coltype1, coltype2, coltype3 = st.columns(3)
+                        with coltype1:
+                            container_metric = st.container()
                         download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                         download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
                         download_types = download_types.reset_index(drop=True)
@@ -1296,8 +1298,10 @@ with st.spinner('Retrieving data...'):
 
                         csv = convert_df(download_types)
                         today = datetime.date.today().isoformat()
+
                         num_items_collections = len(filtered_type_df)
-                        st.write(f"**{num_items_collections}** sources found")
+                        # st.write(f"**{num_items_collections}** sources found")
+                        container_metric.metric(label="Number of items", value=int(num_items_collections))
 
                         true_count = filtered_type_df[filtered_type_df['Publication type']=='Journal article']['OA status'].sum()
                         total_count = len(filtered_type_df[filtered_type_df['Publication type']=='Journal article'])
