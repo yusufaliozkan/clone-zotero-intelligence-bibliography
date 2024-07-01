@@ -2221,7 +2221,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     if publication_type in ["Journal article", "Magazine article", 'Newspaper article']:
                         formatted_row = (
                             f"**{df['Publication type'].iloc[i]}**: "
+                            f"{df['Title'].iloc[i]}"
                             f"(by *{df['Authors'].iloc[i]}*)"
+                            f"(Published on: {df['Date published'].iloc[i]})"
+                            f"(Published in: *{df['Pub_venue'].iloc[i]}*)"
+                            f"[[Publication link]]({df['Link to publication'].iloc[i]})"
+                            f"[[Zotero link]]({df['Zotero link'].iloc[i]})"
                         )
                         # '**'+ df['Publication type'].iloc[i]+ '**'+ ': ' + df['Title'].iloc[i] +', ' +                        
                         #                 ' (by ' + '*' + df['Authors'].iloc[i] + '*' + ') ' +
