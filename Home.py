@@ -81,8 +81,8 @@ def zotero_data(library_id, library_type):
         creators_str,
         item['data'].get('publicationTitle'),
         item['data'].get('bookTitle'),
-        item['data'].get('thesisType'),
-        item['data'].get('university')
+        # item['data'].get('thesisType'),
+        # item['data'].get('university')
         ))
     df = pd.DataFrame(data, columns=columns)
     return df
