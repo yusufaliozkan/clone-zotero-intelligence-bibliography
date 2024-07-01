@@ -1285,8 +1285,6 @@ with st.spinner('Retrieving data...'):
                         st.subheader('Publication type: ' + selected_type, anchor=False, divider='blue')
                         if selected_type == 'Thesis':
                             st.warning('Links to PhD theses catalouged by the British EThOS may not be working due to the [cyber incident at the British Library](https://www.bl.uk/cyber-incident/).')
-
-                        filtered_type_df
                         coltype1, coltype2, coltype3 = st.columns(3)
                         with coltype1:
                             container_metric = st.container()
