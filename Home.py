@@ -206,7 +206,7 @@ Ozkan, Yusuf Ali. ‘Enhancing the “Intelligence Studies Network” Website’
 **Cite this page:** Ozkan, Yusuf A. ‘*Intelligence Studies Network*’, Created 1 June 2020, Accessed {cite_today}. https://intelligence.streamlit.app/.
 '''
 
-with st.spinner('Retrieving data & updating dashboard...'): 
+with st.spinner('Retrieving data...'): 
 
     item_count = zot.num_items() 
 
