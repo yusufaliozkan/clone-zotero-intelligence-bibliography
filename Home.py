@@ -2220,13 +2220,17 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     publication_type = df['Publication type'].iloc[i]
                     
                     if publication_type in ["Journal article", "Magazine article", 'Newspaper article']:
-                        formatted_row = ('**'+ df['Publication type'].iloc[i]+ '**'+ ': ' + df['Title'].iloc[i] +', ' +                        
-                                        ' (by ' + '*' + df['Authors'].iloc[i] + '*' + ') ' +
-                                        ' (Published on: ' + df['Date published'].iloc[i]+') ' +
-                                        " (Published in: " + "*" + df['Pub_venue'].iloc[i] + "*" + ') '+
-                                        '[[Publication link]]'+ '('+ df['Link to publication'].iloc[i] + ')' +
-                                        "[[Zotero link]]" +'('+ df['Zotero link'].iloc[i] + ')' 
-                                        )
+                        formatted_row = (
+                            f"** {df['Publication type'].iloc[i]}**: "
+                            f"(by *{df['Authors'].iloc[i]}*)"
+                        )
+                        # '**'+ df['Publication type'].iloc[i]+ '**'+ ': ' + df['Title'].iloc[i] +', ' +                        
+                        #                 ' (by ' + '*' + df['Authors'].iloc[i] + '*' + ') ' +
+                        #                 ' (Published on: ' + df['Date published'].iloc[i]+') ' +
+                        #                 " (Published in: " + "*" + df['Pub_venue'].iloc[i] + "*" + ') '+
+                        #                 '[[Publication link]]'+ '('+ df['Link to publication'].iloc[i] + ')' +
+                        #                 "[[Zotero link]]" +'('+ df['Zotero link'].iloc[i] + ')' 
+                        #                 )
                         st.write(f"{i+1}) " + formatted_row)
                     
                     elif publication_type == 'Book chapter':
