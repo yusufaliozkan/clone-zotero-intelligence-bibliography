@@ -275,7 +275,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.metric(label='Number of authors', value=int(author_no))
             st.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
-            df_dedup = df_dedup[df_dedup['Publication type'] == 'Thesis']
+            df_dedup = df_dedup[df_dedup['Publication type'] != 'Thesis']
             df_dedup['FirstName2'] = df_dedup['FirstName2'].astype(str)
             df_dedup['multiple_authors'] = df_dedup['FirstName2'].apply(lambda x: ',' in x)
             multiple_authored_papers = df_dedup['multiple_authors'].sum()
