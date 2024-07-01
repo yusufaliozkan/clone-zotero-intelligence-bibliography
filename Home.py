@@ -59,7 +59,7 @@ def zotero_data(library_id, library_type):
     items = zot.top(limit=10)
     items = sorted(items, key=lambda x: x['data']['dateAdded'], reverse=True)
     data=[]
-    columns = ['Title','Publication type', 'Link to publication', 'Abstract', 'Zotero link', 'Date added', 'Date published', 'Date modified', 'Col key', 'Authors', 'Pub_venue', 'Book_title', 'Thesis_type']#, 'University']
+    columns = ['Title','Publication type', 'Link to publication', 'Abstract', 'Zotero link', 'Date added', 'Date published', 'Date modified', 'Col key', 'Authors', 'Pub_venue', 'Book_title', 'Thesis_type', 'University']
 
     for item in items:
         creators = item['data']['creators']
@@ -82,7 +82,7 @@ def zotero_data(library_id, library_type):
         item['data'].get('publicationTitle'),
         item['data'].get('bookTitle'),
         item['data'].get('thesisType'),
-        # item['data'].get('university')
+        item['data'].get('university')
         ))
     df = pd.DataFrame(data, columns=columns)
     return df
