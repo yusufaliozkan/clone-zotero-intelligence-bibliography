@@ -1296,6 +1296,9 @@ with st.spinner('Retrieving data...'):
                                 container_collaboration_ratio = st.container()
                                 container_author_number  = st.container()
                                 container_author_ratio = st.container()
+                        with coltype3:
+                            with st.popover('Filters and more'):
+                                container_download_types = st.container()
                         download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                         download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
                         download_types = download_types.reset_index(drop=True)
@@ -1355,7 +1358,7 @@ with st.spinner('Retrieving data...'):
                             )
 
                         a = f'{selected_type}_{today}'
-                        st.download_button('💾 Download', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
+                        container_download_types.download_button('💾 Download', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
 
                         on = st.toggle('Generate dashboard')
                         if on and len (filtered_type_df) > 0:
