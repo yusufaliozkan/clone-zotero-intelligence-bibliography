@@ -82,4 +82,4 @@ def format_entry(row, include_citation=True):
             # '[[Zotero link]](' + zotero_link + ') ' +
             # (oa_link_text + ' ' if oa_link_text else '') +
             # (citation_text if include_citation else '')
-        )
+        # )
