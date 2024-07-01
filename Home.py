@@ -1253,7 +1253,7 @@ with st.spinner('Retrieving data...'):
                             else:  # If toggle is on but no publications are available
                                 st.write("No publication type selected.")
 
-            elif search_option == "Publication types":
+            elif search_option == "Publication types": 
                 st.query_params.clear()
                 st.subheader('Publication types', anchor=False, divider='blue')
 
