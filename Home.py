@@ -2198,11 +2198,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         )
       
                     else:
-                        return ('**' + row['Publication type'] + '**' + ': ' + row['Title'] + ', ' +
-                                ' (by ' + '*' + row['Authors'] + '*' + ') ' +
-                                ' (Published on: ' + row['Date published'] + ') ' +
-                                '[[Publication link]]' + '(' + row['Link to publication'] + ')' +
-                                "[[Zotero link]]" + '(' + row['Zotero link'] + ')')
+                        return (
+                            f"**{row['Publication type']}**: "
+                            f"{row['Title']}, "
+                            f"(by {row['Authors']})"
+                            f"(Published on: {row['Date published']})"
+                            f"[[Publication link]]({row['Link to publication']})"
+                            f"[[Zotero link]]({row['Zotero link']})"
+                        )
                 df_last = df.apply(format_row, axis=1)
 
                 # df_last = ('**'+ df['Publication type']+ '**'+ ': ' + df['Title'] +', ' +                        
