@@ -2274,15 +2274,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         c = ''
                         if 'Name_x' in df:
                             a = f"[{[df['Name_x'].iloc[i]](df['Link_x'].iloc[i])}]"
-                            # '[' + '[' + df['Name_x'].iloc[i] + ']' + '(' + df['Link_x'].iloc[i] + ')' + ']'
                             if df['Name_x'].iloc[i] == '':
                                 a = ''
                         if 'Name_y' in df:
-                            b = '[' + '[' + df['Name_y'].iloc[i] + ']' + '(' + df['Link_y'].iloc[i] + ')' + ']'
+                            b = f"[{[df['Name_y'].iloc[i]](df['Link_y'].iloc[i])}]"
                             if df['Name_y'].iloc[i] == '':
                                 b = ''
                         if 'Name' in df:
-                            c = '[' + '[' + df['Name'].iloc[i] + ']' + '(' + df['Link'].iloc[i] + ')' + ']'
+                            c = f"[{[df['Name'].iloc[i]](df['Link'].iloc[i])}]"
                             if df['Name'].iloc[i] == '':
                                 c = ''
                         st.caption('Theme(s):  \n ' + a + ' ' + b + ' ' + c)
