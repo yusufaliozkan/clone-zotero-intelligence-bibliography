@@ -1294,8 +1294,8 @@ with st.spinner('Retrieving data...'):
                                 container_citation = st.container()
                                 container_oa = st.container()
                                 container_collaboration_ratio = st.container()
-                                container_author_number
-                                container_author_ratio
+                                container_author_number  = st.container()
+                                container_author_ratio = st.container()
                         download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                         download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
                         download_types = download_types.reset_index(drop=True)
