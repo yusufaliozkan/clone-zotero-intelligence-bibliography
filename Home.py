@@ -52,8 +52,8 @@ st.set_page_config(layout = "wide",
 pd.set_option('display.max_colwidth', None)
 
 zot = zotero.Zotero(library_id, library_type)
-aa = zot.top(limit=10)
-aa
+# aa = zot.top(limit=10)
+# aa
 @st.cache_data(ttl=600)
 def zotero_data(library_id, library_type):
     items = zot.top(limit=10)
@@ -87,15 +87,14 @@ def zotero_data(library_id, library_type):
     df = pd.DataFrame(data, columns=columns)
     return df
 df = zotero_data(library_id, library_type)
-df
 
 df['Abstract'] = df['Abstract'].replace(r'^\s*$', np.nan, regex=True) # To replace '' with NaN. Otherwise the code below do not understand the value is nan.
 df['Abstract'] = df['Abstract'].fillna('No abstract')
+df
 
 split_df= pd.DataFrame(df['Col key'].tolist())
 df = pd.concat([df, split_df], axis=1)
 df['Authors'] = df['Authors'].fillna('null')  
-df
 
 # Change type name
 type_map = {
@@ -2134,7 +2133,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 ' (Published on: ' + row['Date published'] + ') ' +
                                 '[[Publication link]]' + '(' + row['Link to publication'] + ')' +
                                 "[[Zotero link]]" + '(' + row['Zotero link'] + ') ' +
-                                '(In: ' + row['Book_title'] + ')')  # Including Book Title for book chapters
+                                '(In: ' + row['Book_title'] + ')')  # Including Book Title for book chapters                        
                     else:
                         return ('**' + row['Publication type'] + '**' + ': ' + row['Title'] + ', ' +
                                 ' (by ' + '*' + row['Authors'] + '*' + ') ' +
@@ -2163,7 +2162,15 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                         "[[Zotero link]]" +'('+ df['Zotero link'].iloc[i] + ')' 
                                         )
                         st.write(f"{i+1}) " + formatted_row)
-                    
+                    elif publication_type == 'Thesis':
+                        formatted_row = ('**'+ df['Publication type'].iloc[i]+ '**'+ '(' + df['Thesis_tye']+ ')'+
+                                        ': ' + df['Title'].iloc[i] + 
+                                        ' (in: ' + '*'+  df['Book_title'].iloc[i] + ')'+ '*'+ ', ' +                        
+                                        ' (by ' + '*' + df['Authors'].iloc[i] + '*' + ') ' +
+                                        ' (Published on: ' + df['Date published'].iloc[i]+') ' +
+                                        '[[Publication link]]'+ '('+ df['Link to publication'].iloc[i] + ')' +
+                                        "[[Zotero link]]" +'('+ df['Zotero link'].iloc[i] + ')'
+                                        )                        
                     elif publication_type == 'Book chapter':
                         formatted_row = ('**'+ df['Publication type'].iloc[i]+ '**'+ ': ' + df['Title'].iloc[i] + 
                                         ' (in: ' + '*'+  df['Book_title'].iloc[i] + ')'+ '*'+ ', ' +                        
