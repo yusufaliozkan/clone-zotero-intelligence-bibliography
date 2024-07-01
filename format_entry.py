@@ -50,6 +50,17 @@ def format_entry(row, include_citation=True):
             f"{oa_link_text + ' ' if oa_link_text else ''}"
             f"{citation_text if include_citation else ''}"
         )
+    elif publication_type == 'Thesis':
+        return(
+            f"**{publication_type}**: {title} "
+            f" ({thesis_type if thesis_type != '' else ''}*{university}*)"
+            f"(by *{authors}*) "
+            f"(Publication date: {date_published}) "
+            f"[[Publication link]]({link_to_publication}) "
+            f"[[Zotero link]]({zotero_link}) "
+            f"{oa_link_text + ' ' if oa_link_text else ''}"
+            f"{citation_text if include_citation else ''}"
+        )
     else:
         return (
             f"**{publication_type}**: {title} "
