@@ -2137,7 +2137,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     )
 
                     if row['Publication type'] == 'Book chapter' and row.get('Book_title'):
-                        return f"{base_format} (In: {row['Book_title']})"
+                        return (
+                        f"**{row['Publication type']}**: {row['Title']}, "
+                        f"(in: *{'Book_title'}*)"
+                        f"(by *{row['Authors']}*) "
+                        f"(Published on: {row['Date published']}) "
+                        f"[[Publication link]]({row['Link to publication']}) "
+                        f"[[Zotero link]]({row['Zotero link']})"
+                    )
                     elif row['Publication type'] == 'Thesis':
                         return (
                             f"**{row['Publication type']}**: {row['Title']} "
