@@ -2170,7 +2170,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                         ' (Published on: ' + df['Date published'].iloc[i]+') ' +
                                         '[[Publication link]]'+ '('+ df['Link to publication'].iloc[i] + ')' +
                                         "[[Zotero link]]" +'('+ df['Zotero link'].iloc[i] + ')'
-                                        )                        
+                                        )
+                        st.write(f"{i+1}) " + formatted_row)                     
                     elif publication_type == 'Book chapter':
                         formatted_row = ('**'+ df['Publication type'].iloc[i]+ '**'+ ': ' + df['Title'].iloc[i] + 
                                         ' (in: ' + '*'+  df['Book_title'].iloc[i] + ')'+ '*'+ ', ' +                        
