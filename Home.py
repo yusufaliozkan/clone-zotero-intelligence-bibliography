@@ -2135,13 +2135,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 "[[Zotero link]]" + '(' + row['Zotero link'] + ') ' +
                                 '(In: ' + row['Book_title'] + ')')  # Including Book Title for book chapters    
                     elif row['Publication type'] == 'Thesis':
-                        return ('**' + row['Publication type'] + '**' + ': ' + '('+ row['Thesis_type']+')'+
+                        return ('**' + row['Publication type'] + '**' + ': ' +
                                 row['Title'] + ', ' +
                                 ' (by ' + '*' + row['Authors'] + '*' + ') ' +
                                 ' (Published on: ' + row['Date published'] + ') ' +
                                 '[[Publication link]]' + '(' + row['Link to publication'] + ')' +
                                 "[[Zotero link]]" + '(' + row['Zotero link'] + ') ' +
-                                '(Institution: ' + row['University'] + ')')           
+                                '('+ row['Thesis_type']+': ' + row['University'] + ')')           
                     else:
                         return ('**' + row['Publication type'] + '**' + ': ' + row['Title'] + ', ' +
                                 ' (by ' + '*' + row['Authors'] + '*' + ') ' +
