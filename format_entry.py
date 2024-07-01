@@ -41,44 +41,25 @@ def format_entry(row, include_citation=True):
 
     if publication_type == 'Book chapter':
         return (
-            f"**{publication_type}**:"
-            f" {title}"
-            f" (in *{book_title}*)"
-            f" (by *{authors}*)"
-            f" (Publication date: {str(date_published)})"
-            f" [[Publication link]]({link_to_publication})"
-            f" [[Zotero link]]({zotero_link})"
-            f"{oa_link_text if oa_link_text else ''}"
-            f"{citation_text if include_citation else ''}"
+            '**' + publication_type + '**' + ': ' +
+            title + ' ' +
+            '(in: ' + '*' + book_title + '*' + ') ' +
+            '(by ' + '*' + authors + '*' + ') ' +
+            '(Publication date: ' + str(date_published) + ') ' +
+            '[[Publication link]](' + link_to_publication + ') ' +
+            '[[Zotero link]](' + zotero_link + ') ' +
+            (oa_link_text + ' ' if oa_link_text else '') +
+            (citation_text if include_citation else '')
         )
-        #     '**' + publication_type + '**' + ': ' +
-        #     title + ' ' +
-        #     '(in: ' + '*' + book_title + '*' + ') ' +
-        #     '(by ' + '*' + authors + '*' + ') ' +
-        #     '(Publication date: ' + str(date_published) + ') ' +
-        #     '[[Publication link]](' + link_to_publication + ') ' +
-        #     '[[Zotero link]](' + zotero_link + ') ' +
-        #     (oa_link_text + ' ' if oa_link_text else '') +
-        #     (citation_text if include_citation else '')
-        # )
     else:
         return (
-            f"**{publication_type}**: {title} "
-            f"(by *{authors}*) "
-            f"(Publication date: {date_published}) "
-            f"({published_by_or_in}: *{published_source}*) " if published_by_or_in else '' 
-            f"[[Publication link]]({link_to_publication}) "
-            f"[[Zotero link]]({zotero_link}) "
-            f"{oa_link_text} " if oa_link_text else '' 
-            f"{citation_text}" if include_citation else ''
+            '**' + publication_type + '**' + ': ' +
+            title + ' ' +
+            '(by ' + '*' + authors + '*' + ') ' +
+            '(Publication date: ' + str(date_published) + ') ' +
+            ('(' + published_by_or_in + ': ' + '*' + published_source + '*' + ') ' if published_by_or_in else '') +
+            '[[Publication link]](' + link_to_publication + ') ' +
+            '[[Zotero link]](' + zotero_link + ') ' +
+            (oa_link_text + ' ' if oa_link_text else '') +
+            (citation_text if include_citation else '')
         )
-            # '**' + publication_type + '**' + ': ' +
-            # title + ' ' +
-            # '(by ' + '*' + authors + '*' + ') ' +
-            # '(Publication date: ' + str(date_published) + ') ' +
-            # ('(' + published_by_or_in + ': ' + '*' + published_source + '*' + ') ' if published_by_or_in else '') +
-            # '[[Publication link]](' + link_to_publication + ') ' +
-            # '[[Zotero link]](' + zotero_link + ') ' +
-            # (oa_link_text + ' ' if oa_link_text else '') +
-            # (citation_text if include_citation else '')
-        # )
