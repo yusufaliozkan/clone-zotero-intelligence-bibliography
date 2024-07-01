@@ -1300,9 +1300,13 @@ with st.spinner('Retrieving data...'):
                                 container_download_types = st.container()
                                 if selected_type=='Thesis':
                                     unique_thesis_types = [''] + list(filtered_type_df['Thesis_type'].unique())
-                                    selected_thesis_type = st.selectbox('Select a publication type', unique_thesis_types)
+                                    selected_thesis_type = st.selectbox('Select a thesis type', unique_thesis_types)
+
+                                    unique_universities = [''] + list(filtered_type_df['University'].unique())
+                                    selected_thesis_uni = st.selectbox('Select a university', unique_universities)
                                     if not selected_thesis_type == '':
                                         filtered_type_df = filtered_type_df[filtered_type_df['Thesis_type']==selected_thesis_type]
+                                        filtered_type_df = filtered_type_df[filtered_type_df['Thesis_type']==selected_thesis_uni]
                                     
                         download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                         download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
