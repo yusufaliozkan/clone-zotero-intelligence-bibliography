@@ -1289,6 +1289,8 @@ with st.spinner('Retrieving data...'):
                         coltype1, coltype2, coltype3 = st.columns(3)
                         with coltype1:
                             container_metric = st.container()
+                        with coltype2:
+                            container_citation = st.container()
                         download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                         download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
                         download_types = download_types.reset_index(drop=True)
@@ -1311,7 +1313,16 @@ with st.spinner('Retrieving data...'):
                             oa_ratio = true_count / total_count * 100
 
                         citation_count = filtered_type_df['Citation'].sum()
-                        st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
+                        citation_mean = non_nan_cited_df_dedup['Citation'].mean()
+                        citation_median = non_nan_cited_df_dedup['Citation'].median()
+                        # st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
+                        container_citation.metric(
+                            label="Number of citations", 
+                            value=int(citation_count), 
+                            help=f'''Not all papers are tracked for citation. 
+                            Citation per publication: **{round(citation_mean, 1)}**, 
+                            Citation median: **{round(citation_median, 1)}**'''
+                            )
 
                         a = f'{selected_type}_{today}'
                         st.download_button('💾 Download', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
