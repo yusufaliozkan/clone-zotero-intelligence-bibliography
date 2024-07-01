@@ -2184,7 +2184,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     elif publication_type == 'Thesis':
                         formatted_row = ('**'+ df['Publication type'].iloc[i]+ '**'+ ': ' + 
                                         df['Title'].iloc[i] + 
-                                        '('+ df['Thesis_type'].iloc[i]+': ' +  '*'+  df['University'].iloc[i] + ')'+ '*'+ ', ' +                        
+                                        ' ('+ df['Thesis_type'].iloc[i]+': ' +  '*'+  df['University'].iloc[i] + ')'+ '*'+ ', ' +                        
                                         ' (by ' + '*' + df['Authors'].iloc[i] + '*' + ') ' +
                                         ' (Published on: ' + df['Date published'].iloc[i]+') ' +
                                         '[[Publication link]]'+ '('+ df['Link to publication'].iloc[i] + ')' +
