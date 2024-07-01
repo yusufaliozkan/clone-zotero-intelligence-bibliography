@@ -2129,55 +2129,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 
                 display = st.checkbox('Display theme and abstract')
 
-                ### OVERVIEW SECTION SHORT NEW STARTS
-                # def format_row(row):
-                #     base_format = (
-                #         f"**{row['Publication type']}**: {row['Title']}, "
-                #         f"(by *{row['Authors']}*) "
-                #         f"(Published on: {row['Date published']}) "
-                #         f"[[Publication link]]({row['Link to publication']}) "
-                #         f"[[Zotero link]]({row['Zotero link']})"
-                #     )
-
-                #     if row['Publication type'] == 'Book chapter' and row.get('Book_title'):
-                #         return (
-                #         f"**{row['Publication type']}**: {row['Title']}, "
-                #         f"(in: *{row['Book_title']}*)"
-                #         f"(by *{row['Authors']}*) "
-                #         f"(Published on: {row['Date published']}) "
-                #         f"[[Publication link]]({row['Link to publication']}) "
-                #         f"[[Zotero link]]({row['Zotero link']})"
-                #     )
-                #     elif row['Publication type'] == 'Thesis':
-                #         return (
-                #             f"**{row['Publication type']}**: {row['Title']} "
-                #             f"({row['Thesis_type']}: *{row['University']}*), "
-                #             f"(by *{row['Authors']}*) "
-                #             f"(Published on: {row['Date published']}) "
-                #             f"[[Publication link]]({row['Link to publication']}) "
-                #             f"[[Zotero link]]({row['Zotero link']})"
-                #         )
-                #     return base_format
-
-                # df_last = df.apply(format_row, axis=1)
-
-                # row_nu_1 = len(df_last)
-                # for i in range(row_nu_1):
-                #     publication_type = df['Publication type'].iloc[i]
-                #     formatted_row = format_row(df.iloc[i])
-
-                #     if publication_type in ["Journal article", "Magazine article", "Newspaper article"]:
-                #         formatted_row += f" (Published in: *{df['Pub_venue'].iloc[i]}*)"
-                #     # elif publication_type == 'Book chapter':
-                #     #     formatted_row += f" (in: *{df['Book_title'].iloc[i]}*)"
-                #     elif publication_type == 'Thesis':
-                #         # The necessary format is already handled in format_row function for Thesis
-                #         pass
-
-                #     st.write(f"{i + 1}) {formatted_row}")
-
-                ### OVERVIEW SECTION SHORT NEW ENDS
-
                 def format_row(row):
                     if row['Publication type'] == 'Book chapter' and row['Book_title']:
                         return (
@@ -2270,31 +2221,32 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         )
 
                         st.write(f"{i+1}) " + formatted_row)
-
-                    if display:
-                        a = ''
-                        b = ''
-                        c = ''
-                        if 'Name_x' in df:
-                            a = '[' + '[' + df['Name_x'].iloc[i] + ']' + '(' + df['Link_x'].iloc[i] + ')' + ']'
-                            # f"[{[df['Name_x'].iloc[i]](df['Link_x'].iloc[i])}]"
-                            if df['Name_x'].iloc[i] == '':
-                                a = ''
-                        if 'Name_y' in df:
-                            b = '[' + '[' + df['Name_y'].iloc[i] + ']' + '(' + df['Link_y'].iloc[i] + ')' + ']'
-                            # f"[{[df['Name_y'].iloc[i]](df['Link_y'].iloc[i])}]"
-                            if df['Name_y'].iloc[i] == '':
-                                b = ''
-                        if 'Name' in df:
-                            c ='[' + '[' + df['Name'].iloc[i] + ']' + '(' + df['Link'].iloc[i] + ')' + ']'
-                            if df['Name'].iloc[i] == '':
-                                c = ''
-                        st.caption('Theme(s):  \n ' + a + ' ' + b + ' ' + c)
-                        if not any([a, b, c]):
-                            st.caption('No theme to display!')
-                        
-                        st.caption('Abstract: ' + df['Abstract'].iloc[i])
-
+                    @st.experimental_fragment
+                    def abstract_themes():
+                        if display:
+                            a = ''
+                            b = ''
+                            c = ''
+                            if 'Name_x' in df:
+                                a = '[' + '[' + df['Name_x'].iloc[i] + ']' + '(' + df['Link_x'].iloc[i] + ')' + ']'
+                                # f"[{[df['Name_x'].iloc[i]](df['Link_x'].iloc[i])}]"
+                                if df['Name_x'].iloc[i] == '':
+                                    a = ''
+                            if 'Name_y' in df:
+                                b = '[' + '[' + df['Name_y'].iloc[i] + ']' + '(' + df['Link_y'].iloc[i] + ')' + ']'
+                                # f"[{[df['Name_y'].iloc[i]](df['Link_y'].iloc[i])}]"
+                                if df['Name_y'].iloc[i] == '':
+                                    b = ''
+                            if 'Name' in df:
+                                c ='[' + '[' + df['Name'].iloc[i] + ']' + '(' + df['Link'].iloc[i] + ')' + ']'
+                                if df['Name'].iloc[i] == '':
+                                    c = ''
+                            st.caption('Theme(s):  \n ' + a + ' ' + b + ' ' + c)
+                            if not any([a, b, c]):
+                                st.caption('No theme to display!')
+                            
+                            st.caption('Abstract: ' + df['Abstract'].iloc[i])
+                    abstract_themes()
             with tab12:
                 st.markdown('#### Recently published items')
                 display2 = st.checkbox('Display abstracts', key='recently_published')
