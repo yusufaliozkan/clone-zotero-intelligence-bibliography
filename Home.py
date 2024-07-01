@@ -2248,7 +2248,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         formatted_row = (
                             f"**{df['Publication type'].iloc[i]}**: "
                             f"{df['Title'].iloc[i]}"
-                            f"({df['Thesis_type'].iloc[i]}: *{df['University'].iloc[i]}*)"
+                            f" ({df['Thesis_type'].iloc[i]}: *{df['University'].iloc[i]}*)"
                             f" (Published on: {df['Date published'].iloc[i]})"
                             f" [[Publication link]]({df['Link to publication'].iloc[i]})"
                             f" [[Zotero link]]({df['Zotero link'].iloc[i]})"                 
