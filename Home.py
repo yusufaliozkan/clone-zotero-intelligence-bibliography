@@ -1293,6 +1293,7 @@ with st.spinner('Retrieving data...'):
                             with st.popover('More metrics'):
                                 container_citation = st.container()
                                 container_oa = st.container()
+                                container_collaboration_ratio = st.container()
                         download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                         download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
                         download_types = download_types.reset_index(drop=True)
@@ -1314,6 +1315,14 @@ with st.spinner('Retrieving data...'):
                         else:
                             oa_ratio = true_count / total_count * 100
                         container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
+
+                        filtered_type_df['multiple_authors'] = filtered_type_df['FirstName2'].apply(lambda x: ',' in x)
+                        multiple_authored_papers = filtered_type_df['multiple_authors'].sum()
+                        if multiple_authored_papers == 0:
+                            collaboration_ratio = 0
+                        else:
+                            collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
+                        container_collaboration_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
                         citation_count = filtered_type_df['Citation'].sum()
                         citation_mean = non_nan_cited_df_dedup['Citation'].mean()
