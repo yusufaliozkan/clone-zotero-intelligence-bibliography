@@ -2273,7 +2273,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         b = ''
                         c = ''
                         if 'Name_x' in df:
-                            a = '[' + '[' + df['Name_x'].iloc[i] + ']' + '(' + df['Link_x'].iloc[i] + ')' + ']'
+                            a = f"[{[df['Name_x'].iloc[i]](df['Link_x'].iloc[i])}]"
+                            # '[' + '[' + df['Name_x'].iloc[i] + ']' + '(' + df['Link_x'].iloc[i] + ')' + ']'
                             if df['Name_x'].iloc[i] == '':
                                 a = ''
                         if 'Name_y' in df:
