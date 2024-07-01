@@ -1259,7 +1259,7 @@ with st.spinner('Retrieving data...'):
 
                 df_csv_types = df_dedup.copy()
                 unique_types =  list(df_csv_types['Publication type'].unique())  # Adding an empty string as the first option The following bit was at the front [''] +
-                selected_type = st.multiselect('Select a publication type', unique_types)
+                selected_type = st.selectbox('Select a publication type', unique_types)
 
                 if not selected_type or selected_type == '':
                     st.write('Pick a publication type to see items')
