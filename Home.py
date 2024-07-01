@@ -276,6 +276,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
             df_dedup['FirstName2'] = df_dedup['FirstName2'].astype(str)
+            df_dedup
             df_dedup['multiple_authors'] = df_dedup['FirstName2'].apply(lambda x: ',' in x)
             multiple_authored_papers = df_dedup['multiple_authors'].sum()
             collaboration_ratio = round(multiple_authored_papers / item_count * 100, 1)
