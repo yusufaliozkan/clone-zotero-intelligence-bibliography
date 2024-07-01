@@ -2141,7 +2141,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 ' (Published on: ' + row['Date published'] + ') ' +
                                 '[[Publication link]]' + '(' + row['Link to publication'] + ')' +
                                 "[[Zotero link]]" + '(' + row['Zotero link'] + ') ' +
-                                '(In: ' + row['Book_title'] + ')')           
+                                '(Institution: ' + row['University'] + ')')           
                     else:
                         return ('**' + row['Publication type'] + '**' + ': ' + row['Title'] + ', ' +
                                 ' (by ' + '*' + row['Authors'] + '*' + ') ' +
@@ -2185,7 +2185,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         formatted_row = ('**'+ df['Publication type'].iloc[i]+ '**'+ ': ' + 
                                         '(' + df['Thesis_type'].iloc[i]+ ') '+
                                         df['Title'].iloc[i] + 
-                                        ' (in: ' + '*'+  df['Book_title'].iloc[i] + ')'+ '*'+ ', ' +                        
+                                        ' (Institution: ' + '*'+  df['University'].iloc[i] + ')'+ '*'+ ', ' +                        
                                         ' (by ' + '*' + df['Authors'].iloc[i] + '*' + ') ' +
                                         ' (Published on: ' + df['Date published'].iloc[i]+') ' +
                                         '[[Publication link]]'+ '('+ df['Link to publication'].iloc[i] + ')' +
