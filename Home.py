@@ -2665,6 +2665,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     col1, col2 = st.columns([3,1])
                     with col1:
                         df_authors3 = df_authors2.copy()
+                        df_authors3 = df_authors3[df_authors3['Publication type'] != 'Thesis']
+
                         grouped_3 = df_authors3.groupby('Date year')
                         total_publications_3 = grouped_3.size().reset_index(name='Total Publications')
                         multiple_authored_papers_3 = grouped_3['multiple_authors'].apply(lambda x: (x == True).sum()).reset_index(name='# Multiple Authored Publications')
