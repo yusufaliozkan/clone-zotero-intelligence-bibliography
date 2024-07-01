@@ -1253,9 +1253,9 @@ with st.spinner('Retrieving data...'):
                             else:  # If toggle is on but no publications are available
                                 st.write("No publication type selected.")
 
-            elif search_option == "Publication types": 
+            elif search_option == "Publication typesd": 
                 st.query_params.clear()
-                st.subheader('Publication types', anchor=False, divider='blue')
+                st.subheader('Publication types', anchor=False, divider='blue') 
 
                 df_csv_types = df_dedup.copy()
                 unique_types =  list(df_csv_types['Publication type'].unique())  # Adding an empty string as the first option The following bit was at the front [''] +
