@@ -1306,7 +1306,7 @@ with st.spinner('Retrieving data...'):
                                     selected_thesis_uni = st.selectbox('Select a university', unique_universities)
                                     if not selected_thesis_type == '':
                                         filtered_type_df = filtered_type_df[filtered_type_df['Thesis_type']==selected_thesis_type]
-                                        filtered_type_df = filtered_type_df[filtered_type_df['Thesis_type']==selected_thesis_uni]
+                                        filtered_type_df = filtered_type_df[filtered_type_df['University']==selected_thesis_uni]
                                     
                         download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                         download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
