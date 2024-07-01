@@ -2185,6 +2185,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             f"[[Publication link]]({row['Link to publication']})"
                             f"[[Zotero link]]({row['Zotero link']})"
                             f"(In: {row['Book_title']})"
+                        )
                     elif row['Publication type'] == 'Thesis':
                         return ('**' + row['Publication type'] + '**' + ': ' +
                                 row['Title'] + ', ' +
