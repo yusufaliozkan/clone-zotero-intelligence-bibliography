@@ -1307,6 +1307,7 @@ with st.spinner('Retrieving data...'):
                         download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                         download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
                         download_types = download_types.reset_index(drop=True)
+                        filtered_type_df
 
                         def convert_df(download_types):
                             return download_types.to_csv(index=False).encode('utf-8-sig')
