@@ -350,96 +350,97 @@ with st.spinner('Retrieving data...'):
             #     )
 
             # Title input from the user
+
+            def parse_search_terms(search_term):
+                # Split the search term by spaces while keeping phrases in quotes together
+                tokens = re.findall(r'(?:"[^"]*"|\S+)', search_term)
+                boolean_tokens = []
+                for token in tokens:
+                    # Treat "AND", "OR", "NOT" as Boolean operators only if they are uppercase
+                    if token in ["AND", "OR", "NOT"]:
+                        boolean_tokens.append(token)
+                    else:
+                        # Don't strip characters within quoted phrases
+                        if token.startswith('"') and token.endswith('"'):
+                            stripped_token = token.strip('"')
+                        else:
+                            # Preserve alphanumeric characters, apostrophes, hyphens, en dash, and other special characters
+                            stripped_token = re.sub(r'[^a-zA-Z0-9\s\'\-–’]', '', token)
+                            # Remove parentheses from the stripped token
+                            stripped_token = stripped_token.replace('(', '').replace(')', '')
+                        boolean_tokens.append(stripped_token.strip('"'))
+                
+                # Remove trailing operators
+                while boolean_tokens and boolean_tokens[-1] in ["AND", "OR", "NOT"]:
+                    boolean_tokens.pop()
+                
+                return boolean_tokens
+
+            def apply_boolean_search(df, search_tokens, search_in):
+                if not search_tokens:
+                    return df
+
+                query = ''
+                negate_next = False
+
+                for i, token in enumerate(search_tokens):
+                    if token == "AND":
+                        query += " & "
+                        negate_next = False
+                    elif token == "OR":
+                        query += " | "
+                        negate_next = False
+                    elif token == "NOT":
+                        negate_next = True
+                    elif token == "(":
+                        query += " ("
+                    elif token == ")":
+                        query += ") "
+                    else:
+                        escaped_token = re.escape(token)
+                        if search_in == 'Title and abstract':
+                            condition = f'(Title.str.contains(r"\\b{escaped_token}\\b", case=False, na=False) | Abstract.str.contains(r"\\b{escaped_token}\\b", case=False, na=False))'
+                        else:
+                            condition = f'Title.str.contains(r"\\b{escaped_token}\\b", case=False, na=False)'
+
+                        if negate_next:
+                            condition = f"~({condition})"
+                            negate_next = False
+
+                        if query and query.strip()[-1] not in "&|(":
+                            query += " & "
+
+                        query += condition
+
+                # Debugging output
+                print(f"Query: {query}")
+
+                try:
+                    filtered_df = df.query(query, engine='python')
+                except Exception as e:
+                    print(f"Error in query: {query}\n{e}")
+                    return pd.DataFrame()
+
+                return filtered_df
+
+            def highlight_terms(text, terms):
+                boolean_operators = {"AND", "OR", "NOT"}
+                url_pattern = r'https?://\S+'
+                urls = re.findall(url_pattern, text)
+                for url in urls:
+                    text = text.replace(url, f'___URL_PLACEHOLDER_{urls.index(url)}___')
+
+                pattern = re.compile('|'.join(rf'\b{re.escape(term)}\b' for term in terms if term not in boolean_operators), flags=re.IGNORECASE)
+                highlighted_text = pattern.sub(lambda match: f'<span style="background-color: #FF8581;">{match.group(0)}</span>' if match.group(0) not in urls else match.group(0), text)
+                for index, url in enumerate(urls):
+                    highlighted_text = highlighted_text.replace(f'___URL_PLACEHOLDER_{index}___', url)
+                
+                return highlighted_text
+
+            # Example Streamlit code for context
+            st.header('Search in database', anchor=False)
             @st.experimental_fragment
             def search_database():
-                def parse_search_terms(search_term):
-                    # Split the search term by spaces while keeping phrases in quotes together
-                    tokens = re.findall(r'(?:"[^"]*"|\S+)', search_term)
-                    boolean_tokens = []
-                    for token in tokens:
-                        # Treat "AND", "OR", "NOT" as Boolean operators only if they are uppercase
-                        if token in ["AND", "OR", "NOT"]:
-                            boolean_tokens.append(token)
-                        else:
-                            # Don't strip characters within quoted phrases
-                            if token.startswith('"') and token.endswith('"'):
-                                stripped_token = token.strip('"')
-                            else:
-                                # Preserve alphanumeric characters, apostrophes, hyphens, en dash, and other special characters
-                                stripped_token = re.sub(r'[^a-zA-Z0-9\s\'\-–’]', '', token)
-                                # Remove parentheses from the stripped token
-                                stripped_token = stripped_token.replace('(', '').replace(')', '')
-                            boolean_tokens.append(stripped_token.strip('"'))
-                    
-                    # Remove trailing operators
-                    while boolean_tokens and boolean_tokens[-1] in ["AND", "OR", "NOT"]:
-                        boolean_tokens.pop()
-                    
-                    return boolean_tokens
-
-                def apply_boolean_search(df, search_tokens, search_in):
-                    if not search_tokens:
-                        return df
-
-                    query = ''
-                    negate_next = False
-
-                    for i, token in enumerate(search_tokens):
-                        if token == "AND":
-                            query += " & "
-                            negate_next = False
-                        elif token == "OR":
-                            query += " | "
-                            negate_next = False
-                        elif token == "NOT":
-                            negate_next = True
-                        elif token == "(":
-                            query += " ("
-                        elif token == ")":
-                            query += ") "
-                        else:
-                            escaped_token = re.escape(token)
-                            if search_in == 'Title and abstract':
-                                condition = f'(Title.str.contains(r"\\b{escaped_token}\\b", case=False, na=False) | Abstract.str.contains(r"\\b{escaped_token}\\b", case=False, na=False))'
-                            else:
-                                condition = f'Title.str.contains(r"\\b{escaped_token}\\b", case=False, na=False)'
-
-                            if negate_next:
-                                condition = f"~({condition})"
-                                negate_next = False
-
-                            if query and query.strip()[-1] not in "&|(":
-                                query += " & "
-
-                            query += condition
-
-                    # Debugging output
-                    print(f"Query: {query}")
-
-                    try:
-                        filtered_df = df.query(query, engine='python')
-                    except Exception as e:
-                        print(f"Error in query: {query}\n{e}")
-                        return pd.DataFrame()
-
-                    return filtered_df
-
-                def highlight_terms(text, terms):
-                    boolean_operators = {"AND", "OR", "NOT"}
-                    url_pattern = r'https?://\S+'
-                    urls = re.findall(url_pattern, text)
-                    for url in urls:
-                        text = text.replace(url, f'___URL_PLACEHOLDER_{urls.index(url)}___')
-
-                    pattern = re.compile('|'.join(rf'\b{re.escape(term)}\b' for term in terms if term not in boolean_operators), flags=re.IGNORECASE)
-                    highlighted_text = pattern.sub(lambda match: f'<span style="background-color: #FF8581;">{match.group(0)}</span>' if match.group(0) not in urls else match.group(0), text)
-                    for index, url in enumerate(urls):
-                        highlighted_text = highlighted_text.replace(f'___URL_PLACEHOLDER_{index}___', url)
-                    
-                    return highlighted_text
-
-                # Example Streamlit code for context
-                st.header('Search in database', anchor=False)
                 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
                 if search_option == "Search keywords":
