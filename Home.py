@@ -2281,7 +2281,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             if df['Name_y'].iloc[i] == '':
                                 b = ''
                         if 'Name' in df:
-                            c = f"[{[df['Name'].iloc[i]](df['Link'].iloc[i])}]"
+                            c ='[' + '[' + df['Name'].iloc[i] + ']' + '(' + df['Link'].iloc[i] + ')' + ']'
                             if df['Name'].iloc[i] == '':
                                 c = ''
                         st.caption('Theme(s):  \n ' + a + ' ' + b + ' ' + c)
