@@ -81,7 +81,7 @@ def zotero_data(library_id, library_type):
         item['data'].get('bookTitle')
         ))
     df = pd.DataFrame(data, columns=columns)
-    return df, items
+    return df, item
 item
 df = zotero_data(library_id, library_type)
 
