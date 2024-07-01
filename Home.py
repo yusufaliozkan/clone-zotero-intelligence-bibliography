@@ -260,8 +260,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
             item_type_no = df_dedup['Publication type'].nunique()
             st.metric(label='Number of publication types', value=int(item_type_no))
 
-            df_dedup = df_dedup[df_dedup['Publication type'] != 'Thesis']
-            item_count = len(df_dedup)
+            df_dedup_authors = df_dedup[df_dedup['Publication type'] != 'Thesis']
+            item_count = len(df_dedup_authors)
             def split_and_expand(authors):
                 # Ensure the input is a string
                 if isinstance(authors, str):
@@ -271,7 +271,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 else:
                     # Return the original author if it's not a string
                     return pd.Series([authors])
-            expanded_authors = df_dedup['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+            expanded_authors = df_dedup_authors['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
             expanded_authors = expanded_authors.reset_index(name='Author')
             author_no = len(expanded_authors)
             if author_no == 0:
@@ -286,11 +286,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
             )
 
 
-            df_dedup = df_dedup[df_dedup['Publication type'] != 'Thesis']
-            item_count = len(df_dedup)
-            df_dedup['FirstName2'] = df_dedup['FirstName2'].astype(str)
-            df_dedup['multiple_authors'] = df_dedup['FirstName2'].apply(lambda x: ',' in x)
-            multiple_authored_papers = df_dedup['multiple_authors'].sum()
+            df_dedup_authors = df_dedup[df_dedup['Publication type'] != 'Thesis']
+            item_count = len(df_dedup_authors)
+            df_dedup_authors['FirstName2'] = df_dedup_authors['FirstName2'].astype(str)
+            df_dedup_authors['multiple_authors'] = df_dedup_authors['FirstName2'].apply(lambda x: ',' in x)
+            multiple_authored_papers = df_dedup_authors['multiple_authors'].sum()
             collaboration_ratio = round(multiple_authored_papers / item_count * 100, 1)
             st.metric(
                 label='Collaboration ratio', 
