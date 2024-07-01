@@ -2163,7 +2163,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                         )
                         st.write(f"{i+1}) " + formatted_row)
                     elif publication_type == 'Thesis':
-                        formatted_row = ('**'+ df['Publication type'].iloc[i]+ '**'+ '(' + df['Thesis_tye']+ ')'+
+                        formatted_row = ('**'+ df['Publication type'].iloc[i]+ '**'+ '(' + df['Thesis_type']+ ')'+
                                         ': ' + df['Title'].iloc[i] + 
                                         ' (in: ' + '*'+  df['Book_title'].iloc[i] + ')'+ '*'+ ', ' +                        
                                         ' (by ' + '*' + df['Authors'].iloc[i] + '*' + ') ' +
