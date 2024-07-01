@@ -15,6 +15,7 @@ def format_entry(row, include_citation=True):
     citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
     citation_link = citation_link.replace('api.', '')
     thesis_type = str(row['Thesis_type']) if pd.notnull(row['Thesis_type']) else ''
+    thesis_type2 = f"{thesis_type}: "
     university = str(row['University']) if pd.notnull(row['University']) else ''
 
     published_by_or_in_dict = {
@@ -53,8 +54,8 @@ def format_entry(row, include_citation=True):
     elif publication_type == 'Thesis':
         return(
             f"**{publication_type}**: {title} "
-            f" ({thesis_type if thesis_type != '' else ''}*{university}*)"
-            f"(by *{authors}*) "
+            f" ({thesis_type2 if thesis_type != '' else ''}*{university}*)"
+            f" (by *{authors}*) "
             f"(Publication date: {date_published}) "
             f"[[Publication link]]({link_to_publication}) "
             f"[[Zotero link]]({zotero_link}) "
