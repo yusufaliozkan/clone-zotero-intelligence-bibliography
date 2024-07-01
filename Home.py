@@ -2662,7 +2662,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                     df_authors.columns = ['Author name', 'Publication count']
                                     df_authors
 
-                    st.markdown('##### Single vs Multiple authored publications', help='Thesis are excluded as they are inherently single-authored publications.')
+                    st.markdown('##### Single vs Multiple authored publications', help='Thesis are excluded from this section as they are inherently single-authored publications.')
                     col1, col2 = st.columns([3,1])
                     with col1:
                         df_authors3 = df_authors2.copy()
