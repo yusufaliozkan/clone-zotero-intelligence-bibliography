@@ -1258,7 +1258,8 @@ with st.spinner('Retrieving data...'):
                 st.subheader('Publication types', anchor=False, divider='blue') 
 
                 df_csv_types = df_dedup.copy()
-                unique_types =  list(df_csv_types['Publication type'].unique())  # Adding an empty string as the first option The following bit was at the front [''] +
+                unique_authors = [''] + list(df_authors['Publication type'].unique())
+                # unique_types =  list(df_csv_types['Publication type'].unique())  # Adding an empty string as the first option The following bit was at the front [''] +
                 selected_type = st.selectbox('Select a publication type', unique_types)
 
                 if not selected_type or selected_type == '':
