@@ -2141,7 +2141,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     elif row['Publication type'] == 'Thesis':
                         return (
                             f"**{row['Publication type']}**: {row['Title']} "
-                            f"({row['Thesis_type']}: {row['University']}), "
+                            f"({row['Thesis_type']}: *{row['University']}*), "
                             f"(by *{row['Authors']}*) "
                             f"(Published on: {row['Date published']}) "
                             f"[[Publication link]]({row['Link to publication']}) "
