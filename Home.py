@@ -27,8 +27,7 @@ import time
 import PIL
 from PIL import Image, ImageDraw, ImageFilter
 import json
-
-from authors_dict import process_authors #df_authors, name_replacements, process_authors
+from authors_dict import df_authors, name_replacements
 from copyright import display_custom_license
 from sidebar_content import sidebar_content
 import plotly.graph_objs as go
@@ -51,8 +50,6 @@ st.set_page_config(layout = "wide",
                     page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
                     initial_sidebar_state="auto") 
 pd.set_option('display.max_colwidth', None)
-
-df_authors, name_replacements = process_authors()
 
 zot = zotero.Zotero(library_id, library_type)
 # aa = zot.top(limit=10)
@@ -397,10 +394,8 @@ with st.spinner('Retrieving data...'):
             # Example Streamlit code for context
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-
             @st.experimental_fragment
             def search_options_main_menu():
-
                 total_rows = len(df_dedup)
                 nan_count_citation = df_dedup['Citation_list'].isna().sum()
                 non_nan_count_citation = total_rows - nan_count_citation
