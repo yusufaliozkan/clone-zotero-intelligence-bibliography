@@ -456,7 +456,6 @@ with st.spinner('Retrieving data...'):
                 'James J Wirtz':'James J. Wirtz',
                 'Philip HJ Davies':'Philip H. J. Davies'
             }
-            name_replacements
             @st.experimental_fragment
             def search_options_main_menu():
                 name_replacements = {
@@ -519,7 +518,6 @@ with st.spinner('Retrieving data...'):
                     'James J Wirtz':'James J. Wirtz',
                     'Philip HJ Davies':'Philip H. J. Davies'
                 }
-                name_replacements
                 total_rows = len(df_dedup)
                 nan_count_citation = df_dedup['Citation_list'].isna().sum()
                 non_nan_count_citation = total_rows - nan_count_citation
