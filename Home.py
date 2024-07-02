@@ -769,6 +769,7 @@ with st.spinner('Retrieving data...'):
 
                     @st.experimental_fragment
                     def search_author():
+                        st.query_params.clear()
                         unique_authors = [''] + list(df_authors['Author_name'].unique())
 
                         author_publications = df_authors['Author_name'].value_counts().to_dict()
@@ -1016,6 +1017,7 @@ with st.spinner('Retrieving data...'):
 
                     @st.experimental_fragment
                     def search_collection():
+                        st.query_params.clear()
                         df_csv_collections = df_duplicated.copy()
                         excluded_collections = ['97 KCL intelligence']
                         numeric_start_collections = df_csv_collections[df_csv_collections['Collection_Name'].str[0].str.isdigit()]['Collection_Name'].unique()
@@ -1218,6 +1220,7 @@ with st.spinner('Retrieving data...'):
                     st.subheader('Publication types', anchor=False, divider='blue') 
                     @st.experimental_fragment
                     def type_selection():
+                        st.query_params.clear()
                         df_csv_types = df_dedup.copy()
                         unique_types = [''] + list(df_authors['Publication type'].unique())
                         # unique_types =  list(df_csv_types['Publication type'].unique())  # Adding an empty string as the first option The following bit was at the front [''] +
@@ -1458,6 +1461,7 @@ with st.spinner('Retrieving data...'):
 
                     @st.experimental_fragment
                     def search_journal():
+                        st.query_params.clear()
                         df_csv = df_dedup.copy()
                         df_csv = df_csv[df_csv['Publication type']=='Journal article']
                         journal_counts = df_csv['Journal'].value_counts()
@@ -1674,6 +1678,7 @@ with st.spinner('Retrieving data...'):
 
                     @st.experimental_fragment
                     def search_pub_year():
+                        st.query_params.clear()
                         with st.expander('Click to expand', expanded=True):                    
                             df_all = df_dedup.copy()
                             df_all['Date published2'] = (
@@ -1909,6 +1914,7 @@ with st.spinner('Retrieving data...'):
                     
                     @st.experimental_fragment
                     def search_cited_papers():
+                        st.query_params.clear()
                         with st.expander('Click to expand', expanded=True):                    
                             df_cited = df_dedup.copy()
                             non_nan_id = df_cited['ID'].count()
