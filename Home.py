@@ -395,7 +395,7 @@ with st.spinner('Retrieving data...'):
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
             @st.experimental_fragment
-            def search_options():
+            def search_options_main_menu():
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
@@ -2142,7 +2142,7 @@ with st.spinner('Retrieving data...'):
                                     st.markdown(f"{i}. {article}", unsafe_allow_html=True) 
                     search_cited_papers()
                 
-            search_options()
+            search_options_main_menu()
 
             # OVERVIEW
             st.header('Overview', anchor=False)
