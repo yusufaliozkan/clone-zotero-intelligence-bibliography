@@ -52,6 +52,7 @@ st.set_page_config(layout = "wide",
                     initial_sidebar_state="auto") 
 pd.set_option('display.max_colwidth', None)
 
+df_authors, name_replacements = process_authors()
 
 zot = zotero.Zotero(library_id, library_type)
 # aa = zot.top(limit=10)
