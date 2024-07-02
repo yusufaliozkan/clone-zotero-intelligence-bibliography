@@ -394,6 +394,7 @@ with st.spinner('Retrieving data...'):
             # Example Streamlit code for context
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+            authors_dict
             name_replacements = name_replacements
             @st.experimental_fragment
             def search_options_main_menu():
