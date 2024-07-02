@@ -486,13 +486,14 @@ with st.spinner('Retrieving data...'):
 
                         # Text input for search keywords
                         with cola:
-                            st.text_input(
-                                'Search keywords in titles or abstracts',
-                                st.session_state.search_term_input,
-                                key='search_term_input',
-                                placeholder='Type your keyword(s)',
-                                on_change=update_search_params
-                            )
+                            st.write('text')
+                            # st.text_input(
+                            #     'Search keywords in titles or abstracts',
+                            #     st.session_state.search_term_input,
+                            #     key='search_term_input',
+                            #     placeholder='Type your keyword(s)',
+                            #     on_change=update_search_params
+                            # )
 
                         # Function to extract quoted phrases
                         def extract_quoted_phrases(text):
