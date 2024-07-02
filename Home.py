@@ -205,35 +205,197 @@ Ozkan, Yusuf Ali. ‘Enhancing the “Intelligence Studies Network” Website’
 
 **Cite this page:** Ozkan, Yusuf A. ‘*Intelligence Studies Network*’, Created 1 June 2020, Accessed {cite_today}. https://intelligence.streamlit.app/.
 '''
-@st.experimental_fragment
-def search_options_main_menu():
-    with st.spinner('Retrieving data...'): 
 
-        item_count = zot.num_items() 
+with st.spinner('Retrieving data...'): 
 
-        df_dedup = pd.read_csv('all_items.csv')
-        df_duplicated = pd.read_csv('all_items_duplicated.csv')
+    item_count = zot.num_items() 
 
-        col1, col2, col3 = st.columns([3,5,8])
-        with col3:
-            with st.expander('Introduction'):
-                st.info(into)
-        with col1:
-            df_intro = df_dedup.copy()
-            df_intro['Date added'] = pd.to_datetime(df_intro['Date added'])
-            current_date = pd.to_datetime('now', utc=True)
-            items_added_this_month = df_intro[
-                (df_intro['Date added'].dt.year == current_date.year) & 
-                (df_intro['Date added'].dt.month == current_date.month)
-            ]        # st.write(f'**{item_count}** items available in this library. **{len(items_added_this_month)}** items added in {current_date.strftime("%B %Y")}.')
-            st.metric(label='Number of items in the library', value=item_count, delta=len(items_added_this_month),label_visibility='visible', help=f' **{len(items_added_this_month)}** items added in {current_date.strftime("%B %Y")}')
-        st.write('The library last updated on ' + '**'+ df.loc[0]['Date modified']+'**')
-        df_dedup_oa = df_dedup[df_dedup['OA status'] == True].reset_index(drop=True)
+    df_dedup = pd.read_csv('all_items.csv')
+    df_duplicated = pd.read_csv('all_items_duplicated.csv')
 
-        with col2:
-            with st.popover('More metrics'):
-                citation_count = df_dedup['Citation'].sum()
+    col1, col2, col3 = st.columns([3,5,8])
+    with col3:
+        with st.expander('Introduction'):
+            st.info(into)
+    with col1:
+        df_intro = df_dedup.copy()
+        df_intro['Date added'] = pd.to_datetime(df_intro['Date added'])
+        current_date = pd.to_datetime('now', utc=True)
+        items_added_this_month = df_intro[
+            (df_intro['Date added'].dt.year == current_date.year) & 
+            (df_intro['Date added'].dt.month == current_date.month)
+        ]        # st.write(f'**{item_count}** items available in this library. **{len(items_added_this_month)}** items added in {current_date.strftime("%B %Y")}.')
+        st.metric(label='Number of items in the library', value=item_count, delta=len(items_added_this_month),label_visibility='visible', help=f' **{len(items_added_this_month)}** items added in {current_date.strftime("%B %Y")}')
+    st.write('The library last updated on ' + '**'+ df.loc[0]['Date modified']+'**')
+    df_dedup_oa = df_dedup[df_dedup['OA status'] == True].reset_index(drop=True)
+
+    with col2:
+        with st.popover('More metrics'):
+            citation_count = df_dedup['Citation'].sum()
+            
+            total_rows = len(df_dedup)
+            nan_count_citation = df_dedup['Citation_list'].isna().sum()
+            non_nan_count_citation = total_rows - nan_count_citation
+            non_nan_cited_df_dedup = df_dedup.dropna(subset=['Citation_list'])
+            non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
+            citation_mean = non_nan_cited_df_dedup['Citation'].mean()
+            citation_median = non_nan_cited_df_dedup['Citation'].median()
+            st.metric(
+                label="Number of citations", 
+                value=int(citation_count), 
+                help=f'''Not all papers are tracked for citation. 
+                Citation per publication: **{round(citation_mean, 1)}**, 
+                Citation median: **{round(citation_median, 1)}**'''
+                ) 
+
+            true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
+            total_count = len(df_dedup[df_dedup['Publication type']=='Journal article'])
+            if total_count == 0:
+                oa_ratio = 0.0
+            else:
+                oa_ratio = true_count / total_count * 100
+            st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
+            
+            item_type_no = df_dedup['Publication type'].nunique()
+            st.metric(label='Number of publication types', value=int(item_type_no))
+
+            df_dedup_authors = df_dedup[df_dedup['Publication type'] != 'Thesis']
+            item_count = len(df_dedup_authors)
+            def split_and_expand(authors):
+                # Ensure the input is a string
+                if isinstance(authors, str):
+                    # Split by comma and strip whitespace
+                    split_authors = [author.strip() for author in authors.split(',')]
+                    return pd.Series(split_authors)
+                else:
+                    # Return the original author if it's not a string
+                    return pd.Series([authors])
+            expanded_authors = df_dedup_authors['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+            expanded_authors = expanded_authors.reset_index(name='Author')
+            author_no = len(expanded_authors)
+            if author_no == 0:
+                author_pub_ratio=0.0
+            else:
+                author_pub_ratio = round(author_no/item_count, 2)
+            st.metric(label='Number of authors', value=int(author_no))
+            st.metric(
+                label='Author/publication ratio', 
+                value=author_pub_ratio, 
+                help='The average author number per publication (theses are excluded as they are inherently single-authored publications).'
+            )
+
+
+            df_dedup_authors = df_dedup[df_dedup['Publication type'] != 'Thesis']
+            item_count = len(df_dedup_authors)
+            df_dedup_authors['FirstName2'] = df_dedup_authors['FirstName2'].astype(str)
+            df_dedup_authors['multiple_authors'] = df_dedup_authors['FirstName2'].apply(lambda x: ',' in x)
+            multiple_authored_papers = df_dedup_authors['multiple_authors'].sum()
+            collaboration_ratio = round(multiple_authored_papers / item_count * 100, 1)
+            st.metric(
+                label='Collaboration ratio', 
+                value=f'{(collaboration_ratio)}%', 
+                help='Ratio of multiple-authored papers (theses are excluded as they are inherently single-authored publications).'
+            )
+
+    sidebar_content() 
+
+    tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard']) #, '🔀 Surprise me'])
+    with tab1:
+
+        col1, col2 = st.columns([6,2]) 
+        with col1: 
+
+            def parse_search_terms(search_term):
+                # Split the search term by spaces while keeping phrases in quotes together
+                tokens = re.findall(r'(?:"[^"]*"|\S+)', search_term)
+                boolean_tokens = []
+                for token in tokens:
+                    # Treat "AND", "OR", "NOT" as Boolean operators only if they are uppercase
+                    if token in ["AND", "OR", "NOT"]:
+                        boolean_tokens.append(token)
+                    else:
+                        # Don't strip characters within quoted phrases
+                        if token.startswith('"') and token.endswith('"'):
+                            stripped_token = token.strip('"')
+                        else:
+                            # Preserve alphanumeric characters, apostrophes, hyphens, en dash, and other special characters
+                            stripped_token = re.sub(r'[^a-zA-Z0-9\s\'\-–’]', '', token)
+                            # Remove parentheses from the stripped token
+                            stripped_token = stripped_token.replace('(', '').replace(')', '')
+                        boolean_tokens.append(stripped_token.strip('"'))
                 
+                # Remove trailing operators
+                while boolean_tokens and boolean_tokens[-1] in ["AND", "OR", "NOT"]:
+                    boolean_tokens.pop()
+                
+                return boolean_tokens
+
+            def apply_boolean_search(df, search_tokens, search_in):
+                if not search_tokens:
+                    return df
+
+                query = ''
+                negate_next = False
+
+                for i, token in enumerate(search_tokens):
+                    if token == "AND":
+                        query += " & "
+                        negate_next = False
+                    elif token == "OR":
+                        query += " | "
+                        negate_next = False
+                    elif token == "NOT":
+                        negate_next = True
+                    elif token == "(":
+                        query += " ("
+                    elif token == ")":
+                        query += ") "
+                    else:
+                        escaped_token = re.escape(token)
+                        if search_in == 'Title and abstract':
+                            condition = f'(Title.str.contains(r"\\b{escaped_token}\\b", case=False, na=False) | Abstract.str.contains(r"\\b{escaped_token}\\b", case=False, na=False))'
+                        else:
+                            condition = f'Title.str.contains(r"\\b{escaped_token}\\b", case=False, na=False)'
+
+                        if negate_next:
+                            condition = f"~({condition})"
+                            negate_next = False
+
+                        if query and query.strip()[-1] not in "&|(":
+                            query += " & "
+
+                        query += condition
+
+                # Debugging output
+                print(f"Query: {query}")
+
+                try:
+                    filtered_df = df.query(query, engine='python')
+                except Exception as e:
+                    print(f"Error in query: {query}\n{e}")
+                    return pd.DataFrame()
+
+                return filtered_df
+
+            def highlight_terms(text, terms):
+                boolean_operators = {"AND", "OR", "NOT"}
+                url_pattern = r'https?://\S+'
+                urls = re.findall(url_pattern, text)
+                for url in urls:
+                    text = text.replace(url, f'___URL_PLACEHOLDER_{urls.index(url)}___')
+
+                pattern = re.compile('|'.join(rf'\b{re.escape(term)}\b' for term in terms if term not in boolean_operators), flags=re.IGNORECASE)
+                highlighted_text = pattern.sub(lambda match: f'<span style="background-color: #FF8581;">{match.group(0)}</span>' if match.group(0) not in urls else match.group(0), text)
+                for index, url in enumerate(urls):
+                    highlighted_text = highlighted_text.replace(f'___URL_PLACEHOLDER_{index}___', url)
+                
+                return highlighted_text
+
+            # Example Streamlit code for context
+            st.header('Search in database', anchor=False)
+            st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+            @st.experimental_fragment
+            def search_options_main_menu():
                 total_rows = len(df_dedup)
                 nan_count_citation = df_dedup['Citation_list'].isna().sum()
                 non_nan_count_citation = total_rows - nan_count_citation
@@ -241,161 +403,6 @@ def search_options_main_menu():
                 non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
                 citation_mean = non_nan_cited_df_dedup['Citation'].mean()
                 citation_median = non_nan_cited_df_dedup['Citation'].median()
-                st.metric(
-                    label="Number of citations", 
-                    value=int(citation_count), 
-                    help=f'''Not all papers are tracked for citation. 
-                    Citation per publication: **{round(citation_mean, 1)}**, 
-                    Citation median: **{round(citation_median, 1)}**'''
-                    ) 
-
-                true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
-                total_count = len(df_dedup[df_dedup['Publication type']=='Journal article'])
-                if total_count == 0:
-                    oa_ratio = 0.0
-                else:
-                    oa_ratio = true_count / total_count * 100
-                st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
-                
-                item_type_no = df_dedup['Publication type'].nunique()
-                st.metric(label='Number of publication types', value=int(item_type_no))
-
-                df_dedup_authors = df_dedup[df_dedup['Publication type'] != 'Thesis']
-                item_count = len(df_dedup_authors)
-                def split_and_expand(authors):
-                    # Ensure the input is a string
-                    if isinstance(authors, str):
-                        # Split by comma and strip whitespace
-                        split_authors = [author.strip() for author in authors.split(',')]
-                        return pd.Series(split_authors)
-                    else:
-                        # Return the original author if it's not a string
-                        return pd.Series([authors])
-                expanded_authors = df_dedup_authors['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
-                expanded_authors = expanded_authors.reset_index(name='Author')
-                author_no = len(expanded_authors)
-                if author_no == 0:
-                    author_pub_ratio=0.0
-                else:
-                    author_pub_ratio = round(author_no/item_count, 2)
-                st.metric(label='Number of authors', value=int(author_no))
-                st.metric(
-                    label='Author/publication ratio', 
-                    value=author_pub_ratio, 
-                    help='The average author number per publication (theses are excluded as they are inherently single-authored publications).'
-                )
-
-
-                df_dedup_authors = df_dedup[df_dedup['Publication type'] != 'Thesis']
-                item_count = len(df_dedup_authors)
-                df_dedup_authors['FirstName2'] = df_dedup_authors['FirstName2'].astype(str)
-                df_dedup_authors['multiple_authors'] = df_dedup_authors['FirstName2'].apply(lambda x: ',' in x)
-                multiple_authored_papers = df_dedup_authors['multiple_authors'].sum()
-                collaboration_ratio = round(multiple_authored_papers / item_count * 100, 1)
-                st.metric(
-                    label='Collaboration ratio', 
-                    value=f'{(collaboration_ratio)}%', 
-                    help='Ratio of multiple-authored papers (theses are excluded as they are inherently single-authored publications).'
-                )
-
-        sidebar_content() 
-
-        tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard']) #, '🔀 Surprise me'])
-        with tab1:
-
-            col1, col2 = st.columns([6,2]) 
-            with col1: 
-
-                def parse_search_terms(search_term):
-                    # Split the search term by spaces while keeping phrases in quotes together
-                    tokens = re.findall(r'(?:"[^"]*"|\S+)', search_term)
-                    boolean_tokens = []
-                    for token in tokens:
-                        # Treat "AND", "OR", "NOT" as Boolean operators only if they are uppercase
-                        if token in ["AND", "OR", "NOT"]:
-                            boolean_tokens.append(token)
-                        else:
-                            # Don't strip characters within quoted phrases
-                            if token.startswith('"') and token.endswith('"'):
-                                stripped_token = token.strip('"')
-                            else:
-                                # Preserve alphanumeric characters, apostrophes, hyphens, en dash, and other special characters
-                                stripped_token = re.sub(r'[^a-zA-Z0-9\s\'\-–’]', '', token)
-                                # Remove parentheses from the stripped token
-                                stripped_token = stripped_token.replace('(', '').replace(')', '')
-                            boolean_tokens.append(stripped_token.strip('"'))
-                    
-                    # Remove trailing operators
-                    while boolean_tokens and boolean_tokens[-1] in ["AND", "OR", "NOT"]:
-                        boolean_tokens.pop()
-                    
-                    return boolean_tokens
-
-                def apply_boolean_search(df, search_tokens, search_in):
-                    if not search_tokens:
-                        return df
-
-                    query = ''
-                    negate_next = False
-
-                    for i, token in enumerate(search_tokens):
-                        if token == "AND":
-                            query += " & "
-                            negate_next = False
-                        elif token == "OR":
-                            query += " | "
-                            negate_next = False
-                        elif token == "NOT":
-                            negate_next = True
-                        elif token == "(":
-                            query += " ("
-                        elif token == ")":
-                            query += ") "
-                        else:
-                            escaped_token = re.escape(token)
-                            if search_in == 'Title and abstract':
-                                condition = f'(Title.str.contains(r"\\b{escaped_token}\\b", case=False, na=False) | Abstract.str.contains(r"\\b{escaped_token}\\b", case=False, na=False))'
-                            else:
-                                condition = f'Title.str.contains(r"\\b{escaped_token}\\b", case=False, na=False)'
-
-                            if negate_next:
-                                condition = f"~({condition})"
-                                negate_next = False
-
-                            if query and query.strip()[-1] not in "&|(":
-                                query += " & "
-
-                            query += condition
-
-                    # Debugging output
-                    print(f"Query: {query}")
-
-                    try:
-                        filtered_df = df.query(query, engine='python')
-                    except Exception as e:
-                        print(f"Error in query: {query}\n{e}")
-                        return pd.DataFrame()
-
-                    return filtered_df
-
-                def highlight_terms(text, terms):
-                    boolean_operators = {"AND", "OR", "NOT"}
-                    url_pattern = r'https?://\S+'
-                    urls = re.findall(url_pattern, text)
-                    for url in urls:
-                        text = text.replace(url, f'___URL_PLACEHOLDER_{urls.index(url)}___')
-
-                    pattern = re.compile('|'.join(rf'\b{re.escape(term)}\b' for term in terms if term not in boolean_operators), flags=re.IGNORECASE)
-                    highlighted_text = pattern.sub(lambda match: f'<span style="background-color: #FF8581;">{match.group(0)}</span>' if match.group(0) not in urls else match.group(0), text)
-                    for index, url in enumerate(urls):
-                        highlighted_text = highlighted_text.replace(f'___URL_PLACEHOLDER_{index}___', url)
-                    
-                    return highlighted_text
-
-                # Example Streamlit code for context
-                st.header('Search in database', anchor=False)
-                st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
