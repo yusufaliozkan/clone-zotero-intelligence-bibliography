@@ -28,7 +28,7 @@ import PIL
 from PIL import Image, ImageDraw, ImageFilter
 import json
 
-from authors_dict import df_authors, name_replacements, process_authors
+from authors_dict import process_authors #df_authors, name_replacements, process_authors
 from copyright import display_custom_license
 from sidebar_content import sidebar_content
 import plotly.graph_objs as go
