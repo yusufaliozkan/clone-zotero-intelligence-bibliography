@@ -458,7 +458,8 @@ with st.spinner('Retrieving data...'):
             }
             @st.experimental_fragment
             def search_options_main_menu():
-                name_replacements = {
+                from authors_dict import name_replacements
+                # name_replacements = {
                     'David Gioe': 'David V. Gioe',
                     'David V Gioe':'David V. Gioe',
                     'David Vincent Gioe': 'David V. Gioe',
