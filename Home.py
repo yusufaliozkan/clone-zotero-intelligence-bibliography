@@ -212,8 +212,6 @@ with st.spinner('Retrieving data...'):
 
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
-    df_dedup_thesis_type = df_dedup['Thesis_type'].unique()
-    df_dedup_thesis_type
 
     col1, col2, col3 = st.columns([3,5,8])
     with col3:
@@ -2187,7 +2185,7 @@ with st.spinner('Retrieving data...'):
                                 # Display the article with highlighted search terms
                                 st.markdown(f"{i}. {article}", unsafe_allow_html=True) 
                 search_cited_papers()
-                
+
             # OVERVIEW
             st.header('Overview', anchor=False)
             tab11, tab12, tab13 = st.tabs(['Recently added items', 'Recently published items', 'Top cited items'])
