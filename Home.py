@@ -1302,10 +1302,12 @@ with st.spinner('Retrieving data...'):
                                     unique_thesis_types = [''] + list(filtered_type_df['Thesis_type'].unique())
                                     selected_thesis_type = st.selectbox('Select a thesis type', unique_thesis_types)
 
+                                    if selected_thesis_type:
+                                        filtered_type_df = filtered_type_df[filtered_type_df['Thesis_type']==selected_thesis_type]
+                                        
                                     unique_universities = [''] + list(filtered_type_df['University'].unique())
                                     selected_thesis_uni = st.selectbox('Select a university', unique_universities)
-                                    if not selected_thesis_type == '':
-                                        filtered_type_df = filtered_type_df[filtered_type_df['Thesis_type']==selected_thesis_type]
+
                                     if not selected_thesis_uni == '':
                                         filtered_type_df = filtered_type_df[filtered_type_df['University']==selected_thesis_uni]
                                     
