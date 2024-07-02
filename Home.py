@@ -212,7 +212,7 @@ with st.spinner('Retrieving data...'):
 
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
-    df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
+    name_replacements = name_replacements
 
     col1, col2, col3 = st.columns([3,5,8])
     with col3:
