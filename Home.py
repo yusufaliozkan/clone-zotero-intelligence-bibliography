@@ -2767,13 +2767,16 @@ with st.spinner('Retrieving data...'):
                     st.markdown('##### Single vs Multiple authored publications', help='Theses are excluded from this section as they are inherently single-authored publications.')
                     col1, col2 = st.columns([3,1])
                     with col1:
+                        df_authors2['multiple_authors'] = df_authors2['FirstName2'].apply(
+                            lambda x: isinstance(x, str) and ',' in x
+                        )
+
                         df_authors3 = df_authors2.copy()
                         df_authors3 = df_authors3[df_authors3['Publication type'] != 'Thesis']
 
-                        df_authors3['multiple_authors'] = df_authors3['FirstName2'].apply(
-                            lambda x: isinstance(x, str) and ',' in x
-                        )
-                        df_authors3
+                        # df_authors3['multiple_authors'] = df_authors3['FirstName2'].apply(
+                        #     lambda x: isinstance(x, str) and ',' in x
+                        # )
 
                         grouped_3 = df_authors3.groupby('Date year')
                         total_publications_3 = grouped_3.size().reset_index(name='Total Publications')
