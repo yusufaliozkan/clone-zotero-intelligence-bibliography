@@ -2771,6 +2771,7 @@ with st.spinner('Retrieving data...'):
                         df_authors3 = df_authors3[df_authors3['Publication type'] != 'Thesis']
 
                         grouped_3 = df_authors3.groupby('Date year')
+                        grouped_3
                         total_publications_3 = grouped_3.size().reset_index(name='Total Publications')
                         grouped_3['multiple_authors'] = grouped_3['FirstName2'].apply(lambda x: ',' in x)
                         multiple_authored_papers_3 = grouped_3['multiple_authors'].apply(lambda x: (x == True).sum()).reset_index(name='# Multiple Authored Publications')
