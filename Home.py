@@ -1419,6 +1419,7 @@ with st.spinner('Retrieving data...'):
                                         # Order the universities by the total number of theses
                                         thesis_counts_top = thesis_counts_top.sort_values('Number of Theses_total', ascending=False).reset_index(drop=True)
                                         thesis_counts_top = thesis_counts_top.pivot_table(index='University', columns='Thesis_type', values='Number of Theses', aggfunc='sum').fillna(0).reset_index()
+                                        thesis_counts_top
                                         # Create the bar chart
                                         fig = go.Figure()
 
