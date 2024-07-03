@@ -1418,6 +1418,7 @@ with st.spinner('Retrieving data...'):
                                         thesis_counts_top = thesis_counts_top.merge(total_theses_per_university, on='University', suffixes=('', '_total'))
                                         # Order the universities by the total number of theses
                                         thesis_counts_top = thesis_counts_top.sort_values('Number of Theses_total', ascending=False).reset_index(drop=True)
+                                        thesis_counts_top
                                         # Create the bar chart
                                         fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type', barmode='group')
 
