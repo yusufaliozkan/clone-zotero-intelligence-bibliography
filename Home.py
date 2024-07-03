@@ -1378,20 +1378,21 @@ with st.spinner('Retrieving data...'):
                                                     title=f'Publications by Year ({selected_type})')
                                 st.plotly_chart(fig_year_bar)
 
-                                collection_author_df = type_df.copy()
-                                collection_author_df['Author_name'] = collection_author_df['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
-                                collection_author_df = collection_author_df.explode('Author_name')
-                                collection_author_df.reset_index(drop=True, inplace=True)
-                                collection_author_df['Author_name'] = collection_author_df['Author_name'].map(name_replacements).fillna(collection_author_df['Author_name'])
-                                collection_author_df = collection_author_df['Author_name'].value_counts().head(10)
-                                fig = px.bar(collection_author_df, x=collection_author_df.index, y=collection_author_df.values)
-                                fig.update_layout(
-                                    title=f'Top 10 Authors by Publication Count ({selected_type})',
-                                    xaxis_title='Author',
-                                    yaxis_title='Number of Publications',
-                                    xaxis_tickangle=-45,
-                                )
-                                st.plotly_chart(fig)
+                                if selected_type != 'Thesis':
+                                    collection_author_df = type_df.copy()
+                                    collection_author_df['Author_name'] = collection_author_df['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
+                                    collection_author_df = collection_author_df.explode('Author_name')
+                                    collection_author_df.reset_index(drop=True, inplace=True)
+                                    collection_author_df['Author_name'] = collection_author_df['Author_name'].map(name_replacements).fillna(collection_author_df['Author_name'])
+                                    collection_author_df = collection_author_df['Author_name'].value_counts().head(10)
+                                    fig = px.bar(collection_author_df, x=collection_author_df.index, y=collection_author_df.values)
+                                    fig.update_layout(
+                                        title=f'Top 10 Authors by Publication Count ({selected_type})',
+                                        xaxis_title='Author',
+                                        yaxis_title='Number of Publications',
+                                        xaxis_tickangle=-45,
+                                    )
+                                    st.plotly_chart(fig)
 
                                 if selected_type == 'Thesis':
                                     st.write('Thesis')
