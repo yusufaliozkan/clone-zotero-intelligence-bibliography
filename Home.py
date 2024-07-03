@@ -1419,9 +1419,11 @@ with st.spinner('Retrieving data...'):
                                         # Order the universities by the total number of theses
                                         thesis_counts_top = thesis_counts_top.sort_values('Number of Theses_total', ascending=False).reset_index(drop=True)
                                         # Create the bar chart
-                                        fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type',
-                                                    labels={'x': 'University', 'y': 'Number of Theses', 'color': 'Thesis Type'},
-                                                    title='Theses by Institution and Type')
+                                        fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type', barmode='group')
+
+                                        # fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type',
+                                        #             labels={'x': 'University', 'y': 'Number of Theses', 'color': 'Thesis Type'},
+                                        #             title='Theses by Institution and Type')
                                         # Display the bar chart in the Streamlit app
                                         st.plotly_chart(fig)
 
