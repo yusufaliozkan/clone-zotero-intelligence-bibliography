@@ -1398,9 +1398,9 @@ with st.spinner('Retrieving data...'):
                                     st.write('Thesis')
                                     type_df
                                     thesis_types =type_df['Thesis_type'].value_counts()
-                                    fig = px.bar(thesis_types, x=thesis_types.index, y=thesis_types.values,
+                                    fig = px.pie(thesis_types, x=thesis_types.index, y=thesis_types.values,
                                                 labels={'x': 'Thesis Type', 'y': 'Number of Theses'},
-                                                title=f'Theses by Type)')
+                                                title=f'Theses by Type')
                                     st.plotly_chart(fig)
 
                                 author_df = type_df.copy()
