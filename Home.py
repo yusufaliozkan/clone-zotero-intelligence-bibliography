@@ -1410,22 +1410,16 @@ with st.spinner('Retrieving data...'):
 
                                     # Filter to get the top 10 universities by the total number of theses
                                     top_universities = total_theses_per_university.nlargest(10, 'Number of Theses')['University']
-
                                     # Filter the thesis_counts DataFrame to include only these top 10 universities
                                     thesis_counts_top = thesis_counts[thesis_counts['University'].isin(top_universities)]
-
                                     # Merge the total counts to retain the ordering
                                     thesis_counts_top = thesis_counts_top.merge(total_theses_per_university, on='University', suffixes=('', '_total'))
-
                                     # Order the universities by the total number of theses
-                                    thesis_counts_top = thesis_counts_top.sort_values('Number of Theses_total', ascending=False)
-                                    thesis_counts_top 
-
+                                    thesis_counts_top = thesis_counts_top.sort_values('Number of Theses_total', ascending=False).reset_index(drop=True)
                                     # Create the bar chart
                                     fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type',
                                                 labels={'x': 'University', 'y': 'Number of Theses', 'color': 'Thesis Type'},
                                                 title='Theses by Institution and Type')
-
                                     # Display the bar chart in the Streamlit app
                                     st.plotly_chart(fig)
 
