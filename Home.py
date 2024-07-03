@@ -1422,7 +1422,7 @@ with st.spinner('Retrieving data...'):
                                     thesis_counts_top 
 
                                     # Create the bar chart
-                                    fig = px.bar(thesis_counts_top, x='University', y='Number of Theses_total', color='Thesis_type',
+                                    fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type',
                                                 labels={'x': 'University', 'y': 'Number of Theses', 'color': 'Thesis Type'},
                                                 title='Theses by Institution and Type')
 
