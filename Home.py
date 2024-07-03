@@ -1395,8 +1395,6 @@ with st.spinner('Retrieving data...'):
                                     st.plotly_chart(fig)
 
                                 if selected_type == 'Thesis':
-                                    st.write('Thesis')
-                                    type_df
                                     thesis_types = type_df['Thesis_type'].value_counts().reset_index()
                                     thesis_types.columns = ['Thesis Type', 'Number of Theses']
 
