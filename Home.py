@@ -1415,6 +1415,7 @@ with st.spinner('Retrieving data...'):
 
                                     # Filter the thesis_counts DataFrame to include only these top 10 universities
                                     thesis_counts_top = thesis_counts[thesis_counts['University'].isin(top_universities)]
+                                    thesis_counts_top 
 
                                     # Order the universities by the total number of theses
                                     thesis_counts_top['University'] = pd.Categorical(thesis_counts_top['University'], categories=top_universities, ordered=True)
