@@ -1421,6 +1421,7 @@ with st.spinner('Retrieving data...'):
 
                                     # Order the universities by the total number of theses
                                     thesis_counts_top = thesis_counts_top.sort_values('Number of Theses_total', ascending=False)
+                                    thesis_counts_top 
 
                                     # Create the bar chart
                                     fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type',
