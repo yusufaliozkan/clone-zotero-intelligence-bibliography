@@ -1396,6 +1396,7 @@ with st.spinner('Retrieving data...'):
 
                                 if selected_type == 'Thesis':
                                     st.write('Thesis')
+                                    type_df
 
                                 author_df = type_df.copy()
                                 def clean_text (text):
