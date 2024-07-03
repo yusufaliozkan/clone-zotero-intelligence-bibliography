@@ -1406,7 +1406,7 @@ with st.spinner('Retrieving data...'):
                                     st.plotly_chart(fig)
 
                                     university = type_df['University'].value_counts()
-                                    university = university.head(15)
+                                    university = university.head(10)
                                     fig = px.bar(university, x=university.index, y=university.values,
                                                     labels={'x': 'University', 'y': 'Number of Theses'},
                                                     title=f'Theses by Institution')
