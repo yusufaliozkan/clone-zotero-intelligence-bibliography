@@ -1405,11 +1405,18 @@ with st.spinner('Retrieving data...'):
                                                 title='Theses by Type')
                                     st.plotly_chart(fig)
 
-                                    university = type_df['University'].value_counts()
-                                    university = university.head(10)
-                                    fig = px.bar(university, x=university.index, y=university.values,
-                                                    labels={'x': 'University', 'y': 'Number of Theses'},
-                                                    title=f'Theses by Institution')
+                                    thesis_counts = type_df.groupby(['University', 'Thesis_type']).size().reset_index(name='Number of Theses')
+
+                                    # Filter to get the top 10 universities by the number of theses
+                                    top_universities = thesis_counts.groupby('University')['Number of Theses'].sum().nlargest(10).index
+                                    thesis_counts = thesis_counts[thesis_counts['University'].isin(top_universities)]
+
+                                    # Create the bar chart
+                                    fig = px.bar(thesis_counts, x='University', y='Number of Theses', color='Thesis_type',
+                                                labels={'x': 'University', 'y': 'Number of Theses', 'color': 'Thesis Type'},
+                                                title='Theses by Institution and Type')
+
+                                    # Display the bar chart in the Streamlit app
                                     st.plotly_chart(fig)
 
                                 author_df = type_df.copy()
