@@ -1405,6 +1405,12 @@ with st.spinner('Retrieving data...'):
                                                 title='Theses by Type')
                                     st.plotly_chart(fig)
 
+                                    university = type_df['University'].value_counts().reset_index()
+                                    fig = px.bar(university, x=university.index, y=university.values,
+                                                    labels={'x': 'Institution', 'y': 'Number of Theses'},
+                                                    title=f'Theses by Institution')
+                                    st.plotly_chart(fig)
+
                                 author_df = type_df.copy()
                                 def clean_text (text):
                                     text = text.lower() # lowercasing
