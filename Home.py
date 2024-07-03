@@ -1407,12 +1407,21 @@ with st.spinner('Retrieving data...'):
 
                                     thesis_counts = type_df.groupby(['University', 'Thesis_type']).size().reset_index(name='Number of Theses')
 
-                                    # Filter to get the top 10 universities by the number of theses
-                                    top_universities = thesis_counts.groupby('University')['Number of Theses'].sum().nlargest(10).index
-                                    thesis_counts = thesis_counts[thesis_counts['University'].isin(top_universities)]
+                                    # Calculate the total number of theses for each university
+                                    total_theses_per_university = thesis_counts.groupby('University')['Number of Theses'].sum().reset_index()
+
+                                    # Filter to get the top 10 universities by the total number of theses
+                                    top_universities = total_theses_per_university.nlargest(10, 'Number of Theses')['University']
+
+                                    # Filter the thesis_counts DataFrame to include only these top 10 universities
+                                    thesis_counts_top = thesis_counts[thesis_counts['University'].isin(top_universities)]
+
+                                    # Order the universities by the total number of theses
+                                    thesis_counts_top['University'] = pd.Categorical(thesis_counts_top['University'], categories=top_universities, ordered=True)
+                                    thesis_counts_top = thesis_counts_top.sort_values('University')
 
                                     # Create the bar chart
-                                    fig = px.bar(thesis_counts, x='University', y='Number of Theses', color='Thesis_type',
+                                    fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type',
                                                 labels={'x': 'University', 'y': 'Number of Theses', 'color': 'Thesis Type'},
                                                 title='Theses by Institution and Type')
 
