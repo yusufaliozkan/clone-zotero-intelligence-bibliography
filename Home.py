@@ -1418,9 +1418,30 @@ with st.spinner('Retrieving data...'):
                                         thesis_counts_top = thesis_counts_top.merge(total_theses_per_university, on='University', suffixes=('', '_total'))
                                         # Order the universities by the total number of theses
                                         thesis_counts_top = thesis_counts_top.sort_values('Number of Theses_total', ascending=False).reset_index(drop=True)
-                                        thesis_counts_top
+                                        thesis_counts_top = thesis_counts_top.pivot_table(index='University', columns='Thesis_type', values='Number of Theses', aggfunc='sum').fillna(0).reset_index()
                                         # Create the bar chart
-                                        fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type', barmode='group')
+                                        fig = go.Figure()
+
+                                        # Adding each type of thesis as a separate trace
+                                        for thesis_type in df['Thesis_type'].unique():
+                                            fig.add_trace(go.Bar(
+                                                x=df_pivot['University'],
+                                                y=df_pivot[thesis_type],
+                                                name=thesis_type
+                                            ))
+
+                                        # Update the layout
+                                        fig.update_layout(
+                                            barmode='stack',
+                                            title='Number of Theses by University and Thesis Type',
+                                            xaxis_title='University',
+                                            yaxis_title='Number of Theses',
+                                            xaxis={'categoryorder': 'total descending'},
+                                            legend_title_text='Thesis Type'
+                                        )
+
+                                        # Show the plot
+                                        fig.show()
 
                                         # fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type',
                                         #             labels={'x': 'University', 'y': 'Number of Theses', 'color': 'Thesis Type'},
