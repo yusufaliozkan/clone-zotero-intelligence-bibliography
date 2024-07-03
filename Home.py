@@ -1397,10 +1397,12 @@ with st.spinner('Retrieving data...'):
                                 if selected_type == 'Thesis':
                                     st.write('Thesis')
                                     type_df
-                                    thesis_types =type_df['Thesis_type'].value_counts()
-                                    fig = px.pie(thesis_types, x=thesis_types.index, y=thesis_types.values,
-                                                labels={'x': 'Thesis Type', 'y': 'Number of Theses'},
-                                                title=f'Theses by Type')
+                                    thesis_types = type_df['Thesis_type'].value_counts().reset_index()
+                                    thesis_types.columns = ['Thesis Type', 'Number of Theses']
+
+                                    # Create the pie chart
+                                    fig = px.pie(thesis_types, names='Thesis Type', values='Number of Theses', 
+                                                title='Theses by Type')
                                     st.plotly_chart(fig)
 
                                 author_df = type_df.copy()
