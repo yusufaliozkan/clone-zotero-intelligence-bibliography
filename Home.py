@@ -1395,33 +1395,35 @@ with st.spinner('Retrieving data...'):
                                     st.plotly_chart(fig)
 
                                 if selected_type == 'Thesis':
-                                    thesis_types = type_df['Thesis_type'].value_counts().reset_index()
-                                    thesis_types.columns = ['Thesis Type', 'Number of Theses']
+                                    col1, col2 = st.columns(2)
+                                    with col1:
+                                        thesis_types = type_df['Thesis_type'].value_counts().reset_index()
+                                        thesis_types.columns = ['Thesis Type', 'Number of Theses']
 
-                                    # Create the pie chart
-                                    fig = px.pie(thesis_types, names='Thesis Type', values='Number of Theses', 
-                                                title='Theses by Type')
-                                    st.plotly_chart(fig)
+                                        # Create the pie chart
+                                        fig = px.pie(thesis_types, names='Thesis Type', values='Number of Theses', 
+                                                    title='Theses by Type')
+                                        st.plotly_chart(fig)
+                                    with col2:
+                                        thesis_counts = type_df.groupby(['University', 'Thesis_type']).size().reset_index(name='Number of Theses')
 
-                                    thesis_counts = type_df.groupby(['University', 'Thesis_type']).size().reset_index(name='Number of Theses')
+                                        # Calculate the total number of theses for each university
+                                        total_theses_per_university = thesis_counts.groupby('University')['Number of Theses'].sum().reset_index()
 
-                                    # Calculate the total number of theses for each university
-                                    total_theses_per_university = thesis_counts.groupby('University')['Number of Theses'].sum().reset_index()
-
-                                    # Filter to get the top 10 universities by the total number of theses
-                                    top_universities = total_theses_per_university.nlargest(10, 'Number of Theses')['University']
-                                    # Filter the thesis_counts DataFrame to include only these top 10 universities
-                                    thesis_counts_top = thesis_counts[thesis_counts['University'].isin(top_universities)]
-                                    # Merge the total counts to retain the ordering
-                                    thesis_counts_top = thesis_counts_top.merge(total_theses_per_university, on='University', suffixes=('', '_total'))
-                                    # Order the universities by the total number of theses
-                                    thesis_counts_top = thesis_counts_top.sort_values('Number of Theses_total', ascending=False).reset_index(drop=True)
-                                    # Create the bar chart
-                                    fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type',
-                                                labels={'x': 'University', 'y': 'Number of Theses', 'color': 'Thesis Type'},
-                                                title='Theses by Institution and Type')
-                                    # Display the bar chart in the Streamlit app
-                                    st.plotly_chart(fig)
+                                        # Filter to get the top 10 universities by the total number of theses
+                                        top_universities = total_theses_per_university.nlargest(10, 'Number of Theses')['University']
+                                        # Filter the thesis_counts DataFrame to include only these top 10 universities
+                                        thesis_counts_top = thesis_counts[thesis_counts['University'].isin(top_universities)]
+                                        # Merge the total counts to retain the ordering
+                                        thesis_counts_top = thesis_counts_top.merge(total_theses_per_university, on='University', suffixes=('', '_total'))
+                                        # Order the universities by the total number of theses
+                                        thesis_counts_top = thesis_counts_top.sort_values('Number of Theses_total', ascending=False).reset_index(drop=True)
+                                        # Create the bar chart
+                                        fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type',
+                                                    labels={'x': 'University', 'y': 'Number of Theses', 'color': 'Thesis Type'},
+                                                    title='Theses by Institution and Type')
+                                        # Display the bar chart in the Streamlit app
+                                        st.plotly_chart(fig)
 
                                 author_df = type_df.copy()
                                 def clean_text (text):
