@@ -1424,7 +1424,7 @@ with st.spinner('Retrieving data...'):
                                         fig = go.Figure()
 
                                         # Adding each type of thesis as a separate trace
-                                        for thesis_type in thesis_counts_top['Thesis_type'].unique():
+                                        for thesis_type in df['Thesis_type'].unique():
                                             fig.add_trace(go.Bar(
                                                 x=thesis_counts_top['University'],
                                                 y=thesis_counts_top[thesis_type],
