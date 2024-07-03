@@ -1397,6 +1397,8 @@ with st.spinner('Retrieving data...'):
                                 if selected_type == 'Thesis':
                                     st.write('Thesis')
                                     type_df
+                                    thesis_types =type_df['Thesis_type'].value_counts()
+                                    thesis_types
 
                                 author_df = type_df.copy()
                                 def clean_text (text):
