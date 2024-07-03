@@ -347,7 +347,7 @@ with col1:
 
             # Create a DataFrame
             df = pd.DataFrame(data)
-            words_to_filter = ["intelligence", "espionage", "spy", "oversight"]
+            words_to_filter = ["intelligence", "espionage", "spy", "oversight", "colourblindness"]
             pattern = '|'.join(words_to_filter)
 
             df = df[df['title'].str.contains(pattern, case=False, na=False)]
