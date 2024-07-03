@@ -1415,11 +1415,12 @@ with st.spinner('Retrieving data...'):
 
                                     # Filter the thesis_counts DataFrame to include only these top 10 universities
                                     thesis_counts_top = thesis_counts[thesis_counts['University'].isin(top_universities)]
-                                    thesis_counts_top 
+
+                                    # Merge the total counts to retain the ordering
+                                    thesis_counts_top = thesis_counts_top.merge(total_theses_per_university, on='University', suffixes=('', '_total'))
 
                                     # Order the universities by the total number of theses
-                                    thesis_counts_top['University'] = pd.Categorical(thesis_counts_top['University'], categories=top_universities, ordered=True)
-                                    thesis_counts_top = thesis_counts_top.sort_values('University')
+                                    thesis_counts_top = thesis_counts_top.sort_values('Number of Theses_total', ascending=False)
 
                                     # Create the bar chart
                                     fig = px.bar(thesis_counts_top, x='University', y='Number of Theses', color='Thesis_type',
