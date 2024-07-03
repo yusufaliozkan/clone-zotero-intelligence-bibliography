@@ -330,6 +330,8 @@ with col1:
                 items_not_in_df_item_magazines        
             status.update(label="Search complete!", state="complete", expanded=True)
 
+
+            ## LEIDEN THESIS
             url = "https://rss.app/feeds/S566whCCjTbiXmns.xml"
             response = requests.get(url)
             rss_content = response.content
@@ -347,10 +349,11 @@ with col1:
 
             # Create a DataFrame
             df = pd.DataFrame(data)
-            words_to_filter = ["intelligence", "espionage", "spy", "oversight", "colourblindness"]
+            words_to_filter = ["intelligence", "espionage", "spy", "oversight"]
             pattern = '|'.join(words_to_filter)
 
             df = df[df['title'].str.contains(pattern, case=False, na=False)]
+            st.write('Leiden theses')
             df
 
 with col2:
