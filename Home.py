@@ -1393,6 +1393,9 @@ with st.spinner('Retrieving data...'):
                                 )
                                 st.plotly_chart(fig)
 
+                                if selected_type == 'Thesis':
+                                    st.write('Thesis')
+
                                 author_df = type_df.copy()
                                 def clean_text (text):
                                     text = text.lower() # lowercasing
