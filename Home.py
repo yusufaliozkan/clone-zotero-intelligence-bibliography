@@ -117,6 +117,28 @@ type_map = {
     'document':'Document',
     'computerProgram':'Computer program'
 }
+
+mapping_thesis_type ={
+    "MA Thesis": "Master's Thesis",
+    "PhD Thesis": "PhD Thesis",
+    "Master Thesis": "Master's Thesis",
+    "Thesis": "Master's Thesis",  # Assuming 'Thesis' refers to Master's Thesis here, adjust if necessary
+    "Ph.D.": "PhD Thesis",
+    "Master's Dissertation": "Master's Thesis",
+    "Undergraduate Theses": "Undergraduate Thesis",
+    "MPhil": "MPhil Thesis",
+    "A.L.M.": "Master's Thesis",  # Assuming A.L.M. (Master of Liberal Arts) maps to Master's Thesis
+    "doctoralThesis": "PhD Thesis",
+    "PhD": "PhD Thesis",
+    "Masters": "Master's Thesis",
+    "PhD thesis": "PhD Thesis",
+    "phd": "PhD Thesis",
+    "doctoral": "PhD Thesis",
+    "Doctoral": "PhD Thesis",
+    "Master of Arts Dissertation": "Master's Thesis",
+    "":'Unclassified'
+}
+df['Thesis_type'] = df['Thesis_type'].replace(mapping_thesis_type)
 df['Publication type'] = df['Publication type'].replace(type_map)
 df['Date published'] = (
     df['Date published']
@@ -396,66 +418,6 @@ with st.spinner('Retrieving data...'):
             # Example Streamlit code for context
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-            name_replacements = {
-                'David Gioe': 'David V. Gioe',
-                'David V Gioe':'David V. Gioe',
-                'David Vincent Gioe': 'David V. Gioe',
-                'Michael Goodman': 'Michael S. Goodman',
-                'Michael S Goodman': 'Michael S. Goodman',
-                'Michael Simon Goodman': 'Michael S. Goodman',
-                'Thomas Maguire':'Thomas J. Maguire',
-                'Thomas Joseph Maguire':'Thomas J. Maguire',
-                'Huw John Davies':'Huw J. Davies',
-                'Huw Davies':'Huw J. Davies',
-                'Philip H.J. Davies':'Philip H. J. Davies',
-                'Philip Davies':'Philip H. J. Davies',
-                'Dan Lomas':'Daniel W. B. Lomas',
-                'Daniel W B Lomas':'Daniel W. B. Lomas',
-                'Daniel W.B. Lomas':'Daniel W. B. Lomas',
-                'Richard Aldrich':'Richard J. Aldrich',
-                'Richard J Aldrich':'Richard J. Aldrich',
-                'Steven Wagner':'Steven B. Wagner',
-                'Daniel Larsen':'Daniel R. Larsen',
-                'Daniel Richard Larsen':'Daniel R. Larsen',
-                'Loch Johnson':'Loch K. Johnson',
-                'Sir David Omand Gcb':'David Omand',
-                'Sir David Omand':'David Omand',
-                'John Ferris':'John R. Ferris',
-                'John Robert Ferris':'John R. Ferris',
-                'Richard Betts':'Richard K. Betts',
-                'Wesley Wark':'Wesley K. Wark',
-                'Michael Handel':'Michael I. Handel',
-                'Michael I Handel':'Michael I. Handel',
-                'Matthew Seligmann':'Matthew S. Seligmann',
-                'Christopher Andrew':'Christopher M. Andrew',
-                'STEPHEN MARRIN':'Stephen Marrin',
-                'Christopher Moran':'Christopher R. Moran',
-                'Christopher R Moran':'Christopher R. Moran',
-                'Richard Popplewell':'Richard J. Popplewell',
-                'Richard James Popplewell':'Richard J. Popplewell',
-                'Paul Michael McGarr':'Paul M. McGarr',
-                'Paul McGarr':'Paul M. McGarr',
-                'John Paul Maddrell':'John P. Maddrell',
-                'John Maddrell':'John P. Maddrell',
-                'Paul Maddrell':'John P. Maddrell',
-                'C.G. McKay':'C. G. McKay',
-                'C. G. Mckay':'C. G. McKay',
-                'C.G. Mckay':'C. G. McKay',
-                'David Mcknight':'David McKnight',
-                'Julie Mendosa':'Julie A. Mendosa',
-                'Robert Jervis 1':'Robert Jervis',
-                'Ben B. Fischer':'Benjamin B. Fischer',
-                'Benjamin Fischer':'Benjamin B. Fischer',
-                "Eunan O'halpin":"Eunan O'Halpin",
-                "Eunan O’Halpin":"Eunan O'Halpin",
-                'Yusuf Ozkan':'Yusuf A. Ozkan',
-                'Yusuf Ali Ozkan':'Yusuf A. Ozkan',
-                'Stephen Coulthart':'Stephen J. Coulthart',
-                'Kevin Riehle':'Kevin P. Riehle',
-                'James Wirtz':'James J. Wirtz',
-                'James J Wirtz':'James J. Wirtz',
-                'Philip HJ Davies':'Philip H. J. Davies'
-            }
             @st.experimental_fragment
             def search_options_main_menu():
                 from authors_dict import name_replacements
