@@ -1405,7 +1405,7 @@ with st.spinner('Retrieving data...'):
                                                 title='Theses by Type')
                                     st.plotly_chart(fig)
 
-                                    university = type_df['University'].value_counts().reset_index()
+                                    university = type_df['University'].value_counts()
                                     university
                                     fig = px.bar(university, x=university.index, y=university.values,
                                                     labels={'x': 'University', 'y': 'Number of Theses'},
