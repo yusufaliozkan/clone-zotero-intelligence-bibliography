@@ -1522,7 +1522,7 @@ with st.spinner('Retrieving data...'):
                                 filtered_type_df = pd.merge(filtered_type_df, df_zotero_id, on='zotero_item_key', how='left')
                                 df_zotero_id = filtered_type_df[['zotero_item_key']]
 
-                                def display_bibliographies(df):
+                                def display_bibliographies2(df):
                                     all_bibliographies = ""
                                     for index, row in df.iterrows():
                                         # Add a horizontal line between bibliographies
@@ -1533,7 +1533,7 @@ with st.spinner('Retrieving data...'):
                                         all_bibliographies += row['bibliography']
 
                                     st.markdown(all_bibliographies, unsafe_allow_html=True)
-                                display_bibliographies(filtered_type_df)
+                                display_bibliographies2(filtered_type_df)
                     # type_selection()
                 
                 elif search_option == "Search journal":
