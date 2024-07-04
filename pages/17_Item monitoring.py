@@ -332,53 +332,37 @@ with col1:
 
             st.write('**Institutional repositories**')
 
-            ## LEIDEN THESIS
-            url = "https://rss.app/feeds/S566whCCjTbiXmns.xml"
-            response = requests.get(url)
-            rss_content = response.content
+            def fetch_rss_data(url, label):
+                response = requests.get(url)
+                rss_content = response.content
+                root = ET.fromstring(rss_content)
+                items = root.findall('.//item')[1:]
+                data = []
+                for item in items:
+                    title = item.find('title').text
+                    link = item.find('link').text
+                    data.append({'title': title, 'link': link, 'label': label})
+                return data
 
-            # Parse the RSS feed
-            root = ET.fromstring(rss_content)
+            # URLs of the RSS feeds with their respective labels
+            feeds = [
+                {"url": "https://rss.app/feeds/uBBTAmA7a9rMr7JA.xml", "label": "Brunel University"},
+                {"url": "https://rss.app/feeds/S566whCCjTbiXmns.xml", "label": "Leiden University"}
+            ]
 
-            # Extract title and link from each item except the first one
-            items = root.findall('.//item')[1:]
-            data = []
-            for item in items:
-                title = item.find('title').text
-                link = item.find('link').text
-                data.append({'title': title, 'link': link})
-
-            # Create a DataFrame
-            df = pd.DataFrame(data)
-            words_to_filter = ["intelligence", "espionage", "spy", "oversight"]
-            pattern = '|'.join(words_to_filter)
-
-            df = df[df['title'].str.contains(pattern, case=False, na=False)]
-            df
-
-            #BRUNEL REPOSITORY
-            url = "https://rss.app/feeds/uBBTAmA7a9rMr7JA.xml"
-            response = requests.get(url)
-            rss_content = response.content
-
-            # Parse the RSS feed
-            root = ET.fromstring(rss_content)
-
-            # Extract title and link from each item except the first one
-            items = root.findall('.//item')[1:]
-            data = []
-            for item in items:
-                title = item.find('title').text
-                link = item.find('link').text
-                data.append({'title': title, 'link': link})
+            # Fetch and combine data from both RSS feeds
+            all_data = []
+            for feed in feeds:
+                all_data.extend(fetch_rss_data(feed["url"], feed["label"]))
 
             # Create a DataFrame
-            df = pd.DataFrame(data)
+            df = pd.DataFrame(all_data)
             words_to_filter = ["intelligence", "espionage", "spy", "oversight"]
             pattern = '|'.join(words_to_filter)
 
             df = df[df['title'].str.contains(pattern, case=False, na=False)].reset_index(drop=True)
-            df['title'] = df['title'].str.replace('Brunel University Research Archive:', '')
+            df['title'] = df['title'].str.replace('Brunel University Research Archive:', '', regex=False)
+
             df
 
 with col2:
