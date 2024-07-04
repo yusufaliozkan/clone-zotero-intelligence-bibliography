@@ -1299,7 +1299,7 @@ with st.spinner('Retrieving data...'):
                                         if selected_thesis_type:
                                             filtered_type_df = filtered_type_df[filtered_type_df['Thesis_type']==selected_thesis_type]
                                             
-                                        unique_universities = sorted([''] + list(filtered_type_df['University'].unique()))
+                                        unique_universities = [''] + sorted(list(filtered_type_df['University'].unique()))
                                         selected_thesis_uni = st.selectbox('Select a university', unique_universities)
 
                                         if not selected_thesis_uni == '':
