@@ -2290,7 +2290,7 @@ with st.spinner('Retrieving data...'):
                         formatted_row = (
                             f"**{df['Publication type'].iloc[i]}**: "
                             f"{df['Title'].iloc[i]}"
-                            f"(in: *{df['Book_title'].iloc[i]}*)"
+                            f" (in: *{df['Book_title'].iloc[i]}*)"
                             f" (by *{df['Authors'].iloc[i]}*)"
                             f" (Published on: {df['Date published'].iloc[i]})"
                             f" [[Publication link]]({df['Link to publication'].iloc[i]})"
