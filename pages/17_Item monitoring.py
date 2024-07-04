@@ -330,6 +330,7 @@ with col1:
                 items_not_in_df_item_magazines        
             status.update(label="Search complete!", state="complete", expanded=True)
 
+            st.write('**Institutional repositories**')
 
             ## LEIDEN THESIS
             url = "https://rss.app/feeds/S566whCCjTbiXmns.xml"
@@ -353,7 +354,6 @@ with col1:
             pattern = '|'.join(words_to_filter)
 
             df = df[df['title'].str.contains(pattern, case=False, na=False)]
-            st.write('Leiden theses')
             df
 
             #BRUNEL REPOSITORY
