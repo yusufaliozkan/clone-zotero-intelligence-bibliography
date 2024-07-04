@@ -356,6 +356,31 @@ with col1:
             st.write('Leiden theses')
             df
 
+            #BRUNEL REPOSITORY
+            url = "https://rss.app/feeds/uBBTAmA7a9rMr7JA.xml"
+            response = requests.get(url)
+            rss_content = response.content
+
+            # Parse the RSS feed
+            root = ET.fromstring(rss_content)
+
+            # Extract title and link from each item except the first one
+            items = root.findall('.//item')[1:]
+            data = []
+            for item in items:
+                title = item.find('title').text
+                link = item.find('link').text
+                data.append({'title': title, 'link': link})
+
+            # Create a DataFrame
+            df = pd.DataFrame(data)
+            words_to_filter = ["intelligence", "espionage", "spy", "oversight"]
+            pattern = '|'.join(words_to_filter)
+
+            df = df[df['title'].str.contains(pattern, case=False, na=False)].reset_index(drop=True)
+            df['title'] = df['title'].str.replace('Brunel University Research Archive:', '')
+            df
+
 with col2:
     with st.expander('Collections', expanded=True):
         st.caption('[Intelligence history](https://intelligence.streamlit.app/Intelligence_history)')
