@@ -364,11 +364,11 @@ with col1:
             df['title'] = df['title'].str.replace('Brunel University Research Archive:', '', regex=False)
             df = df.rename(columns={'title':'Title'})
 
-            # merged_df_2 = pd.merge(items_not_in_df2, df_titles[['Title']], on='Title', how='left', indicator=True)
-            # items_not_in_df3 = merged_df_2[merged_df_2['_merge'] == 'left_only']
-            # items_not_in_df3.drop('_merge', axis=1, inplace=True)
-            # items_not_in_df3 = items_not_in_df3.sort_values(by=['Publication Date'], ascending=False)
-            # items_not_in_df3 = items_not_in_df3.reset_index(drop=True)
+            df_not = pd.merge(df, df_titles[['Title']], on='Title', how='left', indicator=True)
+            df_not = df_not[df_not['_merge'] == 'left_only']
+            df_not.drop('_merge', axis=1, inplace=True)
+            df_not = df_not.reset_index(drop=True)
+            df_not
 
             df
 
