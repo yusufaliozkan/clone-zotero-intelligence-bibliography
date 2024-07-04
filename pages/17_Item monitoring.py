@@ -363,11 +363,13 @@ with col1:
             df = df[df['title'].str.contains(pattern, case=False, na=False)].reset_index(drop=True)
             df['title'] = df['title'].str.replace('Brunel University Research Archive:', '', regex=False)
             df = df.rename(columns={'title':'Title'})
+            df['Title'] = df['Title'].str.upper()
+            df_titles['Title'] = df_titles['Title'].str.upper()
 
             df_titles
             df_not = pd.merge(df, df_titles[['Title']], on='Title', how='left')#, indicator=True)
-            # df_not = df_not[df_not['_merge'] == 'left_only']
-            # df_not.drop('_merge', axis=1, inplace=True)
+            df_not = df_not[df_not['_merge'] == 'left_only']
+            df_not.drop('_merge', axis=1, inplace=True)
             df_not = df_not.reset_index(drop=True)
             df_not
 
