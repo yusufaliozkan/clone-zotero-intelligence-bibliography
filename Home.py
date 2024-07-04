@@ -2241,14 +2241,14 @@ with st.spinner('Retrieving data...'):
                             f"[[Zotero link]]({row['Zotero link']})"
                             f"(In: {row['Book_title']})"
                         )
-                    if row['Publication type'] == 'Thesis':
+                    elif row['Publication type'] == 'Thesis':
                         return (
                             f"**{row['Publication type']}**: "
                             f"{row['Title']}, "
                             f"(by {row['Authors']})"
                             f"({row['Thesis_type']}: *{row['University']}*) "
                             f"(Published on: {row['Date published']})"
-                            f"[[Publication link]]({row['Link to publication']})"
+                            # f"[[Publication link]]({row['Link to publication']})"
                             f"[[Zotero link]]({row['Zotero link']})"
                         )
       
