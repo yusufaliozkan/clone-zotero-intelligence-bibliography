@@ -2248,7 +2248,7 @@ with st.spinner('Retrieving data...'):
                             f"(by {row['Authors']})"
                             f"({row['Thesis_type']}: *{row['University']}*) "
                             f"(Published on: {row['Date published']})"
-                            # f"[[Publication link]]({row['Link to publication']})"
+                            f"[[Publication link]]({row['Link to publication']})"
                             f"[[Zotero link]]({row['Zotero link']})"
                         )
       
@@ -2308,6 +2308,7 @@ with st.spinner('Retrieving data...'):
                             f" (by *{df['Authors'].iloc[i]}*)"
                             f" (Published on: {df['Date published'].iloc[i]})"
                             f" [[Publication link]]({df['Link to publication'].iloc[i]})"
+                            f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
                         )
 
                         st.write(f"{i+1}) " + formatted_row) 
