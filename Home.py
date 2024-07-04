@@ -1293,7 +1293,7 @@ with st.spinner('Retrieving data...'):
                                 with st.popover('Filters and more'):
                                     container_download_types = st.container()
                                     if selected_type=='Thesis':
-                                        unique_thesis_types = [''] + list(filtered_type_df['Thesis_type'].unique())
+                                        unique_thesis_types = sorted([''] + list(filtered_type_df['Thesis_type'].unique()))
                                         selected_thesis_type = st.selectbox('Select a thesis type', unique_thesis_types)
 
                                         if selected_thesis_type:
