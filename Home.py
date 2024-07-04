@@ -1515,6 +1515,24 @@ with st.spinner('Retrieving data...'):
 
                                     formatted_entry = format_entry(row)
                                     st.write(f"{index + 1}) {formatted_entry}")
+                            
+                                    filtered_type_df['zotero_item_key'] = filtered_type_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                    df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                                    filtered_type_df = pd.merge(filtered_type_df, df_zotero_id, on='zotero_item_key', how='left')
+                                    df_zotero_id = filtered_type_df[['zotero_item_key']]
+
+                                    def display_bibliographies(df):
+                                        all_bibliographies = ""
+                                        for index, row in df.iterrows():
+                                            # Add a horizontal line between bibliographies
+                                            if index > 0:
+                                                all_bibliographies += '<p><p>'
+                                            
+                                            # Display bibliography
+                                            all_bibliographies += row['bibliography']
+
+                                        st.markdown(all_bibliographies, unsafe_allow_html=True)
+                                    display_bibliographies(filtered_type_df)
                     # type_selection()
                 
                 elif search_option == "Search journal":
