@@ -2241,7 +2241,7 @@ with st.spinner('Retrieving data...'):
                             f"[[Zotero link]]({row['Zotero link']})"
                             f"(In: {row['Book_title']})"
                         )
-                    elif row['Publication type'] == 'Thesis':
+                    if row['Publication type'] == 'Thesis':
                         return (
                             f"**{row['Publication type']}**: "
                             f"{row['Title']}, "
