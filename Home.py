@@ -1516,6 +1516,7 @@ with st.spinner('Retrieving data...'):
                                     formatted_entry = format_entry(row)
                                     st.write(f"{index + 1}) {formatted_entry}")
                             
+                                filtered_type_df
                                 filtered_type_df['zotero_item_key'] = filtered_type_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
                                 df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                                 filtered_type_df = pd.merge(filtered_type_df, df_zotero_id, on='zotero_item_key', how='left')
