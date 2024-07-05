@@ -1927,6 +1927,7 @@ with st.spinner('Retrieving data...'):
                                 container_publication_ratio = st.container()
                         with coly3:
                             with st.popover('Filters and more'):
+                                st.warning('Items without a publication date are not listed here!')
                                 pub_types = df_all['Publication type'].unique()
                                 selected_type = st.multiselect("Filter by publication type:", pub_types)
                                 if selected_type:
@@ -2052,7 +2053,6 @@ with st.spinner('Retrieving data...'):
                                     oa_ratio = 0.0
                                 else:
                                     oa_ratio = true_count / total_count * 100                  
-                        st.warning('Items without a publication date are not listed here!')
 
                         dashboard_all = st.toggle('Generate dashboard')
                         if dashboard_all:
