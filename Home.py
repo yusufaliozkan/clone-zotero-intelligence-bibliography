@@ -1086,6 +1086,7 @@ with st.spinner('Retrieving data...'):
                                     container_citation = st.container()
                                     container_citation_average = st.container()
                                     container_oa = st.container()
+                                    container_oa = st.container()
                                     container_type = st.container()
                                     container_collaboration_ratio = st.container()
                             st.write(f"See the collection in [Zotero]({collection_link})")
@@ -1111,6 +1112,7 @@ with st.spinner('Retrieving data...'):
                                 oa_ratio = 0.0
                             else:
                                 oa_ratio = true_count / total_count * 100
+                            container_oa = oa_ratio
 
                             citation_count = filtered_collection_df['Citation'].sum()
                             total_rows = len(filtered_collection_df)
