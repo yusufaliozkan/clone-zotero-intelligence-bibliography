@@ -1926,6 +1926,7 @@ with st.spinner('Retrieving data...'):
                         with coly2:
                             with st.popover('More metrics'):
                                 container_citation = st.container()
+                                container_citation_average = st.container()
 
                         df_all_download = df_all.copy()
                         df_all_download = df_all_download[['Publication type', 'Title', 'Abstract', 'FirstName2', 'Link to publication', 'Zotero link', 'Date published', 'Citation']]
@@ -1954,10 +1955,21 @@ with st.spinner('Retrieving data...'):
                         container_citation.metric(
                             label="Number of citations", 
                             value=int(citation_count), 
-                            help=f'''Not all papers are tracked for citation. 
-                            Citation per publication: **{round(citation_mean, 1)}**, 
-                            Citation median: **{round(citation_median, 1)}**'''
                             )
+
+                        outlier_detector = (df_all['Citation'] > 1000).any()
+                        if outlier_detector == True:
+                            outlier_count = (df_all['Citation'] > 1000).sum()
+                            citation_average = df_all[df_all['Citation'] < 1000]
+                            citation_average = round(citation_average['Citation'].mean(), 2)
+                            citation_average_with_outliers = round(df_all['Citation'].mean(), 2)
+                            container_citation_average.metric(
+                                label="Average citation", 
+                                value=citation_average, 
+                                help=f'**{outlier_count}** item(s) passed the threshold of 1000 citations. With the outliers, the average citation count is **{citation_average_with_outliers}**.'
+                                )
+                        citation_average = round(df_all['Citation'].mean(), 2)
+                        container_citation_average.metric(label="Average citation", value=citation_average)
 
                         if years[0] == years[1] or years[0]==current_year:
                             colyear1, colyear2 = st.columns([2,3])
