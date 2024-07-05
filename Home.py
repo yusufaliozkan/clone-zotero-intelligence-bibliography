@@ -1440,9 +1440,9 @@ with st.spinner('Retrieving data...'):
                                 collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
                             container_collaboration_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
-                            expanded_authors = filtered_type_df['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
-                            expanded_authors = expanded_authors.reset_index(name='Author')
-                            author_no = len(expanded_authors)
+                            expanded_authors_types = filtered_type_df['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                            expanded_authors = expanded_authors_types.reset_index(name='Author')
+                            author_no = len(expanded_authors_types)
                             if author_no == 0:
                                 author_pub_ratio=0.0
                             else:
