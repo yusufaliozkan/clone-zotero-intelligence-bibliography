@@ -1908,13 +1908,6 @@ with st.spinner('Retrieving data...'):
                         filter = (df_all['Date year'] >= years[0]) & (df_all['Date year'] <= years[1])
                         df_all = df_all.loc[filter]
 
-                        pub_types = df_all['Publication type'].unique()
-                        selected_type = st.multiselect("Filter by publication type:", pub_types)
-                        if selected_type:
-                            df_all = df_all[df_all['Publication type'].isin(selected_type)]
-                        
-                        df_all = df_all.reset_index(drop=True)
-
                         # if years[0] == years[1] or years[0]==current_year:
                         #     st.markdown(f'#### Items published in **{int(years[0])}**')
                         # else:
@@ -1932,6 +1925,14 @@ with st.spinner('Retrieving data...'):
                                 container_author_no = st.container()
                                 container_author_pub_ratio = st.container()
                                 container_publication_ratio = st.container()
+                        with coly3:
+                            with st.popover('Filters and more'):
+                                pub_types = df_all['Publication type'].unique()
+                                selected_type = st.multiselect("Filter by publication type:", pub_types)
+                                if selected_type:
+                                    df_all = df_all[df_all['Publication type'].isin(selected_type)]
+                                
+                                df_all = df_all.reset_index(drop=True)
 
                         df_all_download = df_all.copy()
                         df_all_download = df_all_download[['Publication type', 'Title', 'Abstract', 'FirstName2', 'Link to publication', 'Zotero link', 'Date published', 'Citation']]
