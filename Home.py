@@ -1518,7 +1518,6 @@ with st.spinner('Retrieving data...'):
                                         formatted_entry = format_entry(row)
                                         st.write(f"{index + 1}) {formatted_entry}")
                                 if view =='Table':
-                                    filtered_type_df
                                     df_table_view = filtered_type_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Link to publication','Zotero link']]
                                     df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                                     df_table_view
