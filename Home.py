@@ -1975,6 +1975,7 @@ with st.spinner('Retrieving data...'):
                         citation_average = round(df_all['Citation'].mean(), 2)
                         container_citation_average.metric(label="Average citation", value=citation_average)
 
+                        num_items_collections = len(df_all)
                         def split_and_expand(authors):
                             # Ensure the input is a string
                             if isinstance(authors, str):
