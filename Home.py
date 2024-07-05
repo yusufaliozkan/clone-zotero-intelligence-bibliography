@@ -2025,8 +2025,8 @@ with st.spinner('Retrieving data...'):
                                 else:
                                     oa_ratio = true_count / total_count * 100
 
-                                container_metric.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible', 
-                                help=f'Journal articles only')                           
+                                # container_metric.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible', 
+                                # help=f'Journal articles only')                           
                         else:
                             colyear11, colyear22 = st.columns([2,3])
                             with colyear11:
