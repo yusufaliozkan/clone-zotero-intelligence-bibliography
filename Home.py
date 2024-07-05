@@ -1988,9 +1988,9 @@ with st.spinner('Retrieving data...'):
                             author_pub_ratio=0.0
                             author_no=0
                         else:
-                            expanded_authors = df_all['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
-                            expanded_authors = expanded_authors.reset_index(name='Author')
-                            author_no = len(expanded_authors)
+                            expanded_authors_years = df_all['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                            expanded_authors_years = expanded_authors_years.reset_index(name='Author')
+                            author_no = len(expanded_authors_years)
                             author_pub_ratio = round(author_no/num_items_collections, 2)
                         container_author_no.metric(label='Number of authors', value=int(author_no))
                         container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
@@ -2040,8 +2040,6 @@ with st.spinner('Retrieving data...'):
                                     oa_ratio = 0.0
                                 else:
                                     oa_ratio = true_count / total_count * 100                  
-                                st.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible', 
-                                help=f'Journal articles only')    
                         st.warning('Items without a publication date are not listed here!')
 
                         dashboard_all = st.toggle('Generate dashboard')
