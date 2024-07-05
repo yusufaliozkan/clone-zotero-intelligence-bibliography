@@ -848,7 +848,7 @@ with st.spinner('Retrieving data...'):
                             publications_by_type = filtered_collection_df_authors['Publication type'].value_counts()
                             num_items_collections = len(filtered_collection_df_authors)
                             breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
-                            container_metric.metric(label="Number of items", value=int(num_items_collections), help=breakdown_string)
+                            container_metric.metric(label="Number of items", value=int(num_items_collections), help=breakdown_string) 
 
                             citation_count = filtered_collection_df_authors['Citation'].sum()
                 
