@@ -173,7 +173,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     outlier_detector = (df_collections['Citation'] > 1000).any()
     if outlier_detector == True:
-        citation_average = df_collections[df_collections['Citation'] > 1000]
+        citation_average = df_collections[df_collections['Citation'] < 1000]
         citation_average = round(df_collections['Citation'].mean(), 2)
         container_citation_average.metric(label="Average citation", value=citation_average)
 
