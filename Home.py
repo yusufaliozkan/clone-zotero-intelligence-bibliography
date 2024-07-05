@@ -1961,7 +1961,7 @@ with st.spinner('Retrieving data...'):
                         else:
                             colyear11, colyear22 = st.columns([2,3])
                             with colyear11:
-                                container_metric.metric(label=f"# sources published between **{int(years[0])}** - **{int(years[1])}**", value=f'{number_of_items}', label_visibility='visible', 
+                                container_metric.metric(label=f" # sources published between **{int(years[0])}** - **{int(years[1])}**", value=f'{number_of_items}', label_visibility='visible', 
                                 help=f'({breakdown_string})')    
                             with colyear22:
                                 total_count = df_all[['OA status']]
