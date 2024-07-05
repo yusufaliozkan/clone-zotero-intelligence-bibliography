@@ -366,10 +366,23 @@ with col1:
             df['Title'] = df['Title'].str.upper()
             df_titles['Title'] = df_titles['Title'].str.upper()
 
-            df_not = pd.merge(df, df_titles[['Title']], on='Title', how='left', indicator=True)
+            def find_similar_title(title, titles, threshold=80):
+                for t in titles:
+                    similarity = fuzz.ratio(title, t)
+                    if similarity >= threshold:
+                        return t
+                return None
+
+            # Adding a column to df with the most similar title from df_titles
+            df['Similar_Title'] = df['Title'].apply(lambda x: find_similar_title(x, df_titles['Title'], threshold=80))
+
+            # Performing the merge based on the similar titles
+            df_not = df.merge(df_titles[['Title']], left_on='Similar_Title', right_on='Title', how='left', indicator=True)
             df_not = df_not[df_not['_merge'] == 'left_only']
-            df_not.drop('_merge', axis=1, inplace=True)
+            df_not.drop(['_merge', 'Similar_Title'], axis=1, inplace=True)
             df_not = df_not.reset_index(drop=True)
+
+            # Resulting DataFrame
             df_not
 
 with col2:
