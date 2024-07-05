@@ -1973,7 +1973,7 @@ with st.spinner('Retrieving data...'):
                         container_citation_average.metric(label="Average citation", value=citation_average)
 
                         true_count = len(df_all[df_all['OA status']==True])
-                        total_count = len(df_all[df_all['Publication type']=='Journal article'])
+                        total_count = df_all[['OA status']]
                         if total_count == 0:
                             oa_ratio = 0.0
                         else:
