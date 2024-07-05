@@ -1089,7 +1089,7 @@ with st.spinner('Retrieving data...'):
                                     container_type = st.container()
                                     container_author_no = st.container()
                                     container_author_pub_ratio= st.container()
-                                    container_collaboration_ratio = st.container()
+                                    container_publication_ratio = st.container()
                             st.write(f"See the collection in [Zotero]({collection_link})")
                             types = st.multiselect('Publication type', filtered_collection_df['Publication type'].unique(),filtered_collection_df['Publication type'].unique(), key='original')
                             filtered_collection_df = filtered_collection_df[filtered_collection_df['Publication type'].isin(types)]
