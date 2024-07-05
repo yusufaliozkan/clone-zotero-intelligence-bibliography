@@ -171,7 +171,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container_author_no.metric(label='Number of authors', value=int(author_no))
     container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
-    citation_average = round(df_collections['Citation'].mean(), 2)
+    citation_average = round(df_collections['Citation'].median(), 2)
     container_citation_average.metric(label="Average citation", value=citation_average)
 
     df_collections['FirstName2'] = df_collections['FirstName2'].astype(str)
