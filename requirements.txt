@@ -17,3 +17,4 @@ st-gsheets-connection==0.0.4
 shillelagh==1.2.19
 streamlit_dynamic_filters
 pdfkit==1.0.0
+fuzzywuzzy==0.18.0
