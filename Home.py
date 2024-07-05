@@ -1095,6 +1095,7 @@ with st.spinner('Retrieving data...'):
                                     container_info = st.container()
                                     container_filter = st.container()
                                     container_download = st.container()
+                                    view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
                             container_info.info(f"See the collection in [Zotero]({collection_link})")
                             types = container_filter.multiselect('Publication type', filtered_collection_df['Publication type'].unique(),filtered_collection_df['Publication type'].unique(), key='original')
                             filtered_collection_df = filtered_collection_df[filtered_collection_df['Publication type'].isin(types)]
@@ -1291,35 +1292,58 @@ with st.spinner('Retrieving data...'):
                                         if show_first_20:
                                             filtered_collection_df = filtered_collection_df.head(20)
 
-                                    articles_list = []  # Store articles in a list
-                                    for index, row in filtered_collection_df.iterrows():
-                                        formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
-                                        articles_list.append(formatted_entry)    
-                                    
-                                    for index, row in filtered_collection_df.iterrows():
-                                        publication_type = row['Publication type']
-                                        title = row['Title']
-                                        authors = row['FirstName2']
-                                        date_published = row['Date published']
-                                        link_to_publication = row['Link to publication']
-                                        zotero_link = row['Zotero link']
-                                        citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
-                                        citation = int(float(citation))
-                                        citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
-                                        citation_link = citation_link.replace('api.', '')
+                                    if view == 'Basic list':
+                                        articles_list = []  # Store articles in a list
+                                        for index, row in filtered_collection_df.iterrows():
+                                            formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
+                                            articles_list.append(formatted_entry)    
+                                        
+                                        for index, row in filtered_collection_df.iterrows():
+                                            publication_type = row['Publication type']
+                                            title = row['Title']
+                                            authors = row['FirstName2']
+                                            date_published = row['Date published']
+                                            link_to_publication = row['Link to publication']
+                                            zotero_link = row['Zotero link']
+                                            citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
+                                            citation = int(float(citation))
+                                            citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
+                                            citation_link = citation_link.replace('api.', '')
 
-                                        if publication_type == 'Journal article':
-                                            published_by_or_in = 'Published in'
-                                            published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
-                                        elif publication_type == 'Book':
-                                            published_by_or_in = 'Published by'
-                                            published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
-                                        else:
-                                            published_by_or_in = ''
-                                            published_source = ''
+                                            if publication_type == 'Journal article':
+                                                published_by_or_in = 'Published in'
+                                                published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
+                                            elif publication_type == 'Book':
+                                                published_by_or_in = 'Published by'
+                                                published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
+                                            else:
+                                                published_by_or_in = ''
+                                                published_source = ''
 
-                                        formatted_entry = format_entry(row)
-                                        st.write(f"{index + 1}) {formatted_entry}")
+                                            formatted_entry = format_entry(row)
+                                            st.write(f"{index + 1}) {formatted_entry}")
+                                    if view == 'Table':
+                                        df_table_view = filtered_collection_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Link to publication','Zotero link']]
+                                        df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
+                                        df_table_view
+                                    if view == 'Bibliography':
+                                        filtered_collection_df['zotero_item_key'] = filtered_collection_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                        df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                                        filtered_collection_df = pd.merge(filtered_collection_df, df_zotero_id, on='zotero_item_key', how='left')
+                                        df_zotero_id = filtered_collection_df[['zotero_item_key']]
+
+                                        def display_bibliographies2(df):
+                                            all_bibliographies = ""
+                                            for index, row in df.iterrows():
+                                                # Add a horizontal line between bibliographies
+                                                if index > 0:
+                                                    all_bibliographies += '<p><p>'
+                                                
+                                                # Display bibliography
+                                                all_bibliographies += row['bibliography']
+
+                                            st.markdown(all_bibliographies, unsafe_allow_html=True)
+                                        display_bibliographies2(filtered_collection_df)
                                 else:  # If toggle is on but no publications are available
                                     st.write("No publication type selected.")
                     # search_collection()
