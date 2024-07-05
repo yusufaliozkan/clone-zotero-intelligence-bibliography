@@ -1304,6 +1304,7 @@ with st.spinner('Retrieving data...'):
 
                                         if not selected_thesis_uni == '':
                                             filtered_type_df = filtered_type_df[filtered_type_df['University']==selected_thesis_uni]
+                                    view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
                                         
                             download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                             download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
