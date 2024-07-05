@@ -1090,8 +1090,11 @@ with st.spinner('Retrieving data...'):
                                     container_author_no = st.container()
                                     container_author_pub_ratio= st.container()
                                     container_publication_ratio = st.container()
+                            with colcol3:
+                                with st.popover('Filters and more'):
+                                    container_filter = st.container()
                             st.write(f"See the collection in [Zotero]({collection_link})")
-                            types = st.multiselect('Publication type', filtered_collection_df['Publication type'].unique(),filtered_collection_df['Publication type'].unique(), key='original')
+                            types = container_filter.multiselect('Publication type', filtered_collection_df['Publication type'].unique(),filtered_collection_df['Publication type'].unique(), key='original')
                             filtered_collection_df = filtered_collection_df[filtered_collection_df['Publication type'].isin(types)]
                             filtered_collection_df = filtered_collection_df.reset_index(drop=True)
                             publications_by_type = filtered_collection_df['Publication type'].value_counts()
