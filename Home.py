@@ -1077,6 +1077,11 @@ with st.spinner('Retrieving data...'):
                         
                         with st.expander('Click to expand', expanded=True):
                             st.markdown('#### Collection theme: ' + selected_collection)
+
+                            colcol1, colcol2 = st.columns(2)
+                            with colcol1:
+                                container_metric = st.container()
+
                             st.write(f"See the collection in [Zotero]({collection_link})")
                             types = st.multiselect('Publication type', filtered_collection_df['Publication type'].unique(),filtered_collection_df['Publication type'].unique(), key='original')
                             filtered_collection_df = filtered_collection_df[filtered_collection_df['Publication type'].isin(types)]
@@ -1092,7 +1097,7 @@ with st.spinner('Retrieving data...'):
                             today = datetime.date.today().isoformat()
                             num_items_collections = len(filtered_collection_df)
                             breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
-                            st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
+                            container_metric.metric(label="Number of items", value=int(num_items_collections), help=breakdown_string)
 
                             true_count = filtered_collection_df[filtered_collection_df['Publication type']=='Journal article']['OA status'].sum()
                             total_count = len(filtered_collection_df[filtered_collection_df['Publication type']=='Journal article'])
