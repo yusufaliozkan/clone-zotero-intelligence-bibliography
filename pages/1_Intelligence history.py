@@ -218,6 +218,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     citeable_items = df_collections['ID'].count()
     container_citation_average = citation_count/citeable_items
+    container_citation_average
 
     container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
     container_type.metric(label='Number of publication types', value=int(item_type_no))
