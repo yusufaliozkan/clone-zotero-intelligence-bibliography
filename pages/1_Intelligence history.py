@@ -150,6 +150,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     with col2:
         with st.popover("More metrics"):
             container_citation = st.container()
+            container_citation_average = st.container()
             container_oa = st.container()
             container_type = st.container()
             container_author_no = st.container()
@@ -216,14 +217,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container_metric.metric(label="Items found", value=num_items_collections, help=breakdown_string)
     container_citation.metric(label="Number of citations", value=int(citation_count))
 
-    citeable_items = df_collections['ID'].count()
-    container_citation_average = citation_count/citeable_items
-    container_citation_average
-
-    average = df_collections['Citation'].median()
-    # average = int(average)
-    average
-
+    container_citation_average = df_collections['Citation'].median()
 
     container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
     container_type.metric(label='Number of publication types', value=int(item_type_no))
