@@ -1481,58 +1481,62 @@ with st.spinner('Retrieving data...'):
                                 if num_items_collections > 20:
                                     show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
                                     if show_first_20:
-                                        filtered_type_df = filtered_type_df.head(20)                            
+                                        filtered_type_df = filtered_type_df.head(20) 
 
-                                articles_list = []  # Store articles in a list
-                                for index, row in filtered_type_df.iterrows():
-                                    formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
-                                    articles_list.append(formatted_entry)                     
-                                
-                                for index, row in filtered_type_df.iterrows():
-                                    publication_type = row['Publication type']
-                                    title = row['Title']
-                                    authors = row['FirstName2']
-                                    date_published = row['Date published'] 
-                                    link_to_publication = row['Link to publication']
-                                    zotero_link = row['Zotero link']
-                                    citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
-                                    citation = int(float(citation))
-                                    citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
-                                    citation_link = citation_link.replace('api.', '')
+                                if view =='Basic list':
+                                    articles_list = []  # Store articles in a list
+                                    for index, row in filtered_type_df.iterrows():
+                                        formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
+                                        articles_list.append(formatted_entry)                     
+                                    
+                                    for index, row in filtered_type_df.iterrows():
+                                        publication_type = row['Publication type']
+                                        title = row['Title']
+                                        authors = row['FirstName2']
+                                        date_published = row['Date published'] 
+                                        link_to_publication = row['Link to publication']
+                                        zotero_link = row['Zotero link']
+                                        citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
+                                        citation = int(float(citation))
+                                        citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
+                                        citation_link = citation_link.replace('api.', '')
 
-                                    published_by_or_in_dict = {
-                                        'Journal article': 'Published in',
-                                        'Magazine article': 'Published in',
-                                        'Newspaper article': 'Published in',
-                                        'Book': 'Published by',
-                                    }
+                                        published_by_or_in_dict = {
+                                            'Journal article': 'Published in',
+                                            'Magazine article': 'Published in',
+                                            'Newspaper article': 'Published in',
+                                            'Book': 'Published by',
+                                        }
 
-                                    publication_type = row['Publication type']
+                                        publication_type = row['Publication type']
 
-                                    published_by_or_in = published_by_or_in_dict.get(publication_type, '')
-                                    published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
-                                    if publication_type == 'Book':
-                                        published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
+                                        published_by_or_in = published_by_or_in_dict.get(publication_type, '')
+                                        published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
+                                        if publication_type == 'Book':
+                                            published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
 
-                                    formatted_entry = format_entry(row)
-                                    st.write(f"{index + 1}) {formatted_entry}")
-                                # filtered_type_df['zotero_item_key'] = filtered_type_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
-                                # df_zotero_id = pd.read_csv('zotero_citation_format.csv')
-                                # filtered_type_df = pd.merge(filtered_type_df, df_zotero_id, on='zotero_item_key', how='left')
-                                # df_zotero_id = filtered_type_df[['zotero_item_key']]
+                                        formatted_entry = format_entry(row)
+                                        st.write(f"{index + 1}) {formatted_entry}")
+                                if view =='Table':
+                                    filtered_type_df
+                                if view =='Bibliography':
+                                    filtered_type_df['zotero_item_key'] = filtered_type_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                    df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                                    filtered_type_df = pd.merge(filtered_type_df, df_zotero_id, on='zotero_item_key', how='left')
+                                    df_zotero_id = filtered_type_df[['zotero_item_key']]
 
-                                # def display_bibliographies2(df):
-                                #     all_bibliographies = ""
-                                #     for index, row in df.iterrows():
-                                #         # Add a horizontal line between bibliographies
-                                #         if index > 0:
-                                #             all_bibliographies += '<p><p>'
-                                        
-                                #         # Display bibliography
-                                #         all_bibliographies += row['bibliography']
+                                    def display_bibliographies2(df):
+                                        all_bibliographies = ""
+                                        for index, row in df.iterrows():
+                                            # Add a horizontal line between bibliographies
+                                            if index > 0:
+                                                all_bibliographies += '<p><p>'
+                                            
+                                            # Display bibliography
+                                            all_bibliographies += row['bibliography']
 
-                                #     st.markdown(all_bibliographies, unsafe_allow_html=True)
-                                # display_bibliographies2(filtered_type_df)
+                                        st.markdown(all_bibliographies, unsafe_allow_html=True)
+                                    display_bibliographies2(filtered_type_df)
                     # type_selection()
                 
                 elif search_option == "Search journal":
