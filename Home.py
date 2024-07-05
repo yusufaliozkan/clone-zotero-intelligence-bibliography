@@ -1112,10 +1112,10 @@ with st.spinner('Retrieving data...'):
                                 oa_ratio = true_count / total_count * 100
 
                             citation_count = filtered_collection_df['Citation'].sum()
-                            total_rows = len(filtered_collection_df_authors)
-                            nan_count_citation = filtered_collection_df_authors['Citation_list'].isna().sum()
+                            total_rows = len(filtered_collection_df)
+                            nan_count_citation = filtered_collection_df['Citation_list'].isna().sum()
                             non_nan_count_citation = total_rows - nan_count_citation
-                            non_nan_cited_df_dedup = filtered_collection_df_authors.dropna(subset=['Citation_list'])
+                            non_nan_cited_df_dedup = filtered_collection_df.dropna(subset=['Citation_list'])
                             non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
                             citation_mean = non_nan_cited_df_dedup['Citation'].mean()
                             citation_median = non_nan_cited_df_dedup['Citation'].median()
