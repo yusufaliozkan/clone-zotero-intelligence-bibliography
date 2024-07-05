@@ -1920,6 +1920,10 @@ with st.spinner('Retrieving data...'):
                         # else:
                         #     st.markdown(f'#### Items published between **{int(years[0])}** and **{int(years[1])}**')
 
+                        coly1, coly2, coly3 = st.columns(3)
+                        with coly1:
+                            container_metric = st.container()
+
                         df_all_download = df_all.copy()
                         df_all_download = df_all_download[['Publication type', 'Title', 'Abstract', 'FirstName2', 'Link to publication', 'Zotero link', 'Date published', 'Citation']]
                         df_all_download['Abstract'] = df_all_download['Abstract'].str.replace('\n', ' ')
@@ -1939,7 +1943,7 @@ with st.spinner('Retrieving data...'):
                         if years[0] == years[1] or years[0]==current_year:
                             colyear1, colyear2 = st.columns([2,3])
                             with colyear1:
-                                st.metric(label=f"The number of sources published in **{int(years[0])}**", value=f'{number_of_items}', label_visibility='visible', 
+                                container_metric.metric(label=f"The number of sources published in **{int(years[0])}**", value=f'{number_of_items}', label_visibility='visible', 
                                 help=f'({breakdown_string})')
                             with colyear2: 
                                 total_count = df_all[['OA status']]
@@ -1952,7 +1956,7 @@ with st.spinner('Retrieving data...'):
                                 else:
                                     oa_ratio = true_count / total_count * 100
 
-                                st.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible', 
+                                container_metric.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible', 
                                 help=f'Journal articles only')                           
                         else:
                             colyear11, colyear22 = st.columns([2,3])
