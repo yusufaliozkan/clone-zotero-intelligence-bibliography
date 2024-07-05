@@ -171,7 +171,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container_author_no.metric(label='Number of authors', value=int(author_no))
     container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
-    outlier_detector = (df_collections['Citation'] > 1000).any()
+    outlier_detector = (df_collections['Citation'] > 100000).any()
     outlier_detector 
 
     citation_average = round(df_collections['Citation'].mean(), 2)
