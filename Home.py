@@ -1168,6 +1168,15 @@ with st.spinner('Retrieving data...'):
                             citation_average = round(filtered_collection_df['Citation'].mean(), 2)
                             container_citation_average.metric(label="Average citation", value=citation_average)
 
+                            filtered_collection_df['FirstName2'] = filtered_collection_df['FirstName2'].astype(str)
+                            filtered_collection_df['multiple_authors'] = filtered_collection_df['FirstName2'].apply(lambda x: ',' in x)
+                            if len(filtered_collection_df) == 0:
+                                collaboration_ratio=0
+                            else:
+                                multiple_authored_papers = filtered_collection_df['multiple_authors'].sum()
+                                collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
+                                container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
+
                             a = f'{selected_collection}_{today}'
                             st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
 
