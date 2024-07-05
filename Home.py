@@ -1974,6 +1974,8 @@ with st.spinner('Retrieving data...'):
 
                         true_count = len(df_all[df_all['OA status']==True])
                         total_count = df_all[['OA status']]
+                        total_count = total_count.dropna().reset_index(drop=True)
+                        total_count = len(total_count)
                         if total_count == 0:
                             oa_ratio = 0.0
                         else:
