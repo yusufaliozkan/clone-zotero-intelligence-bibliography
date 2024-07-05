@@ -1518,7 +1518,9 @@ with st.spinner('Retrieving data...'):
                                         formatted_entry = format_entry(row)
                                         st.write(f"{index + 1}) {formatted_entry}")
                                 if view =='Table':
-                                    filtered_type_df
+                                    df_table_view = filtered_type_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
+                                    df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
+                                    df_table_view
                                 if view =='Bibliography':
                                     filtered_type_df['zotero_item_key'] = filtered_type_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
                                     df_zotero_id = pd.read_csv('zotero_citation_format.csv')
