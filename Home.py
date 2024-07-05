@@ -1128,6 +1128,9 @@ with st.spinner('Retrieving data...'):
                                 )
                             st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
+                            outlier_detector = (filtered_collection_df['Citation'] > 1000).any()
+                            outlier_detector
+
                             a = f'{selected_collection}_{today}'
                             st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
 
