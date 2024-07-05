@@ -1471,8 +1471,8 @@ with st.spinner('Retrieving data...'):
                                 st.pyplot()
                             else: 
 
-                                filtered_type_df
                                 filtered_type_df['zotero_item_key'] = filtered_type_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                filtered_type_df
                                 df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                                 filtered_type_df = pd.merge(filtered_type_df, df_zotero_id, on='zotero_item_key', how='left')
                                 df_zotero_id = filtered_type_df[['zotero_item_key']]
@@ -1490,7 +1490,7 @@ with st.spinner('Retrieving data...'):
                                     st.markdown(all_bibliographies, unsafe_allow_html=True)
                                 display_bibliographies2(filtered_type_df)
 
-                                
+
                                 sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
                                 if sort_by == 'Publication date :arrow_down:' or filtered_type_df['Citation'].sum() == 0:
                                     filtered_type_df = filtered_type_df.sort_values(by=['Date published'], ascending=False)
