@@ -1092,8 +1092,10 @@ with st.spinner('Retrieving data...'):
                                     container_publication_ratio = st.container()
                             with colcol3:
                                 with st.popover('Filters and more'):
+                                    container_info = st.container()
                                     container_filter = st.container()
-                            st.write(f"See the collection in [Zotero]({collection_link})")
+                                    container_download = st.container()
+                            container_info.info(f"See the collection in [Zotero]({collection_link})")
                             types = container_filter.multiselect('Publication type', filtered_collection_df['Publication type'].unique(),filtered_collection_df['Publication type'].unique(), key='original')
                             filtered_collection_df = filtered_collection_df[filtered_collection_df['Publication type'].isin(types)]
                             filtered_collection_df = filtered_collection_df.reset_index(drop=True)
@@ -1181,7 +1183,7 @@ with st.spinner('Retrieving data...'):
                                 container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
                             a = f'{selected_collection}_{today}'
-                            st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
+                            container_download.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
 
                             on = st.toggle('Generate dashboard')
                             if on and len(filtered_collection_df) > 0: 
