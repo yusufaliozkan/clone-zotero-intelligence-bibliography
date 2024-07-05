@@ -1123,9 +1123,7 @@ with st.spinner('Retrieving data...'):
                             container_citation.metric(
                                 label="Number of citations", 
                                 value=int(citation_count), 
-                                help=f'''Not all papers are tracked for citation. 
-                                Citation per publication: **{round(citation_mean, 1)}**, 
-                                Citation median: **{round(citation_median, 1)}**'''
+                                help=f'Not all items in this collection are citeable.'
                                 )
                             st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
