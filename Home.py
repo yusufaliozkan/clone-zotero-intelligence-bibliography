@@ -1088,6 +1088,7 @@ with st.spinner('Retrieving data...'):
                                     container_oa = st.container()                                    
                                     container_type = st.container()
                                     container_author_no = st.container()
+                                    container_author_pub_ratio= st.container()
                                     container_collaboration_ratio = st.container()
                             st.write(f"See the collection in [Zotero]({collection_link})")
                             types = st.multiselect('Publication type', filtered_collection_df['Publication type'].unique(),filtered_collection_df['Publication type'].unique(), key='original')
@@ -1149,6 +1150,8 @@ with st.spinner('Retrieving data...'):
                                 author_no = len(expanded_authors)
                                 author_pub_ratio = round(author_no/num_items_collections, 2)
                             container_author_no.metric(label='Number of authors', value=int(author_no))
+
+                            container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
                             outlier_detector = (filtered_collection_df['Citation'] > 1000).any()
                             if outlier_detector == True:
