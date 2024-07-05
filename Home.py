@@ -1961,7 +1961,7 @@ with st.spinner('Retrieving data...'):
                         else:
                             colyear11, colyear22 = st.columns([2,3])
                             with colyear11:
-                                st.metric(label=f"The number of sources published between **{int(years[0])}** and **{int(years[1])}**", value=f'{number_of_items}', label_visibility='visible', 
+                                container_metric.metric(label=f"The number of sources published between **{int(years[0])}** and **{int(years[1])}**", value=f'{number_of_items}', label_visibility='visible', 
                                 help=f'({breakdown_string})')    
                             with colyear22:
                                 total_count = df_all[['OA status']]
@@ -1972,7 +1972,7 @@ with st.spinner('Retrieving data...'):
                                     oa_ratio = 0.0
                                 else:
                                     oa_ratio = true_count / total_count * 100                  
-                                container_metric.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible', 
+                                st.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible', 
                                 help=f'Journal articles only')    
                         st.warning('Items without a publication date are not listed here!')
 
