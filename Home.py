@@ -1943,6 +1943,7 @@ with st.spinner('Retrieving data...'):
                         publications_by_type = df_all['Publication type'].value_counts()
                         breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
 
+                        citation_count = df_all['Citation'].sum()
                         total_rows = len(df_all)
                         nan_count_citation = df_all['Citation_list'].isna().sum()
                         non_nan_count_citation = total_rows - nan_count_citation
