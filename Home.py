@@ -1111,7 +1111,7 @@ with st.spinner('Retrieving data...'):
                                 oa_ratio = 0.0
                             else:
                                 oa_ratio = true_count / total_count * 100
-                            container_oa.metric(label="Open access coverage", value=oa_ratio, help=f'Not all items are measured for OA.')
+                            container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help=f'Not all items are measured for OA.')
 
                             citation_count = filtered_collection_df['Citation'].sum()
                             total_rows = len(filtered_collection_df)
