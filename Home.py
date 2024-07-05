@@ -1084,6 +1084,7 @@ with st.spinner('Retrieving data...'):
                             with colcol2:
                                 with st.popover('More metrics'):
                                     container_citation = st.container()
+                                    container_citation_average = st.container()
                                     container_oa = st.container()
                                     container_type = st.container()
                                     container_collaboration_ratio = st.container()
@@ -1129,7 +1130,19 @@ with st.spinner('Retrieving data...'):
                             st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
                             outlier_detector = (filtered_collection_df['Citation'] > 1000).any()
-                            outlier_detector
+                            if outlier_detector == True:
+                                outlier_count = (df_collections['Citation'] > 1000).sum()
+                                citation_average = df_collections[df_collections['Citation'] < 1000]
+                                citation_average = round(citation_average['Citation'].mean(), 2)
+                                citation_average_with_outliers = round(df_collections['Citation'].mean(), 2)
+                                container_citation_average.metric(
+                                    label="Average citation", 
+                                    value=citation_average, 
+                                    help=f'**{outlier_count}** item(s) passed the threshold of 1000 citations. With the outliers, the average citation count is **{citation_average_with_outliers}**.'
+                                    )
+
+                            citation_average = round(df_collections['Citation'].mean(), 2)
+                            container_citation_average.metric(label="Average citation", value=citation_average)
 
                             a = f'{selected_collection}_{today}'
                             st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
