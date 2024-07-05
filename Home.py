@@ -1931,6 +1931,7 @@ with st.spinner('Retrieving data...'):
                                 container_type = st.container()
                                 container_author_no = st.container()
                                 container_author_pub_ratio = st.container()
+                                container_publication_ratio = st.container()
 
                         df_all_download = df_all.copy()
                         df_all_download = df_all_download[['Publication type', 'Title', 'Abstract', 'FirstName2', 'Link to publication', 'Zotero link', 'Date published', 'Citation']]
@@ -2008,6 +2009,15 @@ with st.spinner('Retrieving data...'):
 
                         item_type_no = df_all['Publication type'].nunique()
                         container_type.metric(label='Number of publication types', value=int(item_type_no))
+
+                        df_all['FirstName2'] = df_all['FirstName2'].astype(str)
+                        df_all['multiple_authors'] = df_all['FirstName2'].apply(lambda x: ',' in x)
+                        if len(df_all) == 0:
+                            collaboration_ratio=0
+                        else:
+                            multiple_authored_papers = df_all['multiple_authors'].sum()
+                            collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
+                            container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
                         if years[0] == years[1] or years[0]==current_year:
                             colyear1, colyear2 = st.columns([2,3])
