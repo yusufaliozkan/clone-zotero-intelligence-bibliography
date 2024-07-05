@@ -1931,8 +1931,8 @@ with st.spinner('Retrieving data...'):
                                 selected_type = st.multiselect("Filter by publication type:", pub_types)
                                 if selected_type:
                                     df_all = df_all[df_all['Publication type'].isin(selected_type)]
-                                
                                 df_all = df_all.reset_index(drop=True)
+                                container_download = st.container()
 
                         df_all_download = df_all.copy()
                         df_all_download = df_all_download[['Publication type', 'Title', 'Abstract', 'FirstName2', 'Link to publication', 'Zotero link', 'Date published', 'Citation']]
@@ -1944,7 +1944,7 @@ with st.spinner('Retrieving data...'):
                         # csv = df_download
                         # # st.caption(collection_name)
                         a = 'intelligence-bibliography-items-between-' + str(years[0]) + '-' + str(years[1])
-                        st.download_button('💾 Download selected items ', csv_selected, (a+'.csv'), mime="text/csv", key='download-csv-3')
+                        container_download.download_button('💾 Download selected items ', csv_selected, (a+'.csv'), mime="text/csv", key='download-csv-3')
                         number_of_items = len(df_all)
 
                         publications_by_type = df_all['Publication type'].value_counts()
