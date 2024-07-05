@@ -1923,6 +1923,9 @@ with st.spinner('Retrieving data...'):
                         coly1, coly2, coly3 = st.columns(3)
                         with coly1:
                             container_metric = st.container()
+                        with coly2:
+                            with st.popover('More metrics'):
+                                container_citation = st.container()
 
                         df_all_download = df_all.copy()
                         df_all_download = df_all_download[['Publication type', 'Title', 'Abstract', 'FirstName2', 'Link to publication', 'Zotero link', 'Date published', 'Citation']]
@@ -1939,6 +1942,21 @@ with st.spinner('Retrieving data...'):
 
                         publications_by_type = df_all['Publication type'].value_counts()
                         breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
+
+                        total_rows = len(df_all)
+                        nan_count_citation = df_all['Citation_list'].isna().sum()
+                        non_nan_count_citation = total_rows - nan_count_citation
+                        non_nan_cited_df_dedup = df_all.dropna(subset=['Citation_list'])
+                        non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
+                        citation_mean = non_nan_cited_df_dedup['Citation'].mean()
+                        citation_median = non_nan_cited_df_dedup['Citation'].median()
+                        container_citation.metric(
+                            label="Number of citations", 
+                            value=int(citation_count), 
+                            help=f'''Not all papers are tracked for citation. 
+                            Citation per publication: **{round(citation_mean, 1)}**, 
+                            Citation median: **{round(citation_median, 1)}**'''
+                            )
 
                         if years[0] == years[1] or years[0]==current_year:
                             colyear1, colyear2 = st.columns([2,3])
