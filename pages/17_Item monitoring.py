@@ -20,7 +20,7 @@ import requests
 from rss_feed import df_podcast, df_magazines
 from events import evens_conferences
 import xml.etree.ElementTree as ET
-# from fuzzywuzzy import fuzz
+from fuzzywuzzy import fuzz
 
 st.set_page_config(layout = "wide", 
                     page_title='Intelligence studies network',
