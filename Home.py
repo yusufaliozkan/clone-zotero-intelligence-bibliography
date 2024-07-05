@@ -1440,6 +1440,15 @@ with st.spinner('Retrieving data...'):
                                 collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
                             container_collaboration_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
+                            def split_and_expand(authors):
+                                # Ensure the input is a string
+                                if isinstance(authors, str):
+                                    # Split by comma and strip whitespace
+                                    split_authors = [author.strip() for author in authors.split(',')]
+                                    return pd.Series(split_authors)
+                                else:
+                                    # Return the original author if it's not a string
+                                    return pd.Series([authors])
                             expanded_authors_types = filtered_type_df['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
                             expanded_authors_types = expanded_authors_types.reset_index(name='Author')
                             author_no = len(expanded_authors_types)
