@@ -1929,6 +1929,8 @@ with st.spinner('Retrieving data...'):
                                 container_citation_average = st.container()
                                 container_oa = st.container()
                                 container_type = st.container()
+                                container_author_no = st.container()
+                                container_author_pub_ratio = st.container()
 
                         df_all_download = df_all.copy()
                         df_all_download = df_all_download[['Publication type', 'Title', 'Abstract', 'FirstName2', 'Link to publication', 'Zotero link', 'Date published', 'Citation']]
@@ -1972,6 +1974,26 @@ with st.spinner('Retrieving data...'):
                                 )
                         citation_average = round(df_all['Citation'].mean(), 2)
                         container_citation_average.metric(label="Average citation", value=citation_average)
+
+                        def split_and_expand(authors):
+                            # Ensure the input is a string
+                            if isinstance(authors, str):
+                                # Split by comma and strip whitespace
+                                split_authors = [author.strip() for author in authors.split(',')]
+                                return pd.Series(split_authors)
+                            else:
+                                # Return the original author if it's not a string
+                                return pd.Series([authors])
+                        if len(df_all) == 0:
+                            author_pub_ratio=0.0
+                            author_no=0
+                        else:
+                            expanded_authors = df_all['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                            expanded_authors = expanded_authors.reset_index(name='Author')
+                            author_no = len(expanded_authors)
+                            author_pub_ratio = round(author_no/num_items_collections, 2)
+                        container_author_no.metric(label='Number of authors', value=int(author_no))
+                        container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
                         true_count = len(df_all[df_all['OA status']==True])
                         total_count = df_all[['OA status']]
