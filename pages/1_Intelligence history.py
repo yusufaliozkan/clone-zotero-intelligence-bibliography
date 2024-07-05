@@ -220,7 +220,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container_citation_average = citation_count/citeable_items
     container_citation_average
 
-    average = df_collections['Citation'].mean()
+    average = df_collections['Citation'].median()
     # average = int(average)
     average
 
