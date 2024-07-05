@@ -124,6 +124,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     with col2:
         with st.popover("More metrics"):
             container_citation = st.container()
+            container_citation_average = st.container()
             container_oa = st.container()
             container_type = st.container()
             container_author_no = st.container()
@@ -193,6 +194,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container_type.metric(label='Number of publication types', value=int(item_type_no))
     container_author_no.metric(label='Number of authors', value=int(author_no))
     container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
+
+    citation_average = round(df_collections['Citation'].mean(), 2)
+    container_citation_average.metric(label="Average citation", value=citation_average)
 
     df_collections['FirstName2'] = df_collections['FirstName2'].astype(str)
     df_collections['multiple_authors'] = df_collections['FirstName2'].apply(lambda x: ',' in x)
