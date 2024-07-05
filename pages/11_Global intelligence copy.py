@@ -110,9 +110,23 @@ with st.spinner('Retrieving data & updating dashboard...'):
             else:
                 author_pub_ratio = round(author_no/num_items_collections, 2)
 
+            outlier_detector = (df_collections['Citation'] > 1000).any()
+            if outlier_detector == True:
+                outlier_count = (df_collections['Citation'] > 1000).sum()
+                citation_average = df_collections[df_collections['Citation'] < 1000]
+                citation_average = round(citation_average['Citation'].mean(), 2)
+                citation_average_with_outliers = round(df_collections['Citation'].mean(), 2)
+                container_citation_average.metric(
+                    label="Average citation", 
+                    value=citation_average, 
+                    help=f'**{outlier_count}** item(s) passed the threshold of 1000 citations. With the outliers, the average citation count is **{citation_average_with_outliers}**.'
+                    )
+            citation_average = round(df_collections['Citation'].mean(), 2)
+
             citation_count = df_collections['Citation'].sum()
             st.metric(label='Number of country', value=unique_items_count-1)
             st.metric(label="Number of citations", value=int(citation_count), help='Journal articles only')
+            st.metric(label="Average citation", value=citation_average)
             st.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
             st.metric(label='Number of authors', value=int(author_no))
             st.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
