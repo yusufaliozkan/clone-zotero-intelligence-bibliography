@@ -1078,10 +1078,15 @@ with st.spinner('Retrieving data...'):
                         with st.expander('Click to expand', expanded=True):
                             st.markdown('#### Collection theme: ' + selected_collection)
 
-                            colcol1, colcol2 = st.columns(2)
+                            colcol1, colcol2, colcol3 = st.columns(3)
                             with colcol1:
                                 container_metric = st.container()
-
+                            with colcol2:
+                                with st.popover('More metrics'):
+                                    container_citation = st.container()
+                                    container_oa = st.container()
+                                    container_type = st.container()
+                                    container_collaboration_ratio = st.container()
                             st.write(f"See the collection in [Zotero]({collection_link})")
                             types = st.multiselect('Publication type', filtered_collection_df['Publication type'].unique(),filtered_collection_df['Publication type'].unique(), key='original')
                             filtered_collection_df = filtered_collection_df[filtered_collection_df['Publication type'].isin(types)]
@@ -1107,6 +1112,13 @@ with st.spinner('Retrieving data...'):
                                 oa_ratio = true_count / total_count * 100
 
                             citation_count = filtered_collection_df['Citation'].sum()
+                            container_citation.metric(
+                                label="Number of citations", 
+                                value=int(citation_count), 
+                                help=f'''Not all papers are tracked for citation. 
+                                Citation per publication: **{round(citation_mean, 1)}**, 
+                                Citation median: **{round(citation_median, 1)}**'''
+                                )
                             st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
 
                             a = f'{selected_collection}_{today}'
