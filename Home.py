@@ -1085,7 +1085,7 @@ with st.spinner('Retrieving data...'):
                                 with st.popover('More metrics'):
                                     container_citation = st.container()
                                     container_citation_average = st.container()
-                                    container_oa = st.container()
+                                    container_oa = st.container()                                    
                                     container_type = st.container()
                                     container_collaboration_ratio = st.container()
                             st.write(f"See the collection in [Zotero]({collection_link})")
@@ -1126,7 +1126,9 @@ with st.spinner('Retrieving data...'):
                                 value=int(citation_count), 
                                 help=f'Not all items in this collection are citeable.'
                                 )
-                            st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
+                        
+                            item_type_no = filtered_collection_df['Publication type'].nunique()
+                            container_type.metric(label='Number of publication types', value=int(item_type_no))
 
                             outlier_detector = (filtered_collection_df['Citation'] > 1000).any()
                             if outlier_detector == True:
