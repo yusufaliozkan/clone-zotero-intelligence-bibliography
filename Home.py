@@ -1927,6 +1927,7 @@ with st.spinner('Retrieving data...'):
                             with st.popover('More metrics'):
                                 container_citation = st.container()
                                 container_citation_average = st.container()
+                                container_oa = st.container()
 
                         df_all_download = df_all.copy()
                         df_all_download = df_all_download[['Publication type', 'Title', 'Abstract', 'FirstName2', 'Link to publication', 'Zotero link', 'Date published', 'Citation']]
@@ -1970,6 +1971,14 @@ with st.spinner('Retrieving data...'):
                                 )
                         citation_average = round(df_all['Citation'].mean(), 2)
                         container_citation_average.metric(label="Average citation", value=citation_average)
+
+                        true_count = df_all[df_all['Publication type']=='Journal article']['OA status'].sum()
+                        total_count = len(df_all[df_all['Publication type']=='Journal article'])
+                        if total_count == 0:
+                            oa_ratio = 0.0
+                        else:
+                            oa_ratio = true_count / total_count * 100
+                        container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help=f'Not all items are measured for OA.')
 
                         if years[0] == years[1] or years[0]==current_year:
                             colyear1, colyear2 = st.columns([2,3])
