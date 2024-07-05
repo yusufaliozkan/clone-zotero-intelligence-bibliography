@@ -1928,6 +1928,7 @@ with st.spinner('Retrieving data...'):
                                 container_citation = st.container()
                                 container_citation_average = st.container()
                                 container_oa = st.container()
+                                container_type = st.container()
 
                         df_all_download = df_all.copy()
                         df_all_download = df_all_download[['Publication type', 'Title', 'Abstract', 'FirstName2', 'Link to publication', 'Zotero link', 'Date published', 'Citation']]
@@ -1981,6 +1982,9 @@ with st.spinner('Retrieving data...'):
                         else:
                             oa_ratio = true_count / total_count * 100
                         container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help=f'Not all items are measured for OA.')
+
+                        item_type_no = df_all['Publication type'].nunique()
+                        container_type.metric(label='Number of publication types', value=int(item_type_no))
 
                         if years[0] == years[1] or years[0]==current_year:
                             colyear1, colyear2 = st.columns([2,3])
