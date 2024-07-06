@@ -2382,7 +2382,10 @@ with st.spinner('Retrieving data...'):
                             container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
                             
                         if citation_type=='Trends':
-                            # st.info = note
+                            st.info(f'''
+                                    The trends section shows the citations occured in the last two years 
+                                    ({current_year - 1}-{current_year}) to the papers published in the same period. 
+                                    ''')
                             st.write('trends')
 
                         dashboard_all = st.toggle('Generate dashboard')
