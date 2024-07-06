@@ -2238,6 +2238,7 @@ with st.spinner('Retrieving data...'):
                         with colcite2:
                             with st.popover('More metrics'):
                                 container_citation = st.container()
+                                container_citation_average = st.container()
 
                         max_value = int(df_cited['Citation'].max())
                         min_value = 1
@@ -2284,6 +2285,10 @@ with st.spinner('Retrieving data...'):
                         st.download_button('💾 Download selected items ', csv_selected, (a+'.csv'), mime="text/csv", key='download-csv-3')
                         number_of_items = len(df_cited)
                         container_metric.metric(label=f'Number of publications', value=number_of_items)
+
+
+                        citation_average = round(df_cited['Citation'].mean(), 2)
+                        container_citation_average.metric(label="Average citation", value=citation_average)
 
                         citation_count = df_cited['Citation'].sum()
                         publications_by_type = df_cited['Publication type'].value_counts()
