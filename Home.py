@@ -2212,7 +2212,7 @@ with st.spinner('Retrieving data...'):
                 elif search_option == "Cited papers":
                     st.query_params.clear()
                     st.subheader('Cited items in the library', anchor=False, divider='blue')
-
+                    
                     # @st.experimental_fragment
                     # def search_cited_papers():
                     with st.expander('Click to expand', expanded=True):
@@ -2223,11 +2223,47 @@ with st.spinner('Retrieving data...'):
                         df_cited = df_cited[(df_cited['Citation'].notna()) & (df_cited['Citation'] != 0)]
                         df_cited = df_cited.reset_index(drop=True)
 
+                        colcite1, colcite2, colcite3 = st.columns(3)
+                        with colcite1:
+                            container_metric = st.container()
+                        with colcite2:
+                            with st.popover('More metrics'):
+                                container_citation = st.container()
+                                container_citation_average = st.container()
+                                container_oa = st.container()
+                                container_author_no = st.container()
+                                container_author_pub_ratio = st.container()
+                                container_publication_ratio = st.container()
+                        with colcite3:
+                            with st.popover('Filters and more'):
+                                st.warning('Items without a citation are not listed here! Citation data comes from [OpenAlex](https://openalex.org/).')
+                                citation_type = st.radio('Select:', ('All citations', 'Trends', 'Citations without outliers'))
+                                if citation_type=='All citations':
+                                    df_cited = df_cited.reset_index(drop=True)
+                                elif citation_type=='Trends':
+                                    current_year = datetime.datetime.now().year
+                                    df_cited = df_cited[(df_cited['Last_citation_year'] == current_year) | (df_cited['Last_citation_year'] == current_year - 1)]
+                                    df_cited = df_cited[(df_cited['Publication_year'] == current_year) | (df_cited['Publication_year'] == current_year - 1)]
+                                    note = (f'''
+                                    The trends section shows the citations occured in the last two years 
+                                    ({current_year - 1}-{current_year}) to the papers published in the same period. 
+                                    ''')
+                                elif citation_type == 'Citations without outliers':
+                                    outlier_detector = (df_cited['Citation'] > 1000).any()
+                                    outlier_count = (df_cited['Citation'] > 1000).sum()
+                                    df_cited = df_cited[df_cited['Citation'] < 1000]
+                                    df_cited_for_mean =df_cited_for_mean[df_cited_for_mean['Citation'] < 1000]
+
+                                container_markdown.markdown(f'#### {citation_type}')
+                                container_slider = st.container()
+                                container_download = st.container()
+
                         max_value = int(df_cited['Citation'].max())
                         min_value = 1
                         selected_range = st.slider('Select a citation range:', min_value, max_value, (min_value, max_value), key='')
                         filter = (df_cited['Citation'] >= selected_range[0]) & (df_cited['Citation'] <= selected_range[1])
                         df_cited = df_cited.loc[filter]
+
                         df_cited['Date published2'] = (
                             df_cited['Date published']
                             .str.strip()
@@ -2253,43 +2289,6 @@ with st.spinner('Retrieving data...'):
                         #     df_cited = df_cited[df_cited['Publication type'].isin(selected_type)]
                         
                         df_cited = df_cited.reset_index(drop=True)
-
-                        colcite1, colcite2, colcite3 = st.columns(3)
-                        with colcite1:
-                            container_metric = st.container()
-                        with colcite2:
-                            with st.popover('More metrics'):
-                                container_citation = st.container()
-                                container_citation_average = st.container()
-                                container_oa = st.container()
-                                container_author_no = st.container()
-                                container_author_pub_ratio = st.container()
-                                container_publication_ratio = st.container()
-                        with colcite3:
-                            with st.popover('Filters and more'):
-                                st.warning('Items without a citation are not listed here! Citation data comes from [OpenAlex](https://openalex.org/).')
-
-                                citation_type = st.radio('Select:', ('All citations', 'Trends', 'Citations without outliers'))
-                                if citation_type=='All citations':
-                                    df_cited = df_cited.reset_index(drop=True)
-                                elif citation_type=='Trends':
-                                    current_year = datetime.datetime.now().year
-                                    df_cited = df_cited[(df_cited['Last_citation_year'] == current_year) | (df_cited['Last_citation_year'] == current_year - 1)]
-                                    df_cited = df_cited[(df_cited['Publication_year'] == current_year) | (df_cited['Publication_year'] == current_year - 1)]
-                                    note = (f'''
-                                    The trends section shows the citations occured in the last two years 
-                                    ({current_year - 1}-{current_year}) to the papers published in the same period. 
-                                    ''')
-                                elif citation_type == 'Citations without outliers':
-                                    outlier_detector = (df_cited['Citation'] > 1000).any()
-                                    outlier_count = (df_cited['Citation'] > 1000).sum()
-                                    df_cited = df_cited[df_cited['Citation'] < 1000]
-                                    df_cited_for_mean =df_cited_for_mean[df_cited_for_mean['Citation'] < 1000]
-
-                                container_markdown.markdown(f'#### {citation_type}')
-                                container_download = st.container()
-
-
 
                         df_cited_download = df_cited.copy()
                         df_cited_download = df_cited_download[['Publication type', 'Title', 'Abstract', 'FirstName2', 'Link to publication', 'Zotero link', 'Date published', 'Citation']]
