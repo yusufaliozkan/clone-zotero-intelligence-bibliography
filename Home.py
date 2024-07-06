@@ -2328,6 +2328,7 @@ with st.spinner('Retrieving data...'):
                                 outlier_count = (df_cited_for_mean['Citation'] > 1000).sum()
                                 citation_average = df_cited_for_mean[df_cited_for_mean['Citation'] < 1000]
                                 citation_average = round(citation_average['Citation'].mean(), 2)
+                                citation_median = round(citation_average['Citation'].median(), 2)
                                 citation_average_with_outliers = round(df_cited_for_mean['Citation'].mean(), 2)
                                 container_citation_average.metric(
                                     label="Average citation", 
@@ -2345,6 +2346,7 @@ with st.spinner('Retrieving data...'):
                                 outlier_count = (df_cited_for_mean['Citation'] > 1000).sum()
                                 citation_average = df_cited_for_mean[df_cited_for_mean['Citation'] < 1000]
                                 citation_average = round(citation_average['Citation'].mean(), 2)
+                                citation_median = round(citation_average['Citation'].median(), 2)
                                 citation_average_with_outliers = round(df_cited_for_mean['Citation'].mean(), 2)
                                 container_citation_average.metric(
                                     label="Average citation", 
