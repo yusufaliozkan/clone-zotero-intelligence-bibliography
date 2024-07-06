@@ -2299,7 +2299,7 @@ with st.spinner('Retrieving data...'):
                         number_of_items = len(df_cited)
                         container_metric.metric(label=f'Number of publications', value=number_of_items)
 
-                        if citation_type=='Trends':
+                        elif citation_type=='Trends':
                             outlier_detector = (df_cited['Citation'] > 1000).any()
                             if outlier_detector == True:
                                 outlier_count = (df_cited['Citation'] > 1000).sum()
