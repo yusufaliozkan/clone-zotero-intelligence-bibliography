@@ -2422,17 +2422,6 @@ with st.spinner('Retrieving data...'):
                                 fig.update_traces(marker=dict(color='red', size=7, opacity=0.5), selector=dict(mode='markers'))
                                 st.plotly_chart(fig)
 
-                                citation_distribution_line = df_cited['Citation'].value_counts().sort_index().reset_index()
-                                citation_distribution_line
-                                citation_distribution_line.columns = ['citation_count', 'num_publications']
-                                fig = px.line(citation_distribution_line, x='num_publications', y='citation_count', markers=True, title='Distribution of Citations')
-                                fig.update_layout(
-                                    xaxis_title='Number of Citations',
-                                    yaxis_title='Number of Publications',
-                                    template='plotly_white'
-                                )
-                                st.plotly_chart(fig)
-
                                 fig = go.Figure(data=go.Scatter(x=df_cited['Year_difference'], y=[0] * len(df_cited['Year_difference']), mode='markers'))
                                 # Customize layout
                                 fig.update_layout(
