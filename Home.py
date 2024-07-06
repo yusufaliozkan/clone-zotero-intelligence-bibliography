@@ -2386,7 +2386,6 @@ with st.spinner('Retrieving data...'):
                                     The trends section shows the citations occured in the last two years 
                                     ({current_year - 1}-{current_year}) to the papers published in the same period. 
                                     ''')
-                            st.write('trends')
 
                         dashboard_all = st.toggle('Generate dashboard')
                         if dashboard_all:
@@ -2422,6 +2421,10 @@ with st.spinner('Retrieving data...'):
                                 # For example:
                                 fig.update_traces(marker=dict(color='red', size=7, opacity=0.5), selector=dict(mode='markers'))
                                 st.plotly_chart(fig)
+
+                                citation_distribution_line = df_cited['Citation'].value_counts().sort_index().reset_index()
+                                citation_distribution_line
+
 
                                 fig = go.Figure(data=go.Scatter(x=df_cited['Year_difference'], y=[0] * len(df_cited['Year_difference']), mode='markers'))
                                 # Customize layout
