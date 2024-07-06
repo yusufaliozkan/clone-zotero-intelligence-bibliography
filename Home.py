@@ -2366,7 +2366,8 @@ with st.spinner('Retrieving data...'):
                             container_citation_average.metric(
                                 label="Average citation", 
                                 value=citation_average,
-                                help=f'{citation_average_wo_outliers}'
+                                help=f'**{outlier_count}** outliers detected that have more than 1000 citations. 
+                                The citation count without outliers is **{citation_average_wo_outliers}**.'
                             )
                             citation_median = round(df_cited_for_mean['Citation'].median(), 2)
 
