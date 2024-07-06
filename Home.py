@@ -2240,7 +2240,7 @@ with st.spinner('Retrieving data...'):
                                 citation_type = st.radio('Select:', ('All citations', 'Trends'))
                                 if citation_type=='All citations':
                                     df_cited = df_cited.reset_index(drop=True)
-                                else:
+                                if citation_type=='Trends':
                                     current_year = datetime.datetime.now().year
                                     df_cited = df_cited[(df_cited['Last_citation_year'] == current_year) | (df_cited['Last_citation_year'] == current_year - 1)]
                                     df_cited = df_cited[(df_cited['Publication_year'] == current_year) | (df_cited['Publication_year'] == current_year - 1)]
