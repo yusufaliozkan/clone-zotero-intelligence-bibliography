@@ -2287,9 +2287,17 @@ with st.spinner('Retrieving data...'):
                         number_of_items = len(df_cited)
                         container_metric.metric(label=f'Number of publications', value=number_of_items)
 
-
-                        citation_average = round(df_cited_for_mean['Citation'].mean(), 2)
-                        container_citation_average.metric(label="Average citation", value=citation_average)
+                        outlier_detector = (df_cited_for_mean['Citation'] > 1000).any()
+                        if outlier_detector == True:
+                            outlier_count = (df_cited_for_mean['Citation'] > 1000).sum()
+                            citation_average = df_cited_for_mean[df_cited_for_mean['Citation'] < 1000]
+                            citation_average = round(citation_average['Citation'].mean(), 2)
+                            citation_average_with_outliers = round(df_cited_for_mean['Citation'].mean(), 2)
+                            container_citation_average.metric(
+                                label="Average citation", 
+                                value=citation_average, 
+                                help=f'**{outlier_count}** item(s) passed the threshold of 1000 citations. With the outliers, the average citation count is **{citation_average_with_outliers}**.'
+                                )
 
                         citation_count = df_cited['Citation'].sum()
                         publications_by_type = df_cited['Publication type'].value_counts()
