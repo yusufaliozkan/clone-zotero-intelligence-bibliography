@@ -272,6 +272,9 @@ with st.spinner('Retrieving data...'):
                 Citation median: **{round(citation_median, 1)}**'''
                 ) 
 
+            citation_average = round(df_dedup['Citation'].mean(), 2)
+            st.metric(label="Average citation", value=citation_average)
+
             true_count = df_dedup[df_dedup['Publication type']=='Journal article']['OA status'].sum()
             total_count = len(df_dedup[df_dedup['Publication type']=='Journal article'])
             if total_count == 0:
