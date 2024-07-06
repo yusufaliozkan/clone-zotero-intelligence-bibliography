@@ -2253,7 +2253,7 @@ with st.spinner('Retrieving data...'):
                                     outlier_detector
                                     outlier_count = (df_cited['Citation'] > 1000).sum()
                                     df_cited = df_cited[df_cited['Citation'] < 1000]
-                                    df_cited_for_mean =df_cited_for_mean [df_cited_for_mean['Citation'] < 1000]
+                                    df_cited_for_mean =df_cited_for_mean[df_cited_for_mean['Citation'] < 1000]
 
                                 container_markdown.markdown(f'#### {citation_type}')
                                 container_slider = st.container()
