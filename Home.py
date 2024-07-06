@@ -268,6 +268,7 @@ with st.spinner('Retrieving data...'):
                 label="Number of citations", 
                 value=int(citation_count), 
                 help=f'''Not all papers are tracked for citation. 
+                Citations come from [OpenAlex](https://openalex.org/).
                 Citation per publication: **{round(citation_mean, 1)}**, 
                 Citation median: **{round(citation_median, 1)}**'''
                 ) 
