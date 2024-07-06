@@ -2217,6 +2217,7 @@ with st.spinner('Retrieving data...'):
                     # def search_cited_papers():
                     with st.expander('Click to expand', expanded=True):                    
                         df_cited = df_dedup.copy()
+                        df_cited_for_mean = df_dedup.copy()
                         non_nan_id = df_cited['ID'].count()
                         df_cited = df_cited[(df_cited['Citation'].notna()) & (df_cited['Citation'] != 0)]
                         df_cited = df_cited.reset_index(drop=True)
@@ -2287,7 +2288,7 @@ with st.spinner('Retrieving data...'):
                         container_metric.metric(label=f'Number of publications', value=number_of_items)
 
 
-                        citation_average = round(df_cited['Citation'].mean(), 2)
+                        citation_average = round(df_cited_for_mean['Citation'].mean(), 2)
                         container_citation_average.metric(label="Average citation", value=citation_average)
 
                         citation_count = df_cited['Citation'].sum()
