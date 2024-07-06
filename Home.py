@@ -2236,6 +2236,7 @@ with st.spinner('Retrieving data...'):
                                 container_publication_ratio = st.container()
                         with colcite3:
                             with st.popover('Filters and more'):
+                                st.warning('Items without a citation are not listed here! Citation data comes from [OpenAlex](https://openalex.org/).')
                                 citation_type = st.radio('Select:', ('All citations', 'Trends'))
                                 if citation_type=='All citations':
                                     df_cited = df_cited.reset_index(drop=True)
@@ -2243,9 +2244,7 @@ with st.spinner('Retrieving data...'):
                                     current_year = datetime.datetime.now().year
                                     df_cited = df_cited[(df_cited['Last_citation_year'] == current_year) | (df_cited['Last_citation_year'] == current_year - 1)]
                                     df_cited = df_cited[(df_cited['Publication_year'] == current_year) | (df_cited['Publication_year'] == current_year - 1)]
-                                    note = st.info(f'''
-                                    The trends section shows the citations occured in the last two years ({current_year - 1}-{current_year}) to the papers published in the same period. 
-                                    ''')
+
                                 container_markdown.markdown(f'#### {citation_type}')
                                 container_slider = st.container()
                                 container_download = st.container()
@@ -2358,7 +2357,10 @@ with st.spinner('Retrieving data...'):
                             collaboration_ratio = round(multiple_authored_papers / number_of_items * 100, 1)
                             container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
                             
-                        st.warning('Items without a citation are not listed here! Citation data comes from [OpenAlex](https://openalex.org/).')
+                        if citation_type=='All citations':
+                            note = st.info(f'''
+                            The trends section shows the citations occured in the last two years ({current_year - 1}-{current_year}) to the papers published in the same period. 
+                            ''')
 
                         dashboard_all = st.toggle('Generate dashboard')
                         if dashboard_all:
