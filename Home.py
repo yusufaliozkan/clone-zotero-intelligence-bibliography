@@ -2560,6 +2560,7 @@ with st.spinner('Retrieving data...'):
                                 if show_first_20:
                                     df_cited = df_cited.head(20)
                             if view == 'Basic list':
+                                st.markdown(f'#### {view}')
                                 articles_list = []  # Store articles in a list
                                 abstracts_list = [] #Store abstracts in a list
                                 for index, row in df_cited.iterrows():
@@ -2571,10 +2572,12 @@ with st.spinner('Retrieving data...'):
                                     # Display the article with highlighted search terms
                                     st.markdown(f"{i}. {article}", unsafe_allow_html=True) 
                             if view == 'Table':
+                                st.markdown(f'#### {view}')
                                 df_table_view = df_cited[['Publication type','Title','Date published','FirstName2', 'Abstract','Journal','Link to publication','Zotero link', 'Citation']]
                                 df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                                 df_table_view
                             if view == 'Bibliography':
+                                st.markdown(f'#### {view}')
                                 df_cited['zotero_item_key'] = df_cited['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
                                 df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                                 df_cited = pd.merge(df_cited, df_zotero_id, on='zotero_item_key', how='left')
