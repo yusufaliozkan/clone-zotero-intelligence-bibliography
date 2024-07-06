@@ -2257,6 +2257,7 @@ with st.spinner('Retrieving data...'):
                                 container_markdown.markdown(f'#### {citation_type}')
                                 container_slider = st.container()
                                 container_download = st.container()
+                                view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
 
                         max_value = int(df_cited['Citation'].max())
                         min_value = 1
@@ -2558,16 +2559,40 @@ with st.spinner('Retrieving data...'):
                                 show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True, key='all_items')
                                 if show_first_20:
                                     df_cited = df_cited.head(20)
-                            articles_list = []  # Store articles in a list
-                            abstracts_list = [] #Store abstracts in a list
-                            for index, row in df_cited.iterrows():
-                                formatted_entry = format_entry(row)
-                                articles_list.append(formatted_entry)  # Append formatted entry to the list
-                                abstract = row['Abstract']
-                                abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
-                            for i, article in enumerate(articles_list, start=1):
-                                # Display the article with highlighted search terms
-                                st.markdown(f"{i}. {article}", unsafe_allow_html=True) 
+                            if view == 'Basic list':
+                                articles_list = []  # Store articles in a list
+                                abstracts_list = [] #Store abstracts in a list
+                                for index, row in df_cited.iterrows():
+                                    formatted_entry = format_entry(row)
+                                    articles_list.append(formatted_entry)  # Append formatted entry to the list
+                                    abstract = row['Abstract']
+                                    abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
+                                for i, article in enumerate(articles_list, start=1):
+                                    # Display the article with highlighted search terms
+                                    st.markdown(f"{i}. {article}", unsafe_allow_html=True) 
+                            if view == 'Table':
+                                df_table_view = df_cited[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
+                                df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
+                                df_table_view
+                            if view == 'Bibliography':
+                                df_cited['zotero_item_key'] = df_cited['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                                df_cited = pd.merge(df_cited, df_zotero_id, on='zotero_item_key', how='left')
+                                df_zotero_id = df_cited[['zotero_item_key']]
+
+                                def display_bibliographies(df):
+                                    df['bibliography'] = df['bibliography'].fillna('').astype(str)
+                                    all_bibliographies = ""
+                                    for index, row in df.iterrows():
+                                        # Add a horizontal line between bibliographies
+                                        if index > 0:
+                                            all_bibliographies += '<p><p>'
+                                        
+                                        # Display bibliography
+                                        all_bibliographies += row['bibliography']
+
+                                    st.markdown(all_bibliographies, unsafe_allow_html=True)
+                                display_bibliographies(df_cited)
                     # search_cited_papers()
                 
             search_options_main_menu()
