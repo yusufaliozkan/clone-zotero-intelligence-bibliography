@@ -2314,6 +2314,8 @@ with st.spinner('Retrieving data...'):
                                     With the outliers, the average citation count is **{citation_average_with_outliers}**.
                                     '''
                                     )
+                            citation_average = round(df_cited['Citation'].mean(), 2)
+                            container_citation_average.metric(label="Average citation", value=citation_average)
                         else:
                             outlier_detector = (df_cited_for_mean['Citation'] > 1000).any()
                             if outlier_detector == True:
@@ -2329,6 +2331,8 @@ with st.spinner('Retrieving data...'):
                                     With the outliers, the average citation count is **{citation_average_with_outliers}**.
                                     '''
                                     )
+                            citation_average = round(df_cited_for_mean['Citation'].mean(), 2)
+                            container_citation_average.metric(label="Average citation", value=citation_average)
 
                         citation_count = df_cited['Citation'].sum()
                         publications_by_type = df_cited['Publication type'].value_counts()
