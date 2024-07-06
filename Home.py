@@ -2241,6 +2241,7 @@ with st.spinner('Retrieving data...'):
                                 container_citation = st.container()
                                 container_citation_average = st.container()
                                 container_oa = st.container()
+                                container_author_no = st.container()
 
                         max_value = int(df_cited['Citation'].max())
                         min_value = 1
@@ -2319,8 +2320,26 @@ with st.spinner('Retrieving data...'):
                         else:
                             oa_ratio = true_count / total_count * 100
 
-                        container_oa.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible', 
-                        help=f'Journal articles only') 
+                        container_oa.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible') 
+
+                        def split_and_expand(authors):
+                            # Ensure the input is a string
+                            if isinstance(authors, str):
+                                # Split by comma and strip whitespace
+                                split_authors = [author.strip() for author in authors.split(',')]
+                                return pd.Series(split_authors)
+                            else:
+                                # Return the original author if it's not a string
+                                return pd.Series([authors])
+                        if len(df_cited) == 0:
+                            author_pub_ratio=0.0
+                            author_no=0
+                        else:
+                            expanded_authors = df_cited['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                            expanded_authors = expanded_authors.reset_index(name='Author')
+                            author_no = len(expanded_authors)
+                            author_pub_ratio = round(author_no/num_items_collections, 2)
+                        container_author_no.metric(label='Number of authors', value=int(author_no))
 
                         st.warning('Items without a citation are not listed here! Citation data comes from [OpenAlex](https://openalex.org/).')
 
