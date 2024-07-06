@@ -2260,7 +2260,7 @@ with st.spinner('Retrieving data...'):
                                 container_download = st.container()
 
                         max_value = int(df_cited['Citation'].max())
-                        min_value = 0
+                        min_value = 1
                         selected_range = st.slider('Select a citation range:', min_value, max_value, (min_value, max_value), key='')
                         filter = (df_cited['Citation'] >= selected_range[0]) & (df_cited['Citation'] <= selected_range[1])
                         df_cited = df_cited.loc[filter]
