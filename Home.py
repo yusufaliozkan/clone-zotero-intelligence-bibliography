@@ -2235,6 +2235,10 @@ with st.spinner('Retrieving data...'):
                         colcite1, colcite2, colcite3 = st.columns(3)
                         with colcite1:
                             container_metric = st.container()
+                        with colcite2:
+                            with st.popover('More metrics'):
+                                container_citation = st.container()
+
                         max_value = int(df_cited['Citation'].max())
                         min_value = 1
                         selected_range = st.slider('Select a citation range:', min_value, max_value, (min_value, max_value), key='')
@@ -2281,26 +2285,24 @@ with st.spinner('Retrieving data...'):
                         number_of_items = len(df_cited)
                         container_metric.metric(label=f'Number of publications', value=number_of_items)
 
-                        colcit1, colcit2 = st.columns([2,4])
-                        with colcit1:
-                            citation_count = df_cited['Citation'].sum()
-                            publications_by_type = df_cited['Publication type'].value_counts()
-                            breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
-                            st.metric(label=f"The number of citations for **{number_of_items}** items", value=int(citation_count), label_visibility='visible', 
-                            help=f'''Out of the **{non_nan_id}** items measured for citations, **{number_of_items}** received at least 1 citation.
-                            ''')
-                        with colcit2:
-                            total_count = df_cited[['OA status']]
-                            total_count = total_count.dropna().reset_index(drop=True)
-                            total_count = len(total_count)
-                            true_count = len(df_cited[df_cited['OA status']==True])
-                            if total_count == 0:
-                                oa_ratio = 0.0
-                            else:
-                                oa_ratio = true_count / total_count * 100
+                        citation_count = df_cited['Citation'].sum()
+                        publications_by_type = df_cited['Publication type'].value_counts()
+                        breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
+                        container_citation.metric(label=f"The number of citations for **{number_of_items}** items", value=int(citation_count), label_visibility='visible', 
+                        help=f'''Out of the **{non_nan_id}** items measured for citations, **{number_of_items}** received at least 1 citation.
+                        ''')
 
-                            st.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible', 
-                            help=f'Journal articles only') 
+                        total_count = df_cited[['OA status']]
+                        total_count = total_count.dropna().reset_index(drop=True)
+                        total_count = len(total_count)
+                        true_count = len(df_cited[df_cited['OA status']==True])
+                        if total_count == 0:
+                            oa_ratio = 0.0
+                        else:
+                            oa_ratio = true_count / total_count * 100
+
+                        st.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible', 
+                        help=f'Journal articles only') 
 
                         st.warning('Items without a citation are not listed here! Citation data comes from [OpenAlex](https://openalex.org/).')
 
