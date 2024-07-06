@@ -2436,7 +2436,6 @@ with st.spinner('Retrieving data...'):
 
                                 with colcite1:
                                     st.metric(label=f"Citation average", value=citation_average, label_visibility='visible')
-                                    citation_median
                                 with colcite2:
                                     st.metric(label=f"Citation median", value=citation_median, label_visibility='visible')
                                 with colcite3: 
