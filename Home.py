@@ -2220,7 +2220,7 @@ with st.spinner('Retrieving data...'):
                         df_cited = df_dedup.copy()
                         df_cited_for_mean = df_dedup.copy()
                         non_nan_id = df_cited['ID'].count()
-                        df_cited = df_cited[(df_cited['Citation'].notna()) & (df_cited['Citation'] != 0)]
+                        df_cited = df_cited[(df_cited['Citation'].notna())]# & (df_cited['Citation'] != 0)]
                         df_cited = df_cited.reset_index(drop=True)
 
                         colcite1, colcite2, colcite3 = st.columns(3)
