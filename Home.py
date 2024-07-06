@@ -2222,17 +2222,6 @@ with st.spinner('Retrieving data...'):
                         df_cited = df_cited[(df_cited['Citation'].notna()) & (df_cited['Citation'] != 0)]
                         df_cited = df_cited.reset_index(drop=True)
 
-                        citation_type = st.radio('Select:', ('All citations', 'Trends'))
-                        if citation_type=='All citations':
-                            df_cited = df_cited.reset_index(drop=True)
-                        else:
-                            current_year = datetime.datetime.now().year
-                            df_cited = df_cited[(df_cited['Last_citation_year'] == current_year) | (df_cited['Last_citation_year'] == current_year - 1)]
-                            df_cited = df_cited[(df_cited['Publication_year'] == current_year) | (df_cited['Publication_year'] == current_year - 1)]
-                            note = st.info(f'''
-                            The trends section shows the citations occured in the last two years ({current_year - 1}-{current_year}) to the papers published in the same period. 
-                            ''')
-
                         colcite1, colcite2, colcite3 = st.columns(3)
                         with colcite1:
                             container_metric = st.container()
@@ -2246,6 +2235,16 @@ with st.spinner('Retrieving data...'):
                                 container_publication_ratio = st.container()
                         with colcite3:
                             with st.popover('Filters and more'):
+                                citation_type = st.radio('Select:', ('All citations', 'Trends'))
+                                if citation_type=='All citations':
+                                    df_cited = df_cited.reset_index(drop=True)
+                                else:
+                                    current_year = datetime.datetime.now().year
+                                    df_cited = df_cited[(df_cited['Last_citation_year'] == current_year) | (df_cited['Last_citation_year'] == current_year - 1)]
+                                    df_cited = df_cited[(df_cited['Publication_year'] == current_year) | (df_cited['Publication_year'] == current_year - 1)]
+                                    note = st.info(f'''
+                                    The trends section shows the citations occured in the last two years ({current_year - 1}-{current_year}) to the papers published in the same period. 
+                                    ''')
                                 container_slider = st.container()
                                 container_download = st.container()
 
