@@ -2424,7 +2424,14 @@ with st.spinner('Retrieving data...'):
 
                                 citation_distribution_line = df_cited['Citation'].value_counts().sort_index().reset_index()
                                 citation_distribution_line
-
+                                citation_distribution_line.columns = ['citation_count', 'num_publications']
+                                fig = px.line(citation_distribution_line, x='citation_count', y='num_publications', markers=True, title='Distribution of Citations')
+                                fig.update_layout(
+                                    xaxis_title='Number of Citations',
+                                    yaxis_title='Number of Publications',
+                                    template='plotly_white'
+                                )
+                                st.plotly_chart(fig)
 
                                 fig = go.Figure(data=go.Scatter(x=df_cited['Year_difference'], y=[0] * len(df_cited['Year_difference']), mode='markers'))
                                 # Customize layout
