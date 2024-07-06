@@ -2244,10 +2244,10 @@ with st.spinner('Retrieving data...'):
                                     current_year = datetime.datetime.now().year
                                     df_cited = df_cited[(df_cited['Last_citation_year'] == current_year) | (df_cited['Last_citation_year'] == current_year - 1)]
                                     df_cited = df_cited[(df_cited['Publication_year'] == current_year) | (df_cited['Publication_year'] == current_year - 1)]
-                                    note = (f'''
+                                    note = f'''
                                     The trends section shows the citations occured in the last two years 
                                     ({current_year - 1}-{current_year}) to the papers published in the same period. 
-                                    ''')
+                                    '''
 
                                 container_markdown.markdown(f'#### {citation_type}')
                                 container_slider = st.container()
