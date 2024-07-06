@@ -761,7 +761,7 @@ with st.spinner('Retrieving data...'):
                                                     else:
                                                         st.caption(f"Abstract: No abstract")
                                         if view == 'Table':
-                                            df_table_view = filtered_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Journal','Link to publication','Zotero link', 'Citation']]
+                                            df_table_view = filtered_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
                                             df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                                             df_table_view
                                         if view =='Bibliography':
@@ -2571,7 +2571,7 @@ with st.spinner('Retrieving data...'):
                                     # Display the article with highlighted search terms
                                     st.markdown(f"{i}. {article}", unsafe_allow_html=True) 
                             if view == 'Table':
-                                df_table_view = df_cited[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
+                                df_table_view = df_cited[['Publication type','Title','Date published','FirstName2', 'Abstract','Journal','Link to publication','Zotero link', 'Citation']]
                                 df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                                 df_table_view
                             if view == 'Bibliography':
