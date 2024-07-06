@@ -832,6 +832,7 @@ with st.spinner('Retrieving data...'):
                             with colauthor2:
                                 with st.popover('More metrics'):
                                     container_citation = st.container()
+                                    container_citation_average = st.container()
                                     container_oa = st.container()
                                     container_type = st.container()
                                     container_collaboration_ratio = st.container()
@@ -851,6 +852,9 @@ with st.spinner('Retrieving data...'):
                             container_metric.metric(label="Number of items", value=int(num_items_collections), help=breakdown_string) 
 
                             citation_count = filtered_collection_df_authors['Citation'].sum()
+
+                            citation_average = round(filtered_collection_df['Citation'].mean(), 2)
+                            container_citation_average.metric(label="Average citation", value=citation_average)
                 
                             total_rows = len(filtered_collection_df_authors)
                             nan_count_citation = filtered_collection_df_authors['Citation_list'].isna().sum()
