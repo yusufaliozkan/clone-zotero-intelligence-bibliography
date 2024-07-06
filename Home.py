@@ -2335,9 +2335,9 @@ with st.spinner('Retrieving data...'):
                             author_pub_ratio=0.0
                             author_no=0
                         else:
-                            expanded_authors = df_cited['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
-                            expanded_authors = expanded_authors.reset_index(name='Author')
-                            author_no = len(expanded_authors)
+                            expanded_authors_cited = df_cited['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                            expanded_authors_cited = expanded_authors_cited.reset_index(name='Author')
+                            author_no = len(expanded_authors_cited)
                             author_pub_ratio = round(author_no/num_items_collections, 2)
                         container_author_no.metric(label='Number of authors', value=int(author_no))
 
