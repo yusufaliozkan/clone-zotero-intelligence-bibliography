@@ -2349,8 +2349,8 @@ with st.spinner('Retrieving data...'):
                             container_citation_average.metric(label="Average citation", value=citation_average)
                         else:
                             outlier_detector = (df_cited['Citation'] > 1000).any()
-                            outlier_count = (df_cited_for_mean['Citation'] > 1000).sum()
-                            citation_average_wo_outliers = df_cited_for_mean[df_cited_for_mean['Citation'] < 1000]                                
+                            outlier_count = (df_cited['Citation'] > 1000).sum()
+                            citation_average_wo_outliers = df_cited[df_cited['Citation'] < 1000]                                
                             citation_average_wo_outliers = round(citation_average_wo_outliers['Citation'].mean(), 2)
                             # citation_median = df_cited_for_mean[df_cited_for_mean['Citation'] < 1000]
                             # citation_median = round(citation_median['Citation'].median(), 2)
@@ -2363,7 +2363,7 @@ with st.spinner('Retrieving data...'):
                             #     With the outliers, the average citation count is **{citation_average_with_outliers}**.
                             #     '''
                             #     )
-                            citation_average = round(df_cited_for_mean['Citation'].mean(), 2)
+                            citation_average = round(df_cited['Citation'].mean(), 2)
                             container_citation_average.metric(
                                 label="Average citation", 
                                 value=citation_average,
@@ -2371,7 +2371,7 @@ with st.spinner('Retrieving data...'):
                                 The citation count without outliers is **{citation_average_wo_outliers}**.
                                 '''
                             )
-                            citation_median = round(df_cited_for_mean['Citation'].median(), 2)
+                            citation_median = round(df_cited['Citation'].median(), 2)
 
                         citation_count = df_cited['Citation'].sum()
                         publications_by_type = df_cited['Publication type'].value_counts()
