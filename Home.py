@@ -275,7 +275,7 @@ with st.spinner('Retrieving data...'):
             outlier_count = (df_dedup['Citation'] > 1000).sum()
             citation_average = round(df_dedup['Citation'].mean(), 2)
             citation_average_with_outliers = round(df_dedup['Citation'].mean(), 2)
-            container_citation_average.metric(
+            st.metric(
                 label="Average citation", 
                 value=citation_average, 
                 help=f'**{outlier_count}** item(s) passed the threshold of 1000 citations. With the outliers, the average citation count is **{citation_average_with_outliers}**.'
