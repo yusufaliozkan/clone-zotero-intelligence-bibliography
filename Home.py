@@ -2302,7 +2302,7 @@ with st.spinner('Retrieving data...'):
                         a = 'cited-items-'
                         container_download.download_button('💾 Download selected items ', csv_selected, (a+'.csv'), mime="text/csv", key='download-csv-3')
                         number_of_items = len(df_cited)
-                        container_metric.metric(label=f'Number of publications', value=number_of_items)
+                        container_metric.metric(label=f'Number of cited publications', value=number_of_items)
 
                         if citation_type=='Trends':
                             # outlier_detector = (df_cited['Citation'] > 1000).any()
