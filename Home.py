@@ -2438,9 +2438,7 @@ with st.spinner('Retrieving data...'):
                                     st.metric(label=f"Citation average", value=citation_average, label_visibility='visible')
                                     citation_median
                                 with colcite2:
-                                    st.metric(label=f"Citation median", value=citation_median, label_visibility='visible', 
-                                    help=f'''This is for items at least with 1 citation.
-                                    ''')
+                                    st.metric(label=f"Citation median", value=citation_median, label_visibility='visible')
                                 with colcite3: 
                                     mean_first_citaion = df_cited['Year_difference'].mean()
                                     st.metric(label=f"First citation occurence (average in year)", value=round(mean_first_citaion), label_visibility='visible', 
