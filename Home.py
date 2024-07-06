@@ -2250,7 +2250,6 @@ with st.spinner('Retrieving data...'):
                                     ''')
                                 elif citation_type == 'Citations without outliers':
                                     outlier_detector = (df_cited['Citation'] > 1000).any()
-                                    outlier_detector
                                     outlier_count = (df_cited['Citation'] > 1000).sum()
                                     df_cited = df_cited[df_cited['Citation'] < 1000]
                                     df_cited_for_mean =df_cited_for_mean[df_cited_for_mean['Citation'] < 1000]
@@ -2409,6 +2408,8 @@ with st.spinner('Retrieving data...'):
                                     The trends section shows the citations occured in the last two years 
                                     ({current_year - 1}-{current_year}) to the papers published in the same period. 
                                     ''')
+                        if citation_type == 'Citations without outliers':
+                            st.info(f'**{outlier_count}** items are removed that have more than 1000 citations.')
 
                         dashboard_all = st.toggle('Generate dashboard')
                         if dashboard_all:
