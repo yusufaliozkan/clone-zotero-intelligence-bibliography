@@ -2361,7 +2361,8 @@ with st.spinner('Retrieving data...'):
                                     With the outliers, the average citation count is **{citation_average_with_outliers}**.
                                     '''
                                     )
-                            citation_average = round(df_cited_for_mean['Citation'].mean(), 2)
+                            else:
+                                citation_average = round(df_cited_for_mean['Citation'].mean(), 2)
                             container_citation_average.metric(label="Average citation", value=citation_average)
                             citation_median = round(df_cited_for_mean['Citation'].median(), 2)
 
