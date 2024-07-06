@@ -2237,7 +2237,7 @@ with st.spinner('Retrieving data...'):
                         with colcite3:
                             with st.popover('Filters and more'):
                                 st.warning('Items without a citation are not listed here! Citation data comes from [OpenAlex](https://openalex.org/).')
-                                citation_type = st.radio('Select:', ('All citations', 'Trends'))
+                                citation_type = st.radio('Select:', ('All citations', 'Trends', 'Citations without outliers'))
                                 if citation_type=='All citations':
                                     df_cited = df_cited.reset_index(drop=True)
                                 elif citation_type=='Trends':
@@ -2248,6 +2248,11 @@ with st.spinner('Retrieving data...'):
                                     The trends section shows the citations occured in the last two years 
                                     ({current_year - 1}-{current_year}) to the papers published in the same period. 
                                     ''')
+                                elif citation_type == 'Citations without outliers':
+                                    outlier_detector = (df_cited['Citation'] > 1000).any()
+                                    outlier_detector
+                                    outlier_count = (df_cited['Citation'] > 1000).sum()
+                                    df_cited = df_cited[df_cited['Citation'] < 1000]
 
                                 container_markdown.markdown(f'#### {citation_type}')
                                 container_slider = st.container()
