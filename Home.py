@@ -2364,7 +2364,7 @@ with st.spinner('Retrieving data...'):
                             #         '''
                             #         )
                             # else:
-                            citation_average = round(df_cited_for_mean['Citation'].mean(), 2)
+                            citation_average = round(df_cited['Citation'].mean(), 2)
                             container_citation_average.metric(label="Average citation", value=citation_average)
                             citation_median = round(df_cited['Citation'].median(), 2)
 
