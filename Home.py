@@ -2212,10 +2212,15 @@ with st.spinner('Retrieving data...'):
                 elif search_option == "Cited papers":
                     st.query_params.clear()
                     st.subheader('Cited items in the library', anchor=False, divider='blue')
-                    
+
                     # @st.experimental_fragment
                     # def search_cited_papers():
                     with st.expander('Click to expand', expanded=True):
+                        max_value = int(df_cited['Citation'].max())
+                        min_value = 1
+                        selected_range = st.slider('Select a citation range:', min_value, max_value, (min_value, max_value), key='')
+                        filter = (df_cited['Citation'] >= selected_range[0]) & (df_cited['Citation'] <= selected_range[1])
+                        df_cited = df_cited.loc[filter]
                         container_markdown = st.container()              
                         df_cited = df_dedup.copy()
                         df_cited_for_mean = df_dedup.copy()
@@ -2237,11 +2242,7 @@ with st.spinner('Retrieving data...'):
                         with colcite3:
                             with st.popover('Filters and more'):
                                 st.warning('Items without a citation are not listed here! Citation data comes from [OpenAlex](https://openalex.org/).')
-                                max_value = int(df_cited['Citation'].max())
-                                min_value = 1
-                                selected_range = st.slider('Select a citation range:', min_value, max_value, (min_value, max_value), key='')
-                                filter = (df_cited['Citation'] >= selected_range[0]) & (df_cited['Citation'] <= selected_range[1])
-                                df_cited = df_cited.loc[filter]
+
                                 citation_type = st.radio('Select:', ('All citations', 'Trends', 'Citations without outliers'))
                                 if citation_type=='All citations':
                                     df_cited = df_cited.reset_index(drop=True)
