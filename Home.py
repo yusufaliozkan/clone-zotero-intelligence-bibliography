@@ -2222,7 +2222,6 @@ with st.spinner('Retrieving data...'):
                         non_nan_id = df_cited['ID'].count()
                         df_cited = df_cited[(df_cited['Citation'].notna())]# & (df_cited['Citation'] != 0)]
                         df_cited = df_cited.reset_index(drop=True)
-                        df_cited
 
                         colcite1, colcite2, colcite3 = st.columns(3)
                         with colcite1:
@@ -2261,7 +2260,7 @@ with st.spinner('Retrieving data...'):
 
                         max_value = int(df_cited['Citation'].max())
                         min_value = 1
-                        selected_range = st.slider('Select a citation range:', min_value, max_value, (min_value, max_value), key='')
+                        selected_range = container_slider.slider('Select a citation range:', min_value, max_value, (min_value, max_value), key='')
                         filter = (df_cited['Citation'] >= selected_range[0]) & (df_cited['Citation'] <= selected_range[1])
                         df_cited = df_cited.loc[filter]
 
