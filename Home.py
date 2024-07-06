@@ -2240,6 +2240,7 @@ with st.spinner('Retrieving data...'):
                             with st.popover('More metrics'):
                                 container_citation = st.container()
                                 container_citation_average = st.container()
+                                container_oa = st.container()
 
                         max_value = int(df_cited['Citation'].max())
                         min_value = 1
@@ -2296,7 +2297,10 @@ with st.spinner('Retrieving data...'):
                             container_citation_average.metric(
                                 label="Average citation", 
                                 value=citation_average, 
-                                help=f'**{outlier_count}** item(s) passed the threshold of 1000 citations. With the outliers, the average citation count is **{citation_average_with_outliers}**.'
+                                help=f'''                                
+                                **{outlier_count}** item(s) passed the threshold of 1000 citations. 
+                                With the outliers, the average citation count is **{citation_average_with_outliers}**.
+                                '''
                                 )
 
                         citation_count = df_cited['Citation'].sum()
@@ -2315,7 +2319,7 @@ with st.spinner('Retrieving data...'):
                         else:
                             oa_ratio = true_count / total_count * 100
 
-                        st.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible', 
+                        container_oa.metric(label=f"Open access coverage", value=f"{int(oa_ratio)}%", label_visibility='visible', 
                         help=f'Journal articles only') 
 
                         st.warning('Items without a citation are not listed here! Citation data comes from [OpenAlex](https://openalex.org/).')
