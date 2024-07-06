@@ -2228,6 +2228,31 @@ with st.spinner('Retrieving data...'):
                         selected_range = st.slider('Select a citation range:', min_value, max_value, (min_value, max_value), key='')
                         filter = (df_cited['Citation'] >= selected_range[0]) & (df_cited['Citation'] <= selected_range[1])
                         df_cited = df_cited.loc[filter]
+                        df_cited['Date published2'] = (
+                            df_cited['Date published']
+                            .str.strip()
+                            .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                        )
+                        df_cited['Date year'] = df_cited['Date published2'].dt.strftime('%Y')
+                        df_cited['Date year'] = pd.to_numeric(df_cited['Date year'], errors='coerce', downcast='integer')
+
+                        df_cited['Date published'] = (
+                            df_cited['Date published']
+                            .str.strip()
+                            .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                        )
+                        df_cited['Date published'] = df_cited['Date published'].dt.strftime('%Y-%m-%d')
+                        df_cited['Date published'] = df_cited['Date published'].fillna('')
+                        df_cited['No date flag'] = df_cited['Date published'].isnull().astype(np.uint8)
+                        df_cited = df_cited.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
+                        df_cited = df_cited.sort_values(by=['Date published'], ascending=False)
+
+                        # pub_types = df_cited['Publication type'].unique()
+                        # selected_type = st.multiselect("Filter by publication type:", pub_types)
+                        # if selected_type:
+                        #     df_cited = df_cited[df_cited['Publication type'].isin(selected_type)]
+                        
+                        df_cited = df_cited.reset_index(drop=True)
 
                         colcite1, colcite2, colcite3 = st.columns(3)
                         with colcite1:
@@ -2264,31 +2289,7 @@ with st.spinner('Retrieving data...'):
                                 container_markdown.markdown(f'#### {citation_type}')
                                 container_download = st.container()
 
-                        df_cited['Date published2'] = (
-                            df_cited['Date published']
-                            .str.strip()
-                            .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                        )
-                        df_cited['Date year'] = df_cited['Date published2'].dt.strftime('%Y')
-                        df_cited['Date year'] = pd.to_numeric(df_cited['Date year'], errors='coerce', downcast='integer')
 
-                        df_cited['Date published'] = (
-                            df_cited['Date published']
-                            .str.strip()
-                            .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                        )
-                        df_cited['Date published'] = df_cited['Date published'].dt.strftime('%Y-%m-%d')
-                        df_cited['Date published'] = df_cited['Date published'].fillna('')
-                        df_cited['No date flag'] = df_cited['Date published'].isnull().astype(np.uint8)
-                        df_cited = df_cited.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
-                        df_cited = df_cited.sort_values(by=['Date published'], ascending=False)
-
-                        # pub_types = df_cited['Publication type'].unique()
-                        # selected_type = st.multiselect("Filter by publication type:", pub_types)
-                        # if selected_type:
-                        #     df_cited = df_cited[df_cited['Publication type'].isin(selected_type)]
-                        
-                        df_cited = df_cited.reset_index(drop=True)
 
                         df_cited_download = df_cited.copy()
                         df_cited_download = df_cited_download[['Publication type', 'Title', 'Abstract', 'FirstName2', 'Link to publication', 'Zotero link', 'Date published', 'Citation']]
