@@ -2363,6 +2363,7 @@ with st.spinner('Retrieving data...'):
                             
                         if citation_type=='Trends':
                             st.info = note
+                            st.write('trends')
 
                         dashboard_all = st.toggle('Generate dashboard')
                         if dashboard_all:
