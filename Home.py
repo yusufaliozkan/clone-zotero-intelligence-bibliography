@@ -269,8 +269,7 @@ with st.spinner('Retrieving data...'):
                 value=int(citation_count), 
                 help=f'''Not all papers are tracked for citation. 
                 Citations come from [OpenAlex](https://openalex.org/).
-                Citation per publication: **{round(citation_mean, 1)}**, 
-                Citation median: **{round(citation_median, 1)}**'''
+                '''
                 ) 
 
             outlier_detector = (df_dedup['Citation'] > 1000).any()
@@ -284,6 +283,7 @@ with st.spinner('Retrieving data...'):
                 value=citation_average,
                 help=f'''**{outlier_count}** outliers detected that have more than 1000 citations. 
                 The citation count without outliers is **{citation_average_wo_outliers}**.
+                Citation median: **{round(citation_median, 1)}**.
                 '''
             )
 
