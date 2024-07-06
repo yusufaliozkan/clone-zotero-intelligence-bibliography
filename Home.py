@@ -2222,6 +2222,7 @@ with st.spinner('Retrieving data...'):
                         non_nan_id = df_cited['ID'].count()
                         df_cited = df_cited[(df_cited['Citation'].notna())]# & (df_cited['Citation'] != 0)]
                         df_cited = df_cited.reset_index(drop=True)
+                        df_cited
 
                         colcite1, colcite2, colcite3 = st.columns(3)
                         with colcite1:
