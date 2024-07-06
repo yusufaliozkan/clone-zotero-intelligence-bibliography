@@ -2247,6 +2247,7 @@ with st.spinner('Retrieving data...'):
                         with colcite3:
                             with st.popover('Filters and more'):
                                 container_slider = st.container()
+                                container_download = st.container()
 
                         max_value = int(df_cited['Citation'].max())
                         min_value = 1
@@ -2290,7 +2291,7 @@ with st.spinner('Retrieving data...'):
                         # csv = df_download
                         # # st.caption(collection_name)
                         a = 'cited-items-'
-                        st.download_button('💾 Download selected items ', csv_selected, (a+'.csv'), mime="text/csv", key='download-csv-3')
+                        container_download.download_button('💾 Download selected items ', csv_selected, (a+'.csv'), mime="text/csv", key='download-csv-3')
                         number_of_items = len(df_cited)
                         container_metric.metric(label=f'Number of publications', value=number_of_items)
 
