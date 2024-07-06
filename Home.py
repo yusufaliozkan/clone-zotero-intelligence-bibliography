@@ -2310,6 +2310,7 @@ with st.spinner('Retrieving data...'):
                                 outlier_count = (df_cited['Citation'] > 1000).sum()
                                 citation_average = df_cited[df_cited['Citation'] < 1000]
                                 citation_average = round(citation_average['Citation'].mean(), 2)
+                                citation_median = round(citation_average['Citation'].median(), 2)
                                 citation_average_with_outliers = round(df_cited['Citation'].mean(), 2)
                                 container_citation_average.metric(
                                     label="Average citation", 
@@ -2423,6 +2424,7 @@ with st.spinner('Retrieving data...'):
                                     help=f'''This is for items at least with 1 citation.
                                     Average citation (for all measured items): **{round((citation_count)/(non_nan_id))}**
                                     ''')
+                                    citation_median
                                 with colcite2:
                                     mean_citation = df_cited['Citation'].median()
                                     st.metric(label=f"Citation median", value=round(mean_citation), label_visibility='visible', 
