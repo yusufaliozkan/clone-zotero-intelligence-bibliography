@@ -2451,7 +2451,7 @@ with st.spinner('Retrieving data...'):
                         dashboard_all = st.toggle('Generate dashboard')
                         if dashboard_all:
                             if dashboard_all and len(df_cited) > 0: 
-                                st.info(f'Dashboard for cited items in the library')
+                                st.markdown(f'#### Dashboard for cited items in the library')
 
                                 colcite1, colcite2, colcite3 = st.columns(3) 
 
