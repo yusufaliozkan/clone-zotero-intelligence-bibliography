@@ -2409,7 +2409,7 @@ with st.spinner('Retrieving data...'):
                                     ({current_year - 1}-{current_year}) to the papers published in the same period. 
                                     ''')
                         if citation_type == 'Citations without outliers':
-                            st.info(f'**{outlier_count}** items are removed that have more than 1000 citations.')
+                            st.info(f'**{outlier_count}** items are removed here that have more than 1000 citations.')
 
                         dashboard_all = st.toggle('Generate dashboard')
                         if dashboard_all:
