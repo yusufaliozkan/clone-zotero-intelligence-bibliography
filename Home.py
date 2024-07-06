@@ -2237,6 +2237,11 @@ with st.spinner('Retrieving data...'):
                         with colcite3:
                             with st.popover('Filters and more'):
                                 st.warning('Items without a citation are not listed here! Citation data comes from [OpenAlex](https://openalex.org/).')
+                                max_value = int(df_cited['Citation'].max())
+                                min_value = 1
+                                selected_range = st.slider('Select a citation range:', min_value, max_value, (min_value, max_value), key='')
+                                filter = (df_cited['Citation'] >= selected_range[0]) & (df_cited['Citation'] <= selected_range[1])
+                                df_cited = df_cited.loc[filter]
                                 citation_type = st.radio('Select:', ('All citations', 'Trends', 'Citations without outliers'))
                                 if citation_type=='All citations':
                                     df_cited = df_cited.reset_index(drop=True)
@@ -2255,14 +2260,7 @@ with st.spinner('Retrieving data...'):
                                     df_cited_for_mean =df_cited_for_mean[df_cited_for_mean['Citation'] < 1000]
 
                                 container_markdown.markdown(f'#### {citation_type}')
-                                container_slider = st.container()
                                 container_download = st.container()
-
-                        max_value = int(df_cited['Citation'].max())
-                        min_value = 1
-                        selected_range = container_slider.slider('Select a citation range:', min_value, max_value, (min_value, max_value), key='')
-                        filter = (df_cited['Citation'] >= selected_range[0]) & (df_cited['Citation'] <= selected_range[1])
-                        df_cited = df_cited.loc[filter]
 
                         df_cited['Date published2'] = (
                             df_cited['Date published']
