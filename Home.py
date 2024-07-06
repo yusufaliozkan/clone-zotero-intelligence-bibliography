@@ -2425,7 +2425,7 @@ with st.spinner('Retrieving data...'):
                                 citation_distribution_line = df_cited['Citation'].value_counts().sort_index().reset_index()
                                 citation_distribution_line
                                 citation_distribution_line.columns = ['citation_count', 'num_publications']
-                                fig = px.line(citation_distribution_line, x='citation_count', y='num_publications', markers=True, title='Distribution of Citations')
+                                fig = px.line(citation_distribution_line, x='num_publications', y='citation_count', markers=True, title='Distribution of Citations')
                                 fig.update_layout(
                                     xaxis_title='Number of Citations',
                                     yaxis_title='Number of Publications',
