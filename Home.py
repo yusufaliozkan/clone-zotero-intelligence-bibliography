@@ -2232,6 +2232,9 @@ with st.spinner('Retrieving data...'):
                             The trends section shows the citations occured in the last two years ({current_year - 1}-{current_year}) to the papers published in the same period. 
                             ''')
 
+                        colcite1, colcite2, colcite3 = st.columns(3)
+                        with colcite1:
+                            container_metric = st.container()
                         max_value = int(df_cited['Citation'].max())
                         min_value = 1
                         selected_range = st.slider('Select a citation range:', min_value, max_value, (min_value, max_value), key='')
@@ -2276,6 +2279,7 @@ with st.spinner('Retrieving data...'):
                         a = 'cited-items-'
                         st.download_button('💾 Download selected items ', csv_selected, (a+'.csv'), mime="text/csv", key='download-csv-3')
                         number_of_items = len(df_cited)
+                        container_metric.metric(label=f'Number of publications', value=number_of_items)
 
                         colcit1, colcit2 = st.columns([2,4])
                         with colcit1:
