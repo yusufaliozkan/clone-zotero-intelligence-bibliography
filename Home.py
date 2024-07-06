@@ -2215,7 +2215,8 @@ with st.spinner('Retrieving data...'):
                     
                     # @st.experimental_fragment
                     # def search_cited_papers():
-                    with st.expander('Click to expand', expanded=True):                    
+                    with st.expander('Click to expand', expanded=True):
+                        container_markdown = st.container()              
                         df_cited = df_dedup.copy()
                         df_cited_for_mean = df_dedup.copy()
                         non_nan_id = df_cited['ID'].count()
@@ -2245,6 +2246,7 @@ with st.spinner('Retrieving data...'):
                                     note = st.info(f'''
                                     The trends section shows the citations occured in the last two years ({current_year - 1}-{current_year}) to the papers published in the same period. 
                                     ''')
+                                container_markdown.markdown(f'#### {citation_type}')
                                 container_slider = st.container()
                                 container_download = st.container()
 
