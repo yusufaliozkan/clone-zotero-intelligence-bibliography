@@ -2242,6 +2242,7 @@ with st.spinner('Retrieving data...'):
                                 container_citation_average = st.container()
                                 container_oa = st.container()
                                 container_author_no = st.container()
+                                container_author_pub_ratio = st.container()
 
                         max_value = int(df_cited['Citation'].max())
                         min_value = 1
@@ -2340,6 +2341,7 @@ with st.spinner('Retrieving data...'):
                             author_no = len(expanded_authors_cited)
                             author_pub_ratio = round(author_no/number_of_items, 2)
                         container_author_no.metric(label='Number of authors', value=int(author_no))
+                        container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
                         st.warning('Items without a citation are not listed here! Citation data comes from [OpenAlex](https://openalex.org/).')
 
