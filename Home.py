@@ -853,7 +853,7 @@ with st.spinner('Retrieving data...'):
 
                             citation_count = filtered_collection_df_authors['Citation'].sum()
 
-                            citation_average = round(filtered_collection_df['Citation'].mean(), 2)
+                            citation_average = round(filtered_collection_df_authors['Citation'].mean(), 2)
                             container_citation_average.metric(label="Average citation", value=citation_average)
                 
                             total_rows = len(filtered_collection_df_authors)
