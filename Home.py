@@ -2361,7 +2361,7 @@ with st.spinner('Retrieving data...'):
                             collaboration_ratio = round(multiple_authored_papers / number_of_items * 100, 1)
                             container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
                             
-                        if citation_type=='All citations':
+                        if citation_type=='Trends':
                             st.info = note
 
                         dashboard_all = st.toggle('Generate dashboard')
