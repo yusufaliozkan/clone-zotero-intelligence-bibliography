@@ -6,7 +6,7 @@ def get_copyright_annotation():
             xref='paper',
             yref='paper',
             showarrow=False,
-            text="© 2024 Yusuf Ozkan. All rights reserved.",
+            text=#"© 2024 Yusuf Ozkan. All rights reserved.",
             xanchor='center',
             yanchor='top',
             font=dict(
