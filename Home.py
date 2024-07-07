@@ -3670,7 +3670,7 @@ with st.spinner('Retrieving data...'):
                                 y=0.2,       # Position the legend at the center of the y-axis
                                 yanchor='middle'  # Ensure the legend box is centered vertically
                             ),
-                            hovermode="x unified"
+                            hovermode="x unified",
                             annotations=[
                                 dict(
                                     x=0.5,
