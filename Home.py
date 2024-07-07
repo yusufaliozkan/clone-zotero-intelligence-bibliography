@@ -3671,6 +3671,21 @@ with st.spinner('Retrieving data...'):
                                 yanchor='middle'  # Ensure the legend box is centered vertically
                             ),
                             hovermode="x unified"
+                            annotations=[
+                                dict(
+                                    x=0.5,
+                                    y=-0.2,
+                                    xref='paper',
+                                    yref='paper',
+                                    showarrow=False,
+                                    text="© 2024 Yusuf Ozkan. All rights reserved.",
+                                    xanchor='center',
+                                    yanchor='top',
+                                    font=dict(
+                                        size=12
+                                    )
+                                )
+                            ]
                         )
                         st.plotly_chart(fig, use_container_width=True)
 
