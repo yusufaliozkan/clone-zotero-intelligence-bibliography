@@ -177,7 +177,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             )
     else:
         citation_average = round(df_collections['Citation'].mean(), 2)
-    container_citation_average.metric(label="Average citation", value=citation_average)
+        container_citation_average.metric(label="Average citation", value=citation_average)
 
     df_collections['FirstName2'] = df_collections['FirstName2'].astype(str)
     df_collections['multiple_authors'] = df_collections['FirstName2'].apply(lambda x: ',' in x)
