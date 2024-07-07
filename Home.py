@@ -3673,7 +3673,7 @@ with st.spinner('Retrieving data...'):
                             hovermode="x unified",
                             annotations=[
                                 dict(
-                                    x=0,
+                                    x=0.1,
                                     y=-0.2,
                                     xref='paper',
                                     yref='paper',
