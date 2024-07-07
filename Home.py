@@ -38,6 +38,7 @@ import requests
 from format_entry import format_entry
 from streamlit_dynamic_filters import DynamicFilters
 # from rss_feed import df_podcast, df_magazines
+from annotations import get_copyright_annotation
 
 # Connecting Zotero with API 
 library_id = '2514686'
@@ -3671,21 +3672,7 @@ with st.spinner('Retrieving data...'):
                                 yanchor='middle'  # Ensure the legend box is centered vertically
                             ),
                             hovermode="x unified",
-                            annotations=[
-                                dict(
-                                    x=0.1,
-                                    y=-0.2,
-                                    xref='paper',
-                                    yref='paper',
-                                    showarrow=False,
-                                    text="© 2024 Yusuf Ozkan. All rights reserved.",
-                                    xanchor='center',
-                                    yanchor='top',
-                                    font=dict(
-                                        size=12
-                                    )
-                                )
-                            ]
+                            annotations=get_copyright_annotation()
                         )
                         st.plotly_chart(fig, use_container_width=True)
 
