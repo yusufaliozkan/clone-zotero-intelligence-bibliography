@@ -447,7 +447,7 @@ with st.spinner('Retrieving data...'):
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
-                    # @st.experimental_fragment
+                    @st.experimental_fragment
                     def search_keyword(): 
                         @st.experimental_dialog("Search guide")
                         def guide(item):
@@ -808,7 +808,7 @@ with st.spinner('Retrieving data...'):
                         else:
                             st.write("Please enter a keyword or author name to search.")
                         status.update(label=f"Search completed with **{num_items}** {'source' if num_items == 1 else 'sources'} found!", state="complete", expanded=True)
-                    # search_keyword()
+                    search_keyword()
 
                 # SEARCH AUTHORS
                 elif search_option == "Search author":
