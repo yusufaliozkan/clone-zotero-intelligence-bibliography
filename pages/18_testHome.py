@@ -550,7 +550,7 @@ with st.spinner('Retrieving data...'):
 
                         # Stripping and processing the search term
                         search_term = st.session_state.search_term.strip()
-                        if not search_term=='':
+                        if search_term=='':
                             with st.status("Searching publications...", expanded=True) as status:
                                 search_tokens = parse_search_terms(search_term)
                                 print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
