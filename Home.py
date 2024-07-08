@@ -803,10 +803,11 @@ with st.spinner('Retrieving data...'):
 
                                             st.markdown(all_bibliographies, unsafe_allow_html=True)
                                         display_bibliographies(filtered_df)
-                                status.update(label=f"Search completed with **{num_items}** {'source' if num_items == 1 else 'sources'} found!", state="complete", expanded=True)
+                            if len(filtered_df)==0:
+                                status.update(label=f"No articles found with the given keyword/phrase.", state="error", expanded=True)
                             else:
-                                st.write("No articles found with the given keyword/phrase.")
-
+                                # st.write("No articles found with the given keyword/phrase.")
+                                status.update(label=f"Search completed with **{num_items}** {'source' if num_items == 1 else 'sources'} found!", state="complete", expanded=True)
                     else:
                         st.write("Please enter a keyword or author name to search.")
                     # status.update(label=f"Search completed with **{num_items}** {'source' if num_items == 1 else 'sources'} found!", state="complete", expanded=True)
