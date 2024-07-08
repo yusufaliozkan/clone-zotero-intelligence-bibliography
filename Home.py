@@ -807,7 +807,7 @@ with st.spinner('Retrieving data...'):
                                     st.write("No articles found with the given keyword/phrase.")
                         else:
                             st.write("Please enter a keyword or author name to search.")
-                        status.update(label="Search completed!", state="complete", expanded=True)
+                        status.update(label=f"Matching articles (**{num_items}** {'source' if num_items == 1 else 'sources'} found):", state="complete", expanded=True)
 
                     search_keyword()
 
