@@ -2617,343 +2617,343 @@ with st.spinner('Retrieving data...'):
                                 display_bibliographies(df_cited)
                     # search_cited_papers()
                 
-            search_options_main_menu()
+            # search_options_main_menu()
 
-            # OVERVIEW
-            st.header('Overview', anchor=False)
-            tab11, tab12, tab13 = st.tabs(['Recently added items', 'Recently published items', 'Top cited items'])
-            with tab11:
-                st.markdown('#### Recently added or updated items')
-                df['Abstract'] = df['Abstract'].str.strip()
-                df['Abstract'] = df['Abstract'].fillna('No abstract')
-                
-                # df_download = df.iloc[:, [0,1,2,3,4,5,6,9]] 
-                # df_download = df_download[['Title', 'Publication type', 'Authors', 'Abstract', 'Link to publication', 'Zotero link', 'Date published', 'Date added']]
-                # def convert_df(df):
-                #     return df.to_csv(index=False).encode('utf-8-sig') # not utf-8 because of the weird character,  Â cp1252
-                # csv = convert_df(df_download)
-                # # csv = df_download
-                # # # st.caption(collection_name)
-                # today = datetime.date.today().isoformat()
-                # a = 'recently-added-' + today
-                # st.download_button('💾 Download recently added items', csv, (a+'.csv'), mime="text/csv", key='download-csv-3')
-                
-                display = st.checkbox('Display theme and abstract')
-
-                def format_row(row):
-                    if row['Publication type'] == 'Book chapter' and row['Book_title']:
-                        return (
-                            f"**{row['Publication type']}**: "
-                            f"{row['Title']} "
-                            f"(by *{row['Authors']}*)"
-                            f"(Published on: {row['Date published']}"
-                            f"[[Publication link]]({row['Link to publication']})"
-                            f"[[Zotero link]]({row['Zotero link']})"
-                            f"(In: {row['Book_title']})"
-                        )
-                    elif row['Publication type'] == 'Thesis':
-                        return (
-                            f"**{row['Publication type']}**: "
-                            f"{row['Title']}, "
-                            f"(by {row['Authors']})"
-                            f"({row['Thesis_type']}: *{row['University']}*) "
-                            f"(Published on: {row['Date published']})"
-                            f"[[Publication link]]({row['Link to publication']})"
-                            f"[[Zotero link]]({row['Zotero link']})"
-                        )
-      
-                    else:
-                        return (
-                            f"**{row['Publication type']}**: "
-                            f"{row['Title']}, "
-                            f"(by {row['Authors']})"
-                            f"(Published on: {row['Date published']})"
-                            f"[[Publication link]]({row['Link to publication']})"
-                            f"[[Zotero link]]({row['Zotero link']})"
-                        )
-                df_last = df.apply(format_row, axis=1)
-
-                # df_last = ('**'+ df['Publication type']+ '**'+ ': ' + df['Title'] +', ' +                        
-                #             ' (by ' + '*' + df['Authors'] + '*' + ') ' +
-                #             ' (Published on: ' + df['Date published']+') ' +
-                #             '[[Publication link]]'+ '('+ df['Link to publication'] + ')' +
-                #             "[[Zotero link]]" +'('+ df['Zotero link'] + ')' 
-                #             )
-                row_nu_1 = len(df_last)
-                for i in range(row_nu_1):
-                    publication_type = df['Publication type'].iloc[i]
+                # OVERVIEW
+                st.header('Overview', anchor=False)
+                tab11, tab12, tab13 = st.tabs(['Recently added items', 'Recently published items', 'Top cited items'])
+                with tab11:
+                    st.markdown('#### Recently added or updated items')
+                    df['Abstract'] = df['Abstract'].str.strip()
+                    df['Abstract'] = df['Abstract'].fillna('No abstract')
                     
-                    if publication_type in ["Journal article", "Magazine article", 'Newspaper article']:
-                        formatted_row = (
-                            f"**{df['Publication type'].iloc[i]}**: "
-                            f"{df['Title'].iloc[i]}"
-                            f" (by *{df['Authors'].iloc[i]}*)"
-                            f" (Published on: {df['Date published'].iloc[i]})"
-                            f" (Published in: *{df['Pub_venue'].iloc[i]}*)"
-                            f" [[Publication link]]({df['Link to publication'].iloc[i]})"
-                            f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
-                        )
-
-                        st.write(f"{i+1}) " + formatted_row)
+                    # df_download = df.iloc[:, [0,1,2,3,4,5,6,9]] 
+                    # df_download = df_download[['Title', 'Publication type', 'Authors', 'Abstract', 'Link to publication', 'Zotero link', 'Date published', 'Date added']]
+                    # def convert_df(df):
+                    #     return df.to_csv(index=False).encode('utf-8-sig') # not utf-8 because of the weird character,  Â cp1252
+                    # csv = convert_df(df_download)
+                    # # csv = df_download
+                    # # # st.caption(collection_name)
+                    # today = datetime.date.today().isoformat()
+                    # a = 'recently-added-' + today
+                    # st.download_button('💾 Download recently added items', csv, (a+'.csv'), mime="text/csv", key='download-csv-3')
                     
-                    elif publication_type == 'Book chapter':
-                        formatted_row = (
-                            f"**{df['Publication type'].iloc[i]}**: "
-                            f"{df['Title'].iloc[i]}"
-                            f" (in: *{df['Book_title'].iloc[i]}*)"
-                            f" (by *{df['Authors'].iloc[i]}*)"
-                            f" (Published on: {df['Date published'].iloc[i]})"
-                            f" [[Publication link]]({df['Link to publication'].iloc[i]})"
-                            f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
-                        )
+                    display = st.checkbox('Display theme and abstract')
 
-                        st.write(f"{i+1}) " + formatted_row)
+                    def format_row(row):
+                        if row['Publication type'] == 'Book chapter' and row['Book_title']:
+                            return (
+                                f"**{row['Publication type']}**: "
+                                f"{row['Title']} "
+                                f"(by *{row['Authors']}*)"
+                                f"(Published on: {row['Date published']}"
+                                f"[[Publication link]]({row['Link to publication']})"
+                                f"[[Zotero link]]({row['Zotero link']})"
+                                f"(In: {row['Book_title']})"
+                            )
+                        elif row['Publication type'] == 'Thesis':
+                            return (
+                                f"**{row['Publication type']}**: "
+                                f"{row['Title']}, "
+                                f"(by {row['Authors']})"
+                                f"({row['Thesis_type']}: *{row['University']}*) "
+                                f"(Published on: {row['Date published']})"
+                                f"[[Publication link]]({row['Link to publication']})"
+                                f"[[Zotero link]]({row['Zotero link']})"
+                            )
+        
+                        else:
+                            return (
+                                f"**{row['Publication type']}**: "
+                                f"{row['Title']}, "
+                                f"(by {row['Authors']})"
+                                f"(Published on: {row['Date published']})"
+                                f"[[Publication link]]({row['Link to publication']})"
+                                f"[[Zotero link]]({row['Zotero link']})"
+                            )
+                    df_last = df.apply(format_row, axis=1)
 
-                    elif publication_type == 'Thesis':
-                        thesis_type = f"{df['Thesis_type'].iloc[i]}: "
-                        formatted_row = (
-                            f"**{df['Publication type'].iloc[i]}**: "
-                            f"{df['Title'].iloc[i]}"
-                            f" ({thesis_type if df['Thesis_type'].iloc[i] != '' else ''}*{df['University'].iloc[i]}*)"
-                            f" (by *{df['Authors'].iloc[i]}*)"
-                            f" (Published on: {df['Date published'].iloc[i]})"
-                            f" [[Publication link]]({df['Link to publication'].iloc[i]})"
-                            f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
-                        )
-
-                        st.write(f"{i+1}) " + formatted_row) 
-                    else:
-                        formatted_row = (
-                            f"**{df['Publication type'].iloc[i]}**: "
-                            f"{df['Title'].iloc[i]}"
-                            f" (by *{df['Authors'].iloc[i]}*)"
-                            f" (Published on: {df['Date published'].iloc[i]})"
-                            f" [[Publication link]]({df['Link to publication'].iloc[i]})"
-                            f" [[Zotero link]]({df['Zotero link'].iloc[i]})"   
-                        )
-
-                        st.write(f"{i+1}) " + formatted_row)
-                    if display:
-                        a = ''
-                        b = ''
-                        c = ''
-                        if 'Name_x' in df:
-                            a = '[' + '[' + df['Name_x'].iloc[i] + ']' + '(' + df['Link_x'].iloc[i] + ')' + ']'
-                            # f"[{[df['Name_x'].iloc[i]](df['Link_x'].iloc[i])}]"
-                            if df['Name_x'].iloc[i] == '':
-                                a = ''
-                        if 'Name_y' in df:
-                            b = '[' + '[' + df['Name_y'].iloc[i] + ']' + '(' + df['Link_y'].iloc[i] + ')' + ']'
-                            # f"[{[df['Name_y'].iloc[i]](df['Link_y'].iloc[i])}]"
-                            if df['Name_y'].iloc[i] == '':
-                                b = ''
-                        if 'Name' in df:
-                            c ='[' + '[' + df['Name'].iloc[i] + ']' + '(' + df['Link'].iloc[i] + ')' + ']'
-                            if df['Name'].iloc[i] == '':
-                                c = ''
-                        st.caption('Theme(s):  \n ' + a + ' ' + b + ' ' + c)
-                        if not any([a, b, c]):
-                            st.caption('No theme to display!')
+                    # df_last = ('**'+ df['Publication type']+ '**'+ ': ' + df['Title'] +', ' +                        
+                    #             ' (by ' + '*' + df['Authors'] + '*' + ') ' +
+                    #             ' (Published on: ' + df['Date published']+') ' +
+                    #             '[[Publication link]]'+ '('+ df['Link to publication'] + ')' +
+                    #             "[[Zotero link]]" +'('+ df['Zotero link'] + ')' 
+                    #             )
+                    row_nu_1 = len(df_last)
+                    for i in range(row_nu_1):
+                        publication_type = df['Publication type'].iloc[i]
                         
-                        st.caption('Abstract: ' + df['Abstract'].iloc[i])
+                        if publication_type in ["Journal article", "Magazine article", 'Newspaper article']:
+                            formatted_row = (
+                                f"**{df['Publication type'].iloc[i]}**: "
+                                f"{df['Title'].iloc[i]}"
+                                f" (by *{df['Authors'].iloc[i]}*)"
+                                f" (Published on: {df['Date published'].iloc[i]})"
+                                f" (Published in: *{df['Pub_venue'].iloc[i]}*)"
+                                f" [[Publication link]]({df['Link to publication'].iloc[i]})"
+                                f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
+                            )
 
-            with tab12:
-                st.markdown('#### Recently published items')
-                display2 = st.checkbox('Display abstracts', key='recently_published')
-                df_intro = df_dedup.copy()
-                df_intro['Date published'] = pd.to_datetime(df_intro['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
-                current_date = datetime.datetime.now(datetime.timezone.utc).astimezone(datetime.timezone(datetime.timedelta(hours=1)))  # Current date in London timezone
-                df_intro = df_intro[df_intro['Date published'] <= current_date]
-                df_intro['Date published'] = df_intro['Date published'].dt.strftime('%Y-%m-%d')
-                df_intro['Date published'] = df_intro['Date published'].fillna('')
-                df_intro['No date flag'] = df_intro['Date published'].isnull().astype(np.uint8)
-                df_intro = df_intro.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
-                df_intro = df_intro.sort_values(by=['Date published'], ascending=False)
-                df_intro = df_intro.reset_index(drop=True)
-                df_intro = df_intro.head(10)
-                # articles_list = [format_entry(row) for _, row in df_intro.iterrows()]
-                articles_list = [format_entry(row, include_citation=False) for _, row in df_intro.iterrows()]
-                for index, formatted_entry in enumerate(articles_list):
-                    st.write(f"{index + 1}) {formatted_entry}")
-                    if display2:
-                        st.caption(df_intro.iloc[index]['Abstract'])
-            with tab13:
-                @st.cache_resource(ttl=5000)  # Cache the resource for 5000 seconds
-                def load_data():
-                    df_top = df_dedup.copy()
-                    df_top['Date published'] = (
-                        df_top['Date published']
-                        .str.strip()
-                        .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                            st.write(f"{i+1}) " + formatted_row)
+                        
+                        elif publication_type == 'Book chapter':
+                            formatted_row = (
+                                f"**{df['Publication type'].iloc[i]}**: "
+                                f"{df['Title'].iloc[i]}"
+                                f" (in: *{df['Book_title'].iloc[i]}*)"
+                                f" (by *{df['Authors'].iloc[i]}*)"
+                                f" (Published on: {df['Date published'].iloc[i]})"
+                                f" [[Publication link]]({df['Link to publication'].iloc[i]})"
+                                f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
+                            )
+
+                            st.write(f"{i+1}) " + formatted_row)
+
+                        elif publication_type == 'Thesis':
+                            thesis_type = f"{df['Thesis_type'].iloc[i]}: "
+                            formatted_row = (
+                                f"**{df['Publication type'].iloc[i]}**: "
+                                f"{df['Title'].iloc[i]}"
+                                f" ({thesis_type if df['Thesis_type'].iloc[i] != '' else ''}*{df['University'].iloc[i]}*)"
+                                f" (by *{df['Authors'].iloc[i]}*)"
+                                f" (Published on: {df['Date published'].iloc[i]})"
+                                f" [[Publication link]]({df['Link to publication'].iloc[i]})"
+                                f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
+                            )
+
+                            st.write(f"{i+1}) " + formatted_row) 
+                        else:
+                            formatted_row = (
+                                f"**{df['Publication type'].iloc[i]}**: "
+                                f"{df['Title'].iloc[i]}"
+                                f" (by *{df['Authors'].iloc[i]}*)"
+                                f" (Published on: {df['Date published'].iloc[i]})"
+                                f" [[Publication link]]({df['Link to publication'].iloc[i]})"
+                                f" [[Zotero link]]({df['Zotero link'].iloc[i]})"   
+                            )
+
+                            st.write(f"{i+1}) " + formatted_row)
+                        if display:
+                            a = ''
+                            b = ''
+                            c = ''
+                            if 'Name_x' in df:
+                                a = '[' + '[' + df['Name_x'].iloc[i] + ']' + '(' + df['Link_x'].iloc[i] + ')' + ']'
+                                # f"[{[df['Name_x'].iloc[i]](df['Link_x'].iloc[i])}]"
+                                if df['Name_x'].iloc[i] == '':
+                                    a = ''
+                            if 'Name_y' in df:
+                                b = '[' + '[' + df['Name_y'].iloc[i] + ']' + '(' + df['Link_y'].iloc[i] + ')' + ']'
+                                # f"[{[df['Name_y'].iloc[i]](df['Link_y'].iloc[i])}]"
+                                if df['Name_y'].iloc[i] == '':
+                                    b = ''
+                            if 'Name' in df:
+                                c ='[' + '[' + df['Name'].iloc[i] + ']' + '(' + df['Link'].iloc[i] + ')' + ']'
+                                if df['Name'].iloc[i] == '':
+                                    c = ''
+                            st.caption('Theme(s):  \n ' + a + ' ' + b + ' ' + c)
+                            if not any([a, b, c]):
+                                st.caption('No theme to display!')
+                            
+                            st.caption('Abstract: ' + df['Abstract'].iloc[i])
+
+                with tab12:
+                    st.markdown('#### Recently published items')
+                    display2 = st.checkbox('Display abstracts', key='recently_published')
+                    df_intro = df_dedup.copy()
+                    df_intro['Date published'] = pd.to_datetime(df_intro['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
+                    current_date = datetime.datetime.now(datetime.timezone.utc).astimezone(datetime.timezone(datetime.timedelta(hours=1)))  # Current date in London timezone
+                    df_intro = df_intro[df_intro['Date published'] <= current_date]
+                    df_intro['Date published'] = df_intro['Date published'].dt.strftime('%Y-%m-%d')
+                    df_intro['Date published'] = df_intro['Date published'].fillna('')
+                    df_intro['No date flag'] = df_intro['Date published'].isnull().astype(np.uint8)
+                    df_intro = df_intro.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
+                    df_intro = df_intro.sort_values(by=['Date published'], ascending=False)
+                    df_intro = df_intro.reset_index(drop=True)
+                    df_intro = df_intro.head(10)
+                    # articles_list = [format_entry(row) for _, row in df_intro.iterrows()]
+                    articles_list = [format_entry(row, include_citation=False) for _, row in df_intro.iterrows()]
+                    for index, formatted_entry in enumerate(articles_list):
+                        st.write(f"{index + 1}) {formatted_entry}")
+                        if display2:
+                            st.caption(df_intro.iloc[index]['Abstract'])
+                with tab13:
+                    @st.cache_resource(ttl=5000)  # Cache the resource for 5000 seconds
+                    def load_data():
+                        df_top = df_dedup.copy()
+                        df_top['Date published'] = (
+                            df_top['Date published']
+                            .str.strip()
+                            .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                        )
+                        df_top['Date published'] = df_top['Date published'].dt.strftime('%Y-%m-%d')
+                        df_top['Date published'] = df_top['Date published'].fillna('')
+                        df_top['No date flag'] = df_top['Date published'].isnull().astype(np.uint8)
+                        df_top = df_top.sort_values(by=['Citation'], ascending=False)
+                        df_top = df_top.reset_index(drop=True)
+                        return df_top
+
+                    df_top = load_data() 
+
+                    st.markdown('#### Top cited items')
+                    display3 = st.checkbox('Display abstracts', key='top_cited')
+
+                    df_top_display = df_top.head(10)  # Take top 5 items for display
+                    articles_list = [format_entry(row) for _, row in df_top_display.iterrows()]
+
+                    for index, formatted_entry in enumerate(articles_list):
+                        st.write(f"{index + 1}) {formatted_entry}")
+                        if display3:
+                            st.caption(df_top_display.iloc[index]['Abstract'])
+
+                st.header('All items in database', anchor=False)
+                with st.expander('Click to expand', expanded=False):
+                    df_all_items = df_dedup.copy()
+                    df_all_items = df_all_items[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
+
+                    download_all = df_all_items[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
+                    download_all['Abstract'] = download_all['Abstract'].str.replace('\n', ' ')
+                    download_all = download_all.reset_index(drop=True)
+                    def convert_df(download_all):
+                        return download_all.to_csv(index=False).encode('utf-8-sig') # not utf-8 because of the weird character,  Â cp1252
+                    csv = convert_df(download_all)
+                    # csv = df_download
+                    # # st.caption(collection_name)
+                    today = datetime.date.today().isoformat()
+                    a = 'intelligence-bibliography-all-' + today
+                    st.download_button('💾 Download all items', csv, (a+'.csv'), mime="text/csv", key='download-csv-2')
+                    df_all_items
+
+                    df_added = df_dedup.copy()
+                    df_added['Date added'] = pd.to_datetime(df_added['Date added'])
+                    df_added['YearMonth'] = df_added['Date added'].dt.to_period('M').astype(str)
+                    monthly_counts = df_added.groupby('YearMonth').size()
+                    monthly_counts.name = 'Number of items added'
+                    cumulative_counts = monthly_counts.cumsum()
+                    cumulative_chart = alt.Chart(pd.DataFrame({'YearMonth': cumulative_counts.index, 'Total items': cumulative_counts})).mark_bar().encode(
+                        x='YearMonth',
+                        y='Total items',
+                        tooltip=['YearMonth', 'Total items']
+                    ).properties(
+                        width=500,
+                        height=600,  # Adjust the height here
+                        title='Total Number of Items Added'
                     )
-                    df_top['Date published'] = df_top['Date published'].dt.strftime('%Y-%m-%d')
-                    df_top['Date published'] = df_top['Date published'].fillna('')
-                    df_top['No date flag'] = df_top['Date published'].isnull().astype(np.uint8)
-                    df_top = df_top.sort_values(by=['Citation'], ascending=False)
-                    df_top = df_top.reset_index(drop=True)
-                    return df_top
+                    step = 6
+                    data_labels = cumulative_chart.mark_text(
+                        align='center',
+                        baseline='bottom',
+                        dy=-5,  # Adjust the vertical position of labels
+                        fontSize=10
+                    ).encode(
+                        x=alt.X('YearMonth', title='Year-Month', axis=alt.Axis(labelAngle=-45)),
+                        y='Total items:Q',
+                        text='Total items:Q'
+                    ).transform_filter(
+                        alt.datum.YearMonth % step == 0
+                    )
+                    st.subheader('Growth of the library', anchor=False, divider='blue')
+                    st.altair_chart(cumulative_chart + data_labels, use_container_width=True)
+                        
 
-                df_top = load_data() 
+            with col2:
+                st.info('Join the [mailing list](https://groups.google.com/g/intelligence-studies-network)')
+                with st.expander('Collections', expanded=True):
+                    st.caption('[Intelligence history](https://intelligence.streamlit.app/Intelligence_history)')
+                    st.caption('[Intelligence studies](https://intelligence.streamlit.app/Intelligence_studies)')
+                    st.caption('[Intelligence analysis](https://intelligence.streamlit.app/Intelligence_analysis)')
+                    st.caption('[Intelligence organisations](https://intelligence.streamlit.app/Intelligence_organisations)')
+                    st.caption('[Intelligence failures](https://intelligence.streamlit.app/Intelligence_failures)')
+                    st.caption('[Intelligence oversight and ethics](https://intelligence.streamlit.app/Intelligence_oversight_and_ethics)')
+                    st.caption('[Intelligence collection](https://intelligence.streamlit.app/Intelligence_collection)')
+                    st.caption('[Counterintelligence](https://intelligence.streamlit.app/Counterintelligence)')
+                    st.caption('[Covert action](https://intelligence.streamlit.app/Covert_action)')
+                    st.caption('[Intelligence and cybersphere](https://intelligence.streamlit.app/Intelligence_and_cybersphere)')
+                    st.caption('[Global intelligence](https://intelligence.streamlit.app/Global_intelligence)')
+                    st.caption('[AI and intelligence](https://intelligence.streamlit.app/AI_and_intelligence)')
+                    st.caption('[Special collections](https://intelligence.streamlit.app/Special_collections)')
 
-                st.markdown('#### Top cited items')
-                display3 = st.checkbox('Display abstracts', key='top_cited')
+                with st.expander('Events & conferences', expanded=True):
+                    st.markdown('##### Next event')
 
-                df_top_display = df_top.head(10)  # Take top 5 items for display
-                articles_list = [format_entry(row) for _, row in df_top_display.iterrows()]
+                    conn = st.connection("gsheets", type=GSheetsConnection)
 
-                for index, formatted_entry in enumerate(articles_list):
-                    st.write(f"{index + 1}) {formatted_entry}")
-                    if display3:
-                        st.caption(df_top_display.iloc[index]['Abstract'])
+                    # Read the first spreadsheet
+                    df_gs = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=0')
 
-            st.header('All items in database', anchor=False)
-            with st.expander('Click to expand', expanded=False):
-                df_all_items = df_dedup.copy()
-                df_all_items = df_all_items[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
+                    # Read the second spreadsheet
+                    df_forms = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
+                    df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
+                    df_forms = df_forms.drop(columns=['Timestamp'])
 
-                download_all = df_all_items[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
-                download_all['Abstract'] = download_all['Abstract'].str.replace('\n', ' ')
-                download_all = download_all.reset_index(drop=True)
-                def convert_df(download_all):
-                    return download_all.to_csv(index=False).encode('utf-8-sig') # not utf-8 because of the weird character,  Â cp1252
-                csv = convert_df(download_all)
-                # csv = df_download
-                # # st.caption(collection_name)
-                today = datetime.date.today().isoformat()
-                a = 'intelligence-bibliography-all-' + today
-                st.download_button('💾 Download all items', csv, (a+'.csv'), mime="text/csv", key='download-csv-2')
-                df_all_items
+                    # Convert and format dates in df_gs
+                    df_gs['date'] = pd.to_datetime(df_gs['date'])
+                    df_gs['date_new'] = df_gs['date'].dt.strftime('%Y-%m-%d')
 
-                df_added = df_dedup.copy()
-                df_added['Date added'] = pd.to_datetime(df_added['Date added'])
-                df_added['YearMonth'] = df_added['Date added'].dt.to_period('M').astype(str)
-                monthly_counts = df_added.groupby('YearMonth').size()
-                monthly_counts.name = 'Number of items added'
-                cumulative_counts = monthly_counts.cumsum()
-                cumulative_chart = alt.Chart(pd.DataFrame({'YearMonth': cumulative_counts.index, 'Total items': cumulative_counts})).mark_bar().encode(
-                    x='YearMonth',
-                    y='Total items',
-                    tooltip=['YearMonth', 'Total items']
-                ).properties(
-                    width=500,
-                    height=600,  # Adjust the height here
-                    title='Total Number of Items Added'
-                )
-                step = 6
-                data_labels = cumulative_chart.mark_text(
-                    align='center',
-                    baseline='bottom',
-                    dy=-5,  # Adjust the vertical position of labels
-                    fontSize=10
-                ).encode(
-                    x=alt.X('YearMonth', title='Year-Month', axis=alt.Axis(labelAngle=-45)),
-                    y='Total items:Q',
-                    text='Total items:Q'
-                ).transform_filter(
-                    alt.datum.YearMonth % step == 0
-                )
-                st.subheader('Growth of the library', anchor=False, divider='blue')
-                st.altair_chart(cumulative_chart + data_labels, use_container_width=True)
+                    # Convert and format dates in df_forms
+                    df_forms['date'] = pd.to_datetime(df_forms['date'])
+                    df_forms['date_new'] = df_forms['date'].dt.strftime('%Y-%m-%d')
+                    df_forms['month'] = df_forms['date'].dt.strftime('%m')
+                    df_forms['year'] = df_forms['date'].dt.strftime('%Y')
+                    df_forms['month_year'] = df_forms['date'].dt.strftime('%Y-%m')
+                    df_forms.sort_values(by='date', ascending=True, inplace=True)
+                    df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
+
+                    # Fill missing values in df_forms
+                    df_forms['details'] = df_forms['details'].fillna('No details')
+                    df_forms = df_forms.fillna('')
+
+                    # Concatenate df_gs and df_forms
+                    df_gs = pd.concat([df_gs, df_forms], axis=0)
+                    df_gs = df_gs.reset_index(drop=True)
+                    df_gs = df_gs.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
+
+                    # Sort the concatenated dataframe by date_new
+                    df_gs = df_gs.sort_values(by='date_new', ascending=True)
+
+                    # Filter events happening today or in the future
+                    today = dt.date.today()
+                    df_gs['date'] = pd.to_datetime(df_gs['date'], dayfirst=True)  # Ensure 'date' is datetime
+                    filter = df_gs['date'] >= pd.to_datetime(today)
+                    df_gs = df_gs[filter]
+
+                    # Display the filtered dataframe
+                    df_gs = df_gs.loc[filter]
+                    df_gs = df_gs.fillna('')
+                    df_gs = df_gs.head(3)
+                    if df_gs['event_name'].any() in ("", [], None, 0, False):
+                        st.write('No upcoming event!')
+                    df_gs1 = ('['+ df_gs['event_name'] + ']'+ '('+ df_gs['link'] + ')'', organised by ' + '**' + df_gs['organiser'] + '**' + '. Date: ' + df_gs['date_new'] + ', Venue: ' + df_gs['venue'])
+                    row_nu = len(df_gs.index)
+                    for i in range(row_nu):
+                        st.write(df_gs1.iloc[i])
+                    st.write('Visit the [Events on intelligence](https://intelligence.streamlit.app/Events) page to see more!')
                     
+                    st.markdown('##### Next conference')
+                    df_con = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=939232836')
+                    df_con['date'] = pd.to_datetime(df_con['date'])
+                    df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
+                    df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%d/%m/%Y')
+                    df_con['date_new_end'] = pd.to_datetime(df_con['date_end'], dayfirst = True).dt.strftime('%d/%m/%Y')
+                    df_con.sort_values(by='date', ascending = True, inplace=True)
+                    df_con['details'] = df_con['details'].fillna('No details')
+                    df_con['location'] = df_con['location'].fillna('No details')
+                    df_con = df_con.fillna('')
+                    df_con['date_end'] = pd.to_datetime(df_con['date'], dayfirst=True)     
+                    filter = df_con['date_end']>=pd.to_datetime(today)
+                    df_con = df_con.loc[filter]
+                    df_con = df_con.head(1)
+                    if df_con['conference_name'].any() in ("", [], None, 0, False):
+                        st.write('No upcoming conference!')
+                    df_con1 = ('['+ df_con['conference_name'] + ']'+ '('+ df_con['link'] + ')'', organised by ' + '**' + df_con['organiser'] + '**' + '. Date(s): ' + df_con['date_new'] + ' - ' + df_con['date_new_end'] + ', Venue: ' + df_con['venue'])
+                    row_nu = len(df_con.index)
+                    for i in range(row_nu):
+                        st.write( df_con1.iloc[i])
+                    st.write('Visit the [Events on intelligence](https://intelligence.streamlit.app/Events) page to see more!')
 
-        with col2:
-            st.info('Join the [mailing list](https://groups.google.com/g/intelligence-studies-network)')
-            with st.expander('Collections', expanded=True):
-                st.caption('[Intelligence history](https://intelligence.streamlit.app/Intelligence_history)')
-                st.caption('[Intelligence studies](https://intelligence.streamlit.app/Intelligence_studies)')
-                st.caption('[Intelligence analysis](https://intelligence.streamlit.app/Intelligence_analysis)')
-                st.caption('[Intelligence organisations](https://intelligence.streamlit.app/Intelligence_organisations)')
-                st.caption('[Intelligence failures](https://intelligence.streamlit.app/Intelligence_failures)')
-                st.caption('[Intelligence oversight and ethics](https://intelligence.streamlit.app/Intelligence_oversight_and_ethics)')
-                st.caption('[Intelligence collection](https://intelligence.streamlit.app/Intelligence_collection)')
-                st.caption('[Counterintelligence](https://intelligence.streamlit.app/Counterintelligence)')
-                st.caption('[Covert action](https://intelligence.streamlit.app/Covert_action)')
-                st.caption('[Intelligence and cybersphere](https://intelligence.streamlit.app/Intelligence_and_cybersphere)')
-                st.caption('[Global intelligence](https://intelligence.streamlit.app/Global_intelligence)')
-                st.caption('[AI and intelligence](https://intelligence.streamlit.app/AI_and_intelligence)')
-                st.caption('[Special collections](https://intelligence.streamlit.app/Special_collections)')
-
-            with st.expander('Events & conferences', expanded=True):
-                st.markdown('##### Next event')
-
-                conn = st.connection("gsheets", type=GSheetsConnection)
-
-                # Read the first spreadsheet
-                df_gs = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=0')
-
-                # Read the second spreadsheet
-                df_forms = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
-                df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
-                df_forms = df_forms.drop(columns=['Timestamp'])
-
-                # Convert and format dates in df_gs
-                df_gs['date'] = pd.to_datetime(df_gs['date'])
-                df_gs['date_new'] = df_gs['date'].dt.strftime('%Y-%m-%d')
-
-                # Convert and format dates in df_forms
-                df_forms['date'] = pd.to_datetime(df_forms['date'])
-                df_forms['date_new'] = df_forms['date'].dt.strftime('%Y-%m-%d')
-                df_forms['month'] = df_forms['date'].dt.strftime('%m')
-                df_forms['year'] = df_forms['date'].dt.strftime('%Y')
-                df_forms['month_year'] = df_forms['date'].dt.strftime('%Y-%m')
-                df_forms.sort_values(by='date', ascending=True, inplace=True)
-                df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
-
-                # Fill missing values in df_forms
-                df_forms['details'] = df_forms['details'].fillna('No details')
-                df_forms = df_forms.fillna('')
-
-                # Concatenate df_gs and df_forms
-                df_gs = pd.concat([df_gs, df_forms], axis=0)
-                df_gs = df_gs.reset_index(drop=True)
-                df_gs = df_gs.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
-
-                # Sort the concatenated dataframe by date_new
-                df_gs = df_gs.sort_values(by='date_new', ascending=True)
-
-                # Filter events happening today or in the future
-                today = dt.date.today()
-                df_gs['date'] = pd.to_datetime(df_gs['date'], dayfirst=True)  # Ensure 'date' is datetime
-                filter = df_gs['date'] >= pd.to_datetime(today)
-                df_gs = df_gs[filter]
-
-                # Display the filtered dataframe
-                df_gs = df_gs.loc[filter]
-                df_gs = df_gs.fillna('')
-                df_gs = df_gs.head(3)
-                if df_gs['event_name'].any() in ("", [], None, 0, False):
-                    st.write('No upcoming event!')
-                df_gs1 = ('['+ df_gs['event_name'] + ']'+ '('+ df_gs['link'] + ')'', organised by ' + '**' + df_gs['organiser'] + '**' + '. Date: ' + df_gs['date_new'] + ', Venue: ' + df_gs['venue'])
-                row_nu = len(df_gs.index)
-                for i in range(row_nu):
-                    st.write(df_gs1.iloc[i])
-                st.write('Visit the [Events on intelligence](https://intelligence.streamlit.app/Events) page to see more!')
-                
-                st.markdown('##### Next conference')
-                df_con = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=939232836')
-                df_con['date'] = pd.to_datetime(df_con['date'])
-                df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
-                df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%d/%m/%Y')
-                df_con['date_new_end'] = pd.to_datetime(df_con['date_end'], dayfirst = True).dt.strftime('%d/%m/%Y')
-                df_con.sort_values(by='date', ascending = True, inplace=True)
-                df_con['details'] = df_con['details'].fillna('No details')
-                df_con['location'] = df_con['location'].fillna('No details')
-                df_con = df_con.fillna('')
-                df_con['date_end'] = pd.to_datetime(df_con['date'], dayfirst=True)     
-                filter = df_con['date_end']>=pd.to_datetime(today)
-                df_con = df_con.loc[filter]
-                df_con = df_con.head(1)
-                if df_con['conference_name'].any() in ("", [], None, 0, False):
-                    st.write('No upcoming conference!')
-                df_con1 = ('['+ df_con['conference_name'] + ']'+ '('+ df_con['link'] + ')'', organised by ' + '**' + df_con['organiser'] + '**' + '. Date(s): ' + df_con['date_new'] + ' - ' + df_con['date_new_end'] + ', Venue: ' + df_con['venue'])
-                row_nu = len(df_con.index)
-                for i in range(row_nu):
-                    st.write( df_con1.iloc[i])
-                st.write('Visit the [Events on intelligence](https://intelligence.streamlit.app/Events) page to see more!')
-
-            with st.expander('Digest', expanded=True):
-                st.write('See our dynamic [digest](https://intelligence.streamlit.app/Digest) for the latest updates on intelligence!')
-
+                with st.expander('Digest', expanded=True):
+                    st.write('See our dynamic [digest](https://intelligence.streamlit.app/Digest) for the latest updates on intelligence!')
+            search_options_main_menu()
     with tab2:
         st.header('Dashboard', anchor=False)
         on_main_dashboard = st.toggle('Display dashboard')
