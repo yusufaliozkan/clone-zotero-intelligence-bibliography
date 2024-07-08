@@ -757,51 +757,51 @@ with st.spinner('Retrieving data...'):
                                                 highlighted_text = highlighted_text.replace(f'___URL_PLACEHOLDER_{index}___', url)
 
                                             return highlighted_text
-                                        if view == 'Basic list':
-                                            # Display the numbered list using Markdown syntax
-                                            for i, article in enumerate(articles_list, start=1):
-                                                # Display the article with highlighted search terms
-                                                highlighted_article = highlight_terms(article, search_tokens)
-                                                st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
-                                                
-                                                # Display abstract under each numbered item only if the checkbox is selected
-                                                if display_abstracts:
-                                                    abstract = abstracts_list[i - 1]  # Get the corresponding abstract for this article
-                                                    if pd.notnull(abstract):
-                                                        if search_in == 'Title and abstract':
-                                                            highlighted_abstract = highlight_terms(abstract, search_tokens)
-                                                        else:
-                                                            highlighted_abstract = abstract 
-                                                        st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
+                                        # if view == 'Basic list':
+                                        # Display the numbered list using Markdown syntax
+                                        for i, article in enumerate(articles_list, start=1):
+                                            # Display the article with highlighted search terms
+                                            highlighted_article = highlight_terms(article, search_tokens)
+                                            st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
+                                            
+                                            # Display abstract under each numbered item only if the checkbox is selected
+                                            if display_abstracts:
+                                                abstract = abstracts_list[i - 1]  # Get the corresponding abstract for this article
+                                                if pd.notnull(abstract):
+                                                    if search_in == 'Title and abstract':
+                                                        highlighted_abstract = highlight_terms(abstract, search_tokens)
                                                     else:
-                                                        st.caption(f"Abstract: No abstract")
-                                        if view == 'Table':
-                                            df_table_view = filtered_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
-                                            df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
-                                            df_table_view
-                                        if view =='Bibliography':
-                                            if sort_by == 'Publication type':
-                                                filtered_df = filtered_df.sort_values(by=['Publication type'], ascending=True)
-                                            elif sort_by == 'Citation':
-                                                filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
-                                            filtered_df['zotero_item_key'] = filtered_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
-                                            df_zotero_id = pd.read_csv('zotero_citation_format.csv')
-                                            filtered_df = pd.merge(filtered_df, df_zotero_id, on='zotero_item_key', how='left')
-                                            df_zotero_id = filtered_df[['zotero_item_key']]
+                                                        highlighted_abstract = abstract 
+                                                    st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
+                                                else:
+                                                    st.caption(f"Abstract: No abstract")
+                                        # if view == 'Table':
+                                        #     df_table_view = filtered_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
+                                        #     df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
+                                        #     df_table_view
+                                        # if view =='Bibliography':
+                                        #     if sort_by == 'Publication type':
+                                        #         filtered_df = filtered_df.sort_values(by=['Publication type'], ascending=True)
+                                        #     elif sort_by == 'Citation':
+                                        #         filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
+                                        #     filtered_df['zotero_item_key'] = filtered_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                        #     df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                                        #     filtered_df = pd.merge(filtered_df, df_zotero_id, on='zotero_item_key', how='left')
+                                        #     df_zotero_id = filtered_df[['zotero_item_key']]
 
-                                            def display_bibliographies(df):
-                                                df['bibliography'] = df['bibliography'].fillna('').astype(str)
-                                                all_bibliographies = ""
-                                                for index, row in df.iterrows():
-                                                    # Add a horizontal line between bibliographies
-                                                    if index > 0:
-                                                        all_bibliographies += '<p><p>'
+                                        #     def display_bibliographies(df):
+                                        #         df['bibliography'] = df['bibliography'].fillna('').astype(str)
+                                        #         all_bibliographies = ""
+                                        #         for index, row in df.iterrows():
+                                        #             # Add a horizontal line between bibliographies
+                                        #             if index > 0:
+                                        #                 all_bibliographies += '<p><p>'
                                                     
-                                                    # Display bibliography
-                                                    all_bibliographies += row['bibliography']
+                                        #             # Display bibliography
+                                        #             all_bibliographies += row['bibliography']
 
-                                                st.markdown(all_bibliographies, unsafe_allow_html=True)
-                                            display_bibliographies(filtered_df)
+                                        #         st.markdown(all_bibliographies, unsafe_allow_html=True)
+                                        #     display_bibliographies(filtered_df)
                                 else:
                                     st.write("No articles found with the given keyword/phrase.")
                                 status.update(label="Search completed!", state="complete", expanded=True)
