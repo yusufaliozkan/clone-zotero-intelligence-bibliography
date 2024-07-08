@@ -549,7 +549,7 @@ with st.spinner('Retrieving data...'):
                             return quoted_phrases + words
 
                         # Stripping and processing the search term
-                        search_term = st.session_state.search_term.strip()
+                        # search_term = st.session_state.search_term.strip()
                         if search_term:
                             with st.status("Searching publications...", expanded=True) as status:
                                 search_tokens = parse_search_terms(search_term)
