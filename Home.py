@@ -447,7 +447,7 @@ with st.spinner('Retrieving data...'):
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
-                    @st.experimental_fragment
+                    # @st.experimental_fragment
                     def search_keyword(): 
                         @st.experimental_dialog("Search guide")
                         def guide(item):
@@ -552,7 +552,7 @@ with st.spinner('Retrieving data...'):
                         # Stripping and processing the search term
                         search_term = st.session_state.search_term.strip()
                         if search_term:
-                            with st.expander("Searching publications..."):#, expanded=True) as status:
+                            with st.status("Searching publications...", expanded=True) as status:
                                 search_tokens = parse_search_terms(search_term)
                                 print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
                                 df_csv = df_duplicated.copy()
@@ -805,7 +805,7 @@ with st.spinner('Retrieving data...'):
                                             display_bibliographies(filtered_df)
                                 else:
                                     st.write("No articles found with the given keyword/phrase.")
-                                # status.update(label="Search completed!", state="complete", expanded=True)
+                                status.update(label="Search completed!", state="complete", expanded=True)
                         else:
                             st.write("Please enter a keyword or author name to search.")
                     search_keyword()
