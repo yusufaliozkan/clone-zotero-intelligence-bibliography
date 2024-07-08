@@ -552,8 +552,7 @@ with st.spinner('Retrieving data...'):
                     # Stripping and processing the search term
                     search_term = st.session_state.search_term.strip()
                     if search_term:
-                        # with st.status("Searching publications...", expanded=True) as status:
-                        with st.expander('Search results', expanded=True):
+                        with st.status("Searching publications...", expanded=True) as status:
                             search_tokens = parse_search_terms(search_term)
                             print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
                             df_csv = df_duplicated.copy()
@@ -806,7 +805,7 @@ with st.spinner('Retrieving data...'):
                                         display_bibliographies(filtered_df)
                             else:
                                 st.write("No articles found with the given keyword/phrase.")
-                        # status.update(label=f"Search completed with **{num_items}** {'source' if num_items == 1 else 'sources'} found!", state="complete", expanded=True)
+                            status.update(label=f"Search completed with **{num_items}** {'source' if num_items == 1 else 'sources'} found!", state="complete", expanded=True)
                     else:
                         st.write("Please enter a keyword or author name to search.")
                     # status.update(label=f"Search completed with **{num_items}** {'source' if num_items == 1 else 'sources'} found!", state="complete", expanded=True)
