@@ -555,7 +555,7 @@ with st.spinner('Retrieving data...'):
                         search_term = st.session_state.search_term.strip()
                         if search_term != st.session_state.previous_search_term:
                             # Execute additional code when search_term is different
-                            st.rerun()
+                            st.write("The search term has changed.")
                         if search_term:
                             with st.status("Searching publications...", expanded=True) as status:
                                 search_tokens = parse_search_terms(search_term)
