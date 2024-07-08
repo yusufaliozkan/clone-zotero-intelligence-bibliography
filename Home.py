@@ -444,6 +444,7 @@ with st.spinner('Retrieving data...'):
                 citation_mean = non_nan_cited_df_dedup['Citation'].mean()
                 citation_median = non_nan_cited_df_dedup['Citation'].median()
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
+                status_placeholder = st.empty() 
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
                     # @st.experimental_fragment
@@ -551,7 +552,7 @@ with st.spinner('Retrieving data...'):
                     # Stripping and processing the search term
                     search_term = st.session_state.search_term.strip()
                     if search_term:
-                        with st.status("Searching publications...", expanded=True) as status:
+                        with status_placeholder.status("Searching publications...", expanded=True) as status:
                             search_tokens = parse_search_terms(search_term)
                             print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
                             df_csv = df_duplicated.copy()
