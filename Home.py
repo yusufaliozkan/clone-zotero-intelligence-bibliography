@@ -519,7 +519,6 @@ with st.spinner('Retrieving data...'):
                             search_in_index = search_options.index(search_in_from_key)
                         except (ValueError, KeyError):
                             pass
-                    status_placeholder = st.empty() 
                     # Layout for input elements
                     cols, cola = st.columns([2, 6])
 
@@ -540,6 +539,7 @@ with st.spinner('Retrieving data...'):
                             placeholder='Type your keyword(s)',
                             on_change=update_search_params
                         )
+                    status_placeholder = st.empty() 
 
                     # Function to extract quoted phrases
                     def extract_quoted_phrases(text):
