@@ -811,6 +811,7 @@ with st.spinner('Retrieving data...'):
 
                 # SEARCH AUTHORS
                 elif search_option == "Search author":
+                    st.empty()
                     st.query_params.clear()
                     st.subheader('Search author', anchor=False, divider='blue') 
 
