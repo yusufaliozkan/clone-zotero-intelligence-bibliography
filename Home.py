@@ -539,7 +539,6 @@ with st.spinner('Retrieving data...'):
                             placeholder='Type your keyword(s)',
                             on_change=update_search_params
                         )
-                    status_placeholder = st.empty() 
 
                     # Function to extract quoted phrases
                     def extract_quoted_phrases(text):
@@ -552,7 +551,7 @@ with st.spinner('Retrieving data...'):
                     search_term = st.session_state.search_term.strip()
 
                     if search_term:
-                        with status_placeholder.status("Searching publications...", expanded=True) as status:
+                        with st.status("Searching publications...", expanded=True) as status:
                             search_tokens = parse_search_terms(search_term)
                             print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
                             df_csv = df_duplicated.copy()
