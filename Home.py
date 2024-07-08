@@ -541,6 +541,9 @@ with st.spinner('Retrieving data...'):
                                 on_change=update_search_params
                             )
 
+                        if 'previous_search_term' not in st.session_state:
+                            st.session_state.previous_search_term = ''
+
                         # Function to extract quoted phrases
                         def extract_quoted_phrases(text):
                             quoted_phrases = re.findall(r'"(.*?)"', text)
@@ -550,6 +553,9 @@ with st.spinner('Retrieving data...'):
 
                         # Stripping and processing the search term
                         search_term = st.session_state.search_term.strip()
+                        if search_term != st.session_state.previous_search_term:
+                            # Execute additional code when search_term is different
+                            st.write("The search term has changed.")
                         if search_term:
                             with st.status("Searching publications...", expanded=True) as status:
                                 search_tokens = parse_search_terms(search_term)
