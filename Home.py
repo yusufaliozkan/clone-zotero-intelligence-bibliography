@@ -499,14 +499,14 @@ with st.spinner('Retrieving data...'):
                             search_term = query_params['query']
                         if 'search_in' in query_params:
                             search_in = query_params['search_in']
-                        with st.empty():
-                            # Initialize session state variables
-                            if 'search_term' not in st.session_state:
-                                st.session_state.search_term = search_term
-                            if 'search_in' not in st.session_state:
-                                st.session_state.search_in = search_in
-                            if 'search_term_input' not in st.session_state:
-                                st.session_state.search_term_input = search_term
+
+                        # Initialize session state variables
+                        if 'search_term' not in st.session_state:
+                            st.session_state.search_term = search_term
+                        if 'search_in' not in st.session_state:
+                            st.session_state.search_in = search_in
+                        if 'search_term_input' not in st.session_state:
+                            st.session_state.search_term_input = search_term
 
                         # Define unique search options
                         search_options = ["Title", "Title and abstract"]
