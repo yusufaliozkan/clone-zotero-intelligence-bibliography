@@ -339,7 +339,9 @@ with st.spinner('Retrieving data...'):
     sidebar_content() 
 
     tab1, tab2 = st.tabs(['📑 Publications', '📊 Dashboard']) #, '🔀 Surprise me'])
-    with tab1:
+    @st.experimental_fragment
+    def search_options_main_menu():
+        with tab1:
 
         col1, col2 = st.columns([6,2]) 
         with col1: 
@@ -433,8 +435,7 @@ with st.spinner('Retrieving data...'):
             # Example Streamlit code for context
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-            # @st.experimental_fragment
-            # def search_options_main_menu():
+
             from authors_dict import name_replacements
             total_rows = len(df_dedup)
             nan_count_citation = df_dedup['Citation_list'].isna().sum()
@@ -2953,7 +2954,7 @@ with st.spinner('Retrieving data...'):
 
             with st.expander('Digest', expanded=True):
                 st.write('See our dynamic [digest](https://intelligence.streamlit.app/Digest) for the latest updates on intelligence!')
-
+    search_options_main_menu()
     with tab2:
         st.header('Dashboard', anchor=False)
         on_main_dashboard = st.toggle('Display dashboard')
