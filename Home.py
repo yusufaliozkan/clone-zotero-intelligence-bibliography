@@ -814,10 +814,10 @@ with st.spinner('Retrieving data...'):
                     st.query_params.clear()
                     st.subheader('Search author', anchor=False, divider='blue') 
 
-                    # @st.experimental_fragment
-                    # def search_author():
-                    unique_authors = [''] + list(df_authors['Author_name'].unique())
-
+                    @st.experimental_fragment
+                    def search_author():
+                        unique_authors = [''] + list(df_authors['Author_name'].unique())
+                    search_author()
                     author_publications = df_authors['Author_name'].value_counts().to_dict()
                     sorted_authors_by_publications = sorted(unique_authors, key=lambda author: author_publications.get(author, 0), reverse=True)
                     select_options_author_with_counts = [''] + [f"{author} ({author_publications.get(author, 0)})" for author in sorted_authors_by_publications]
