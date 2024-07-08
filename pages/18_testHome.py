@@ -550,7 +550,7 @@ with st.spinner('Retrieving data...'):
 
                         # Stripping and processing the search term
                         search_term = st.session_state.search_term.strip()
-                        if search_term=='':
+                        if search_term:
                             with st.status("Searching publications...", expanded=True) as status:
                                 search_tokens = parse_search_terms(search_term)
                                 print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
@@ -805,8 +805,8 @@ with st.spinner('Retrieving data...'):
                                 else:
                                     st.write("No articles found with the given keyword/phrase.")
                                 status.update(label="Search completed!", state="complete", expanded=True)
-                        else:
-                            st.write("Please enter a keyword or author name to search.")
+                        # else:
+                        #     st.write("Please enter a keyword or author name to search.")
                     search_keyword()
 
                 # SEARCH AUTHORS
