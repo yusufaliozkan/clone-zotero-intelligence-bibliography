@@ -805,9 +805,10 @@ with st.spinner('Retrieving data...'):
                                             display_bibliographies(filtered_df)
                                 else:
                                     st.write("No articles found with the given keyword/phrase.")
-                        status.update(label="Search completed!", state="complete", expanded=True)
                         else:
                             st.write("Please enter a keyword or author name to search.")
+                        status.update(label="Search completed!", state="complete", expanded=True)
+
                     search_keyword()
 
                 # SEARCH AUTHORS
