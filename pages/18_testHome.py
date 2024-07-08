@@ -448,7 +448,7 @@ with st.spinner('Retrieving data...'):
                     st.subheader('Search keywords', anchor=False, divider='blue')
                     if 'search_result_container' not in st.session_state:
                         st.session_state.search_result_container = None
-                    @st.experimental_fragment
+                    # @st.experimental_fragment
                     def search_keyword(): 
                         @st.experimental_dialog("Search guide")
                         def guide(item):
