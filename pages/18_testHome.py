@@ -552,65 +552,66 @@ with st.spinner('Retrieving data...'):
 
                         # Stripping and processing the search term
                         search_term = st.session_state.search_term.strip()
-                        if search_term:
-                            with st.status("Searching publications...", expanded=True) as status:
-                                search_tokens = parse_search_terms(search_term)
-                                print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
-                                df_csv = df_duplicated.copy()
+                        st.session_state.search_result_container = st.container()
+                        with st.session_state.search_result_container:
+                            if search_term:
+                                with st.status("Searching publications...", expanded=True) as status:
+                                    search_tokens = parse_search_terms(search_term)
+                                    print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
+                                    df_csv = df_duplicated.copy()
 
-                                filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
-                                print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
-                                filtered_df = filtered_df.drop_duplicates()
-                                print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
-                                
-                                if not filtered_df.empty and 'Date published' in filtered_df.columns:
-                                    filtered_df['Date published'] = filtered_df['Date published'].astype(str).str.strip()
-                                    filtered_df['Date published'] = filtered_df['Date published'].str.strip().apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                                    if filtered_df['Date published'].notna().any():
-                                        filtered_df['Date published'] = filtered_df['Date published'].dt.strftime('%Y-%m-%d')
+                                    filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
+                                    print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
+                                    filtered_df = filtered_df.drop_duplicates()
+                                    print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
+                                    
+                                    if not filtered_df.empty and 'Date published' in filtered_df.columns:
+                                        filtered_df['Date published'] = filtered_df['Date published'].astype(str).str.strip()
+                                        filtered_df['Date published'] = filtered_df['Date published'].str.strip().apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                                        if filtered_df['Date published'].notna().any():
+                                            filtered_df['Date published'] = filtered_df['Date published'].dt.strftime('%Y-%m-%d')
+                                        else:
+                                            filtered_df['Date published'] = ''
+                                        filtered_df['Date published'] = filtered_df['Date published'].fillna('')
+                                        filtered_df['No date flag'] = filtered_df['Date published'].isnull().astype(np.uint8)
+                                        filtered_df = filtered_df.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
                                     else:
                                         filtered_df['Date published'] = ''
-                                    filtered_df['Date published'] = filtered_df['Date published'].fillna('')
-                                    filtered_df['No date flag'] = filtered_df['Date published'].isnull().astype(np.uint8)
-                                    filtered_df = filtered_df.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
-                                else:
-                                    filtered_df['Date published'] = ''
-                                    filtered_df['No date flag'] = 1
-                                print(f"Final Filtered DataFrame:\n{filtered_df}")  # Debugging: Print final DataFrame
+                                        filtered_df['No date flag'] = 1
+                                    print(f"Final Filtered DataFrame:\n{filtered_df}")  # Debugging: Print final DataFrame
 
-                                types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
-                                collections = filtered_df['Collection_Name'].dropna().unique()
+                                    types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
+                                    collections = filtered_df['Collection_Name'].dropna().unique()
 
-                                        # if container_refresh_button.button('Refresh'):
-                                #     st.query_params.clear()
-                                #     st.rerun()
+                                            # if container_refresh_button.button('Refresh'):
+                                    #     st.query_params.clear()
+                                    #     st.rerun()
 
-                                with st.popover("Filters and more"):
-                                    types2 = st.multiselect('Publication types', types, key='original2')
-                                    collections = st.multiselect('Collection', collections, key='original_collection')
-                                    container_download_button = st.container()
+                                    with st.popover("Filters and more"):
+                                        types2 = st.multiselect('Publication types', types, key='original2')
+                                        collections = st.multiselect('Collection', collections, key='original_collection')
+                                        container_download_button = st.container()
 
-                                    col112, col113 = st.columns(2)
-                                    with col112:
-                                        display_abstracts = st.checkbox('Display abstracts')
-                                    with col113:
-                                        only_citation = st.checkbox('Show cited items only')
-                                        if only_citation:
-                                            filtered_df = filtered_df[(df_csv['Citation'].notna()) & (filtered_df['Citation'] != 0)]
+                                        col112, col113 = st.columns(2)
+                                        with col112:
+                                            display_abstracts = st.checkbox('Display abstracts')
+                                        with col113:
+                                            only_citation = st.checkbox('Show cited items only')
+                                            if only_citation:
+                                                filtered_df = filtered_df[(df_csv['Citation'].notna()) & (filtered_df['Citation'] != 0)]
 
-                                    view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
-                                    # with col114:
-                                    #     table_view = st.checkbox('See results in table')
+                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                        # with col114:
+                                        #     table_view = st.checkbox('See results in table')
 
-                                if types2:
-                                    filtered_df = filtered_df[filtered_df['Publication type'].isin(types2)]                 
+                                    if types2:
+                                        filtered_df = filtered_df[filtered_df['Publication type'].isin(types2)]                 
 
-                                if collections:
-                                    filtered_df = filtered_df[filtered_df['Collection_Name'].isin(collections)] 
+                                    if collections:
+                                        filtered_df = filtered_df[filtered_df['Collection_Name'].isin(collections)] 
 
 
-                                if not filtered_df.empty:
-                                    with st.session_state.search_result_container:
+                                    if not filtered_df.empty:
                                         filtered_df = filtered_df.drop_duplicates(subset=['Zotero link'], keep='first')
                                         num_items = len(filtered_df)
                                         st.write(f"Matching articles (**{num_items}** {'source' if num_items == 1 else 'sources'} found):")
@@ -805,11 +806,11 @@ with st.spinner('Retrieving data...'):
 
                                             #         st.markdown(all_bibliographies, unsafe_allow_html=True)
                                             #     display_bibliographies(filtered_df)
-                                else:
-                                    st.write("No articles found with the given keyword/phrase.")
-                                status.update(label="Search completed!", state="complete", expanded=True)
-                        else:
-                            st.write("Please enter a keyword or author name to search.")
+                                    else:
+                                        st.write("No articles found with the given keyword/phrase.")
+                                    status.update(label="Search completed!", state="complete", expanded=True)
+                            else:
+                                st.write("Please enter a keyword or author name to search.")
                     search_keyword()
 
                 # SEARCH AUTHORS
