@@ -2617,7 +2617,7 @@ with st.spinner('Retrieving data...'):
                                     display_bibliographies(df_cited)
                     search_cited_papers()
             
-            search_options_main_menu()
+            # search_options_main_menu()
 
             # OVERVIEW
             st.header('Overview', anchor=False)
@@ -2855,7 +2855,7 @@ with st.spinner('Retrieving data...'):
                 st.subheader('Growth of the library', anchor=False, divider='blue')
                 st.altair_chart(cumulative_chart + data_labels, use_container_width=True)
                     
-
+        search_options_main_menu
         with col2:
             st.info('Join the [mailing list](https://groups.google.com/g/intelligence-studies-network)')
             with st.expander('Collections', expanded=True):
