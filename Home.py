@@ -2617,6 +2617,7 @@ with st.spinner('Retrieving data...'):
                                 display_bibliographies(df_cited)
                     # search_cited_papers()
                 
+            st.query_params.clear()
             search_options_main_menu()
 
             # OVERVIEW
