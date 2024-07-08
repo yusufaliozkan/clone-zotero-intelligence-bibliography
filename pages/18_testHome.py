@@ -444,53 +444,83 @@ with st.spinner('Retrieving data...'):
                 citation_mean = non_nan_cited_df_dedup['Citation'].mean()
                 citation_median = non_nan_cited_df_dedup['Citation'].median()
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
-
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
-                    
-                    # Reset search results container
-                    if 'search_result_container' not in st.session_state:
-                        st.session_state.search_result_container = None
-                    
+                    @st.experimental_fragment
                     def search_keyword(): 
+                        if 'search_result_container' not in st.session_state:
+                            st.session_state.search_result_container = None
+                        @st.experimental_dialog("Search guide")
+                        def guide(item):
+                            st.write('''
+                                The Intelligence Studies Bibliography supports basic-level searches with Boolean operators.
+
+                                Available Boolean operators: **AND**, **OR**, **NOT** (e.g., "covert action" **NOT** British).
+
+                                You can search using double quotes (e.g., "covert action").
+
+                                Multiple Boolean operators are allowed: (e.g. "covert action" **OR** "covert operation" **OR** "covert operations")
+
+                                Please note: Search with parentheses is **not** available.
+
+                                Note that the search function is limited: you will only find exact matches and cannot see search relevance.
+
+                                You can share the link of your search result. Try: https://intelligence.streamlit.app/?search_in=Title&query=cia+OR+mi6
+                                ''')
+                        
                         if "guide" not in st.session_state:
                             if st.button("Search guide"):
-                                st.write('''
-                                    The Intelligence Studies Bibliography supports basic-level searches with Boolean operators.
+                                guide("Search guide")
+                        container_refresh_button = st.container()
 
-                                    Available Boolean operators: **AND**, **OR**, **NOT** (e.g., "covert action" **NOT** British).
+                        # if st.button('Search guide'):
+                        #     st.toast('''
+                        #     **Search guide**
 
-                                    You can search using double quotes (e.g., "covert action").
+                        #     The following Boolean operators are available: AND, OR, NOT (e.g. "covert action" NOT british).
 
-                                    Multiple Boolean operators are allowed: (e.g. "covert action" **OR** "covert operation" **OR** "covert operations")
+                        #     Search with double quote is available. (e.g. "covert action")
 
-                                    Please note: Search with parentheses is **not** available.
-
-                                    Note that the search function is limited: you will only find exact matches and cannot see search relevance.
-
-                                    You can share the link of your search result. Try: https://intelligence.streamlit.app/?search_in=Title&query=cia+OR+mi6
-                                ''')
-
+                        #     Search with parantheses is **not** available.                   
+                        #     ''')
                         # Function to update search parameters in the query string
                         def update_search_params():
                             st.session_state.search_term = st.session_state.search_term_input
-                            st.experimental_set_query_params(
-                                search_in=st.session_state.search_in,
-                                query=st.session_state.search_term
-                            )
+                            st.query_params.from_dict({
+                                "search_in": st.session_state.search_in,
+                                "query": st.session_state.search_term
+                            })
 
                         # Extracting initial query parameters
-                        query_params = st.experimental_get_query_params()
-                        search_term = query_params.get('query', [""])[0]
-                        search_in = query_params.get('search_in', ["Title"])[0]
+                        query_params = st.query_params
+                        search_term = ""
+                        search_in = "Title"
+
+                        # Retrieve the initial search term and search_in from query parameters if available
+                        if 'query' in query_params:
+                            search_term = query_params['query']
+                        if 'search_in' in query_params:
+                            search_in = query_params['search_in']
 
                         # Initialize session state variables
-                        st.session_state.search_term = st.session_state.get('search_term', search_term)
-                        st.session_state.search_in = st.session_state.get('search_in', search_in)
-                        st.session_state.search_term_input = st.session_state.get('search_term_input', search_term)
+                        if 'search_term' not in st.session_state:
+                            st.session_state.search_term = search_term
+                        if 'search_in' not in st.session_state:
+                            st.session_state.search_in = search_in
+                        if 'search_term_input' not in st.session_state:
+                            st.session_state.search_term_input = search_term
 
                         # Define unique search options
                         search_options = ["Title", "Title and abstract"]
+
+                        # Handling the search_in select box selection
+                        search_in_index = 0
+                        if 'search_in' in query_params:
+                            try:
+                                search_in_from_key = query_params['search_in']
+                                search_in_index = search_options.index(search_in_from_key)
+                            except (ValueError, KeyError):
+                                pass
 
                         # Layout for input elements
                         cols, cola = st.columns([2, 6])
@@ -499,7 +529,7 @@ with st.spinner('Retrieving data...'):
                         with cols:
                             st.session_state.search_in = st.selectbox(
                                 '🔍 Search in', search_options,
-                                index=search_options.index(st.session_state.search_in),
+                                index=search_in_index,
                                 on_change=update_search_params
                             )
 
@@ -513,27 +543,75 @@ with st.spinner('Retrieving data...'):
                                 on_change=update_search_params
                             )
 
+                        # Function to extract quoted phrases
+                        def extract_quoted_phrases(text):
+                            quoted_phrases = re.findall(r'"(.*?)"', text)
+                            text_without_quotes = re.sub(r'"(.*?)"', '', text)
+                            words = text_without_quotes.split()
+                            return quoted_phrases + words
+
                         # Stripping and processing the search term
                         search_term = st.session_state.search_term.strip()
                         if search_term:
-                            with st.spinner("Searching publications..."):
+                            with st.status("Searching publications...", expanded=True) as status:
                                 search_tokens = parse_search_terms(search_term)
+                                print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
                                 df_csv = df_duplicated.copy()
 
                                 filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
+                                print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
                                 filtered_df = filtered_df.drop_duplicates()
+                                print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
                                 
                                 if not filtered_df.empty and 'Date published' in filtered_df.columns:
-                                    filtered_df['Date published'] = pd.to_datetime(filtered_df['Date published'], errors='coerce').dt.strftime('%Y-%m-%d')
+                                    filtered_df['Date published'] = filtered_df['Date published'].astype(str).str.strip()
+                                    filtered_df['Date published'] = filtered_df['Date published'].str.strip().apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                                    if filtered_df['Date published'].notna().any():
+                                        filtered_df['Date published'] = filtered_df['Date published'].dt.strftime('%Y-%m-%d')
+                                    else:
+                                        filtered_df['Date published'] = ''
                                     filtered_df['Date published'] = filtered_df['Date published'].fillna('')
+                                    filtered_df['No date flag'] = filtered_df['Date published'].isnull().astype(np.uint8)
+                                    filtered_df = filtered_df.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
                                 else:
                                     filtered_df['Date published'] = ''
-                                
-                                filtered_df = filtered_df.drop_duplicates(subset=['Zotero link'], keep='first')
-                                
-                                st.session_state.search_result_container = st.container()
-                                with st.session_state.search_result_container:
-                                    if not filtered_df.empty:
+                                    filtered_df['No date flag'] = 1
+                                print(f"Final Filtered DataFrame:\n{filtered_df}")  # Debugging: Print final DataFrame
+
+                                types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
+                                collections = filtered_df['Collection_Name'].dropna().unique()
+
+                                        # if container_refresh_button.button('Refresh'):
+                                #     st.query_params.clear()
+                                #     st.rerun()
+
+                                with st.popover("Filters and more"):
+                                    types2 = st.multiselect('Publication types', types, key='original2')
+                                    collections = st.multiselect('Collection', collections, key='original_collection')
+                                    container_download_button = st.container()
+
+                                    col112, col113 = st.columns(2)
+                                    with col112:
+                                        display_abstracts = st.checkbox('Display abstracts')
+                                    with col113:
+                                        only_citation = st.checkbox('Show cited items only')
+                                        if only_citation:
+                                            filtered_df = filtered_df[(df_csv['Citation'].notna()) & (filtered_df['Citation'] != 0)]
+
+                                    view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                    # with col114:
+                                    #     table_view = st.checkbox('See results in table')
+
+                                if types2:
+                                    filtered_df = filtered_df[filtered_df['Publication type'].isin(types2)]                 
+
+                                if collections:
+                                    filtered_df = filtered_df[filtered_df['Collection_Name'].isin(collections)] 
+
+
+                                if not filtered_df.empty:
+                                    with st.session_state.search_result_container:
+                                        filtered_df = filtered_df.drop_duplicates(subset=['Zotero link'], keep='first')
                                         num_items = len(filtered_df)
                                         st.write(f"Matching articles (**{num_items}** {'source' if num_items == 1 else 'sources'} found):")
 
@@ -547,9 +625,9 @@ with st.spinner('Retrieving data...'):
                                         csv = convert_df(download_filtered)
                                         today = datetime.date.today().isoformat()
                                         a = 'search-result-' + today
-                                        st.download_button('💾 Download search', csv, (a+'.csv'), mime="text/csv", key='download-csv-1')
+                                        container_download_button.download_button('💾 Download search', csv, (a+'.csv'), mime="text/csv", key='download-csv-1')
 
-                                        on = st.checkbox('Generate dashboard')
+                                        on = st.toggle('Generate dashboard')
 
                                         if on and len(filtered_df) > 0: 
                                             st.info(f'Dashboard for search terms: {search_term}')
@@ -595,34 +673,143 @@ with st.spinner('Retrieving data...'):
                                             def tokenization(text):
                                                 text = re.split('\W+', text)
                                                 return text    
-                                            search_df['token_title']=search_df['clean_title'].apply(lambda x: tokenization(x))
+                                            search_df['token_title']=search_df['clean_title'].apply(tokenization)
                                             stopword = nltk.corpus.stopwords.words('english')
-                                            search_df['token_title'] = search_df['token_title'].apply(lambda x: [item for item in x if item not in stopword])
-                                            search_df['title_final'] = search_df['token_title'].apply(lambda x: ' '.join(x))
+                                            SW = ['york', 'intelligence', 'security', 'pp', 'war','world', 'article', 'twitter', 'nan',
+                                                'new', 'isbn', 'book', 'also', 'yet', 'matter', 'erratum', 'commentary', 'studies',
+                                                'volume', 'paper', 'study', 'question', 'editorial', 'welcome', 'introduction', 'editorial', 'reader',
+                                                'university', 'followed', 'particular', 'based', 'press', 'examine', 'show', 'may', 'result', 'explore',
+                                                'examines', 'become', 'used', 'journal', 'london', 'review']
+                                            stopword.extend(SW)
 
-                                            def lemma(text):
-                                                wnl = nltk.WordNetLemmatizer()
-                                                text = [wnl.lemmatize(word) for word in text]
+                                            custom_stopwords = extract_quoted_phrases(search_term)
+                                            stopword.extend(custom_stopwords)
+
+                                            def remove_stopwords(text):
+                                                text = [i for i in text if i] # this part deals with getting rid of spaces as it treads as a string
+                                                text = [word for word in text if word not in stopword] #keep the word if it is not in stopword
                                                 return text
-                                            search_df['title_final'] = search_df['title_final'].apply(lambda x: lemma(x))
-                                            search_df['title_final'] = search_df['title_final'].apply(lambda x: ' '.join ([w for w in x.split() if len (w)>2])) # this function removes words less than 2 words
+                                            search_df['stopword']=search_df['token_title'].apply(remove_stopwords)
+                                            wn = nltk.WordNetLemmatizer()
+                                            def lemmatizer(text):
+                                                text = [wn.lemmatize(word) for word in text]
+                                                return text
+                                            search_df['lemma_title'] = search_df['stopword'].apply(lemmatizer)
+                                            listdf = search_df['lemma_title']
+                                            df_list = [item for sublist in listdf for item in sublist]
+                                            string = pd.Series(df_list).str.cat(sep=' ')
+                                            wordcloud_texts = string
+                                            wordcloud_texts_str = str(wordcloud_texts)
+                                            wordcloud = WordCloud(stopwords=stopword, width=1500, height=750, background_color='white', collocations=False).generate(wordcloud_texts_str)
+                                            plt.figure(figsize=(20,8))
+                                            plt.axis('off')
+                                            plt.title(f"Word Cloud for Titles")
+                                            plt.imshow(wordcloud)
+                                            plt.axis("off")
+                                            plt.show()
+                                            st.set_option('deprecation.showPyplotGlobalUse', False)
+                                            st.pyplot()
 
-                                            # Joining all the titles together
-                                            titles = ' '.join(search_df['title_final'])
+                                        else:
+                                            sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
+                                            if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
+                                                filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False)
+                                                filtered_df = filtered_df.reset_index(drop=True)
+                                            else:
+                                                filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
+                                                filtered_df = filtered_df.reset_index(drop=True)
+                                            if num_items > 20:
+                                                show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
+                                                if show_first_20:
+                                                    filtered_df = filtered_df.head(20)
 
-                                            # Generate word cloud
-                                            wordcloud = WordCloud(width=800, height=400, background_color ='white').generate(titles)
+                                            articles_list = []  # Store articles in a list
+                                            abstracts_list = [] #Store abstracts in a list
+                                            for index, row in filtered_df.iterrows():
+                                                formatted_entry = format_entry(row)
+                                                articles_list.append(formatted_entry)  # Append formatted entry to the list
+                                                abstract = row['Abstract']
+                                                abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
 
-                                            # Display word cloud
-                                            fig, ax = plt.subplots(figsize=(10, 5))
-                                            ax.imshow(wordcloud, interpolation='bilinear')
-                                            ax.axis('off')
-                                            ax.set_title(f"Word Cloud for Titles matching the search terms: {search_term}")
-                                            st.pyplot(fig)
+                                            def highlight_terms(text, terms):
+                                                # Define boolean operators
+                                                boolean_operators = {"AND", "OR", "NOT"}
 
-                                    else:
-                                        st.warning('No matching articles found. Please refine your search terms and try again.')
+                                                # Regular expression pattern to identify URLs
+                                                url_pattern = r'https?://\S+'
 
+                                                # Find all URLs in the text
+                                                urls = re.findall(url_pattern, text)
+                                                
+                                                # Replace URLs in the text with placeholders to avoid highlighting
+                                                for url in urls:
+                                                    text = text.replace(url, f'___URL_PLACEHOLDER_{urls.index(url)}___')
+
+                                                # Create a regex pattern to find the search terms in the text, excluding boolean operators
+                                                pattern = re.compile('|'.join(rf'\b{re.escape(term)}\b' for term in terms if term not in boolean_operators), flags=re.IGNORECASE)
+
+                                                # Use HTML tags to highlight the terms in the text, excluding URLs
+                                                highlighted_text = pattern.sub(
+                                                    lambda match: f'<span style="background-color: #FF8581;">{match.group(0)}</span>' 
+                                                                if match.group(0) not in urls else match.group(0),
+                                                    text
+                                                )
+
+                                                # Restore the original URLs in the highlighted text
+                                                for index, url in enumerate(urls):
+                                                    highlighted_text = highlighted_text.replace(f'___URL_PLACEHOLDER_{index}___', url)
+
+                                                return highlighted_text
+                                            # if view == 'Basic list':
+                                            # Display the numbered list using Markdown syntax
+                                            for i, article in enumerate(articles_list, start=1):
+                                                # Display the article with highlighted search terms
+                                                highlighted_article = highlight_terms(article, search_tokens)
+                                                st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
+                                                
+                                                # Display abstract under each numbered item only if the checkbox is selected
+                                                if display_abstracts:
+                                                    abstract = abstracts_list[i - 1]  # Get the corresponding abstract for this article
+                                                    if pd.notnull(abstract):
+                                                        if search_in == 'Title and abstract':
+                                                            highlighted_abstract = highlight_terms(abstract, search_tokens)
+                                                        else:
+                                                            highlighted_abstract = abstract 
+                                                        st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
+                                                    else:
+                                                        st.caption(f"Abstract: No abstract")
+                                            # if view == 'Table':
+                                            #     df_table_view = filtered_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
+                                            #     df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
+                                            #     df_table_view
+                                            # if view =='Bibliography':
+                                            #     if sort_by == 'Publication type':
+                                            #         filtered_df = filtered_df.sort_values(by=['Publication type'], ascending=True)
+                                            #     elif sort_by == 'Citation':
+                                            #         filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
+                                            #     filtered_df['zotero_item_key'] = filtered_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                            #     df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                                            #     filtered_df = pd.merge(filtered_df, df_zotero_id, on='zotero_item_key', how='left')
+                                            #     df_zotero_id = filtered_df[['zotero_item_key']]
+
+                                            #     def display_bibliographies(df):
+                                            #         df['bibliography'] = df['bibliography'].fillna('').astype(str)
+                                            #         all_bibliographies = ""
+                                            #         for index, row in df.iterrows():
+                                            #             # Add a horizontal line between bibliographies
+                                            #             if index > 0:
+                                            #                 all_bibliographies += '<p><p>'
+                                                        
+                                            #             # Display bibliography
+                                            #             all_bibliographies += row['bibliography']
+
+                                            #         st.markdown(all_bibliographies, unsafe_allow_html=True)
+                                            #     display_bibliographies(filtered_df)
+                                else:
+                                    st.write("No articles found with the given keyword/phrase.")
+                                status.update(label="Search completed!", state="complete", expanded=True)
+                        else:
+                            st.write("Please enter a keyword or author name to search.")
                     search_keyword()
 
                 # SEARCH AUTHORS
