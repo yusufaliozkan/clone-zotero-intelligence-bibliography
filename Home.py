@@ -808,7 +808,7 @@ with st.spinner('Retrieving data...'):
                         else:
                             st.write("Please enter a keyword or author name to search.")
                         status.update(label=f"Search completed with **{num_items}** {'source' if num_items == 1 else 'sources'} found!", state="complete", expanded=True)
-                    search_keyword()
+                    # search_keyword()
 
                 # SEARCH AUTHORS
                 elif search_option == "Search author":
