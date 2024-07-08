@@ -803,9 +803,10 @@ with st.spinner('Retrieving data...'):
 
                                             st.markdown(all_bibliographies, unsafe_allow_html=True)
                                         display_bibliographies(filtered_df)
+                                status.update(label=f"Search completed with **{num_items}** {'source' if num_items == 1 else 'sources'} found!", state="complete", expanded=True)
                             else:
                                 st.write("No articles found with the given keyword/phrase.")
-                            status.update(label=f"Search completed with **{num_items}** {'source' if num_items == 1 else 'sources'} found!", state="complete", expanded=True)
+
                     else:
                         st.write("Please enter a keyword or author name to search.")
                     # status.update(label=f"Search completed with **{num_items}** {'source' if num_items == 1 else 'sources'} found!", state="complete", expanded=True)
@@ -813,7 +814,6 @@ with st.spinner('Retrieving data...'):
 
                 # SEARCH AUTHORS
                 elif search_option == "Search author":
-                    st.rerun()
                     st.query_params.clear()
                     st.subheader('Search author', anchor=False, divider='blue') 
 
