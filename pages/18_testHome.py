@@ -807,7 +807,7 @@ with st.spinner('Retrieving data...'):
 
                                             st.markdown(all_bibliographies, unsafe_allow_html=True)
                                         display_bibliographies(filtered_df)
-                                        text_to_be_copied = filtered_df
+                                        text_to_be_copied = display_bibliographies(filtered_df)
                                         copy_dict = {"content": text_to_be_copied}
 
                                         copy_button = Button(label="Copy to clipboard")
