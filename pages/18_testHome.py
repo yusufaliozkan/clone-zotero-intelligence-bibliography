@@ -488,6 +488,7 @@ with st.spinner('Retrieving data...'):
                             "search_in": st.session_state.search_in,
                             "query": st.session_state.search_term
                         })
+                        st.rerun()
 
                     # Extracting initial query parameters
                     query_params = st.query_params
