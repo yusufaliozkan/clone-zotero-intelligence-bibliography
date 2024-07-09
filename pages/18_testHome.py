@@ -820,7 +820,7 @@ with st.spinner('Retrieving data...'):
                                         return highlighted_text
                                                                 
                                     if 'rerun_triggered' not in st.session_state:
-                                        st.session_state.show_first_20_checked = True
+                                        st.session_state.show_first_20_checked = False
 
                                     if view == 'Basic list' and not st.session_state.show_first_20_checked:
                                         st.session_state.show_first_20_checked = True
