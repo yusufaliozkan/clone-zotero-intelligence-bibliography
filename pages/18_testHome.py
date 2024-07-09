@@ -819,17 +819,9 @@ with st.spinner('Retrieving data...'):
 
                                         return highlighted_text
 
-                                    def reset_search():
-                                        st.session_state.show_first_20 = True
-                                    if st.button("Perform new search"):
-                                        reset_search()
-
                                     if view == 'Basic list':
-                                        if 'show_first_20' not in st.session_state:
-                                            st.session_state.show_first_20 = True
-
-                                        show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=st.session_state.show_first_20)
-
+                                        show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
+                                        
                                         if show_first_20:
                                             filtered_df = filtered_df.head(20)
                                             for i, article in enumerate(articles_list[:20], start=1):
