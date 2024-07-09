@@ -594,6 +594,7 @@ with st.spinner('Retrieving data...'):
                                     container_type = st.container()
                                     container_author_no = st.container()
                                     container_author_pub_ratio= st.container()
+                                    container_publication_ratio = st.container()
                             with colsearch3:
                                 with st.popover("Filters and more"):
                                     types2 = st.multiselect('Publication types', types, key='original2')
@@ -674,6 +675,15 @@ with st.spinner('Retrieving data...'):
                                 container_author_no.metric(label='Number of authors', value=int(author_no))
                             
                                 container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
+
+                                filtered_df['FirstName2'] = filtered_df['FirstName2'].astype(str)
+                                filtered_df['multiple_authors'] = filtered_df['FirstName2'].apply(lambda x: ',' in x)
+                                if len(filtered_df) == 0:
+                                    collaboration_ratio=0
+                                else:
+                                    multiple_authored_papers = filtered_df['multiple_authors'].sum()
+                                    collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
+                                    container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
                                 download_filtered = filtered_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                                 download_filtered['Abstract'] = download_filtered['Abstract'].str.replace('\n', ' ')
