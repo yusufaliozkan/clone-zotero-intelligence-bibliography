@@ -583,22 +583,32 @@ with st.spinner('Retrieving data...'):
                             #     st.query_params.clear()
                             #     st.rerun()
 
-                            with st.popover("Filters and more"):
-                                types2 = st.multiselect('Publication types', types, key='original2')
-                                collections = st.multiselect('Collection', collections, key='original_collection')
-                                container_download_button = st.container()
+                            colsearch1, colsearch2, colsearch3 = st.columns(3)
+                            with colsearch1:
+                                container_metric = st.container()
+                            with colsearch2:
+                                with st.popover('More metrics'):
+                                    container_citation = st.container()
+                                    container_citation_average = st.container()
+                                    container_oa = st.container() 
+                                    container_type = st.container()
+                                    container_author_no = st.container()
+                                    container_author_pub_ratio= st.container()
+                                    container_publication_ratio = st.container()
+                            with colsearch3:
+                                with st.popover("Filters and more"):
+                                    types2 = st.multiselect('Publication types', types, key='original2')
+                                    collections = st.multiselect('Collection', collections, key='original_collection')
+                                    container_download_button = st.container()
 
-                                col112, col113 = st.columns(2)
-                                with col112:
                                     display_abstracts = st.checkbox('Display abstracts')
-                                with col113:
                                     only_citation = st.checkbox('Show cited items only')
                                     if only_citation:
                                         filtered_df = filtered_df[(df_csv['Citation'].notna()) & (filtered_df['Citation'] != 0)]
 
-                                view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
-                                # with col114:
-                                #     table_view = st.checkbox('See results in table')
+                                    view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                    # with col114:
+                                    #     table_view = st.checkbox('See results in table')
 
                             if types2:
                                 filtered_df = filtered_df[filtered_df['Publication type'].isin(types2)]                 
@@ -609,8 +619,72 @@ with st.spinner('Retrieving data...'):
 
                             if not filtered_df.empty:
                                 filtered_df = filtered_df.drop_duplicates(subset=['Zotero link'], keep='first')
+
                                 num_items = len(filtered_df)
-                                st.write(f"Matching articles (**{num_items}** {'source' if num_items == 1 else 'sources'} found):")
+                                publications_by_type = filtered_df['Publication type'].value_counts()
+                                num_items_collections = len(filtered_df)
+                                breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
+                                container_metric.metric(label="Number of items found", value=int(num_items), help=breakdown_string)
+
+                                citation_average = round(filtered_df['Citation'].mean(), 2)
+                                container_citation_average.metric(label="Average citation", value=citation_average)
+
+                                citation_count = filtered_df['Citation'].sum()
+                                total_rows = len(filtered_df)
+                                nan_count_citation = filtered_df['Citation_list'].isna().sum()
+                                non_nan_count_citation = total_rows - nan_count_citation
+                                non_nan_cited_df_dedup = filtered_df.dropna(subset=['Citation_list'])
+                                non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
+                                citation_mean = non_nan_cited_df_dedup['Citation'].mean()
+                                citation_median = non_nan_cited_df_dedup['Citation'].median()
+                                container_citation.metric(
+                                    label="Number of citations", 
+                                    value=int(citation_count), 
+                                    help=f'Note that not all items are citeable.'
+                                    )
+
+                                true_count = filtered_df[filtered_df['Publication type']=='Journal article']['OA status'].sum()
+                                total_count = len(filtered_df[filtered_df['Publication type']=='Journal article'])
+                                if total_count == 0:
+                                    oa_ratio = 0.0
+                                else:
+                                    oa_ratio = true_count / total_count * 100
+                                container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help=f'Not all items are measured for OA.')
+
+                                item_type_no = filtered_df['Publication type'].nunique()
+                                container_type.metric(label='Number of publication types', value=int(item_type_no))
+
+                                def split_and_expand(authors):
+                                    # Ensure the input is a string
+                                    if isinstance(authors, str):
+                                        # Split by comma and strip whitespace
+                                        split_authors = [author.strip() for author in authors.split(',')]
+                                        return pd.Series(split_authors)
+                                    else:
+                                        # Return the original author if it's not a string
+                                        return pd.Series([authors])
+                                if len(filtered_df) == 0:
+                                    author_pub_ratio=0.0
+                                    author_no=0
+                                else:
+                                    expanded_authors = filtered_df['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                                    expanded_authors = expanded_authors.reset_index(name='Author')
+                                    expanded_authors_unique = expanded_authors.drop_duplicates(subset='Author')
+                                    author_no = len(expanded_authors)
+                                    unique_author_no = len(expanded_authors_unique)
+                                    author_pub_ratio = round(author_no/num_items_collections, 2)
+                                container_author_no.metric(label='Number of unique authors', value=int(unique_author_no))
+                            
+                                container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
+
+                                filtered_df['FirstName2'] = filtered_df['FirstName2'].astype(str)
+                                filtered_df['multiple_authors'] = filtered_df['FirstName2'].apply(lambda x: ',' in x)
+                                if len(filtered_df) == 0:
+                                    collaboration_ratio=0
+                                else:
+                                    multiple_authored_papers = filtered_df['multiple_authors'].sum()
+                                    collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
+                                    container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
                                 download_filtered = filtered_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                                 download_filtered['Abstract'] = download_filtered['Abstract'].str.replace('\n', ' ')
@@ -715,13 +789,9 @@ with st.spinner('Retrieving data...'):
                                     else:
                                         filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
                                         filtered_df = filtered_df.reset_index(drop=True)
-                                    if num_items > 20:
-                                        show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
-                                        if show_first_20:
-                                            filtered_df = filtered_df.head(20)
 
                                     articles_list = []  # Store articles in a list
-                                    abstracts_list = [] #Store abstracts in a list
+                                    abstracts_list = [] # Store abstracts in a list
                                     for index, row in filtered_df.iterrows():
                                         formatted_entry = format_entry(row)
                                         articles_list.append(formatted_entry)  # Append formatted entry to the list
@@ -729,52 +799,68 @@ with st.spinner('Retrieving data...'):
                                         abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
 
                                     def highlight_terms(text, terms):
-                                        # Define boolean operators
                                         boolean_operators = {"AND", "OR", "NOT"}
-
-                                        # Regular expression pattern to identify URLs
                                         url_pattern = r'https?://\S+'
-
-                                        # Find all URLs in the text
                                         urls = re.findall(url_pattern, text)
                                         
-                                        # Replace URLs in the text with placeholders to avoid highlighting
                                         for url in urls:
                                             text = text.replace(url, f'___URL_PLACEHOLDER_{urls.index(url)}___')
 
-                                        # Create a regex pattern to find the search terms in the text, excluding boolean operators
                                         pattern = re.compile('|'.join(rf'\b{re.escape(term)}\b' for term in terms if term not in boolean_operators), flags=re.IGNORECASE)
-
-                                        # Use HTML tags to highlight the terms in the text, excluding URLs
                                         highlighted_text = pattern.sub(
                                             lambda match: f'<span style="background-color: #FF8581;">{match.group(0)}</span>' 
                                                         if match.group(0) not in urls else match.group(0),
                                             text
                                         )
 
-                                        # Restore the original URLs in the highlighted text
                                         for index, url in enumerate(urls):
                                             highlighted_text = highlighted_text.replace(f'___URL_PLACEHOLDER_{index}___', url)
 
                                         return highlighted_text
+
                                     if view == 'Basic list':
-                                        # Display the numbered list using Markdown syntax
-                                        for i, article in enumerate(articles_list, start=1):
-                                            # Display the article with highlighted search terms
-                                            highlighted_article = highlight_terms(article, search_tokens)
-                                            st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
-                                            
-                                            # Display abstract under each numbered item only if the checkbox is selected
-                                            if display_abstracts:
-                                                abstract = abstracts_list[i - 1]  # Get the corresponding abstract for this article
-                                                if pd.notnull(abstract):
-                                                    if search_in == 'Title and abstract':
-                                                        highlighted_abstract = highlight_terms(abstract, search_tokens)
+                                        show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
+                                        
+                                        if show_first_20:
+                                            filtered_df = filtered_df.head(20)
+                                            for i, article in enumerate(articles_list[:20], start=1):
+                                                highlighted_article = highlight_terms(article, search_tokens)
+                                                st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
+                                                
+                                                if display_abstracts:
+                                                    abstract = abstracts_list[i - 1]
+                                                    if pd.notnull(abstract):
+                                                        if search_in == 'Title and abstract':
+                                                            highlighted_abstract = highlight_terms(abstract, search_tokens)
+                                                        else:
+                                                            highlighted_abstract = abstract 
+                                                        st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
                                                     else:
-                                                        highlighted_abstract = abstract 
-                                                    st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
-                                                else:
-                                                    st.caption(f"Abstract: No abstract")
+                                                        st.caption(f"Abstract: No abstract")
+                                        else:
+                                            num_tabs = (num_items // 20) + 1
+                                            tab_titles = [f"Results {i*20+1}-{(i+1)*20}" for i in range(num_tabs)]
+                                            
+                                            tabs = st.tabs(tab_titles)
+                                            for tab_index, tab in enumerate(tabs):
+                                                with tab:
+                                                    start_idx = tab_index * 20
+                                                    end_idx = min(start_idx + 20, num_items)
+                                                    for i in range(start_idx, end_idx):
+                                                        article = articles_list[i]
+                                                        highlighted_article = highlight_terms(article, search_tokens)
+                                                        st.markdown(f"{i + 1}. {highlighted_article}", unsafe_allow_html=True)
+                                                        
+                                                        if display_abstracts:
+                                                            abstract = abstracts_list[i]
+                                                            if pd.notnull(abstract):
+                                                                if search_in == 'Title and abstract':
+                                                                    highlighted_abstract = highlight_terms(abstract, search_tokens)
+                                                                else:
+                                                                    highlighted_abstract = abstract 
+                                                                st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
+                                                            else:
+                                                                st.caption(f"Abstract: No abstract")
                                     if view == 'Table':
                                         df_table_view = filtered_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
                                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})

@@ -789,9 +789,13 @@ with st.spinner('Retrieving data...'):
                                     else:
                                         filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
                                         filtered_df = filtered_df.reset_index(drop=True)
+                                    if num_items > 20:
+                                        show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
+                                        if show_first_20:
+                                            filtered_df = filtered_df.head(20)
 
                                     articles_list = []  # Store articles in a list
-                                    abstracts_list = [] # Store abstracts in a list
+                                    abstracts_list = [] #Store abstracts in a list
                                     for index, row in filtered_df.iterrows():
                                         formatted_entry = format_entry(row)
                                         articles_list.append(formatted_entry)  # Append formatted entry to the list
@@ -799,68 +803,52 @@ with st.spinner('Retrieving data...'):
                                         abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
 
                                     def highlight_terms(text, terms):
+                                        # Define boolean operators
                                         boolean_operators = {"AND", "OR", "NOT"}
+
+                                        # Regular expression pattern to identify URLs
                                         url_pattern = r'https?://\S+'
+
+                                        # Find all URLs in the text
                                         urls = re.findall(url_pattern, text)
                                         
+                                        # Replace URLs in the text with placeholders to avoid highlighting
                                         for url in urls:
                                             text = text.replace(url, f'___URL_PLACEHOLDER_{urls.index(url)}___')
 
+                                        # Create a regex pattern to find the search terms in the text, excluding boolean operators
                                         pattern = re.compile('|'.join(rf'\b{re.escape(term)}\b' for term in terms if term not in boolean_operators), flags=re.IGNORECASE)
+
+                                        # Use HTML tags to highlight the terms in the text, excluding URLs
                                         highlighted_text = pattern.sub(
                                             lambda match: f'<span style="background-color: #FF8581;">{match.group(0)}</span>' 
                                                         if match.group(0) not in urls else match.group(0),
                                             text
                                         )
 
+                                        # Restore the original URLs in the highlighted text
                                         for index, url in enumerate(urls):
                                             highlighted_text = highlighted_text.replace(f'___URL_PLACEHOLDER_{index}___', url)
 
                                         return highlighted_text
-
                                     if view == 'Basic list':
-                                        show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
-                                        
-                                        if show_first_20:
-                                            filtered_df = filtered_df.head(20)
-                                            for i, article in enumerate(articles_list[:20], start=1):
-                                                highlighted_article = highlight_terms(article, search_tokens)
-                                                st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
-                                                
-                                                if display_abstracts:
-                                                    abstract = abstracts_list[i - 1]
-                                                    if pd.notnull(abstract):
-                                                        if search_in == 'Title and abstract':
-                                                            highlighted_abstract = highlight_terms(abstract, search_tokens)
-                                                        else:
-                                                            highlighted_abstract = abstract 
-                                                        st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
-                                                    else:
-                                                        st.caption(f"Abstract: No abstract")
-                                        else:
-                                            num_tabs = (num_items // 20) + 1
-                                            tab_titles = [f"Results {i*20+1}-{(i+1)*20}" for i in range(num_tabs)]
+                                        # Display the numbered list using Markdown syntax
+                                        for i, article in enumerate(articles_list, start=1):
+                                            # Display the article with highlighted search terms
+                                            highlighted_article = highlight_terms(article, search_tokens)
+                                            st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
                                             
-                                            tabs = st.tabs(tab_titles)
-                                            for tab_index, tab in enumerate(tabs):
-                                                with tab:
-                                                    start_idx = tab_index * 20
-                                                    end_idx = min(start_idx + 20, num_items)
-                                                    for i in range(start_idx, end_idx):
-                                                        article = articles_list[i]
-                                                        highlighted_article = highlight_terms(article, search_tokens)
-                                                        st.markdown(f"{i + 1}. {highlighted_article}", unsafe_allow_html=True)
-                                                        
-                                                        if display_abstracts:
-                                                            abstract = abstracts_list[i]
-                                                            if pd.notnull(abstract):
-                                                                if search_in == 'Title and abstract':
-                                                                    highlighted_abstract = highlight_terms(abstract, search_tokens)
-                                                                else:
-                                                                    highlighted_abstract = abstract 
-                                                                st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
-                                                            else:
-                                                                st.caption(f"Abstract: No abstract")
+                                            # Display abstract under each numbered item only if the checkbox is selected
+                                            if display_abstracts:
+                                                abstract = abstracts_list[i - 1]  # Get the corresponding abstract for this article
+                                                if pd.notnull(abstract):
+                                                    if search_in == 'Title and abstract':
+                                                        highlighted_abstract = highlight_terms(abstract, search_tokens)
+                                                    else:
+                                                        highlighted_abstract = abstract 
+                                                    st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
+                                                else:
+                                                    st.caption(f"Abstract: No abstract")
                                     if view == 'Table':
                                         df_table_view = filtered_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
                                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
