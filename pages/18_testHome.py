@@ -2619,6 +2619,9 @@ with st.spinner('Retrieving data...'):
                 
             search_options_main_menu()
 
+            if search_option == 'Search keywords':
+                st.write('test option')
+
             # OVERVIEW
             st.header('Overview', anchor=False)
             tab11, tab12, tab13 = st.tabs(['Recently added items', 'Recently published items', 'Top cited items'])
