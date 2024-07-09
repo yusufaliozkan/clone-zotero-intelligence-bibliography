@@ -621,6 +621,7 @@ with st.spinner('Retrieving data...'):
                                 filtered_df = filtered_df.drop_duplicates(subset=['Zotero link'], keep='first')
 
                                 num_items = len(filtered_df)
+                                filtered_df
                                 num_items
                                 # if num_items == 0:
                                 publications_by_type = filtered_df['Publication type'].value_counts()
