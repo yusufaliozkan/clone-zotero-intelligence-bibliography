@@ -819,7 +819,7 @@ with st.spinner('Retrieving data...'):
 
                                         return highlighted_text
                                                                 
-                                    if view == 'Basic list' and st.session_state.show_first_20_checked:
+                                    if view == 'Basic list':
                                         show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
                                         
                                         if not show_first_20:
