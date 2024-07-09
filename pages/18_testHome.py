@@ -822,7 +822,7 @@ with st.spinner('Retrieving data...'):
                                     if view == 'Basic list':
                                         show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
                                         
-                                        if not show_first_20:
+                                        if show_first_20:
                                             filtered_df = filtered_df.head(20)
                                             for i, article in enumerate(articles_list[:20], start=1):
                                                 highlighted_article = highlight_terms(article, search_tokens)
