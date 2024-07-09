@@ -625,17 +625,18 @@ with st.spinner('Retrieving data...'):
                                 container_citation_average.metric(label="Average citation", value=citation_average)
 
                                 citation_count = filtered_df['Citation'].sum()
-                                    citation_mean = non_nan_cited_df_dedup['Citation'].mean()
-                                    citation_median = non_nan_cited_df_dedup['Citation'].median()
-                                    # st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
-                                    container_citation.metric(
-                                        label="Number of citations", 
-                                        value=int(citation_count), 
-                                        help=f'''Not all papers are tracked for citation. 
-                                        Citation per publication: **{round(citation_mean, 1)}**, 
-                                        Citation median: **{round(citation_median, 1)}**'''
-                                        )tion median: **{round(citation_median, 1)}**'''
-                                            )
+                                total_rows = len(filtered_df)
+                                nan_count_citation = filtered_df['Citation_list'].isna().sum()
+                                non_nan_count_citation = total_rows - nan_count_citation
+                                non_nan_cited_df_dedup = filtered_df.dropna(subset=['Citation_list'])
+                                non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
+                                citation_mean = non_nan_cited_df_dedup['Citation'].mean()
+                                citation_median = non_nan_cited_df_dedup['Citation'].median()
+                                container_citation.metric(
+                                    label="Number of citations", 
+                                    value=int(citation_count), 
+                                    help=f'Not all items in this collection are citeable.'
+                                    )
 
                                 download_filtered = filtered_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                                 download_filtered['Abstract'] = download_filtered['Abstract'].str.replace('\n', ' ')
