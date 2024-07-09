@@ -18,5 +18,3 @@ shillelagh==1.2.19
 streamlit_dynamic_filters
 pdfkit==1.0.0
 fuzzywuzzy==0.18.0
-bokeh==2.4.3
-streamlit-bokeh-events==0.1.2

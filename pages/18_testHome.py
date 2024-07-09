@@ -39,10 +39,6 @@ from format_entry import format_entry
 from streamlit_dynamic_filters import DynamicFilters
 # from rss_feed import df_podcast, df_magazines
 
-from bokeh.models.widgets import Button
-from bokeh.models import CustomJS
-from streamlit_bokeh_events import streamlit_bokeh_events
-
 # Connecting Zotero with API 
 library_id = '2514686'
 library_type = 'group'
@@ -779,7 +775,21 @@ with st.spinner('Retrieving data...'):
                                                     st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
                                                 else:
                                                     st.caption(f"Abstract: No abstract")
+                                        text_to_be_copied = df_statement
+                                        copy_dict = {"content": text_to_be_copied}
 
+                                        copy_button = Button(label="Copy to clipboard")
+                                        copy_button.js_on_event("button_click", CustomJS(args=copy_dict, code="""
+                                            navigator.clipboard.writeText(content);
+                                            """))
+
+                                        no_event = streamlit_bokeh_events(
+                                            copy_button,
+                                            events="GET_TEXT",
+                                            key="get_text",
+                                            refresh_on_update=True,
+                                            override_height=75,
+                                            debounce_time=0)
                                     if view == 'Table':
                                         df_table_view = filtered_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
                                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
@@ -807,21 +817,6 @@ with st.spinner('Retrieving data...'):
 
                                             st.markdown(all_bibliographies, unsafe_allow_html=True)
                                         display_bibliographies(filtered_df)
-                                        text_to_be_copied = display_bibliographies(filtered_df)
-                                        copy_dict = {"content": text_to_be_copied}
-
-                                        copy_button = Button(label="Copy to clipboard")
-                                        copy_button.js_on_event("button_click", CustomJS(args=copy_dict, code="""
-                                            navigator.clipboard.writeText(content);
-                                            """))
-
-                                        no_event = streamlit_bokeh_events(
-                                            copy_button,
-                                            events="GET_TEXT",
-                                            key="get_text",
-                                            refresh_on_update=True,
-                                            override_height=75,
-                                            debounce_time=0)
                             else:
                                 st.write("No articles found with the given keyword/phrase.")
                             status.update(
