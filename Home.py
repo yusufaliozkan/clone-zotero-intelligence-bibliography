@@ -609,7 +609,7 @@ with st.spinner('Retrieving data...'):
 
                             if not filtered_df.empty:
                                 filtered_df = filtered_df.drop_duplicates(subset=['Zotero link'], keep='first')
-                                colsearch1, colsearch2, colsearch 3 = st.columns(3)
+                                colsearch1, colsearch2, colsearch3 = st.columns(3)
                                 with colsearch1:
                                     num_items = len(filtered_df)
                                     st.metric(label="Number of items found", value=int(num_items), help=breakdown_string) 
