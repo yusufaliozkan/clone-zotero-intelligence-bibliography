@@ -821,6 +821,8 @@ with st.spinner('Retrieving data...'):
 
                                     def reset_search():
                                         st.session_state.show_first_20 = True
+                                    if st.button("Perform new search"):
+                                        reset_search()
 
                                     if view == 'Basic list':
                                         if 'show_first_20' not in st.session_state:
