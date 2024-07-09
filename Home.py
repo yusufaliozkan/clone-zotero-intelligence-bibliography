@@ -819,9 +819,25 @@ with st.spinner('Retrieving data...'):
                                         return highlighted_text
 
                                     if view == 'Basic list':
-                                        show_in_tabs = st.checkbox("Show results in tabs", value=False)
+                                        show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
                                         
-                                        if show_in_tabs and num_items > 20:
+                                        if show_first_20:
+                                            filtered_df = filtered_df.head(20)
+                                            for i, article in enumerate(articles_list[:20], start=1):
+                                                highlighted_article = highlight_terms(article, search_tokens)
+                                                st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
+                                                
+                                                if display_abstracts:
+                                                    abstract = abstracts_list[i - 1]
+                                                    if pd.notnull(abstract):
+                                                        if search_in == 'Title and abstract':
+                                                            highlighted_abstract = highlight_terms(abstract, search_tokens)
+                                                        else:
+                                                            highlighted_abstract = abstract 
+                                                        st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
+                                                    else:
+                                                        st.caption(f"Abstract: No abstract")
+                                        else:
                                             num_tabs = (num_items // 20) + 1
                                             tab_titles = [f"Results {i*20+1}-{(i+1)*20}" for i in range(num_tabs)]
                                             
@@ -845,25 +861,6 @@ with st.spinner('Retrieving data...'):
                                                                 st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
                                                             else:
                                                                 st.caption(f"Abstract: No abstract")
-                                        else:
-                                            show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
-                                            if show_first_20:
-                                                filtered_df = filtered_df.head(20)
-
-                                            for i, article in enumerate(articles_list, start=1):
-                                                highlighted_article = highlight_terms(article, search_tokens)
-                                                st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
-                                                
-                                                if display_abstracts:
-                                                    abstract = abstracts_list[i - 1]
-                                                    if pd.notnull(abstract):
-                                                        if search_in == 'Title and abstract':
-                                                            highlighted_abstract = highlight_terms(abstract, search_tokens)
-                                                        else:
-                                                            highlighted_abstract = abstract 
-                                                        st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
-                                                    else:
-                                                        st.caption(f"Abstract: No abstract")
                                     if view == 'Table':
                                         df_table_view = filtered_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
                                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
