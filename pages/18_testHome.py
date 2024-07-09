@@ -484,10 +484,10 @@ with st.spinner('Retrieving data...'):
                     # Function to update search parameters in the query string
                     def update_search_params():
                         st.session_state.search_term = st.session_state.search_term_input
-                        st.query_params.from_dict({
-                            "search_in": st.session_state.search_in,
-                            "query": st.session_state.search_term
-                        })
+                        # st.query_params.from_dict({
+                        #     "search_in": st.session_state.search_in,
+                        #     "query": st.session_state.search_term
+                        # })
                         st.rerun()
 
                     # Extracting initial query parameters
