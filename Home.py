@@ -589,22 +589,24 @@ with st.spinner('Retrieving data...'):
                             with colsearch2:
                                 with st.popover('More metrics'):
                                     container_citation = st.container()
-                            with st.popover("Filters and more"):
-                                types2 = st.multiselect('Publication types', types, key='original2')
-                                collections = st.multiselect('Collection', collections, key='original_collection')
-                                container_download_button = st.container()
+                                    container_citation_average = st.container()
+                            with colsearch3:
+                                with st.popover("Filters and more"):
+                                    types2 = st.multiselect('Publication types', types, key='original2')
+                                    collections = st.multiselect('Collection', collections, key='original_collection')
+                                    container_download_button = st.container()
 
-                                col112, col113 = st.columns(2)
-                                with col112:
-                                    display_abstracts = st.checkbox('Display abstracts')
-                                with col113:
-                                    only_citation = st.checkbox('Show cited items only')
-                                    if only_citation:
-                                        filtered_df = filtered_df[(df_csv['Citation'].notna()) & (filtered_df['Citation'] != 0)]
+                                    col112, col113 = st.columns(2)
+                                    with col112:
+                                        display_abstracts = st.checkbox('Display abstracts')
+                                    with col113:
+                                        only_citation = st.checkbox('Show cited items only')
+                                        if only_citation:
+                                            filtered_df = filtered_df[(df_csv['Citation'].notna()) & (filtered_df['Citation'] != 0)]
 
-                                view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
-                                # with col114:
-                                #     table_view = st.checkbox('See results in table')
+                                    view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                    # with col114:
+                                    #     table_view = st.checkbox('See results in table')
 
                             if types2:
                                 filtered_df = filtered_df[filtered_df['Publication type'].isin(types2)]                 
