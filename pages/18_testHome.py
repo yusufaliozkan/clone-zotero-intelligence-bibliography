@@ -2619,8 +2619,8 @@ with st.spinner('Retrieving data...'):
                 
             search_options_main_menu()
 
-            if search_option == 'Search keywords':
-                st.write('test option')
+            if search_option == "Search keywords":
+                st.write('rest')
 
             # OVERVIEW
             st.header('Overview', anchor=False)
