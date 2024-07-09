@@ -866,14 +866,14 @@ with st.spinner('Retrieving data...'):
                                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                                         df_table_view
                                     if view =='Bibliography':
+                                        sort_by = st.radio('Sort by:', ('Publication type', 'Citation'))
                                         if sort_by == 'Publication type':
                                             filtered_df = filtered_df.sort_values(by=['Publication type'], ascending=True)
                                         elif sort_by == 'Citation':
                                             filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
+
                                         filtered_df['zotero_item_key'] = filtered_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
-                                        df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                                         filtered_df = pd.merge(filtered_df, df_zotero_id, on='zotero_item_key', how='left')
-                                        df_zotero_id = filtered_df[['zotero_item_key']]
 
                                         def display_bibliographies(df):
                                             df['bibliography'] = df['bibliography'].fillna('').astype(str)
@@ -885,9 +885,24 @@ with st.spinner('Retrieving data...'):
                                                 
                                                 # Display bibliography
                                                 all_bibliographies += row['bibliography']
-
                                             st.markdown(all_bibliographies, unsafe_allow_html=True)
-                                        display_bibliographies(filtered_df)
+
+                                        num_items = len(filtered_df)
+                                        show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
+
+                                        if show_first_20:
+                                            filtered_df = filtered_df.head(20)
+                                            display_bibliographies(filtered_df)
+                                        else:
+                                            num_tabs = (num_items // 20) + 1
+                                            tab_titles = [f"Results {i*20+1}-{(i+1)*20}" for i in range(num_tabs)]
+
+                                            tabs = st.tabs(tab_titles)
+                                            for tab_index, tab in enumerate(tabs):
+                                                with tab:
+                                                    start_idx = tab_index * 20
+                                                    end_idx = min(start_idx + 20, num_items)
+                                                    display_bibliographies(filtered_df.iloc[start_idx:end_idx])
                             else:
                                 st.write("No articles found with the given keyword/phrase.")
                             status.update(
