@@ -591,6 +591,7 @@ with st.spinner('Retrieving data...'):
                                     container_citation = st.container()
                                     container_citation_average = st.container()
                                     container_oa = st.container() 
+                                    container_type = st.container()
                             with colsearch3:
                                 with st.popover("Filters and more"):
                                     types2 = st.multiselect('Publication types', types, key='original2')
@@ -646,6 +647,9 @@ with st.spinner('Retrieving data...'):
                                 else:
                                     oa_ratio = true_count / total_count * 100
                                 container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help=f'Not all items are measured for OA.')
+
+                                item_type_no = filtered_df['Publication type'].nunique()
+                                container_type.metric(label='Number of publication types', value=int(item_type_no))
 
                                 download_filtered = filtered_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                                 download_filtered['Abstract'] = download_filtered['Abstract'].str.replace('\n', ' ')
