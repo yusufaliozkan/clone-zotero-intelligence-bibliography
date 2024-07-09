@@ -883,7 +883,6 @@ with st.spinner('Retrieving data...'):
                                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                                         df_table_view
                                     if view == 'Bibliography':
-                                        sort_by = st.radio('Sort by:', ('Publication type', 'Citation'))
                                         if sort_by == 'Publication type':
                                             filtered_df = filtered_df.sort_values(by=['Publication type'], ascending=True)
                                         elif sort_by == 'Citation':
