@@ -586,6 +586,9 @@ with st.spinner('Retrieving data...'):
                             colsearch1, colsearch2, colsearch3 = st.columns(3)
                             with colsearch1:
                                 container_metric = st.container()
+                            with colsearch2:
+                                with st.popover('More metrics'):
+                                    container_citation = st.container()
                             with st.popover("Filters and more"):
                                 types2 = st.multiselect('Publication types', types, key='original2')
                                 collections = st.multiselect('Collection', collections, key='original_collection')
@@ -617,7 +620,10 @@ with st.spinner('Retrieving data...'):
                                 publications_by_type = filtered_df['Publication type'].value_counts()
                                 num_items_collections = len(filtered_df)
                                 breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
-                                container_metric.metric(label="Number of items found", value=int(num_items), help=breakdown_string) 
+                                container_metric.metric(label="Number of items found", value=int(num_items), help=breakdown_string)
+
+                                citation_average = round(filtered_df['Citation'].mean(), 2)
+                                container_citation_average.metric(label="Average citation", value=citation_average)
 
                                 download_filtered = filtered_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                                 download_filtered['Abstract'] = download_filtered['Abstract'].str.replace('\n', ' ')
