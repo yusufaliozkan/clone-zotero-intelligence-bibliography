@@ -779,21 +779,7 @@ with st.spinner('Retrieving data...'):
                                                     st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
                                                 else:
                                                     st.caption(f"Abstract: No abstract")
-                                        text_to_be_copied = highlighted_article
-                                        copy_dict = {"content": text_to_be_copied}
 
-                                        copy_button = Button(label="Copy to clipboard")
-                                        copy_button.js_on_event("button_click", CustomJS(args=copy_dict, code="""
-                                            navigator.clipboard.writeText(content);
-                                            """))
-
-                                        no_event = streamlit_bokeh_events(
-                                            copy_button,
-                                            events="GET_TEXT",
-                                            key="get_text",
-                                            refresh_on_update=True,
-                                            override_height=75,
-                                            debounce_time=0)
                                     if view == 'Table':
                                         df_table_view = filtered_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
                                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
@@ -821,6 +807,21 @@ with st.spinner('Retrieving data...'):
 
                                             st.markdown(all_bibliographies, unsafe_allow_html=True)
                                         display_bibliographies(filtered_df)
+                                        text_to_be_copied = display_bibliographies
+                                        copy_dict = {"content": text_to_be_copied}
+
+                                        copy_button = Button(label="Copy to clipboard")
+                                        copy_button.js_on_event("button_click", CustomJS(args=copy_dict, code="""
+                                            navigator.clipboard.writeText(content);
+                                            """))
+
+                                        no_event = streamlit_bokeh_events(
+                                            copy_button,
+                                            events="GET_TEXT",
+                                            key="get_text",
+                                            refresh_on_update=True,
+                                            override_height=75,
+                                            debounce_time=0)
                             else:
                                 st.write("No articles found with the given keyword/phrase.")
                             status.update(
