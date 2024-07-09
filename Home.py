@@ -639,13 +639,13 @@ with st.spinner('Retrieving data...'):
                                     help=f'Note that not all items are citeable.'
                                     )
 
-                            true_count = filtered_df[filtered_df['Publication type']=='Journal article']['OA status'].sum()
-                            total_count = len(filtered_df[filtered_df['Publication type']=='Journal article'])
-                            if total_count == 0:
-                                oa_ratio = 0.0
-                            else:
-                                oa_ratio = true_count / total_count * 100
-                            container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help=f'Not all items are measured for OA.')
+                                true_count = filtered_df[filtered_df['Publication type']=='Journal article']['OA status'].sum()
+                                total_count = len(filtered_df[filtered_df['Publication type']=='Journal article'])
+                                if total_count == 0:
+                                    oa_ratio = 0.0
+                                else:
+                                    oa_ratio = true_count / total_count * 100
+                                container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help=f'Not all items are measured for OA.')
 
                                 download_filtered = filtered_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                                 download_filtered['Abstract'] = download_filtered['Abstract'].str.replace('\n', ' ')
