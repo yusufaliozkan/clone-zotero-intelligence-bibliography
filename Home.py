@@ -667,6 +667,7 @@ with st.spinner('Retrieving data...'):
                                 else:
                                     expanded_authors = filtered_df['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
                                     expanded_authors = expanded_authors.reset_index(name='Author')
+                                    expanded_authors = expanded_authors.drop_duplicates(subset='Author')
                                     author_no = len(expanded_authors)
                                     author_pub_ratio = round(author_no/num_items_collections, 2)
                                 container_author_no.metric(label='Number of authors', value=int(author_no))
