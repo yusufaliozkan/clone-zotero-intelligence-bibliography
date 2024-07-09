@@ -871,7 +871,7 @@ with st.spinner('Retrieving data...'):
                                             filtered_df = filtered_df.sort_values(by=['Publication type'], ascending=True)
                                         elif sort_by == 'Citation':
                                             filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
-
+                                        df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                                         filtered_df['zotero_item_key'] = filtered_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
                                         filtered_df = pd.merge(filtered_df, df_zotero_id, on='zotero_item_key', how='left')
 
