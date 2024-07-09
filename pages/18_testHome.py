@@ -484,10 +484,10 @@ with st.spinner('Retrieving data...'):
                     # Function to update search parameters in the query string
                     def update_search_params():
                         st.session_state.search_term = st.session_state.search_term_input
-                        # st.query_params.from_dict({
-                        #     "search_in": st.session_state.search_in,
-                        #     "query": st.session_state.search_term
-                        # })
+                        st.query_params.from_dict({
+                            "search_in": st.session_state.search_in,
+                            "query": st.session_state.search_term
+                        })
                         st.rerun()
 
                     # Extracting initial query parameters
@@ -840,8 +840,8 @@ with st.spinner('Retrieving data...'):
                                                     else:
                                                         st.caption(f"Abstract: No abstract")
                                         else:
-                                            num_tabs = (num_items // 20) + 1
-                                            tab_titles = [f"Results {i*20+1}-{(i+1)*20}" for i in range(num_tabs)]
+                                            num_tabs = (num_items // 20) + 1 if num_items > 0 else 1
+                                            tab_titles = [f"Results {i*20+1}-{min((i+1)*20, num_items)}" for i in range(num_tabs)]
                                             
                                             tabs = st.tabs(tab_titles)
                                             for tab_index, tab in enumerate(tabs):
