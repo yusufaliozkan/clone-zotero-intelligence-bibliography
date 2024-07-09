@@ -763,6 +763,7 @@ with st.spinner('Retrieving data...'):
                                             # Display the article with highlighted search terms
                                             highlighted_article = highlight_terms(article, search_tokens)
                                             st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
+                                            highlighted_article
                                             
                                             # Display abstract under each numbered item only if the checkbox is selected
                                             if display_abstracts:
