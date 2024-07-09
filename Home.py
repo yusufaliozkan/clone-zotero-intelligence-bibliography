@@ -582,7 +582,7 @@ with st.spinner('Retrieving data...'):
                                     # if container_refresh_button.button('Refresh'):
                             #     st.query_params.clear()
                             #     st.rerun()
-
+                            filtered_df
                             colsearch1, colsearch2, colsearch3 = st.columns(3)
                             with colsearch1:
                                 container_metric = st.container()
