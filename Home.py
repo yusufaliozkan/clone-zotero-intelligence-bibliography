@@ -585,7 +585,7 @@ with st.spinner('Retrieving data...'):
 
                             colsearch1, colsearch2, colsearch3 = st.columns(3)
                             with colsearch1:
-                                container_metric = st.metric()
+                                container_metric = st.container()
                             with st.popover("Filters and more"):
                                 types2 = st.multiselect('Publication types', types, key='original2')
                                 collections = st.multiselect('Collection', collections, key='original_collection')
