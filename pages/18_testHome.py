@@ -4085,3 +4085,17 @@ with st.spinner('Retrieving data...'):
         ''') 
 
     display_custom_license()
+
+    if 'rerun_triggered' not in st.session_state:
+        st.session_state.rerun_triggered = False
+
+    # Sample dropdown menu (or any selection widget)
+    selected_option = st.selectbox('Select an option:', ['None', 'Option 1', 'Option 2'])
+
+    # Only trigger st.rerun() once when an option is selected
+    if selected_option != 'None' and not st.session_state.rerun_triggered:
+        st.session_state.rerun_triggered = True
+        st.rerun()
+
+    # Display the selected option (post rerun)
+    st.write(f'You selected: {selected_option}')
