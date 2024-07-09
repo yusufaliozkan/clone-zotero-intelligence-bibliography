@@ -612,6 +612,9 @@ with st.spinner('Retrieving data...'):
                                 colsearch1, colsearch2, colsearch3 = st.columns(3)
                                 with colsearch1:
                                     num_items = len(filtered_df)
+                                    publications_by_type = filtered_df['Publication type'].value_counts()
+                                    num_items_collections = len(filtered_df)
+                                    breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
                                     st.metric(label="Number of items found", value=int(num_items), help=breakdown_string) 
 
                                 download_filtered = filtered_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
