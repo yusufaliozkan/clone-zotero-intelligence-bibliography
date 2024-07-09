@@ -592,6 +592,7 @@ with st.spinner('Retrieving data...'):
                                     container_citation_average = st.container()
                                     container_oa = st.container() 
                                     container_type = st.container()
+                                    container_author_no = st.container()
                             with colsearch3:
                                 with st.popover("Filters and more"):
                                     types2 = st.multiselect('Publication types', types, key='original2')
@@ -650,6 +651,25 @@ with st.spinner('Retrieving data...'):
 
                                 item_type_no = filtered_df['Publication type'].nunique()
                                 container_type.metric(label='Number of publication types', value=int(item_type_no))
+
+                                def split_and_expand(authors):
+                                    # Ensure the input is a string
+                                    if isinstance(authors, str):
+                                        # Split by comma and strip whitespace
+                                        split_authors = [author.strip() for author in authors.split(',')]
+                                        return pd.Series(split_authors)
+                                    else:
+                                        # Return the original author if it's not a string
+                                        return pd.Series([authors])
+                                if len(filtered_df) == 0:
+                                    author_pub_ratio=0.0
+                                    author_no=0
+                                else:
+                                    expanded_authors = filtered_df['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                                    expanded_authors = expanded_authors.reset_index(name='Author')
+                                    author_no = len(expanded_authors)
+                                    author_pub_ratio = round(author_no/num_items_collections, 2)
+                                container_author_no.metric(label='Number of authors', value=int(author_no))
 
                                 download_filtered = filtered_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                                 download_filtered['Abstract'] = download_filtered['Abstract'].str.replace('\n', ' ')
