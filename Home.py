@@ -593,6 +593,7 @@ with st.spinner('Retrieving data...'):
                                     container_oa = st.container() 
                                     container_type = st.container()
                                     container_author_no = st.container()
+                                    container_author_pub_ratio= st.container()
                             with colsearch3:
                                 with st.popover("Filters and more"):
                                     types2 = st.multiselect('Publication types', types, key='original2')
@@ -671,6 +672,8 @@ with st.spinner('Retrieving data...'):
                                     author_no = len(expanded_authors)
                                     author_pub_ratio = round(author_no/num_items_collections, 2)
                                 container_author_no.metric(label='Number of authors', value=int(author_no))
+                            
+                                container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
                                 download_filtered = filtered_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                                 download_filtered['Abstract'] = download_filtered['Abstract'].str.replace('\n', ' ')
