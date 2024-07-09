@@ -826,7 +826,7 @@ with st.spinner('Retrieving data...'):
                                         st.session_state.show_first_20_checked = True
                                         show_first_20 = st.checkbox("Show only first 20 items (untick to see all)")#, value=st.session_state.show_first_20_checked)
                                         
-                                        if show_first_20:
+                                        if not show_first_20:
                                             filtered_df = filtered_df.head(20)
                                             for i, article in enumerate(articles_list[:20], start=1):
                                                 highlighted_article = highlight_terms(article, search_tokens)
