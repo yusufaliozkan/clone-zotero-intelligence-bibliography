@@ -583,6 +583,9 @@ with st.spinner('Retrieving data...'):
                             #     st.query_params.clear()
                             #     st.rerun()
 
+                            colsearch1, colsearch2, colsearch3 = st.columns(3)
+                            with colsearch1:
+                                container_metric = st.metric()
                             with st.popover("Filters and more"):
                                 types2 = st.multiselect('Publication types', types, key='original2')
                                 collections = st.multiselect('Collection', collections, key='original_collection')
@@ -609,13 +612,12 @@ with st.spinner('Retrieving data...'):
 
                             if not filtered_df.empty:
                                 filtered_df = filtered_df.drop_duplicates(subset=['Zotero link'], keep='first')
-                                colsearch1, colsearch2, colsearch3 = st.columns(3)
-                                with colsearch1:
-                                    num_items = len(filtered_df)
-                                    publications_by_type = filtered_df['Publication type'].value_counts()
-                                    num_items_collections = len(filtered_df)
-                                    breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
-                                    st.metric(label="Number of items found", value=int(num_items), help=breakdown_string) 
+
+                                num_items = len(filtered_df)
+                                publications_by_type = filtered_df['Publication type'].value_counts()
+                                num_items_collections = len(filtered_df)
+                                breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
+                                container_metric.metric(label="Number of items found", value=int(num_items), help=breakdown_string) 
 
                                 download_filtered = filtered_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                                 download_filtered['Abstract'] = download_filtered['Abstract'].str.replace('\n', ' ')
