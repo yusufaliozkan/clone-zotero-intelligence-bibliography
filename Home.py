@@ -596,13 +596,10 @@ with st.spinner('Retrieving data...'):
                                 collections = st.multiselect('Collection', collections, key='original_collection')
                                 container_download_button = st.container()
 
-                                col112, col113 = st.columns(2)
-                                with col112:
-                                    display_abstracts = st.checkbox('Display abstracts')
-                                with col113:
-                                    only_citation = st.checkbox('Show cited items only')
-                                    if only_citation:
-                                        filtered_df = filtered_df[(df_csv['Citation'].notna()) & (filtered_df['Citation'] != 0)]
+                                display_abstracts = st.checkbox('Display abstracts')
+                                only_citation = st.checkbox('Show cited items only')
+                                if only_citation:
+                                    filtered_df = filtered_df[(df_csv['Citation'].notna()) & (filtered_df['Citation'] != 0)]
 
                                 view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
                                 # with col114:
