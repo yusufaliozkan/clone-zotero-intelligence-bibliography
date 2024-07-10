@@ -621,7 +621,7 @@ with st.spinner('Retrieving data...'):
 
                                     # Use st.write to print each row
                                     for row in formatted_rows:
-                                        st.write(row)
+                                        st.caption(row)
                             with colsearch4:
                                 with st.popover("Filters and more"):
                                     types2 = st.multiselect('Publication types', types, key='original2')
