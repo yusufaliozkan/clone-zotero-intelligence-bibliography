@@ -558,6 +558,7 @@ with st.spinner('Retrieving data...'):
 
                             filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
                             print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
+                            filtered_df_for_collections = filtered_df.copy()
                             filtered_df = filtered_df.drop_duplicates()
                             print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
                             
@@ -605,7 +606,7 @@ with st.spinner('Retrieving data...'):
                                     display_abstracts = st.checkbox('Display abstracts')
                                     only_citation = st.checkbox('Show cited items only')
                                     if only_citation:
-                                        filtered_df = filtered_df[(df_csv['Citation'].notna()) & (filtered_df['Citation'] != 0)]
+                                        filtered_df = filtered_df[(filtered_df['Citation'].notna()) & (filtered_df['Citation'] != 0)]
 
                                     view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
                                     # with col114:
@@ -783,7 +784,7 @@ with st.spinner('Retrieving data...'):
                                     st.pyplot()
 
                                 else:
-                                    filtered_df
+                                    filtered_df_for_collections
                                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
                                     if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
                                         filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False)
