@@ -794,13 +794,18 @@ with st.spinner('Retrieving data...'):
                                     filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
                                     filtered_df_for_collections
                                     row_nu = len(filtered_df_for_collections)
+                                    formatted_rows = []
                                     for i in range(row_nu):
                                         formatted_row = (
-                                            f'{filtered_df_for_collections['Collection_Name'].iloc[i]}'
-                                            f'{filtered_df_for_collections['Number_of_Items'].iloc[i]}'
-                                            f'{filtered_df_for_collections['Zotero link'].iloc[i]}'
+                                            f"{filtered_df_for_collections['Collection_Name'].iloc[i]} "
+                                            f"{filtered_df_for_collections['Number_of_Items'].iloc[i]} "
+                                            f"{filtered_df_for_collections['Zotero link'].iloc[i]}"
                                         )
-                                    st.write(f"{i+1}) " + formatted_row)
+                                        formatted_rows.append(f"{i+1}) " + formatted_row)
+
+                                    # Use st.write to print each row
+                                    for row in formatted_rows:
+                                        st.write(row)
                                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
                                     if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
                                         filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False)
