@@ -616,7 +616,7 @@ with st.spinner('Retrieving data...'):
                                             f"[{collection_name}]({zotero_link}) "  # Hyperlink format in markdown
                                             f"{number_of_items} items"
                                         )
-                                        formatted_rows.append(f"{i+1}) " + formatted_row)
+                                        formatted_rows.append(f"{i}) " + formatted_row)
 
                                     # Use st.write to print each row
                                     for row in formatted_rows:
