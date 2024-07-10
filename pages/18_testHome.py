@@ -785,9 +785,10 @@ with st.spinner('Retrieving data...'):
 
                                 else:
                                     filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
-                                    # filtered_df_for_collections_2 = filtered_df_for_collections[['Collection_Name']].drop_duplicates()
-                                    filtered_df_for_collections_21 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index()
-                                    filtered_df_for_collections_21
+                                    filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
+                                    filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
+                                    filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on'Collection_Name', how='left')
+                                    filtered_df_for_collections
                                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
                                     if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
                                         filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False)
