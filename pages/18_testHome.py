@@ -790,17 +790,21 @@ with st.spinner('Retrieving data...'):
                                     filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on='Collection_Name', how='left').drop_duplicates(subset='Collection_Name').reset_index(drop=True)
                                     def remove_numbers(name):
                                         return re.sub(r'^\d+(\.\d+)*\s*', '', name)
-
-                                    filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
-                                    filtered_df_for_collections
                                     row_nu = len(filtered_df_for_collections)
                                     formatted_rows = []
                                     for i in range(row_nu):
+                                        collection_name = filtered_df_for_collections['Collection_Name'].iloc[i]
+                                        number_of_items = filtered_df_for_collections['Number_of_Items'].iloc[i]
+                                        zotero_link = filtered_df_for_collections['Zotero link'].iloc[i]
                                         formatted_row = (
-                                            f"{[filtered_df_for_collections['Collection_Name'].iloc[i]](filtered_df_for_collections['Zotero link'].iloc[i])} "
-                                            f"{filtered_df_for_collections['Number_of_Items'].iloc[i]} "
+                                            f"[{collection_name}]({zotero_link}) "  # Hyperlink format in markdown
+                                            f"{number_of_items} items"
                                         )
                                         formatted_rows.append(f"{i+1}) " + formatted_row)
+
+                                    # Use st.write to print each row
+                                    for row in formatted_rows:
+                                        st.write(row)
 
                                     # Use st.write to print each row
                                     for row in formatted_rows:
