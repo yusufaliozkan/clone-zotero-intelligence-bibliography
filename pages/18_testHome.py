@@ -624,8 +624,6 @@ with st.spinner('Retrieving data...'):
                                         st.caption(row)
                                     fig = px.pie(data, names='Collection_Name', values='Number_of_Items', title='Pie Chart for All Collections')
                                     st.plotly_chart(fig)
-
-
                             with colsearch4:
                                 with st.popover("Filters and more"):
                                     types2 = st.multiselect('Publication types', types, key='original2')
