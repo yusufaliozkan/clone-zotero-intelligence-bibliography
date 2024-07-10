@@ -1012,7 +1012,7 @@ with st.spinner('Retrieving data...'):
 
                             st.markdown(f'##### Top 5 relevant themes')
                             filtered_df_for_collections =  df_duplicated.copy()
-                            filtered_df_for_collections = 
+                            filtered_df_for_collections 
                             filtered_df_for_collections = filtered_df_for_collections[filtered_df_for_collections['Author_name']== selected_author]
                             filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
                             filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
