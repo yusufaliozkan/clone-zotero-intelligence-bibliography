@@ -1008,6 +1008,31 @@ with st.spinner('Retrieving data...'):
                                     container_download = st.container()
                                     view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
 
+                            st.markdown(f'##### Top 5 relevant themes')
+                            filtered_df_for_collections =  df_duplicated.copy()
+                            filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
+                            filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
+                            filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
+                            filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on='Collection_Name', how='left').drop_duplicates(subset='Collection_Name').reset_index(drop=True)
+                            def remove_numbers(name):
+                                return re.sub(r'^\d+(\.\d+)*\s*', '', name)
+                            filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
+                            row_nu = len(filtered_df_for_collections)
+                            formatted_rows = []
+                            for i in range(row_nu):
+                                collection_name = filtered_df_for_collections['Collection_Name'].iloc[i]
+                                number_of_items = filtered_df_for_collections['Number_of_Items'].iloc[i]
+                                zotero_collection_link = filtered_df_for_collections['Collection_Link'].iloc[i]
+                                formatted_row = (
+                                    f"[{collection_name}]({zotero_collection_link}) "  # Hyperlink format in markdown
+                                    f"{number_of_items} items"
+                                )
+                                formatted_rows.append(f"{i+1}) " + formatted_row)
+
+                            # Use st.write to print each row
+                            for row in formatted_rows:
+                                st.caption(row)
+
                             st.write('*Please note that this database **may not show** all research outputs of the author.*')
                             types = container_types.multiselect('Publication type', filtered_collection_df_authors['Publication type'].unique(), filtered_collection_df_authors['Publication type'].unique(), key='original_authors')
                             filtered_collection_df_authors = filtered_collection_df_authors[filtered_collection_df_authors['Publication type'].isin(types)]
