@@ -614,9 +614,8 @@ with st.spinner('Retrieving data...'):
                                         number_of_items = filtered_df_for_collections['Number_of_Items'].iloc[i]
                                         zotero_collection_link = filtered_df_for_collections['Collection_Link'].iloc[i]
                                         formatted_row = (
-                                            f"{collection_name} "  # Hyperlink format in markdown
+                                            f"[{collection_name}]({zotero_collection_link}) "  # Hyperlink format in markdown
                                             f"{number_of_items} items"
-                                            f" [See Zotero collection]({zotero_collection_link})"
                                         )
                                         formatted_rows.append(f"{i+1}) " + formatted_row)
 
