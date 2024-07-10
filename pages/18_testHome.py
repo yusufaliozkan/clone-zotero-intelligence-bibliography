@@ -784,7 +784,7 @@ with st.spinner('Retrieving data...'):
                                     st.pyplot()
 
                                 else:
-                                    filtered_df_for_collections = filtered_df_for_collections[filtered_df_for_collections['Zotero link', 'Collecction_Key', 'Collection_Name', 'Collection_Link']]
+                                    filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']]
                                     filtered_df_for_collections
                                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
                                     if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
