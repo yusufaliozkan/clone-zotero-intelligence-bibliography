@@ -585,7 +585,7 @@ with st.spinner('Retrieving data...'):
                             #     st.rerun()
                             if len(filtered_df)==0:
                                 num_items=0
-                            colsearch1, colsearch2, colsearch3 = st.columns(3)
+                            colsearch1, colsearch2, colsearch3, colsearch4 = st.columns(4)
                             with colsearch1:
                                 container_metric = st.container()
                             with colsearch2:
@@ -598,6 +598,30 @@ with st.spinner('Retrieving data...'):
                                     container_author_pub_ratio= st.container()
                                     container_publication_ratio = st.container()
                             with colsearch3:
+                                with st.popover('Relevant themes'):
+                                    filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
+                                    filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
+                                    filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
+                                    filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on='Collection_Name', how='left').drop_duplicates(subset='Collection_Name').reset_index(drop=True)
+                                    def remove_numbers(name):
+                                        return re.sub(r'^\d+(\.\d+)*\s*', '', name)
+                                    filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
+                                    row_nu = len(filtered_df_for_collections)
+                                    formatted_rows = []
+                                    for i in range(row_nu):
+                                        collection_name = filtered_df_for_collections['Collection_Name'].iloc[i]
+                                        number_of_items = filtered_df_for_collections['Number_of_Items'].iloc[i]
+                                        zotero_link = filtered_df_for_collections['Zotero link'].iloc[i]
+                                        formatted_row = (
+                                            f"[{collection_name}]({zotero_link}) "  # Hyperlink format in markdown
+                                            f"{number_of_items} items"
+                                        )
+                                        formatted_rows.append(f"{i+1}) " + formatted_row)
+
+                                    # Use st.write to print each row
+                                    for row in formatted_rows:
+                                        st.write(row)
+                            with colsearch4:
                                 with st.popover("Filters and more"):
                                     types2 = st.multiselect('Publication types', types, key='original2')
                                     collections = st.multiselect('Collection', collections, key='original_collection')
@@ -784,29 +808,6 @@ with st.spinner('Retrieving data...'):
                                     st.pyplot()
 
                                 else:
-                                    filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
-                                    filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
-                                    filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
-                                    filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on='Collection_Name', how='left').drop_duplicates(subset='Collection_Name').reset_index(drop=True)
-                                    def remove_numbers(name):
-                                        return re.sub(r'^\d+(\.\d+)*\s*', '', name)
-                                    filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
-                                    row_nu = len(filtered_df_for_collections)
-                                    formatted_rows = []
-                                    for i in range(row_nu):
-                                        collection_name = filtered_df_for_collections['Collection_Name'].iloc[i]
-                                        number_of_items = filtered_df_for_collections['Number_of_Items'].iloc[i]
-                                        zotero_link = filtered_df_for_collections['Zotero link'].iloc[i]
-                                        formatted_row = (
-                                            f"[{collection_name}]({zotero_link}) "  # Hyperlink format in markdown
-                                            f"{number_of_items} items"
-                                        )
-                                        formatted_rows.append(f"{i+1}) " + formatted_row)
-
-                                    # Use st.write to print each row
-                                    for row in formatted_rows:
-                                        st.write(row)
-
                                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
                                     if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
                                         filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False)
