@@ -739,7 +739,7 @@ with st.spinner('Retrieving data...'):
                                     st.plotly_chart(fig)
 
                                     fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
-                                                        title=f'Top Publication Themes ({selected_author})')
+                                                        title=f'Top Publication Themes ({search_term})')
                                     fig.update_traces(fill='toself')
                                     st.plotly_chart(fig, use_container_width = True)
 
