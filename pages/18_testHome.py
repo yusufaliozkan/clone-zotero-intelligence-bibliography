@@ -930,7 +930,7 @@ with st.spinner('Retrieving data...'):
                             else:
                                 st.write("No articles found with the given keyword/phrase.")
                             status.update(
-                                label=f"Search found **{num_items}** {'matching source' if num_items == 1 else 'matching sources'} in the database for {search_term}.", 
+                                label=f"Search found **{num_items}** {'matching source' if num_items == 1 else 'matching sources'} in the database for '{search_term}'.", 
                                 state="complete", 
                                 expanded=True
                                 )
