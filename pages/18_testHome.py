@@ -972,7 +972,6 @@ with st.spinner('Retrieving data...'):
                     author_publications = df_authors['Author_name'].value_counts().to_dict()
                     sorted_authors_by_publications = sorted(unique_authors, key=lambda author: author_publications.get(author, 0), reverse=True)
                     select_options_author_with_counts = [''] + [f"{author} ({author_publications.get(author, 0)})" for author in sorted_authors_by_publications]
-                    df_authors
 
                     selected_author_display = st.selectbox('Select author', select_options_author_with_counts)
                     selected_author = selected_author_display.split(' (')[0] if selected_author_display else None
@@ -982,6 +981,8 @@ with st.spinner('Retrieving data...'):
                         st.write('Select an author to see items')
                     else:
                         filtered_collection_df_authors = df_authors[df_authors['Author_name']== selected_author]
+                        filtered_collection_df_authors_items = filtered_collection_df_authors[['Zotero link']]
+                        filtered_collection_df_authors_items
 
                         filtered_collection_df_authors['Date published'] = pd.to_datetime(filtered_collection_df_authors['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
                         filtered_collection_df_authors['Date published'] = filtered_collection_df_authors['Date published'].dt.strftime('%Y-%m-%d')
@@ -1011,6 +1012,7 @@ with st.spinner('Retrieving data...'):
 
                             st.markdown(f'##### Top 5 relevant themes')
                             filtered_df_for_collections =  df_duplicated.copy()
+                            filtered_df_for_collections = 
                             filtered_df_for_collections = filtered_df_for_collections[filtered_df_for_collections['Author_name']== selected_author]
                             filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
                             filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
