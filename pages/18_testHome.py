@@ -1011,13 +1011,12 @@ with st.spinner('Retrieving data...'):
                                     filtered_df_for_collections =  df_duplicated.copy()
                                     filtered_df_for_collections = pd.merge(filtered_df_for_collections, filtered_collection_df_authors_items, on='Zotero link')
                                     filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
-                                    filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index()#.head(5)
+                                    filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
                                     filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
                                     filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on='Collection_Name', how='left').drop_duplicates(subset='Collection_Name').reset_index(drop=True)
                                     def remove_numbers(name):
                                         return re.sub(r'^\d+(\.\d+)*\s*', '', name)
                                     filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
-                                    filtered_df_for_collections
                                     row_nu = len(filtered_df_for_collections)
                                     formatted_rows = []
                                     for i in range(row_nu):
