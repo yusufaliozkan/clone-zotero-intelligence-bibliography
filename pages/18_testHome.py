@@ -735,7 +735,7 @@ with st.spinner('Retrieving data...'):
                                     publications_by_type = search_df['Publication type'].value_counts()
                                     fig = px.bar(publications_by_type, x=publications_by_type.index, y=publications_by_type.values,
                                                 labels={'x': 'Publication Type', 'y': 'Number of Publications'},
-                                                title=f'Publications by Type')
+                                                title=f'Publications by Type ({search_term})')
                                     st.plotly_chart(fig)
 
                                     fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
@@ -748,7 +748,7 @@ with st.spinner('Retrieving data...'):
                                     publications_by_year = search_df['Year'].value_counts().sort_index()
                                     fig_year_bar = px.bar(publications_by_year, x=publications_by_year.index, y=publications_by_year.values,
                                                         labels={'x': 'Publication Year', 'y': 'Number of Publications'},
-                                                        title=f'Publications by Year')
+                                                        title=f'Publications by Year ({search_term})')
                                     st.plotly_chart(fig_year_bar)
                                 
                                     search_df = filtered_df.copy()
@@ -759,7 +759,7 @@ with st.spinner('Retrieving data...'):
                                     search_df = search_df['Author_name'].value_counts().head(10)
                                     fig = px.bar(search_df, x=search_df.index, y=search_df.values)
                                     fig.update_layout(
-                                        title=f'Top 10 Authors by Publication Count',
+                                        title=f'Top 10 Authors by Publication Count ({search_term})',
                                         xaxis_title='Author',
                                         yaxis_title='Number of Publications',
                                         xaxis_tickangle=-45,
@@ -808,7 +808,7 @@ with st.spinner('Retrieving data...'):
                                     wordcloud = WordCloud(stopwords=stopword, width=1500, height=750, background_color='white', collocations=False).generate(wordcloud_texts_str)
                                     plt.figure(figsize=(20,8))
                                     plt.axis('off')
-                                    plt.title(f"Word Cloud for Titles")
+                                    plt.title(f"Word Cloud for Titles ({search_term})")
                                     plt.imshow(wordcloud)
                                     plt.axis("off")
                                     plt.show()
