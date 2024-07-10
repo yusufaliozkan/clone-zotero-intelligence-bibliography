@@ -806,9 +806,6 @@ with st.spinner('Retrieving data...'):
                                     for row in formatted_rows:
                                         st.write(row)
 
-                                    # Use st.write to print each row
-                                    for row in formatted_rows:
-                                        st.write(row)
                                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
                                     if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
                                         filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False)
