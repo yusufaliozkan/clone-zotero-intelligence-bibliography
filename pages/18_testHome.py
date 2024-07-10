@@ -1034,7 +1034,7 @@ with st.spinner('Retrieving data...'):
                                     #     st.caption(row)
                                     fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
                                                         title='Radar Chart for Collection Items')
-                                    st.plotly_chart(fig)
+                                    colauthor3.plotly_chart(fig)
                             with colauthor4:
                                 with st.popover('Filters and more'):
                                     container_types = st.container()
