@@ -1113,6 +1113,7 @@ with st.spinner('Retrieving data...'):
 
                                 fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
                                                     title='Top Publication Themes')
+                                fig.update_traces(fill='toself')
                                 st.plotly_chart(fig, use_container_width = True)
 
                                 author_df = filtered_collection_df_authors
