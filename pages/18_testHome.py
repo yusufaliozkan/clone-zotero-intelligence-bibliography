@@ -738,6 +738,11 @@ with st.spinner('Retrieving data...'):
                                                 title=f'Publications by Type')
                                     st.plotly_chart(fig)
 
+                                    fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
+                                                        title=f'Top Publication Themes ({selected_author})')
+                                    fig.update_traces(fill='toself')
+                                    st.plotly_chart(fig, use_container_width = True)
+
                                     search_df = filtered_df.copy()
                                     search_df['Year'] = pd.to_datetime(search_df['Date published']).dt.year
                                     publications_by_year = search_df['Year'].value_counts().sort_index()
