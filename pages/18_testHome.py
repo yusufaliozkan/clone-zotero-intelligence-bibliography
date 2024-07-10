@@ -1032,7 +1032,7 @@ with st.spinner('Retrieving data...'):
                                     # Use st.write to print each row
                                     for row in formatted_rows:
                                         st.caption(row)
-                                    fig = px.line_polar(data, r='Number_of_Items', theta='Collection_Name', line_close=True, 
+                                    fig = px.line_polar(filtered_df_for_collections_2, r='Number_of_Items', theta='Collection_Name', line_close=True, 
                                                         title='Radar Chart for Collection Items')
                                     st.plotly_chart(fig)
                             with colauthor4:
