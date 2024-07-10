@@ -799,7 +799,6 @@ with st.spinner('Retrieving data...'):
                                         formatted_row = (
                                             f"{[filtered_df_for_collections['Collection_Name'].iloc[i]](filtered_df_for_collections['Zotero link'].iloc[i])} "
                                             f"{filtered_df_for_collections['Number_of_Items'].iloc[i]} "
-                                            f"{filtered_df_for_collections['Zotero link'].iloc[i]}"
                                         )
                                         formatted_rows.append(f"{i+1}) " + formatted_row)
 
