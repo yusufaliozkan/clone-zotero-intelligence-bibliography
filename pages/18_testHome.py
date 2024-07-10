@@ -1030,8 +1030,8 @@ with st.spinner('Retrieving data...'):
                                         formatted_rows.append(f"{i+1}) " + formatted_row)
 
                                     # Use st.write to print each row
-                                    for row in formatted_rows:
-                                        st.caption(row)
+                                    # for row in formatted_rows:
+                                    #     st.caption(row)
                                     fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
                                                         title='Radar Chart for Collection Items')
                                     st.plotly_chart(fig)
