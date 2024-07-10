@@ -1034,7 +1034,6 @@ with st.spinner('Retrieving data...'):
                                         st.caption(row)
                                     fig = px.pie(filtered_df_for_collections, names='Collection_Name', values='Number_of_Items', title='Pie Chart for All Collections')
                                     st.plotly_chart(fig)
-                                    filtered_df_for_collections_2
                             with colauthor4:
                                 with st.popover('Filters and more'):
                                     container_types = st.container()
