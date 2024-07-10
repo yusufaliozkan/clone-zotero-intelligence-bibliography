@@ -796,9 +796,9 @@ with st.spinner('Retrieving data...'):
                                     row_nu = len(filtered_df_for_collections)
                                     for i in range(row_nu):
                                         formatted_row = (
-                                            f'{row['Collection_Name'].iloc[i]}'
-                                            f'{row['Number_of_Items'].iloc[i]}'
-                                            f'{row['Zotero link'].iloc[i]}'
+                                            f'{filtered_df_for_collections['Collection_Name'].iloc[i]}'
+                                            f'{filtered_df_for_collections['Number_of_Items'].iloc[i]}'
+                                            f'{filtered_df_for_collections['Zotero link'].iloc[i]}'
                                         )
                                     st.write(f"{i+1}) " + formatted_row)
                                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
