@@ -599,7 +599,7 @@ with st.spinner('Retrieving data...'):
                                     container_publication_ratio = st.container()
                             with colsearch3:
                                 with st.popover('Relevant themes'):
-                                    st.markdown(f'##### Top 5 relevant themes')
+                                    st.markdown(f'##### Top relevant publication themes')
                                     filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
                                     filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
                                     filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
@@ -1112,7 +1112,7 @@ with st.spinner('Retrieving data...'):
                                 st.plotly_chart(fig)
 
                                 fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
-                                                    title='Radar Chart for Collection Items')
+                                                    title='Top Publication Themes')
                                 st.plotly_chart(fig, use_container_width = True)
 
                                 author_df = filtered_collection_df_authors
