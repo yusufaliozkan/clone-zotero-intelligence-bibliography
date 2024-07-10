@@ -790,6 +790,7 @@ with st.spinner('Retrieving data...'):
                                     filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on='Collection_Name', how='left').drop_duplicates(subset='Collection_Name').reset_index(drop=True)
                                     def remove_numbers(name):
                                         return re.sub(r'^\d+(\.\d+)*\s*', '', name)
+                                    filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
                                     row_nu = len(filtered_df_for_collections)
                                     formatted_rows = []
                                     for i in range(row_nu):
