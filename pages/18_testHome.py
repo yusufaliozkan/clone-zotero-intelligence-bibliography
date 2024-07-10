@@ -444,6 +444,15 @@ with st.spinner('Retrieving data...'):
                 citation_mean = non_nan_cited_df_dedup['Citation'].mean()
                 citation_median = non_nan_cited_df_dedup['Citation'].median()
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
+                
+                if search_option != st.session_state.search_option:
+                    st.session_state.search_option = search_option
+                    # Clear session state variables related to the search
+                    if 'search_term' in st.session_state:
+                        del st.session_state.search_term
+                    if 'search_term_input' in st.session_state:
+                        del st.session_state.search_term_input
+                
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
                     # @st.experimental_fragment
