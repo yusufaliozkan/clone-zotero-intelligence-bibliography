@@ -622,8 +622,7 @@ with st.spinner('Retrieving data...'):
                                     # Use st.write to print each row
                                     for row in formatted_rows:
                                         st.caption(row)
-                                    fig = px.pie(filtered_df_for_collections, names='Collection_Name', values='Number_of_Items', title='Pie Chart for All Collections')
-                                    st.plotly_chart(fig)
+
 
                             with colsearch4:
                                 with st.popover("Filters and more"):
@@ -1034,6 +1033,9 @@ with st.spinner('Retrieving data...'):
                                     # Use st.write to print each row
                                     for row in formatted_rows:
                                         st.caption(row)
+                                    fig = px.pie(filtered_df_for_collections, names='Collection_Name', values='Number_of_Items', title='Pie Chart for All Collections')
+                                    st.plotly_chart(fig)
+                                    filtered_df_for_collections_2
                             with colauthor4:
                                 with st.popover('Filters and more'):
                                     container_types = st.container()
