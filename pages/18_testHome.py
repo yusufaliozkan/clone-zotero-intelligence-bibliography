@@ -1026,15 +1026,15 @@ with st.spinner('Retrieving data...'):
                                             f"{number_of_items} items"
                                         )
                                         formatted_rows.append(f"{i+1}) " + formatted_row)
+
+                                    # Use st.write to print each row
+                                    for row in formatted_rows:
+                                        st.caption(row)
                             with colauthor4:
                                 with st.popover('Filters and more'):
                                     container_types = st.container()
                                     container_download = st.container()
                                     view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
-
-                            # Use st.write to print each row
-                            for row in formatted_rows:
-                                st.caption(row)
 
                             st.write('*Please note that this database **may not show** all research outputs of the author.*')
                             types = container_types.multiselect('Publication type', filtered_collection_df_authors['Publication type'].unique(), filtered_collection_df_authors['Publication type'].unique(), key='original_authors')
