@@ -446,415 +446,434 @@ with st.spinner('Retrieving data...'):
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
-                    @st.experimental_fragment
-                    def search_keyword(): 
-                        @st.experimental_dialog("Search guide")
-                        def guide(item):
-                            st.write('''
-                                The Intelligence Studies Bibliography supports basic-level searches with Boolean operators.
+                    # @st.experimental_fragment
+                    # def search_keyword(): 
+                    @st.experimental_dialog("Search guide")
+                    def guide(item):
+                        st.write('''
+                            The Intelligence Studies Bibliography supports basic-level searches with Boolean operators.
 
-                                Available Boolean operators: **AND**, **OR**, **NOT** (e.g., "covert action" **NOT** British).
+                            Available Boolean operators: **AND**, **OR**, **NOT** (e.g., "covert action" **NOT** British).
 
-                                You can search using double quotes (e.g., "covert action").
+                            You can search using double quotes (e.g., "covert action").
 
-                                Multiple Boolean operators are allowed: (e.g. "covert action" **OR** "covert operation" **OR** "covert operations")
+                            Multiple Boolean operators are allowed: (e.g. "covert action" **OR** "covert operation" **OR** "covert operations")
 
-                                Please note: Search with parentheses is **not** available.
+                            Please note: Search with parentheses is **not** available.
 
-                                Note that the search function is limited: you will only find exact matches and cannot see search relevance.
+                            Note that the search function is limited: you will only find exact matches and cannot see search relevance.
 
-                                You can share the link of your search result. Try: https://intelligence.streamlit.app/?search_in=Title&query=cia+OR+mi6
-                                ''')
-                        
-                        if "guide" not in st.session_state:
-                            if st.button("Search guide"):
-                                guide("Search guide")
-                        container_refresh_button = st.container()
+                            You can share the link of your search result. Try: https://intelligence.streamlit.app/?search_in=Title&query=cia+OR+mi6
+                            ''')
+                    
+                    if "guide" not in st.session_state:
+                        if st.button("Search guide"):
+                            guide("Search guide")
+                    container_refresh_button = st.container()
 
-                        # if st.button('Search guide'):
-                        #     st.toast('''
-                        #     **Search guide**
+                    # if st.button('Search guide'):
+                    #     st.toast('''
+                    #     **Search guide**
 
-                        #     The following Boolean operators are available: AND, OR, NOT (e.g. "covert action" NOT british).
+                    #     The following Boolean operators are available: AND, OR, NOT (e.g. "covert action" NOT british).
 
-                        #     Search with double quote is available. (e.g. "covert action")
+                    #     Search with double quote is available. (e.g. "covert action")
 
-                        #     Search with parantheses is **not** available.                   
-                        #     ''')
-                        # Function to update search parameters in the query string
-                        def update_search_params():
-                            st.session_state.search_term = st.session_state.search_term_input
-                            st.query_params.from_dict({
-                                "search_in": st.session_state.search_in,
-                                "query": st.session_state.search_term
-                            })
+                    #     Search with parantheses is **not** available.                   
+                    #     ''')
+                    # Function to update search parameters in the query string
+                    def update_search_params():
+                        st.session_state.search_term = st.session_state.search_term_input
+                        st.query_params.from_dict({
+                            "search_in": st.session_state.search_in,
+                            "query": st.session_state.search_term
+                        })
 
-                        # Extracting initial query parameters
-                        query_params = st.query_params
-                        search_term = ""
-                        search_in = "Title"
+                    # Extracting initial query parameters
+                    query_params = st.query_params
+                    search_term = ""
+                    search_in = "Title"
 
-                        # Retrieve the initial search term and search_in from query parameters if available
-                        if 'query' in query_params:
-                            search_term = query_params['query']
-                        if 'search_in' in query_params:
-                            search_in = query_params['search_in']
+                    # Retrieve the initial search term and search_in from query parameters if available
+                    if 'query' in query_params:
+                        search_term = query_params['query']
+                    if 'search_in' in query_params:
+                        search_in = query_params['search_in']
 
-                        # Initialize session state variables
-                        if 'search_term' not in st.session_state:
-                            st.session_state.search_term = search_term
-                        if 'search_in' not in st.session_state:
-                            st.session_state.search_in = search_in
-                        if 'search_term_input' not in st.session_state:
-                            st.session_state.search_term_input = search_term
+                    # Initialize session state variables
+                    if 'search_term' not in st.session_state:
+                        st.session_state.search_term = search_term
+                    if 'search_in' not in st.session_state:
+                        st.session_state.search_in = search_in
+                    if 'search_term_input' not in st.session_state:
+                        st.session_state.search_term_input = search_term
 
-                        # Define unique search options
-                        search_options = ["Title", "Title and abstract"]
+                    # Define unique search options
+                    search_options = ["Title", "Title and abstract"]
 
-                        # Handling the search_in select box selection
-                        search_in_index = 0
-                        if 'search_in' in query_params:
-                            try:
-                                search_in_from_key = query_params['search_in']
-                                search_in_index = search_options.index(search_in_from_key)
-                            except (ValueError, KeyError):
-                                pass
+                    # Handling the search_in select box selection
+                    search_in_index = 0
+                    if 'search_in' in query_params:
+                        try:
+                            search_in_from_key = query_params['search_in']
+                            search_in_index = search_options.index(search_in_from_key)
+                        except (ValueError, KeyError):
+                            pass
 
-                        # Layout for input elements
-                        cols, cola = st.columns([2, 6])
+                    # Layout for input elements
+                    cols, cola = st.columns([2, 6])
 
-                        # Selectbox for search options
-                        with cols:
-                            st.session_state.search_in = st.selectbox(
-                                '🔍 Search in', search_options,
-                                index=search_in_index,
-                                on_change=update_search_params
-                            )
+                    # Selectbox for search options
+                    with cols:
+                        st.session_state.search_in = st.selectbox(
+                            '🔍 Search in', search_options,
+                            index=search_in_index,
+                            on_change=update_search_params
+                        )
 
-                        # Text input for search keywords
-                        with cola:
-                            st.text_input(
-                                'Search keywords in titles or abstracts',
-                                st.session_state.search_term_input,
-                                key='search_term_input',
-                                placeholder='Type your keyword(s)',
-                                on_change=update_search_params
-                            )
+                    # Text input for search keywords
+                    with cola:
+                        st.text_input(
+                            'Search keywords in titles or abstracts',
+                            st.session_state.search_term_input,
+                            key='search_term_input',
+                            placeholder='Type your keyword(s)',
+                            on_change=update_search_params
+                        )
 
-                        # Function to extract quoted phrases
-                        def extract_quoted_phrases(text):
-                            quoted_phrases = re.findall(r'"(.*?)"', text)
-                            text_without_quotes = re.sub(r'"(.*?)"', '', text)
-                            words = text_without_quotes.split()
-                            return quoted_phrases + words
+                    # Function to extract quoted phrases
+                    def extract_quoted_phrases(text):
+                        quoted_phrases = re.findall(r'"(.*?)"', text)
+                        text_without_quotes = re.sub(r'"(.*?)"', '', text)
+                        words = text_without_quotes.split()
+                        return quoted_phrases + words
 
-                        # Stripping and processing the search term
-                        search_term = st.session_state.search_term.strip()
-                        if search_term:
-                            with st.status("Searching publications...", expanded=True) as status:
-                                search_tokens = parse_search_terms(search_term)
-                                print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
-                                df_csv = df_duplicated.copy()
+                    # Stripping and processing the search term
+                    search_term = st.session_state.search_term.strip()
+                    if search_term:
+                        with st.status("Searching publications...", expanded=True) as status:
+                            search_tokens = parse_search_terms(search_term)
+                            print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
+                            df_csv = df_duplicated.copy()
 
-                                filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
-                                print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
-                                filtered_df_for_collections = filtered_df.copy()
-                                filtered_df = filtered_df.drop_duplicates()
-                                print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
-                                
-                                if not filtered_df.empty and 'Date published' in filtered_df.columns:
-                                    filtered_df['Date published'] = filtered_df['Date published'].astype(str).str.strip()
-                                    filtered_df['Date published'] = filtered_df['Date published'].str.strip().apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                                    if filtered_df['Date published'].notna().any():
-                                        filtered_df['Date published'] = filtered_df['Date published'].dt.strftime('%Y-%m-%d')
-                                    else:
-                                        filtered_df['Date published'] = ''
-                                    filtered_df['Date published'] = filtered_df['Date published'].fillna('')
-                                    filtered_df['No date flag'] = filtered_df['Date published'].isnull().astype(np.uint8)
-                                    filtered_df = filtered_df.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
+                            filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
+                            print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
+                            filtered_df_for_collections = filtered_df.copy()
+                            filtered_df = filtered_df.drop_duplicates()
+                            print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
+                            
+                            if not filtered_df.empty and 'Date published' in filtered_df.columns:
+                                filtered_df['Date published'] = filtered_df['Date published'].astype(str).str.strip()
+                                filtered_df['Date published'] = filtered_df['Date published'].str.strip().apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                                if filtered_df['Date published'].notna().any():
+                                    filtered_df['Date published'] = filtered_df['Date published'].dt.strftime('%Y-%m-%d')
                                 else:
                                     filtered_df['Date published'] = ''
-                                    filtered_df['No date flag'] = 1
-                                print(f"Final Filtered DataFrame:\n{filtered_df}")  # Debugging: Print final DataFrame
+                                filtered_df['Date published'] = filtered_df['Date published'].fillna('')
+                                filtered_df['No date flag'] = filtered_df['Date published'].isnull().astype(np.uint8)
+                                filtered_df = filtered_df.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
+                            else:
+                                filtered_df['Date published'] = ''
+                                filtered_df['No date flag'] = 1
+                            print(f"Final Filtered DataFrame:\n{filtered_df}")  # Debugging: Print final DataFrame
 
-                                types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
-                                collections = filtered_df['Collection_Name'].dropna().unique()
+                            types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
+                            collections = filtered_df['Collection_Name'].dropna().unique()
 
-                                        # if container_refresh_button.button('Refresh'):
-                                #     st.query_params.clear()
-                                #     st.rerun()
-                                if len(filtered_df)==0:
-                                    num_items=0
-                                colsearch1, colsearch2, colsearch3, colsearch4 = st.columns(4)
-                                with colsearch1:
-                                    container_metric = st.container()
-                                with colsearch2:
-                                    with st.popover('More metrics'):
-                                        container_citation = st.container()
-                                        container_citation_average = st.container()
-                                        container_oa = st.container() 
-                                        container_type = st.container()
-                                        container_author_no = st.container()
-                                        container_author_pub_ratio= st.container()
-                                        container_publication_ratio = st.container()
-                                with colsearch3:
-                                    with st.popover('Relevant themes'):
-                                        st.markdown(f'##### Top relevant publication themes')
-                                        filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
-                                        filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
-                                        filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
-                                        filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on='Collection_Name', how='left').drop_duplicates(subset='Collection_Name').reset_index(drop=True)
-                                        def remove_numbers(name):
-                                            return re.sub(r'^\d+(\.\d+)*\s*', '', name)
-                                        filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
-                                        row_nu = len(filtered_df_for_collections)
-                                        formatted_rows = []
-                                        for i in range(row_nu):
-                                            collection_name = filtered_df_for_collections['Collection_Name'].iloc[i]
-                                            number_of_items = filtered_df_for_collections['Number_of_Items'].iloc[i]
-                                            zotero_collection_link = filtered_df_for_collections['Collection_Link'].iloc[i]
-                                            formatted_row = (
-                                                f"[{collection_name}]({zotero_collection_link}) "  # Hyperlink format in markdown
-                                                f"{number_of_items} items"
-                                            )
-                                            formatted_rows.append(f"{i+1}) " + formatted_row)
-
-                                        # Use st.write to print each row
-                                        for row in formatted_rows:
-                                            st.caption(row)
-
-
-                                with colsearch4:
-                                    with st.popover("Filters and more"):
-                                        types2 = st.multiselect('Publication types', types, key='original2')
-                                        collections = st.multiselect('Collection', collections, key='original_collection')
-                                        container_download_button = st.container()
-
-                                        display_abstracts = st.checkbox('Display abstracts')
-                                        only_citation = st.checkbox('Show cited items only')
-                                        if only_citation:
-                                            filtered_df = filtered_df[(filtered_df['Citation'].notna()) & (filtered_df['Citation'] != 0)]
-
-                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
-                                        # with col114:
-                                        #     table_view = st.checkbox('See results in table')
-
-                                if types2:
-                                    filtered_df = filtered_df[filtered_df['Publication type'].isin(types2)]                 
-
-                                if collections:
-                                    filtered_df = filtered_df[filtered_df['Collection_Name'].isin(collections)] 
-
-
-                                if not filtered_df.empty:
-                                    filtered_df = filtered_df.drop_duplicates(subset=['Zotero link'], keep='first')
-
-                                    num_items = len(filtered_df)
-                                    publications_by_type = filtered_df['Publication type'].value_counts()
-                                    num_items_collections = len(filtered_df)
-                                    breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
-                                    container_metric.metric(label="Number of items found", value=int(num_items), help=breakdown_string)
-
-                                    citation_average = round(filtered_df['Citation'].mean(), 2)
-                                    container_citation_average.metric(label="Average citation", value=citation_average)
-
-                                    citation_count = filtered_df['Citation'].sum()
-                                    total_rows = len(filtered_df)
-                                    nan_count_citation = filtered_df['Citation_list'].isna().sum()
-                                    non_nan_count_citation = total_rows - nan_count_citation
-                                    non_nan_cited_df_dedup = filtered_df.dropna(subset=['Citation_list'])
-                                    non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
-                                    citation_mean = non_nan_cited_df_dedup['Citation'].mean()
-                                    citation_median = non_nan_cited_df_dedup['Citation'].median()
-                                    container_citation.metric(
-                                        label="Number of citations", 
-                                        value=int(citation_count), 
-                                        help=f'Note that not all items are citeable.'
+                                    # if container_refresh_button.button('Refresh'):
+                            #     st.query_params.clear()
+                            #     st.rerun()
+                            if len(filtered_df)==0:
+                                num_items=0
+                            colsearch1, colsearch2, colsearch3, colsearch4 = st.columns(4)
+                            with colsearch1:
+                                container_metric = st.container()
+                            with colsearch2:
+                                with st.popover('More metrics'):
+                                    container_citation = st.container()
+                                    container_citation_average = st.container()
+                                    container_oa = st.container() 
+                                    container_type = st.container()
+                                    container_author_no = st.container()
+                                    container_author_pub_ratio= st.container()
+                                    container_publication_ratio = st.container()
+                            with colsearch3:
+                                with st.popover('Relevant themes'):
+                                    st.markdown(f'##### Top relevant publication themes')
+                                    filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
+                                    filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
+                                    filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
+                                    filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on='Collection_Name', how='left').drop_duplicates(subset='Collection_Name').reset_index(drop=True)
+                                    def remove_numbers(name):
+                                        return re.sub(r'^\d+(\.\d+)*\s*', '', name)
+                                    filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
+                                    row_nu = len(filtered_df_for_collections)
+                                    formatted_rows = []
+                                    for i in range(row_nu):
+                                        collection_name = filtered_df_for_collections['Collection_Name'].iloc[i]
+                                        number_of_items = filtered_df_for_collections['Number_of_Items'].iloc[i]
+                                        zotero_collection_link = filtered_df_for_collections['Collection_Link'].iloc[i]
+                                        formatted_row = (
+                                            f"[{collection_name}]({zotero_collection_link}) "  # Hyperlink format in markdown
+                                            f"{number_of_items} items"
                                         )
+                                        formatted_rows.append(f"{i+1}) " + formatted_row)
 
-                                    true_count = filtered_df[filtered_df['Publication type']=='Journal article']['OA status'].sum()
-                                    total_count = len(filtered_df[filtered_df['Publication type']=='Journal article'])
-                                    if total_count == 0:
-                                        oa_ratio = 0.0
+                                    # Use st.write to print each row
+                                    for row in formatted_rows:
+                                        st.caption(row)
+
+
+                            with colsearch4:
+                                with st.popover("Filters and more"):
+                                    types2 = st.multiselect('Publication types', types, key='original2')
+                                    collections = st.multiselect('Collection', collections, key='original_collection')
+                                    container_download_button = st.container()
+
+                                    display_abstracts = st.checkbox('Display abstracts')
+                                    only_citation = st.checkbox('Show cited items only')
+                                    if only_citation:
+                                        filtered_df = filtered_df[(filtered_df['Citation'].notna()) & (filtered_df['Citation'] != 0)]
+
+                                    view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                    # with col114:
+                                    #     table_view = st.checkbox('See results in table')
+
+                            if types2:
+                                filtered_df = filtered_df[filtered_df['Publication type'].isin(types2)]                 
+
+                            if collections:
+                                filtered_df = filtered_df[filtered_df['Collection_Name'].isin(collections)] 
+
+
+                            if not filtered_df.empty:
+                                filtered_df = filtered_df.drop_duplicates(subset=['Zotero link'], keep='first')
+
+                                num_items = len(filtered_df)
+                                publications_by_type = filtered_df['Publication type'].value_counts()
+                                num_items_collections = len(filtered_df)
+                                breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
+                                container_metric.metric(label="Number of items found", value=int(num_items), help=breakdown_string)
+
+                                citation_average = round(filtered_df['Citation'].mean(), 2)
+                                container_citation_average.metric(label="Average citation", value=citation_average)
+
+                                citation_count = filtered_df['Citation'].sum()
+                                total_rows = len(filtered_df)
+                                nan_count_citation = filtered_df['Citation_list'].isna().sum()
+                                non_nan_count_citation = total_rows - nan_count_citation
+                                non_nan_cited_df_dedup = filtered_df.dropna(subset=['Citation_list'])
+                                non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
+                                citation_mean = non_nan_cited_df_dedup['Citation'].mean()
+                                citation_median = non_nan_cited_df_dedup['Citation'].median()
+                                container_citation.metric(
+                                    label="Number of citations", 
+                                    value=int(citation_count), 
+                                    help=f'Note that not all items are citeable.'
+                                    )
+
+                                true_count = filtered_df[filtered_df['Publication type']=='Journal article']['OA status'].sum()
+                                total_count = len(filtered_df[filtered_df['Publication type']=='Journal article'])
+                                if total_count == 0:
+                                    oa_ratio = 0.0
+                                else:
+                                    oa_ratio = true_count / total_count * 100
+                                container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help=f'Not all items are measured for OA.')
+
+                                item_type_no = filtered_df['Publication type'].nunique()
+                                container_type.metric(label='Number of publication types', value=int(item_type_no))
+
+                                def split_and_expand(authors):
+                                    # Ensure the input is a string
+                                    if isinstance(authors, str):
+                                        # Split by comma and strip whitespace
+                                        split_authors = [author.strip() for author in authors.split(',')]
+                                        return pd.Series(split_authors)
                                     else:
-                                        oa_ratio = true_count / total_count * 100
-                                    container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help=f'Not all items are measured for OA.')
+                                        # Return the original author if it's not a string
+                                        return pd.Series([authors])
+                                if len(filtered_df) == 0:
+                                    author_pub_ratio=0.0
+                                    author_no=0
+                                else:
+                                    expanded_authors = filtered_df['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                                    expanded_authors = expanded_authors.reset_index(name='Author')
+                                    expanded_authors_unique = expanded_authors.drop_duplicates(subset='Author')
+                                    author_no = len(expanded_authors)
+                                    unique_author_no = len(expanded_authors_unique)
+                                    author_pub_ratio = round(author_no/num_items_collections, 2)
+                                container_author_no.metric(label='Number of unique authors', value=int(unique_author_no))
+                            
+                                container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
 
-                                    item_type_no = filtered_df['Publication type'].nunique()
-                                    container_type.metric(label='Number of publication types', value=int(item_type_no))
+                                filtered_df['FirstName2'] = filtered_df['FirstName2'].astype(str)
+                                filtered_df['multiple_authors'] = filtered_df['FirstName2'].apply(lambda x: ',' in x)
+                                if len(filtered_df) == 0:
+                                    collaboration_ratio=0
+                                else:
+                                    multiple_authored_papers = filtered_df['multiple_authors'].sum()
+                                    collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
+                                    container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
-                                    def split_and_expand(authors):
-                                        # Ensure the input is a string
-                                        if isinstance(authors, str):
-                                            # Split by comma and strip whitespace
-                                            split_authors = [author.strip() for author in authors.split(',')]
-                                            return pd.Series(split_authors)
-                                        else:
-                                            # Return the original author if it's not a string
-                                            return pd.Series([authors])
-                                    if len(filtered_df) == 0:
-                                        author_pub_ratio=0.0
-                                        author_no=0
-                                    else:
-                                        expanded_authors = filtered_df['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
-                                        expanded_authors = expanded_authors.reset_index(name='Author')
-                                        expanded_authors_unique = expanded_authors.drop_duplicates(subset='Author')
-                                        author_no = len(expanded_authors)
-                                        unique_author_no = len(expanded_authors_unique)
-                                        author_pub_ratio = round(author_no/num_items_collections, 2)
-                                    container_author_no.metric(label='Number of unique authors', value=int(unique_author_no))
+                                download_filtered = filtered_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
+                                download_filtered['Abstract'] = download_filtered['Abstract'].str.replace('\n', ' ')
+                                download_filtered = download_filtered.reset_index(drop=True)
+
+                                def convert_df(download_filtered):
+                                    return download_filtered.to_csv(index=False).encode('utf-8-sig')
                                 
-                                    container_author_pub_ratio.metric(label='Author/publication ratio', value=author_pub_ratio, help='The average author number per publication')
+                                csv = convert_df(download_filtered)
+                                today = datetime.date.today().isoformat()
+                                a = 'search-result-' + today
+                                container_download_button.download_button('💾 Download search', csv, (a+'.csv'), mime="text/csv", key='download-csv-1')
 
-                                    filtered_df['FirstName2'] = filtered_df['FirstName2'].astype(str)
-                                    filtered_df['multiple_authors'] = filtered_df['FirstName2'].apply(lambda x: ',' in x)
-                                    if len(filtered_df) == 0:
-                                        collaboration_ratio=0
+                                on = st.toggle('Generate dashboard')
+
+                                if on and len(filtered_df) > 0: 
+                                    st.info(f'Dashboard for search terms: {search_term}')
+                                    search_df = filtered_df.copy()
+                                    publications_by_type = search_df['Publication type'].value_counts()
+                                    fig = px.bar(publications_by_type, x=publications_by_type.index, y=publications_by_type.values,
+                                                labels={'x': 'Publication Type', 'y': 'Number of Publications'},
+                                                title=f'Publications by Type ({search_term})')
+                                    st.plotly_chart(fig)
+
+                                    fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
+                                                        title=f'Top Publication Themes ({search_term})')
+                                    fig.update_traces(fill='toself')
+                                    st.plotly_chart(fig, use_container_width = True)
+
+                                    search_df = filtered_df.copy()
+                                    search_df['Year'] = pd.to_datetime(search_df['Date published']).dt.year
+                                    publications_by_year = search_df['Year'].value_counts().sort_index()
+                                    fig_year_bar = px.bar(publications_by_year, x=publications_by_year.index, y=publications_by_year.values,
+                                                        labels={'x': 'Publication Year', 'y': 'Number of Publications'},
+                                                        title=f'Publications by Year ({search_term})')
+                                    st.plotly_chart(fig_year_bar)
+                                
+                                    search_df = filtered_df.copy()
+                                    search_df['Author_name'] = search_df['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
+                                    search_df = search_df.explode('Author_name')
+                                    search_df.reset_index(drop=True, inplace=True)
+                                    search_df['Author_name'] = search_df['Author_name'].map(name_replacements).fillna(search_df['Author_name'])
+                                    search_df = search_df['Author_name'].value_counts().head(10)
+                                    fig = px.bar(search_df, x=search_df.index, y=search_df.values)
+                                    fig.update_layout(
+                                        title=f'Top 10 Authors by Publication Count ({search_term})',
+                                        xaxis_title='Author',
+                                        yaxis_title='Number of Publications',
+                                        xaxis_tickangle=-45,
+                                    )
+                                    st.plotly_chart(fig)
+
+                                    search_df = filtered_df.copy()
+                                    def clean_text (text):
+                                        text = text.lower() # lowercasing
+                                        text = re.sub(r'[^\w\s]', ' ', text) # this removes punctuation
+                                        text = re.sub('[0-9_]', ' ', text) # this removes numbers
+                                        text = re.sub('[^a-z_]', ' ', text) # removing all characters except lowercase letters
+                                        return text
+                                    search_df['clean_title'] = search_df['Title'].apply(clean_text)
+                                    search_df['clean_title'] = search_df['clean_title'].apply(lambda x: ' '.join ([w for w in x.split() if len (w)>2])) # this function removes words less than 2 words
+                                    def tokenization(text):
+                                        text = re.split('\W+', text)
+                                        return text    
+                                    search_df['token_title']=search_df['clean_title'].apply(tokenization)
+                                    stopword = nltk.corpus.stopwords.words('english')
+                                    SW = ['york', 'intelligence', 'security', 'pp', 'war','world', 'article', 'twitter', 'nan',
+                                        'new', 'isbn', 'book', 'also', 'yet', 'matter', 'erratum', 'commentary', 'studies',
+                                        'volume', 'paper', 'study', 'question', 'editorial', 'welcome', 'introduction', 'editorial', 'reader',
+                                        'university', 'followed', 'particular', 'based', 'press', 'examine', 'show', 'may', 'result', 'explore',
+                                        'examines', 'become', 'used', 'journal', 'london', 'review']
+                                    stopword.extend(SW)
+
+                                    custom_stopwords = extract_quoted_phrases(search_term)
+                                    stopword.extend(custom_stopwords)
+
+                                    def remove_stopwords(text):
+                                        text = [i for i in text if i] # this part deals with getting rid of spaces as it treads as a string
+                                        text = [word for word in text if word not in stopword] #keep the word if it is not in stopword
+                                        return text
+                                    search_df['stopword']=search_df['token_title'].apply(remove_stopwords)
+                                    wn = nltk.WordNetLemmatizer()
+                                    def lemmatizer(text):
+                                        text = [wn.lemmatize(word) for word in text]
+                                        return text
+                                    search_df['lemma_title'] = search_df['stopword'].apply(lemmatizer)
+                                    listdf = search_df['lemma_title']
+                                    df_list = [item for sublist in listdf for item in sublist]
+                                    string = pd.Series(df_list).str.cat(sep=' ')
+                                    wordcloud_texts = string
+                                    wordcloud_texts_str = str(wordcloud_texts)
+                                    wordcloud = WordCloud(stopwords=stopword, width=1500, height=750, background_color='white', collocations=False).generate(wordcloud_texts_str)
+                                    plt.figure(figsize=(20,8))
+                                    plt.axis('off')
+                                    plt.title(f"Word Cloud for Titles ({search_term})")
+                                    plt.imshow(wordcloud)
+                                    plt.axis("off")
+                                    plt.show()
+                                    st.set_option('deprecation.showPyplotGlobalUse', False)
+                                    st.pyplot()
+
+                                else:
+                                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
+                                    if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
+                                        filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False)
+                                        filtered_df = filtered_df.reset_index(drop=True)
                                     else:
-                                        multiple_authored_papers = filtered_df['multiple_authors'].sum()
-                                        collaboration_ratio = round(multiple_authored_papers / num_items_collections * 100, 1)
-                                        container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
+                                        filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
+                                        filtered_df = filtered_df.reset_index(drop=True)
 
-                                    download_filtered = filtered_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
-                                    download_filtered['Abstract'] = download_filtered['Abstract'].str.replace('\n', ' ')
-                                    download_filtered = download_filtered.reset_index(drop=True)
+                                    articles_list = []  # Store articles in a list
+                                    abstracts_list = [] # Store abstracts in a list
+                                    for index, row in filtered_df.iterrows():
+                                        formatted_entry = format_entry(row)
+                                        articles_list.append(formatted_entry)  # Append formatted entry to the list
+                                        abstract = row['Abstract']
+                                        abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
 
-                                    def convert_df(download_filtered):
-                                        return download_filtered.to_csv(index=False).encode('utf-8-sig')
-                                    
-                                    csv = convert_df(download_filtered)
-                                    today = datetime.date.today().isoformat()
-                                    a = 'search-result-' + today
-                                    container_download_button.download_button('💾 Download search', csv, (a+'.csv'), mime="text/csv", key='download-csv-1')
+                                    def highlight_terms(text, terms):
+                                        boolean_operators = {"AND", "OR", "NOT"}
+                                        url_pattern = r'https?://\S+'
+                                        urls = re.findall(url_pattern, text)
+                                        
+                                        for url in urls:
+                                            text = text.replace(url, f'___URL_PLACEHOLDER_{urls.index(url)}___')
 
-                                    on = st.toggle('Generate dashboard')
-
-                                    if on and len(filtered_df) > 0: 
-                                        st.info(f'Dashboard for search terms: {search_term}')
-                                        search_df = filtered_df.copy()
-                                        publications_by_type = search_df['Publication type'].value_counts()
-                                        fig = px.bar(publications_by_type, x=publications_by_type.index, y=publications_by_type.values,
-                                                    labels={'x': 'Publication Type', 'y': 'Number of Publications'},
-                                                    title=f'Publications by Type ({search_term})')
-                                        st.plotly_chart(fig)
-
-                                        fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
-                                                            title=f'Top Publication Themes ({search_term})')
-                                        fig.update_traces(fill='toself')
-                                        st.plotly_chart(fig, use_container_width = True)
-
-                                        search_df = filtered_df.copy()
-                                        search_df['Year'] = pd.to_datetime(search_df['Date published']).dt.year
-                                        publications_by_year = search_df['Year'].value_counts().sort_index()
-                                        fig_year_bar = px.bar(publications_by_year, x=publications_by_year.index, y=publications_by_year.values,
-                                                            labels={'x': 'Publication Year', 'y': 'Number of Publications'},
-                                                            title=f'Publications by Year ({search_term})')
-                                        st.plotly_chart(fig_year_bar)
-                                    
-                                        search_df = filtered_df.copy()
-                                        search_df['Author_name'] = search_df['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
-                                        search_df = search_df.explode('Author_name')
-                                        search_df.reset_index(drop=True, inplace=True)
-                                        search_df['Author_name'] = search_df['Author_name'].map(name_replacements).fillna(search_df['Author_name'])
-                                        search_df = search_df['Author_name'].value_counts().head(10)
-                                        fig = px.bar(search_df, x=search_df.index, y=search_df.values)
-                                        fig.update_layout(
-                                            title=f'Top 10 Authors by Publication Count ({search_term})',
-                                            xaxis_title='Author',
-                                            yaxis_title='Number of Publications',
-                                            xaxis_tickangle=-45,
+                                        pattern = re.compile('|'.join(rf'\b{re.escape(term)}\b' for term in terms if term not in boolean_operators), flags=re.IGNORECASE)
+                                        highlighted_text = pattern.sub(
+                                            lambda match: f'<span style="background-color: #FF8581;">{match.group(0)}</span>' 
+                                                        if match.group(0) not in urls else match.group(0),
+                                            text
                                         )
-                                        st.plotly_chart(fig)
 
-                                        search_df = filtered_df.copy()
-                                        def clean_text (text):
-                                            text = text.lower() # lowercasing
-                                            text = re.sub(r'[^\w\s]', ' ', text) # this removes punctuation
-                                            text = re.sub('[0-9_]', ' ', text) # this removes numbers
-                                            text = re.sub('[^a-z_]', ' ', text) # removing all characters except lowercase letters
-                                            return text
-                                        search_df['clean_title'] = search_df['Title'].apply(clean_text)
-                                        search_df['clean_title'] = search_df['clean_title'].apply(lambda x: ' '.join ([w for w in x.split() if len (w)>2])) # this function removes words less than 2 words
-                                        def tokenization(text):
-                                            text = re.split('\W+', text)
-                                            return text    
-                                        search_df['token_title']=search_df['clean_title'].apply(tokenization)
-                                        stopword = nltk.corpus.stopwords.words('english')
-                                        SW = ['york', 'intelligence', 'security', 'pp', 'war','world', 'article', 'twitter', 'nan',
-                                            'new', 'isbn', 'book', 'also', 'yet', 'matter', 'erratum', 'commentary', 'studies',
-                                            'volume', 'paper', 'study', 'question', 'editorial', 'welcome', 'introduction', 'editorial', 'reader',
-                                            'university', 'followed', 'particular', 'based', 'press', 'examine', 'show', 'may', 'result', 'explore',
-                                            'examines', 'become', 'used', 'journal', 'london', 'review']
-                                        stopword.extend(SW)
+                                        for index, url in enumerate(urls):
+                                            highlighted_text = highlighted_text.replace(f'___URL_PLACEHOLDER_{index}___', url)
 
-                                        custom_stopwords = extract_quoted_phrases(search_term)
-                                        stopword.extend(custom_stopwords)
-
-                                        def remove_stopwords(text):
-                                            text = [i for i in text if i] # this part deals with getting rid of spaces as it treads as a string
-                                            text = [word for word in text if word not in stopword] #keep the word if it is not in stopword
-                                            return text
-                                        search_df['stopword']=search_df['token_title'].apply(remove_stopwords)
-                                        wn = nltk.WordNetLemmatizer()
-                                        def lemmatizer(text):
-                                            text = [wn.lemmatize(word) for word in text]
-                                            return text
-                                        search_df['lemma_title'] = search_df['stopword'].apply(lemmatizer)
-                                        listdf = search_df['lemma_title']
-                                        df_list = [item for sublist in listdf for item in sublist]
-                                        string = pd.Series(df_list).str.cat(sep=' ')
-                                        wordcloud_texts = string
-                                        wordcloud_texts_str = str(wordcloud_texts)
-                                        wordcloud = WordCloud(stopwords=stopword, width=1500, height=750, background_color='white', collocations=False).generate(wordcloud_texts_str)
-                                        plt.figure(figsize=(20,8))
-                                        plt.axis('off')
-                                        plt.title(f"Word Cloud for Titles ({search_term})")
-                                        plt.imshow(wordcloud)
-                                        plt.axis("off")
-                                        plt.show()
-                                        st.set_option('deprecation.showPyplotGlobalUse', False)
-                                        st.pyplot()
-
-                                    else:
-                                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
-                                        if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
-                                            filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False)
-                                            filtered_df = filtered_df.reset_index(drop=True)
+                                        return highlighted_text
+                                                                
+                                    if view == 'Basic list':
+                                        if num_items < 20:
+                                            for i, article in enumerate(articles_list, start=1):
+                                                highlighted_article = highlight_terms(article, search_tokens)
+                                                st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
+                                                
+                                                if display_abstracts:
+                                                    abstract = abstracts_list[i - 1]
+                                                    if pd.notnull(abstract):
+                                                        if search_in == 'Title and abstract':
+                                                            highlighted_abstract = highlight_terms(abstract, search_tokens)
+                                                        else:
+                                                            highlighted_abstract = abstract 
+                                                        st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
+                                                    else:
+                                                        st.caption(f"Abstract: No abstract")
                                         else:
-                                            filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
-                                            filtered_df = filtered_df.reset_index(drop=True)
-
-                                        articles_list = []  # Store articles in a list
-                                        abstracts_list = [] # Store abstracts in a list
-                                        for index, row in filtered_df.iterrows():
-                                            formatted_entry = format_entry(row)
-                                            articles_list.append(formatted_entry)  # Append formatted entry to the list
-                                            abstract = row['Abstract']
-                                            abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
-
-                                        def highlight_terms(text, terms):
-                                            boolean_operators = {"AND", "OR", "NOT"}
-                                            url_pattern = r'https?://\S+'
-                                            urls = re.findall(url_pattern, text)
+                                            show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
                                             
-                                            for url in urls:
-                                                text = text.replace(url, f'___URL_PLACEHOLDER_{urls.index(url)}___')
-
-                                            pattern = re.compile('|'.join(rf'\b{re.escape(term)}\b' for term in terms if term not in boolean_operators), flags=re.IGNORECASE)
-                                            highlighted_text = pattern.sub(
-                                                lambda match: f'<span style="background-color: #FF8581;">{match.group(0)}</span>' 
-                                                            if match.group(0) not in urls else match.group(0),
-                                                text
-                                            )
-
-                                            for index, url in enumerate(urls):
-                                                highlighted_text = highlighted_text.replace(f'___URL_PLACEHOLDER_{index}___', url)
-
-                                            return highlighted_text
-                                                                    
-                                        if view == 'Basic list':
-                                            if num_items < 20:
-                                                for i, article in enumerate(articles_list, start=1):
+                                            if show_first_20:
+                                                filtered_df = filtered_df.head(20)
+                                                for i, article in enumerate(articles_list[:20], start=1):
                                                     highlighted_article = highlight_terms(article, search_tokens)
                                                     st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
                                                     
@@ -869,103 +888,84 @@ with st.spinner('Retrieving data...'):
                                                         else:
                                                             st.caption(f"Abstract: No abstract")
                                             else:
-                                                show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
+                                                num_tabs = (num_items // 20) + 1 if num_items > 0 else 1
+                                                tab_titles = [f"Results {i*20+1}-{min((i+1)*20, num_items)}" for i in range(num_tabs)]
                                                 
-                                                if show_first_20:
-                                                    filtered_df = filtered_df.head(20)
-                                                    for i, article in enumerate(articles_list[:20], start=1):
-                                                        highlighted_article = highlight_terms(article, search_tokens)
-                                                        st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
-                                                        
-                                                        if display_abstracts:
-                                                            abstract = abstracts_list[i - 1]
-                                                            if pd.notnull(abstract):
-                                                                if search_in == 'Title and abstract':
-                                                                    highlighted_abstract = highlight_terms(abstract, search_tokens)
-                                                                else:
-                                                                    highlighted_abstract = abstract 
-                                                                st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
-                                                            else:
-                                                                st.caption(f"Abstract: No abstract")
-                                                else:
-                                                    num_tabs = (num_items // 20) + 1 if num_items > 0 else 1
-                                                    tab_titles = [f"Results {i*20+1}-{min((i+1)*20, num_items)}" for i in range(num_tabs)]
-                                                    
-                                                    tabs = st.tabs(tab_titles)
-                                                    for tab_index, tab in enumerate(tabs):
-                                                        with tab:
-                                                            start_idx = tab_index * 20
-                                                            end_idx = min(start_idx + 20, num_items)
-                                                            for i in range(start_idx, end_idx):
-                                                                article = articles_list[i]
-                                                                highlighted_article = highlight_terms(article, search_tokens)
-                                                                st.markdown(f"{i + 1}. {highlighted_article}", unsafe_allow_html=True)
-                                                                
-                                                                if display_abstracts:
-                                                                    abstract = abstracts_list[i]
-                                                                    if pd.notnull(abstract):
-                                                                        if search_in == 'Title and abstract':
-                                                                            highlighted_abstract = highlight_terms(abstract, search_tokens)
-                                                                        else:
-                                                                            highlighted_abstract = abstract 
-                                                                        st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
+                                                tabs = st.tabs(tab_titles)
+                                                for tab_index, tab in enumerate(tabs):
+                                                    with tab:
+                                                        start_idx = tab_index * 20
+                                                        end_idx = min(start_idx + 20, num_items)
+                                                        for i in range(start_idx, end_idx):
+                                                            article = articles_list[i]
+                                                            highlighted_article = highlight_terms(article, search_tokens)
+                                                            st.markdown(f"{i + 1}. {highlighted_article}", unsafe_allow_html=True)
+                                                            
+                                                            if display_abstracts:
+                                                                abstract = abstracts_list[i]
+                                                                if pd.notnull(abstract):
+                                                                    if search_in == 'Title and abstract':
+                                                                        highlighted_abstract = highlight_terms(abstract, search_tokens)
                                                                     else:
-                                                                        st.caption(f"Abstract: No abstract")
-                                        if view == 'Table':
-                                            df_table_view = filtered_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
-                                            df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
-                                            df_table_view
-                                        if view == 'Bibliography':
-                                            if sort_by == 'Publication type':
-                                                filtered_df = filtered_df.sort_values(by=['Publication type'], ascending=True)
-                                            elif sort_by == 'Citation':
-                                                filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
-                                            df_zotero_id = pd.read_csv('zotero_citation_format.csv')
-                                            filtered_df['zotero_item_key'] = filtered_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
-                                            filtered_df = pd.merge(filtered_df, df_zotero_id, on='zotero_item_key', how='left')
+                                                                        highlighted_abstract = abstract 
+                                                                    st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
+                                                                else:
+                                                                    st.caption(f"Abstract: No abstract")
+                                    if view == 'Table':
+                                        df_table_view = filtered_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
+                                        df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
+                                        df_table_view
+                                    if view == 'Bibliography':
+                                        if sort_by == 'Publication type':
+                                            filtered_df = filtered_df.sort_values(by=['Publication type'], ascending=True)
+                                        elif sort_by == 'Citation':
+                                            filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
+                                        df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                                        filtered_df['zotero_item_key'] = filtered_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                        filtered_df = pd.merge(filtered_df, df_zotero_id, on='zotero_item_key', how='left')
 
-                                            def display_bibliographies(df):
-                                                df['bibliography'] = df['bibliography'].fillna('').astype(str)
-                                                all_bibliographies = ""
-                                                for index, row in df.iterrows():
-                                                    # Add a horizontal line between bibliographies
-                                                    if index > 0:
-                                                        all_bibliographies += '<p><p>'
-                                                    
-                                                    # Display bibliography
-                                                    all_bibliographies += row['bibliography']
-                                                st.markdown(all_bibliographies, unsafe_allow_html=True)
+                                        def display_bibliographies(df):
+                                            df['bibliography'] = df['bibliography'].fillna('').astype(str)
+                                            all_bibliographies = ""
+                                            for index, row in df.iterrows():
+                                                # Add a horizontal line between bibliographies
+                                                if index > 0:
+                                                    all_bibliographies += '<p><p>'
+                                                
+                                                # Display bibliography
+                                                all_bibliographies += row['bibliography']
+                                            st.markdown(all_bibliographies, unsafe_allow_html=True)
 
-                                            num_items = len(filtered_df)
+                                        num_items = len(filtered_df)
 
-                                            if num_items < 20:
+                                        if num_items < 20:
+                                            display_bibliographies(filtered_df)
+                                        else:
+                                            show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
+
+                                            if show_first_20:
+                                                filtered_df = filtered_df.head(20)
                                                 display_bibliographies(filtered_df)
                                             else:
-                                                show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
+                                                num_tabs = (num_items // 20) + 1
+                                                tab_titles = [f"Results {i*20+1}-{min((i+1)*20, num_items)}" for i in range(num_tabs)]
 
-                                                if show_first_20:
-                                                    filtered_df = filtered_df.head(20)
-                                                    display_bibliographies(filtered_df)
-                                                else:
-                                                    num_tabs = (num_items // 20) + 1
-                                                    tab_titles = [f"Results {i*20+1}-{min((i+1)*20, num_items)}" for i in range(num_tabs)]
-
-                                                    tabs = st.tabs(tab_titles)
-                                                    for tab_index, tab in enumerate(tabs):
-                                                        with tab:
-                                                            start_idx = tab_index * 20
-                                                            end_idx = min(start_idx + 20, num_items)
-                                                            display_bibliographies(filtered_df.iloc[start_idx:end_idx])
-                                else:
-                                    st.write("No articles found with the given keyword/phrase.")
-                                status.update(
-                                    label=f"Search found **{num_items}** {'matching source' if num_items == 1 else 'matching sources'} in the database for '{search_term}'.", 
-                                    state="complete", 
-                                    expanded=True
-                                    )
-                        else:
-                            st.write("Please enter a keyword or author name to search.")
-                    search_keyword()
+                                                tabs = st.tabs(tab_titles)
+                                                for tab_index, tab in enumerate(tabs):
+                                                    with tab:
+                                                        start_idx = tab_index * 20
+                                                        end_idx = min(start_idx + 20, num_items)
+                                                        display_bibliographies(filtered_df.iloc[start_idx:end_idx])
+                            else:
+                                st.write("No articles found with the given keyword/phrase.")
+                            status.update(
+                                label=f"Search found **{num_items}** {'matching source' if num_items == 1 else 'matching sources'} in the database for '{search_term}'.", 
+                                state="complete", 
+                                expanded=True
+                                )
+                    else:
+                        st.write("Please enter a keyword or author name to search.")
+                    # search_keyword()
 
                 # SEARCH AUTHORS
                 elif search_option == "Search author":
