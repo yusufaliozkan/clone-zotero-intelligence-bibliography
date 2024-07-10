@@ -1030,11 +1030,9 @@ with st.spinner('Retrieving data...'):
                                         formatted_rows.append(f"{i+1}) " + formatted_row)
 
                                     # Use st.write to print each row
-                                    # for row in formatted_rows:
-                                    #     st.caption(row)
-                                    fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
-                                                        title='Radar Chart for Collection Items')
-                                    st.plotly_chart(fig, use_container_width = True)
+                                    for row in formatted_rows:
+                                        st.caption(row)
+
                             with colauthor4:
                                 with st.popover('Filters and more'):
                                     container_types = st.container()
@@ -1112,6 +1110,10 @@ with st.spinner('Retrieving data...'):
                                             labels={'x': 'Publication Type', 'y': 'Number of Publications'},
                                             title=f'Publications by Type ({selected_author})')
                                 st.plotly_chart(fig)
+
+                                fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
+                                                    title='Radar Chart for Collection Items')
+                                st.plotly_chart(fig, use_container_width = True)
 
                                 author_df = filtered_collection_df_authors
                                 author_df['Year'] = pd.to_datetime(author_df['Date published']).dt.year
