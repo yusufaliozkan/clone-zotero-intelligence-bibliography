@@ -1032,7 +1032,8 @@ with st.spinner('Retrieving data...'):
                                     # Use st.write to print each row
                                     for row in formatted_rows:
                                         st.caption(row)
-                                    fig = px.pie(filtered_df_for_collections, names='Collection_Name', values='Number_of_Items', title='Pie Chart for All Collections')
+                                    fig = px.line_polar(data, r='Number_of_Items', theta='Collection_Name', line_close=True, 
+                                                        title='Radar Chart for Collection Items')
                                     st.plotly_chart(fig)
                             with colauthor4:
                                 with st.popover('Filters and more'):
