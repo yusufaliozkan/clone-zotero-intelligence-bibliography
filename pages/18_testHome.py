@@ -982,7 +982,6 @@ with st.spinner('Retrieving data...'):
                     else:
                         filtered_collection_df_authors = df_authors[df_authors['Author_name']== selected_author]
                         filtered_collection_df_authors_items = filtered_collection_df_authors[['Zotero link']]
-                        filtered_collection_df_authors_items
 
                         filtered_collection_df_authors['Date published'] = pd.to_datetime(filtered_collection_df_authors['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
                         filtered_collection_df_authors['Date published'] = filtered_collection_df_authors['Date published'].dt.strftime('%Y-%m-%d')
@@ -1012,8 +1011,7 @@ with st.spinner('Retrieving data...'):
 
                             st.markdown(f'##### Top 5 relevant themes')
                             filtered_df_for_collections =  df_duplicated.copy()
-                            filtered_df_for_collections 
-                            filtered_df_for_collections = filtered_df_for_collections[filtered_df_for_collections['Author_name']== selected_author]
+                            filtered_df_for_collections = pd.merge(filtered_df_for_collections, filtered_collection_df_authors_items, on='Zotero link')
                             filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
                             filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
                             filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
