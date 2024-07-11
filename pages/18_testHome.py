@@ -1937,6 +1937,9 @@ with st.spinner('Retrieving data...'):
                             coljournal1, coljournal2, coljournal3, coljournal4 = st.columns(4)
                             with coljournal1:
                                 container_metric = st.container()
+                            with coljournal2:
+                                with st.popover('More metrics'):
+                                    container_citation = st.container()
 
                             non_nan_id = selected_journal_df['ID'].count()
 
@@ -1959,10 +1962,22 @@ with st.spinner('Retrieving data...'):
                                 oa_ratio = true_count / total_count * 100
                             st.write(f"Sources found: **{num_items_collections}**, Number of citations: **{int(citation_count)}**, Open access coverage: **{int(oa_ratio)}%**")
                             container_metric.metric(label="Number of items", value=int(num_items_collections))
+                            
                             journal_citations = selected_journal_df.groupby('Journal')['Citation'].sum()
-
                             if len(journal_citations) >1:
                                 journal_citations
+
+                            citation_count = selected_journal_df['Citation'].sum()
+                            citation_mean = non_nan_cited_df_dedup['Citation'].mean()
+                            citation_median = non_nan_cited_df_dedup['Citation'].median()
+                            # st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
+                            container_citation.metric(
+                                label="Number of citations", 
+                                value=int(citation_count), 
+                                help=f'''Not all papers are tracked for citation. 
+                                Citation per publication: **{round(citation_mean, 1)}**, 
+                                Citation median: **{round(citation_median, 1)}**'''
+                                )
 
                             a = f'selected_journal_{today}'
                             st.download_button('💾 Download', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
