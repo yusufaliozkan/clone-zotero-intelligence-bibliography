@@ -1933,7 +1933,7 @@ with st.spinner('Retrieving data...'):
                         
                         with st.expander('Click to expand', expanded=True):
                             journals
-                            if len(selected_journal_df)==1:
+                            if len(selected_journal_df['Journal'].drop_duplicates())==1:
                                 st.markdown('#### Journal: ' + str(journals))
                             else:
                                 st.markdown('#### Journals: ')
