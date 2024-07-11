@@ -1936,7 +1936,7 @@ with st.spinner('Retrieving data...'):
                                 st.markdown('#### Journal: ' + str(journals))
                             else:
                                 st.markdown('#### Journals: ')
-                                st.caption(f'{journals}')
+                                st.write(f'{journals}')
 
                             coljournal1, coljournal2, coljournal3, coljournal4 = st.columns(4)
                             with coljournal1:
