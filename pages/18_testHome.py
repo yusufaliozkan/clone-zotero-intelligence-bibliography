@@ -1940,6 +1940,7 @@ with st.spinner('Retrieving data...'):
                             with coljournal2:
                                 with st.popover('More metrics'):
                                     container_citation = st.container()
+                                    container_oa = st.container()
 
                             non_nan_id = selected_journal_df['ID'].count()
 
@@ -1953,15 +1954,16 @@ with st.spinner('Retrieving data...'):
                             today = datetime.date.today().isoformat()
                             num_items_collections = len(selected_journal_df)
                             citation_count = selected_journal_df['Citation'].sum()
+
                             true_count = selected_journal_df['OA status'].sum()
                             total_count = len(selected_journal_df['OA status'])
-
                             if total_count == 0:
                                 oa_ratio = 0.0
                             else:
                                 oa_ratio = true_count / total_count * 100
                             st.write(f"Sources found: **{num_items_collections}**, Number of citations: **{int(citation_count)}**, Open access coverage: **{int(oa_ratio)}%**")
                             container_metric.metric(label="Number of items", value=int(num_items_collections))
+                            container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
                             
                             journal_citations = selected_journal_df.groupby('Journal')['Citation'].sum()
                             if len(journal_citations) >1:
