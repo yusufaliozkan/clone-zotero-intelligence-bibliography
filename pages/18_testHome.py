@@ -2429,7 +2429,7 @@ with st.spinner('Retrieving data...'):
                     st.query_params.clear()
                     st.subheader('Cited items in the library', anchor=False, divider='blue')
                     
-                    @st.experimental_fragment
+                    # @st.experimental_fragment
                     # def search_cited_papers():
                     with st.expander('Click to expand', expanded=True):
                         container_markdown = st.container()              
