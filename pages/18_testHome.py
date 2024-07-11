@@ -1934,6 +1934,10 @@ with st.spinner('Retrieving data...'):
                         with st.expander('Click to expand', expanded=True):
                             st.markdown('#### Journal: ' + str(journals))
 
+                            coljournal1, coljournal2, coljournal3, coljournal4 = st.columns(4)
+                            with coljournal1:
+                                container_metric = st.container()
+
                             non_nan_id = selected_journal_df['ID'].count()
 
                             download_journal = selected_journal_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
@@ -1954,6 +1958,7 @@ with st.spinner('Retrieving data...'):
                             else:
                                 oa_ratio = true_count / total_count * 100
                             st.write(f"Sources found: **{num_items_collections}**, Number of citations: **{int(citation_count)}**, Open access coverage: **{int(oa_ratio)}%**")
+                            container_metric.metric(label="Number of items", value=int(num_items_collections))
                             journal_citations = selected_journal_df.groupby('Journal')['Citation'].sum()
 
                             if len(journal_citations) >1:
