@@ -1941,6 +1941,7 @@ with st.spinner('Retrieving data...'):
                                 with st.popover('More metrics'):
                                     container_citation = st.container()
                                     container_oa = st.container()
+                                    container_collaboration_ratio = st.container()
 
                             non_nan_id = selected_journal_df['ID'].count()
 
@@ -1980,6 +1981,16 @@ with st.spinner('Retrieving data...'):
                                 Citation per publication: **{round(citation_mean, 1)}**, 
                                 Citation median: **{round(citation_median, 1)}**'''
                                 )
+
+                            selected_journal_df['multiple_authors'] = selected_journal_df['FirstName2'].apply(
+                                lambda x: isinstance(x, str) and ',' in x
+                            )
+                            multiple_authored_papers = selected_journal_df['multiple_authors'].sum()
+                            if multiple_authored_papers == 0:
+                                collaboration_ratio = 0
+                            else:
+                                collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
+                            container_collaboration_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
                             a = f'selected_journal_{today}'
                             st.download_button('💾 Download', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
