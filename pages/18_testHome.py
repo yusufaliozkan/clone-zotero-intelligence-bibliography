@@ -1597,7 +1597,7 @@ with st.spinner('Retrieving data...'):
                             st.subheader('Publication type: ' + selected_type, anchor=False, divider='blue')
                             if selected_type == 'Thesis':
                                 st.warning('Links to PhD theses catalouged by the British EThOS may not be working due to the [cyber incident at the British Library](https://www.bl.uk/cyber-incident/).')
-                            coltype1, coltype2, coltype3 = st.columns(3)
+                            coltype1, coltype2, coltype3, coltype4 = st.columns(4)
                             with coltype1:
                                 container_metric = st.container()
                             with coltype2:
@@ -1608,6 +1608,33 @@ with st.spinner('Retrieving data...'):
                                     container_author_number  = st.container()
                                     container_author_ratio = st.container()
                             with coltype3:
+                                with st.popover('Relevant themes'):
+                                    st.markdown(f'##### Top relevant publication themes')
+                                    filtered_df_for_collections =  df_duplicated.copy()
+                                    filtered_df_for_collections = pd.merge(filtered_df_for_collections, filtered_collection_df_authors_items, on='Zotero link')
+                                    filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
+                                    filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(10)
+                                    filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
+                                    filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on='Collection_Name', how='left').drop_duplicates(subset='Collection_Name').reset_index(drop=True)
+                                    def remove_numbers(name):
+                                        return re.sub(r'^\d+(\.\d+)*\s*', '', name)
+                                    filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
+                                    row_nu = len(filtered_df_for_collections)
+                                    formatted_rows = []
+                                    for i in range(row_nu):
+                                        collection_name = filtered_df_for_collections['Collection_Name'].iloc[i]
+                                        number_of_items = filtered_df_for_collections['Number_of_Items'].iloc[i]
+                                        zotero_collection_link = filtered_df_for_collections['Collection_Link'].iloc[i]
+                                        formatted_row = (
+                                            f"[{collection_name}]({zotero_collection_link}) "  # Hyperlink format in markdown
+                                            f"{number_of_items} items"
+                                        )
+                                        formatted_rows.append(f"{i+1}) " + formatted_row)
+
+                                    # Use st.write to print each row
+                                    for row in formatted_rows:
+                                        st.caption(row)
+                            with coltype4:
                                 with st.popover('Filters and more'):
                                     container_download_types = st.container()
                                     if selected_type=='Thesis':
@@ -1705,32 +1732,6 @@ with st.spinner('Retrieving data...'):
                                                     labels={'x': 'Publication Year', 'y': 'Number of Publications'},
                                                     title=f'Publications by Year ({selected_type})')
                                 st.plotly_chart(fig_year_bar)
-
-                                st.markdown(f'##### Top relevant publication themes')
-                                filtered_df_for_collections =  df_duplicated.copy()
-                                filtered_df_for_collections = pd.merge(filtered_df_for_collections, filtered_collection_df_authors_items, on='Zotero link')
-                                filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
-                                filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(10)
-                                filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
-                                filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on='Collection_Name', how='left').drop_duplicates(subset='Collection_Name').reset_index(drop=True)
-                                def remove_numbers(name):
-                                    return re.sub(r'^\d+(\.\d+)*\s*', '', name)
-                                filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
-                                row_nu = len(filtered_df_for_collections)
-                                formatted_rows = []
-                                for i in range(row_nu):
-                                    collection_name = filtered_df_for_collections['Collection_Name'].iloc[i]
-                                    number_of_items = filtered_df_for_collections['Number_of_Items'].iloc[i]
-                                    zotero_collection_link = filtered_df_for_collections['Collection_Link'].iloc[i]
-                                    formatted_row = (
-                                        f"[{collection_name}]({zotero_collection_link}) "  # Hyperlink format in markdown
-                                        f"{number_of_items} items"
-                                    )
-                                    formatted_rows.append(f"{i+1}) " + formatted_row)
-
-                                # Use st.write to print each row
-                                for row in formatted_rows:
-                                    st.caption(row)
 
                                 fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
                                                     title=f'Top Publication Themes ({selected_type})')
