@@ -1932,11 +1932,11 @@ with st.spinner('Retrieving data...'):
                         # publications_by_type = filtered_collection_df['Publication type'].value_counts()
                         
                         with st.expander('Click to expand', expanded=True):
-                            if len(selected_journal_df)=1:
+                            if len(selected_journal_df)==1:
                                 st.markdown('#### Journal: ' + str(journals))
                             else:
                                 st.markdown('#### Journals: ')
-                                st.caption(f'{str{journals}}')
+                                st.caption(f'{journals}')
 
                             coljournal1, coljournal2, coljournal3, coljournal4 = st.columns(4)
                             with coljournal1:
