@@ -357,6 +357,7 @@ with col1:
 
             # Create a DataFrame
             df = pd.DataFrame(all_data)
+            df
             words_to_filter = ["intelligence", "espionage", "spy", "oversight"]
             pattern = '|'.join(words_to_filter)
 
