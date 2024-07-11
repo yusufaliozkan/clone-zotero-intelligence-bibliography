@@ -1932,6 +1932,7 @@ with st.spinner('Retrieving data...'):
                         # publications_by_type = filtered_collection_df['Publication type'].value_counts()
                         
                         with st.expander('Click to expand', expanded=True):
+                            journals
                             if len(selected_journal_df)==1:
                                 st.markdown('#### Journal: ' + str(journals))
                             else:
