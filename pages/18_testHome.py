@@ -1944,6 +1944,7 @@ with st.spinner('Retrieving data...'):
                                     container_collaboration_ratio = st.container()
                                     container_author_number  = st.container()
                                     container_author_ratio = st.container()
+                                    container_dataframe = st.container()
                             non_nan_id = selected_journal_df['ID'].count()
 
                             download_journal = selected_journal_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
@@ -1969,7 +1970,7 @@ with st.spinner('Retrieving data...'):
                             
                             journal_citations = selected_journal_df.groupby('Journal')['Citation'].sum()
                             if len(journal_citations) >1:
-                                journal_citations
+                                container_dataframe.dataframe(journal_citations)
 
                             citation_count = selected_journal_df['Citation'].sum()
 
