@@ -1575,6 +1575,7 @@ with st.spinner('Retrieving data...'):
                         st.write('Pick a publication type to see items')
                     else:
                         filtered_df_for_collections = df_csv_types[df_csv_types['Publication type']== selected_type]
+                        filtered_df_for_collections
                         filtered_df_for_collections = filtered_df_for_collections[['Zotero link']]
 
                         filtered_type_df = df_csv_types[df_csv_types['Publication type']==selected_type]
