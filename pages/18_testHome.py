@@ -1574,6 +1574,9 @@ with st.spinner('Retrieving data...'):
                     if not selected_type or selected_type == '':
                         st.write('Pick a publication type to see items')
                     else:
+                        filtered_collection_df_authors = df_csv_types[df_csv_types['Publication type']== selected_type]
+                        filtered_collection_df_authors_items = filtered_collection_df_authors[['Zotero link']]
+
                         filtered_type_df = df_csv_types[df_csv_types['Publication type']==selected_type]
                         # filtered_collection_df = filtered_collection_df.sort_values(by='Date published', ascending=False).reset_index(drop=True)
 
@@ -1704,7 +1707,6 @@ with st.spinner('Retrieving data...'):
                                 st.plotly_chart(fig_year_bar)
 
                                 st.markdown(f'##### Top relevant publication themes')
-                                filtered_df_for_collections =  df_duplicated.copy()
                                 filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
                                 filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(10)
                                 filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
