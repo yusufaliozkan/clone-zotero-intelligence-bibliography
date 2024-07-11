@@ -1942,7 +1942,7 @@ with st.spinner('Retrieving data...'):
                                     container_citation = st.container()
                                     container_oa = st.container()
                                     container_collaboration_ratio = st.container()
-
+                                    container_author_number  = st.container()
                             non_nan_id = selected_journal_df['ID'].count()
 
                             download_journal = selected_journal_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
@@ -1991,6 +1991,29 @@ with st.spinner('Retrieving data...'):
                             else:
                                 collaboration_ratio = round(multiple_authored_papers/num_items_collections*100, 1)
                             container_collaboration_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
+
+                            def split_and_expand(authors):
+                                # Ensure the input is a string
+                                if isinstance(authors, str):
+                                    # Split by comma and strip whitespace
+                                    split_authors = [author.strip() for author in authors.split(',')]
+                                    return pd.Series(split_authors)
+                                else:
+                                    # Return the original author if it's not a string
+                                    return pd.Series([authors])
+                            expanded_authors_types = selected_journal_df['FirstName2'].apply(split_and_expand).stack().reset_index(level=1, drop=True)
+                            expanded_authors_types = expanded_authors_types.reset_index(name='Author')
+                            author_no = len(expanded_authors_types)
+                            if author_no == 0:
+                                author_pub_ratio=0.0
+                            else:
+                                author_pub_ratio = round(author_no/num_items_collections, 2)
+                            container_author_number.metric(label='Number of authors', value=int(author_no))
+                            container_author_ratio.metric(
+                                label='Author/publication ratio', 
+                                value=author_pub_ratio, 
+                                help='The average author number per publication.'
+                            )
 
                             a = f'selected_journal_{today}'
                             st.download_button('💾 Download', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
