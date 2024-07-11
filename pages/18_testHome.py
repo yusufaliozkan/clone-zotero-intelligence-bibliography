@@ -1972,6 +1972,14 @@ with st.spinner('Retrieving data...'):
                                 journal_citations
 
                             citation_count = selected_journal_df['Citation'].sum()
+
+                            citation_count = selected_journal_df['Citation'].sum()
+                            total_rows = len(selected_journal_df)
+                            nan_count_citation = selected_journal_df['Citation_list'].isna().sum()
+                            non_nan_count_citation = total_rows - nan_count_citation
+                            non_nan_cited_df_dedup = selected_journal_df.dropna(subset=['Citation_list'])
+                            non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
+
                             citation_mean = non_nan_cited_df_dedup['Citation'].mean()
                             citation_median = non_nan_cited_df_dedup['Citation'].median()
                             # st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
