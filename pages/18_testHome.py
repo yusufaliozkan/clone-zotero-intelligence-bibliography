@@ -1710,6 +1710,7 @@ with st.spinner('Retrieving data...'):
                                 filtered_collection_df_authors_items
                                 filtered_df_for_collections =  df_duplicated.copy()
                                 filtered_df_for_collections = pd.merge(filtered_df_for_collections, filtered_collection_df_authors_items, on='Zotero link')
+                                filtered_df_for_collections
                                 filtered_df_for_collections = filtered_collection_df_authors_items[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
                                 filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(10)
                                 filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
