@@ -1943,6 +1943,7 @@ with st.spinner('Retrieving data...'):
                                     container_oa = st.container()
                                     container_collaboration_ratio = st.container()
                                     container_author_number  = st.container()
+                                    container_author_ratio = st.container()
                             non_nan_id = selected_journal_df['ID'].count()
 
                             download_journal = selected_journal_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
