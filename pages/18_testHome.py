@@ -1936,7 +1936,7 @@ with st.spinner('Retrieving data...'):
                         
                         with st.expander('Click to expand', expanded=True):
                             if len(selected_journal_df['Journal'].drop_duplicates())==1:
-                                st.markdown('#### Selected Journal: ' + str(journals))
+                                st.markdown('#### Selected Journal: ' + (journals))
                             else:
                                 st.markdown('#### Selected Journals: ')
                                 items_string = ', '.join(journals)
