@@ -1917,9 +1917,8 @@ with st.spinner('Retrieving data...'):
                         st.write('Pick a journal name to see items')
                     else:
                         selected_journal_df = df_csv[df_csv['Journal'].isin(journals)]
-                        filtered_collection_df_authors_items = filtered_collection_df_authors[['Zotero link']]
-
                         filtered_collection_df_authors = selected_journal_df.copy()
+                        filtered_collection_df_authors_items = filtered_collection_df_authors[['Zotero link']]
 
                         selected_journal_df['Date published'] = (
                             selected_journal_df['Date published']
