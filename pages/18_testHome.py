@@ -1912,8 +1912,6 @@ with st.spinner('Retrieving data...'):
                     journal_counts = df_csv['Journal'].value_counts()
                     unique_journals_sorted = journal_counts.index.tolist()
                     journals = st.multiselect('Select a journal', unique_journals_sorted)
-                    for journal in journals:
-                        st.write(journal)
 
                     if not journals:
                         st.write('Pick a journal name to see items')
@@ -1938,10 +1936,11 @@ with st.spinner('Retrieving data...'):
                         
                         with st.expander('Click to expand', expanded=True):
                             if len(selected_journal_df['Journal'].drop_duplicates())==1:
-                                st.markdown('#### Journal: ' + str(journals))
+                                st.markdown('#### Selected Journal: ' + str(journals))
                             else:
-                                st.markdown('#### Journals: ')
-                                st.write(f'{journals}')
+                                st.markdown('#### Selected Journals: ')
+                                for journal in journals:
+                                    st.write(journal)
 
                             coljournal1, coljournal2, coljournal3, coljournal4 = st.columns(4)
                             with coljournal1:
