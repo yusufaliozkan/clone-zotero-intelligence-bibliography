@@ -1939,12 +1939,8 @@ with st.spinner('Retrieving data...'):
                                 st.markdown('#### Selected Journal: ' + str(journals))
                             else:
                                 st.markdown('#### Selected Journals: ')
-                                for journal in journals:
-                                    items_string = ', '.join(journals)
-                                    st.write(items_string)
-
-
-                                    st.write(journal)
+                                items_string = ', '.join(journals)
+                                st.write(items_string)
 
                             coljournal1, coljournal2, coljournal3, coljournal4 = st.columns(4)
                             with coljournal1:
