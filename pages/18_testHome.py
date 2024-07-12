@@ -2308,7 +2308,7 @@ with st.spinner('Retrieving data...'):
                                 container_publication_ratio = st.container()
                         with coly3:
                             with st.popover('Releveant themes'):
-                                st.markdown(f'##### Top 5 relevant themes')
+                                st.markdown(f'##### Top relevant themes')
                                 container_themes = st.container()
                         with coly4:
                             with st.popover('Filters and more'):
@@ -2505,6 +2505,17 @@ with st.spinner('Retrieving data...'):
                                                         labels={'x': 'Publication Month', 'y': 'Number of Publications'},
                                                         title=f'Publications by Month in {int(years[0])}')
                                     st.plotly_chart(fig_year_bar)
+
+                                if abs(years[1]-years[0])>0 and years[0]<current_year:
+                                    fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
+                                                        title=f'Top Publication Themes between {int(years[0])} and {int(years[1])}')
+                                    fig.update_traces(fill='toself')
+                                    st.plotly_chart(fig, use_container_width = True)
+                                else:
+                                    fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
+                                                        title=f'Top Publication Themes in {int(years[0])}')
+                                    fig.update_traces(fill='toself')
+                                    st.plotly_chart(fig, use_container_width = True)
 
                                 collection_author_df = df_all.copy()
                                 collection_author_df['Author_name'] = collection_author_df['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
