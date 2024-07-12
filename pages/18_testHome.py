@@ -2119,10 +2119,10 @@ with st.spinner('Retrieving data...'):
                                 st.plotly_chart(fig_cumsum_line, use_container_width = True)
 
                                 fig = px.line_polar(filtered_df_for_collections, r='Number_of_Items', theta='Collection_Name', line_close=True, 
-                                                    title=f'Top Publication Themes ({selected_author})')
+                                                    title=f'Top Publication Themes ({journals})')
                                 fig.update_traces(fill='toself')
                                 st.plotly_chart(fig, use_container_width = True)
-                                
+
                                 collection_author_df = type_df.copy()
                                 collection_author_df['Author_name'] = collection_author_df['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                                 collection_author_df = collection_author_df.explode('Author_name')
