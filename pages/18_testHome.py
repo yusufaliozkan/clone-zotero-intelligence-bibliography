@@ -2003,7 +2003,6 @@ with st.spinner('Retrieving data...'):
                                 oa_ratio = 0.0
                             else:
                                 oa_ratio = true_count / total_count * 100
-                            st.write(f"Sources found: **{num_items_collections}**, Number of citations: **{int(citation_count)}**, Open access coverage: **{int(oa_ratio)}%**")
                             container_metric.metric(label="Number of items", value=int(num_items_collections))
                             container_oa.metric(label="Open access coverage", value=f'{int(oa_ratio)}%', help='Journal articles only')
                             
