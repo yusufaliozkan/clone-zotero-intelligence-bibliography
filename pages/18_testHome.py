@@ -1916,7 +1916,7 @@ with st.spinner('Retrieving data...'):
                     if not journals:
                         st.write('Pick a journal name to see items')
                     else:
-                        filtered_collection_df_authors = df_csv[df_csv['Author_name']== journals]
+                        filtered_collection_df_authors = df_csv[df_csv['Journal']== journals]
                         filtered_collection_df_authors_items = filtered_collection_df_authors[['Zotero link']]
 
                         selected_journal_df = df_csv[df_csv['Journal'].isin(journals)]
