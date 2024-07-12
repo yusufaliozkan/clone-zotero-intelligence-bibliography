@@ -2194,37 +2194,40 @@ with st.spinner('Retrieving data...'):
                                     show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
                                     if show_first_20:
                                         selected_journal_df = selected_journal_df.head(20)                            
+                                if view == 'Basic list':
+                                    articles_list = []  # Store articles in a list
+                                    for index, row in selected_journal_df.iterrows():
+                                        formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
+                                        articles_list.append(formatted_entry)                     
+                                    
+                                    for index, row in selected_journal_df.iterrows():
+                                        publication_type = row['Publication type']
+                                        title = row['Title']
+                                        authors = row['FirstName2']
+                                        date_published = row['Date published'] 
+                                        link_to_publication = row['Link to publication']
+                                        zotero_link = row['Zotero link']
+                                        citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
+                                        citation = int(float(citation))
+                                        citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
+                                        citation_link = citation_link.replace('api.', '')
 
-                                articles_list = []  # Store articles in a list
-                                for index, row in selected_journal_df.iterrows():
-                                    formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
-                                    articles_list.append(formatted_entry)                     
-                                
-                                for index, row in selected_journal_df.iterrows():
-                                    publication_type = row['Publication type']
-                                    title = row['Title']
-                                    authors = row['FirstName2']
-                                    date_published = row['Date published'] 
-                                    link_to_publication = row['Link to publication']
-                                    zotero_link = row['Zotero link']
-                                    citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
-                                    citation = int(float(citation))
-                                    citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
-                                    citation_link = citation_link.replace('api.', '')
+                                        if publication_type == 'Journal article':
+                                            published_by_or_in = 'Published in'
+                                            published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
+                                        elif publication_type == 'Book':
+                                            published_by_or_in = 'Published by'
+                                            published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
+                                        else:
+                                            published_by_or_in = ''
+                                            published_source = ''
 
-                                    if publication_type == 'Journal article':
-                                        published_by_or_in = 'Published in'
-                                        published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
-                                    elif publication_type == 'Book':
-                                        published_by_or_in = 'Published by'
-                                        published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
-                                    else:
-                                        published_by_or_in = ''
-                                        published_source = ''
-
-                                    formatted_entry = format_entry(row)
-                                    st.write(f"{index + 1}) {formatted_entry}")
-                
+                                        formatted_entry = format_entry(row)
+                                        st.write(f"{index + 1}) {formatted_entry}")
+                                    if view == 'Table':
+                                        df_table_view = selected_journal_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Link to publication','Zotero link']]
+                                        df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
+                                        df_table_view
                     # search_journal()
                 
                 elif search_option == "Publication year": 
