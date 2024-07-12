@@ -2224,29 +2224,28 @@ with st.spinner('Retrieving data...'):
 
                                         formatted_entry = format_entry(row)
                                         st.write(f"{index + 1}) {formatted_entry}")
-                                    if view == 'Table':
-                                        df_table_view = selected_journal_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Link to publication','Zotero link']]
-                                        df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
-                                        df_table_view
-                                        st.write('test')
-                                    if view =='Bibliography':
-                                        selected_journal_df['zotero_item_key'] = selected_journal_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
-                                        df_zotero_id = pd.read_csv('zotero_citation_format.csv')
-                                        selected_journal_df = pd.merge(selected_journal_df, df_zotero_id, on='zotero_item_key', how='left')
-                                        df_zotero_id = selected_journal_df[['zotero_item_key']]
+                                if view == 'Table':
+                                    df_table_view = selected_journal_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Link to publication','Zotero link']]
+                                    df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
+                                    df_table_view
+                                if view =='Bibliography':
+                                    selected_journal_df['zotero_item_key'] = selected_journal_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                    df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                                    selected_journal_df = pd.merge(selected_journal_df, df_zotero_id, on='zotero_item_key', how='left')
+                                    df_zotero_id = selected_journal_df[['zotero_item_key']]
 
-                                        def display_bibliographies2(df):
-                                            all_bibliographies = ""
-                                            for index, row in df.iterrows():
-                                                # Add a horizontal line between bibliographies
-                                                if index > 0:
-                                                    all_bibliographies += '<p><p>'
-                                                
-                                                # Display bibliography
-                                                all_bibliographies += row['bibliography']
+                                    def display_bibliographies2(df):
+                                        all_bibliographies = ""
+                                        for index, row in df.iterrows():
+                                            # Add a horizontal line between bibliographies
+                                            if index > 0:
+                                                all_bibliographies += '<p><p>'
+                                            
+                                            # Display bibliography
+                                            all_bibliographies += row['bibliography']
 
-                                            st.markdown(all_bibliographies, unsafe_allow_html=True)
-                                        display_bibliographies2(selected_journal_df)
+                                        st.markdown(all_bibliographies, unsafe_allow_html=True)
+                                    display_bibliographies2(selected_journal_df)
                     # search_journal()
                 
                 elif search_option == "Publication year": 
