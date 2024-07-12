@@ -2294,7 +2294,7 @@ with st.spinner('Retrieving data...'):
                         # else:
                         #     st.markdown(f'#### Items published between **{int(years[0])}** and **{int(years[1])}**')
 
-                        coly1, coly2, coly3 = st.columns(3)
+                        coly1, coly2, coly3, coly4 = st.columns(4)
                         with coly1:
                             container_metric = st.container()
                         with coly2:
@@ -2307,6 +2307,10 @@ with st.spinner('Retrieving data...'):
                                 container_author_pub_ratio = st.container()
                                 container_publication_ratio = st.container()
                         with coly3:
+                            with st.popover('Releveant themes'):
+                                st.markdown(f'##### Top 5 relevant themes')
+                                container_themes = st.container()
+                        with coly4:
                             with st.popover('Filters and more'):
                                 st.warning('Items without a publication date are not listed here!')
                                 pub_types = df_all['Publication type'].unique()
@@ -2439,7 +2443,6 @@ with st.spinner('Retrieving data...'):
                         filtered_collection_df_journals = df_all.copy()
                         filtered_collection_df_journals_items = filtered_collection_df_journals[['Zotero link']]
 
-                        st.markdown(f'##### Top 5 relevant themes')
                         filtered_df_for_collections =  df_duplicated.copy()
                         filtered_df_for_collections = pd.merge(filtered_df_for_collections, filtered_collection_df_journals_items, on='Zotero link')
                         filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
@@ -2464,7 +2467,7 @@ with st.spinner('Retrieving data...'):
 
                         # Use st.write to print each row
                         for row in formatted_rows:
-                            st.caption(row)                
+                            container_themes.caption(row)                
 
                         dashboard_all = st.toggle('Generate dashboard')
                         if dashboard_all:
