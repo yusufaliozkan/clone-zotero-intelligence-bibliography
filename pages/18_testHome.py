@@ -2228,6 +2228,7 @@ with st.spinner('Retrieving data...'):
                                         df_table_view = selected_journal_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Link to publication','Zotero link']]
                                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                                         df_table_view
+                                        st.write('test')
                                     if view =='Bibliography':
                                         selected_journal_df['zotero_item_key'] = selected_journal_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
                                         df_zotero_id = pd.read_csv('zotero_citation_format.csv')
