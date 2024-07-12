@@ -1912,6 +1912,7 @@ with st.spinner('Retrieving data...'):
                     journal_counts = df_csv['Journal'].value_counts()
                     unique_journals_sorted = journal_counts.index.tolist()
                     journals = st.multiselect('Select a journal', unique_journals_sorted)
+                    journals
 
                     if not journals:
                         st.write('Pick a journal name to see items')
