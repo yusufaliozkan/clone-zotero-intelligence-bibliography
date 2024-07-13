@@ -98,7 +98,7 @@ with st.spinner('Preparing digest...'):
                 today = st.date_input('To:', today, max_value=today, min_value=rg)
                 a = today - rg
                 a = str(a.days) + ' days'
-
+            df_csv
             filter = (df_csv['Date published']>rg) & (df_csv['Date published']<=today)
             rg2 = rg.strftime('%d/%m/%Y')
             df_csv = df_csv.loc[filter]
