@@ -195,7 +195,7 @@ with st.spinner('Preparing digest...'):
                     '**' + str(publication_type) + '**' + ': ' +
                     str(title) + ' ' +
                     '(by ' + '*' + str(authors) + '*' + ') ' +
-                    '(Publication date: ' + str(date_published) + ') ' +
+                    '(Publication date: ' + (date_published) + ') ' +
                     ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
                     '[[Publication link]](' + str(link_to_publication) + ') ' +
                     '[[Zotero link]](' + str(zotero_link) + ')'
