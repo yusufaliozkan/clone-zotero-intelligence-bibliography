@@ -95,6 +95,7 @@ with st.spinner('Preparing digest...'):
                 a='10 days'
             if range_day == 'Last month':
                 rg = start_last_month
+                today = end_last_month
                 a = 'Last month'
             if range_day == '3 months':
                 rg = previous_180
