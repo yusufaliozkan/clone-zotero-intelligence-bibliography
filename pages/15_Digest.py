@@ -67,8 +67,8 @@ with st.spinner('Preparing digest...'):
 
     with st.expander('Publications:', expanded=ex):
         st.header('Publications')
-        tab1, tab2, tab3 = st.tabs(['Recently added', 'Recent publications', 'Recently cited publications'])
-        with tab1:
+        options = st.radio('Select an option', ('Recently added', 'Recently published', 'Recently cited'))
+        if options=='Recently added':
             previous_10 = today - dt.timedelta(days=10)
             previous_30 = today - dt.timedelta(days=30)
             previous_180 = today - dt.timedelta(days=180)
@@ -294,7 +294,7 @@ with st.spinner('Preparing digest...'):
                     plt.show()
                     st.set_option('deprecation.showPyplotGlobalUse', False)
                     st.pyplot() 
-        with tab2:
+        if options=='Recently published':
             previous_10 = today - dt.timedelta(days=10)
             previous_30 = today - dt.timedelta(days=30)
             previous_180 = today - dt.timedelta(days=180)
@@ -518,7 +518,7 @@ with st.spinner('Preparing digest...'):
                     plt.show()
                     st.set_option('deprecation.showPyplotGlobalUse', False)
                     st.pyplot() 
-        with tab3:
+        if options=='Recently cited':
             current_year = datetime.datetime.now().year
             df_cited = df_cited[(df_cited['Citation'].notna()) & (df_cited['Citation'] != 0)]
             df_cited = df_cited.reset_index(drop=True)
