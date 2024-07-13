@@ -77,7 +77,8 @@ with st.spinner('Preparing digest...'):
             a='30 days'
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-            df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], errors='coerce')
+            df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], errors='coerce').dt.date
+
 
             # Define today
             # today = pd.Timestamp.today().normalize()
