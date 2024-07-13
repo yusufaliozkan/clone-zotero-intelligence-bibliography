@@ -64,6 +64,7 @@ with st.spinner('Preparing digest...'):
     if expand:
         ex = True
 
+    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
     with st.expander('Publications:', expanded=ex):
         st.header('Publications')
@@ -76,8 +77,6 @@ with st.spinner('Preparing digest...'):
             # previous_360 = today - dt.timedelta(days=365)
             rg = previous_10
             a='30 days'
-            st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-
 
             df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], errors='coerce').dt.date
             latest_added_date = df_csv['Date added'].max()
