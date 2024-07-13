@@ -123,7 +123,7 @@ with st.spinner('Preparing digest...'):
                 num_items = len(df_csv)
                 today_2 = today.strftime('%d/%m/%Y')
                 st.subheader('Sources added between ' + '**'+ rg2 +' - ' + today_2+'**')
-                st.write('This list finds '+str(num_items)+' sources added between ' + '**'+ rg2 +' - ' + today_2+'**')
+                st.write(f"{str(num_items)} sources added in the last  {days_difference} day" if days_difference == 1 else f"{str(num_items)} sources added in the last  {days_difference} days")    
             else:
                 num_items = len(df_csv)
                 st.subheader('Sources added in the last ' + str(a))
