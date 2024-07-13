@@ -107,6 +107,7 @@ with st.spinner('Preparing digest...'):
 
         
             filter = (df_csv['Date added']>rg) & (df_csv['Date added']<=latest_added_date)
+            filter
             rg2 = rg.strftime('%d/%m/%Y')
             df_csv = df_csv.loc[filter]
 
