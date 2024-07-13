@@ -6,7 +6,7 @@ import streamlit.components.v1 as components
 import numpy as np
 import altair as alt
 # from pandas.io.json import json_normalize
-import datetime, timedelta
+import datetime
 import plotly.express as px
 import numpy as np
 import re
@@ -98,7 +98,7 @@ with st.spinner('Preparing digest...'):
                 previous_custom = today - dt.timedelta(days=number)
                 rg = previous_custom
             if range_day == 'Custom (select date)':
-                rg = st.date_input('From:', today-dt.timedelta(days=7), max_value=(latest_added_date- timedelta(days=1)))
+                rg = st.date_input('From:', today-dt.timedelta(days=7), max_value=(latest_added_date- dt.timedelta(days=1)))
                 today = st.date_input('To:', today, max_value=today, min_value=rg)
                 a = today - rg
                 a = str(a.days) + ' days'
