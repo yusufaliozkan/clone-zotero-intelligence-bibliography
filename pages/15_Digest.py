@@ -80,7 +80,7 @@ with st.spinner('Preparing digest...'):
             df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], errors='coerce')
 
             # Define today
-            today = pd.Timestamp.today().normalize()
+            # today = pd.Timestamp.today().normalize()
 
             # Radio button for date range selection
             range_day = st.radio('Show sources added to the database in the last:', 
