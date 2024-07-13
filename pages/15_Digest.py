@@ -302,7 +302,7 @@ with st.spinner('Preparing digest...'):
                     plt.show()
                     st.set_option('deprecation.showPyplotGlobalUse', False)
                     st.pyplot() 
-        if options=='Recently published':
+        elif options=='Recently published':
             previous_10 = today - dt.timedelta(days=10)
             previous_30 = today - dt.timedelta(days=30)
             previous_180 = today - dt.timedelta(days=180)
