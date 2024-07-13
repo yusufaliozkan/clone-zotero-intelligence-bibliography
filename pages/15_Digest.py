@@ -101,12 +101,12 @@ with st.spinner('Preparing digest...'):
                 a = str(a.days) + ' days'
 
             df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], errors='coerce').dt.date
-
+            latest = df_csv['Date added'].max()
+            latest
             filter = (df_csv['Date added']>rg) & (df_csv['Date added']<=today)
             rg2 = rg.strftime('%d/%m/%Y')
             df_csv = df_csv.loc[filter]
-            latest = df_csv['Date added'].max()
-            latest
+
 
             df_csv['Date published'] = pd.to_datetime(df_csv['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
 
