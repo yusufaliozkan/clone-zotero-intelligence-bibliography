@@ -201,7 +201,6 @@ with st.spinner('Preparing digest...'):
                     df_csv = df_csv.sort_values(by=['Date published'], ascending=False)
                     for index, row in df_csv.iterrows():
                         formatted_entry = format_entry(row)
-                        count += 1
                         if display2:
                             st.caption(row['Abstract']) 
             st.subheader('📊 Trends')
