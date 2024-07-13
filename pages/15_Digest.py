@@ -165,7 +165,7 @@ with st.spinner('Preparing digest...'):
                                     ", [Publication link]"+ '('+ df_csv['Link to publication'] + ')'
                                     )
                 df_last = df_last.dropna().reset_index(drop=True)
-                row_nu99 = len(df_csv)
+                row_nu99 = len(df_last)
                 st.info(f'**{row_nu99} paper(s) cited in {current_year}**.')
                 articles_list = []  # Store articles in a list
                 for index, row in df_cited.iterrows():
