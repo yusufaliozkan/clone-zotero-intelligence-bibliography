@@ -130,7 +130,7 @@ with st.spinner('Preparing digest...'):
                 difference = (latest_added_date-rg)
                 days_difference = difference.days
                 days_difference
-                st.write(f"{str(num_items)} sources added in the last  {days_difference}")    
+                st.write(f"{str(num_items)} sources added in the last  {days_difference} day" if days_difference == 1 else f"{str(num_items)} sources added in the last  {days_difference} days")    
 
             if df_csv['Title'].any() in ("", [], None, 0, False):
                 st.write('There is no publication added in the last '+ str(a))
