@@ -198,7 +198,6 @@ with st.spinner('Preparing digest...'):
                     '[[Publication link]](' + str(link_to_publication) + ') ' +
                     '[[Zotero link]](' + str(zotero_link) + ')'
                 )
-                df_csv = df_csv.sort_values(by=['Date published'], ascending=False)
                 count = 1
                 for index, row in df_csv.iterrows():
                     formatted_entry = format_entry(row)
