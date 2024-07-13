@@ -138,22 +138,34 @@ with st.spinner('Preparing digest...'):
             if df_csv['Title'].any() in ("", [], None, 0, False):
                 st.write('There is no publication added in the last '+ str(a))
 
+            df_csv['Date published'] = pd.to_datetime(df_csv['Date published'], errors='coerce').dt.date
             if sort_by_type:
                 df_csv = df_csv.sort_values(by=['Publication type'], ascending = True)
                 types2 = df_csv['Publication type'].unique()
                 types2 = pd.DataFrame(types2, columns=['Publication type'])
                 row_nu_types2 = len(types2.index)
-                articles_list = []
-
-                for index, row in df_csv.iterrows():
-                    formatted_entry = format_entry(row)
-                    articles_list.append(formatted_entry)
-
-                # Write the articles to the Streamlit app
-                count = 1
-                for entry in articles_list:
-                    st.write(f"{count}) {entry}")
-                    count += 1
+                for i in range(row_nu_types2):
+                    st.subheader(types2['Publication type'].iloc[i])
+                    b = types2['Publication type'].iloc[i]
+                    df_csva = df_csv[df_csv['Publication type']==b]
+                    df_csva["Link to publication"].fillna("No link", inplace = True)
+                    publication_info = ''
+                    if df_csva['Publication type'].iloc[0] in ('Journal article', 'Magazine article', 'Newspaper article'):
+                        publication_info = ' (Published in: ' + '*' + df_csva['Journal'] + '*' +')'
+                    df_lasta = (
+                        '**' + df_csva['Publication type'] + '**' + ": '" +
+                        df_csva['Title'] + "'," +
+                        ' (Author(s): ' + '*' + df_csva['FirstName2'].astype(str) + '*' + ')' +
+                        # Concatenate 'publication_info' if it's required here
+                        # publication_info +
+                        ' (Published on: ' + df_csva['Date published new'].astype(str) + ')' +
+                        ", [Publication link](" + df_csva['Link to publication'] + ')'
+                    )
+                    # df_lasta=df_lasta.dropna().reset_index(drop=True)
+                    row_nu = len(df_csva.index)
+                    for i in range(row_nu):
+                        df_lasta=df_lasta.dropna().reset_index(drop=True)                
+                        st.write(''+str(i+1)+') ' +df_lasta.iloc[i])
             else:
                 df_csv
                 row_nu99 = len(df_csv)
