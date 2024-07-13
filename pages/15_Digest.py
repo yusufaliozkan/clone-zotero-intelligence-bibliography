@@ -110,7 +110,7 @@ with st.spinner('Preparing digest...'):
             df_csv.sort_values(by='Date added', ascending = False, inplace=True)    
             df_csv
 
-            sort_by_type = st.checkbox('Sort by publication type', key='type')
+            sort_by_type = st.checkbox('Sort by publication type', key='type_recently_added')
             st.caption('See [📊 trends](#trends) in the last ' + str(a))
             types = st.multiselect('Publication type', df_csv['Publication type'].unique(),df_csv['Publication type'].unique())
             df_csv = df_csv[df_csv['Publication type'].isin(types)]
