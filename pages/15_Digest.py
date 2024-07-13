@@ -121,6 +121,8 @@ with st.spinner('Preparing digest...'):
             df_csv["Link to publication"].fillna("No link", inplace = True)
             if range_day == 'Custom (select date)':
                 num_items = len(df_csv)
+                difference = (today-rg)
+                days_difference = difference.days
                 today_2 = today.strftime('%d/%m/%Y')
                 st.subheader('Sources added between ' + '**'+ rg2 +' - ' + today_2+'**')
                 st.write(f"{num_items} sources added in the last {days_difference} day" if days_difference == 1 else f"{num_items} sources added in the last {days_difference} days")
