@@ -112,7 +112,7 @@ with st.spinner('Preparing digest...'):
             df_csv
             df_csv['Date published'] = df_csv['Date published'].fillna('No date')
             df_csv
-            df_csv.sort_values(by='Date published', ascending = False, inplace=True)    
+            # df_csv.sort_values(by='Date published', ascending = False, inplace=True)    
 
             sort_by_type = st.checkbox('Sort by publication type', key='type')
             st.caption('See [📊 trends](#trends) in the last ' + str(a))
