@@ -81,7 +81,6 @@ with st.spinner('Preparing digest...'):
 
             df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], errors='coerce').dt.date
             latest_added_date = df_csv['Date added'].max()
-            df_csv
 
             range_day = st.radio('Show sources added to the database in the last:', ('10 days','30 days', 'Custom (select date)'), key='days_recently_added')
             if range_day == '10 days':
@@ -104,13 +103,12 @@ with st.spinner('Preparing digest...'):
                 latest_added_date
                 a = latest_added_date - rg
                 a = str(a.days) + ' days'
+                rg
 
         
             filter = (df_csv['Date added']>rg) & (df_csv['Date added']<=latest_added_date)
-            filter
             rg2 = rg.strftime('%d/%m/%Y')
             df_csv = df_csv.loc[filter]
-
 
             df_csv['Date published'] = pd.to_datetime(df_csv['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
 
