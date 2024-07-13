@@ -100,13 +100,10 @@ with st.spinner('Preparing digest...'):
             if range_day == 'Custom (select date)':
                 rg = st.date_input('From:', today-dt.timedelta(days=7), max_value=latest_added_date)
                 latest_added_date = st.date_input('To:', latest_added_date, max_value=latest_added_date, min_value=rg)
-                latest_added_date
                 a = latest_added_date - rg
                 a = str(a.days) + ' days'
-                rg
-
         
-            filter = (df_csv['Date added']>rg) & (df_csv['Date added']<=latest_added_date)
+            filter = (df_csv['Date added']=>rg) & (df_csv['Date added']<=latest_added_date)
             rg2 = rg.strftime('%d/%m/%Y')
             df_csv = df_csv.loc[filter]
 
