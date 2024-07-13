@@ -140,33 +140,6 @@ with st.spinner('Preparing digest...'):
 
             df_csv['Date published'] = pd.to_datetime(df_csv['Date published'], errors='coerce').dt.date
             if sort_by_type:
-                # df_csv = df_csv.sort_values(by=['Publication type'], ascending = True)
-                # types2 = df_csv['Publication type'].unique()
-                # types2 = pd.DataFrame(types2, columns=['Publication type'])
-                # row_nu_types2 = len(types2.index)
-                # for i in range(row_nu_types2):
-                #     st.subheader(types2['Publication type'].iloc[i])
-                #     b = types2['Publication type'].iloc[i]
-                #     df_csva = df_csv[df_csv['Publication type']==b]
-                #     df_csva["Link to publication"].fillna("No link", inplace = True)
-                #     publication_info = ''
-                #     if df_csva['Publication type'].iloc[0] in ('Journal article', 'Magazine article', 'Newspaper article'):
-                #         publication_info = ' (Published in: ' + '*' + df_csva['Journal'] + '*' +')'
-                #     df_lasta = (
-                #         '**' + df_csva['Publication type'] + '**' + ": '" +
-                #         df_csva['Title'] + "'," +
-                #         ' (Author(s): ' + '*' + df_csva['FirstName2'].astype(str) + '*' + ')' +
-                #         # Concatenate 'publication_info' if it's required here
-                #         # publication_info +
-                #         ' (Published on: ' + df_csva['Date published new'].astype(str) + ')' +
-                #         ", [Publication link](" + df_csva['Link to publication'] + ')'
-                #     )
-                #     # df_lasta=df_lasta.dropna().reset_index(drop=True)
-                #     row_nu = len(df_csva.index)
-                #     for i in range(row_nu):
-                #         df_lasta=df_lasta.dropna().reset_index(drop=True)                
-                #         st.write(''+str(i+1)+') ' +df_lasta.iloc[i])
-
                 df_csv = df_csv.sort_values(by=['Publication type'], ascending=True)
                 current_type = None
                 count_by_type = {}
@@ -551,7 +524,7 @@ with st.spinner('Preparing digest...'):
                     plt.show()
                     st.set_option('deprecation.showPyplotGlobalUse', False)
                     st.pyplot() 
-        if options=='Recently cited':
+        else:
             current_year = datetime.datetime.now().year
             df_cited = df_cited[(df_cited['Citation'].notna()) & (df_cited['Citation'] != 0)]
             df_cited = df_cited.reset_index(drop=True)
