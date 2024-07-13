@@ -109,7 +109,9 @@ with st.spinner('Preparing digest...'):
 
             df_csv['Date published new'] = df_csv['Date published'].dt.strftime('%d/%m/%Y')
             df_csv['Date months'] = df_csv['Date published'].dt.strftime('%Y-%m')
+            df_csv
             df_csv['Date published'] = df_csv['Date published'].fillna('No date')
+            df_csv
             df_csv.sort_values(by='Date published', ascending = False, inplace=True)    
 
             sort_by_type = st.checkbox('Sort by publication type', key='type')
