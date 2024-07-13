@@ -77,37 +77,48 @@ with st.spinner('Preparing digest...'):
             a='30 days'
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
+            df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], errors='coerce')
 
-            range_day = st.radio('Show sources added to the database in the last:', ('10 days','30 days', '3 months', 'Custom (days)', 'Custom (select date)'), key='days_recently_Added')
+            # Define today
+            today = dt.date.today()
+
+            # Radio button for date range selection
+            range_day = st.radio('Show sources added to the database in the last:', 
+                                ('10 days', '30 days', '3 months', 'Custom (days)', 'Custom (select date)'), 
+                                key='days_recently_Added')
+
+            # Determine the date range based on user selection
             if range_day == '10 days':
-                rg = previous_10
-                a='10 days'
-            if range_day == '30 days':
-                rg = previous_30
+                rg = today - dt.timedelta(days=10)
+                a = '10 days'
+            elif range_day == '30 days':
+                rg = today - dt.timedelta(days=30)
                 a = '30 days'
-            if range_day == '3 months':
-                rg = previous_180
-                a ='3 months'
-            if range_day == 'Custom (days)':
+            elif range_day == '3 months':
+                rg = today - dt.timedelta(days=90)  # 3 months approximated to 90 days
+                a = '3 months'
+            elif range_day == 'Custom (days)':
                 number = st.number_input('How many days do you want to go back:', min_value=10, max_value=11000, value=365, step=30)
                 a = str(int(number)) + ' days'
-                previous_custom = today - dt.timedelta(days=number)
-                rg = previous_custom
-            if range_day == 'Custom (select date)':
-                rg = st.date_input('From:', today-dt.timedelta(days=7), max_value=today-dt.timedelta(days=0))
-                today = st.date_input('To:', today, max_value=today, min_value=rg)
-                a = today - rg
-                a = str(a.days) + ' days'
-            filter = (df_csv['Date added']>rg) & (df_csv['Date added']<=today)
-            rg2 = rg.strftime('%d/%m/%Y')
-            df_csv = df_csv.loc[filter]
+                rg = today - dt.timedelta(days=int(number))
+            elif range_day == 'Custom (select date)':
+                rg = st.date_input('From:', today - dt.timedelta(days=7), max_value=today - dt.timedelta(days=0))
+                end_date = st.date_input('To:', today, max_value=today, min_value=rg)
+                a = (end_date - rg).days
+                a = str(a) + ' days'
 
-            df_csv['Date added'] = pd.to_datetime(df_csv['Date added'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
+            # Filter DataFrame based on the selected date range
+            filter = (df_csv['Date added'] >= pd.Timestamp(rg)) & (df_csv['Date added'] <= pd.Timestamp(end_date if range_day == 'Custom (select date)' else today))
 
+            # Format the 'Date added' column
+            df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], utc=True, errors='coerce').dt.tz_convert('Europe/London')
+
+            # Create new columns for formatted dates
             df_csv['Date added new'] = df_csv['Date added'].dt.strftime('%d/%m/%Y')
             df_csv['Date months'] = df_csv['Date added'].dt.strftime('%Y-%m')
-            df_csv['Date added'] = df_csv['Date added'].fillna('No date')
-            df_csv.sort_values(by='Date added', ascending = False, inplace=True)    
+
+            # Fill missing dates with 'No date'
+            df_csv['Date added'] = df_csv['Date added'].fillna('No date')   
             df_csv
 
             sort_by_type = st.checkbox('Sort by publication type', key='type_recently_added')
