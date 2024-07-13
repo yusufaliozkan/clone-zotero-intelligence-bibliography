@@ -81,13 +81,21 @@ with st.spinner('Preparing digest...'):
             df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], errors='coerce').dt.date
             latest_added_date = df_csv['Date added'].max()
 
-            range_day = st.radio('Show sources added to the database in the last:', ('10 days','30 days', 'Custom (select date)'), key='days_recently_added')
+            current_year = today.year
+            if today.month == 12:
+                start_last_month = dt.date(current_year, 11, 1)
+                end_last_month = dt.date(current_year, 11, 30)
+            else:
+                start_last_month = dt.date(current_year, 12, 1)
+                end_last_month = dt.date(current_year, 12, 31)
+
+            range_day = st.radio('Show sources added to the database in:', ('Last 10 days','Last month', 'Custom (select date)'), key='days_recently_added')
             if range_day == '10 days':
                 rg = previous_10
                 a='10 days'
-            if range_day == '30 days':
-                rg = previous_30
-                a = '30 days'
+            if range_day == 'Last month':
+                rg = start_last_month
+                a = 'Last month'
             if range_day == '3 months':
                 rg = previous_180
                 a ='3 months'
