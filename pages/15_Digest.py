@@ -78,7 +78,7 @@ with st.spinner('Preparing digest...'):
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 
-            range_day = st.radio('Show sources added to the database in the last:', ('10 days','30 days', '3 months', 'Custom (days)', 'Custom (select date)'), key='days')
+            range_day = st.radio('Show sources added to the database in the last:', ('10 days','30 days', '3 months', 'Custom (days)', 'Custom (select date)'), key='days_recently_added')
             if range_day == '10 days':
                 rg = previous_10
                 a='10 days'
