@@ -108,10 +108,8 @@ with st.spinner('Preparing digest...'):
                 a = (end_date - rg).days
                 a = str(a) + ' days'
 
-            df_csv
             # Filter DataFrame based on the selected date range
             filter = (df_csv['Date added'] >= pd.Timestamp(rg)) & (df_csv['Date added'] <= pd.Timestamp(end_date if range_day == 'Custom (select date)' else today))
-            filter
 
             # Format the 'Date added' column
             df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], utc=True, errors='coerce').dt.tz_convert('Europe/London')
@@ -122,7 +120,6 @@ with st.spinner('Preparing digest...'):
 
             # Fill missing dates with 'No date'
             df_csv['Date added'] = df_csv['Date added'].fillna('No date')   
-            df_csv
 
             sort_by_type = st.checkbox('Sort by publication type', key='type_recently_added')
             st.caption('See [📊 trends](#trends) in the last ' + str(a))
