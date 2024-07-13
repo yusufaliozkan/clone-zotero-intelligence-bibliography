@@ -107,6 +107,7 @@ with st.spinner('Preparing digest...'):
                 a = (end_date - rg).days
                 a = str(a) + ' days'
 
+            rg
             # Filter DataFrame based on the selected date range
             filter = (df_csv['Date added'] >= pd.Timestamp(rg)) & (df_csv['Date added'] <= pd.Timestamp(end_date if range_day == 'Custom (select date)' else today))
             filter
