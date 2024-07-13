@@ -203,6 +203,7 @@ with st.spinner('Preparing digest...'):
                     for index, row in df_csv.iterrows():
                         formatted_entry = format_entry(row)
                         st.write(f"{count}) {formatted_entry}")
+                        count += 1
             st.subheader('📊 Trends')
             if df_csv['Publication type'].any() in ("", [], None, 0, False):
                 st.write('No data to visualise')
