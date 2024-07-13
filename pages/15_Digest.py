@@ -109,7 +109,6 @@ with st.spinner('Preparing digest...'):
                 filter = (df_csv['Date added']>rg) & (df_csv['Date added']<=today)
             rg2 = rg.strftime('%d/%m/%Y')
             df_csv = df_csv.loc[filter]
-            rg
 
             df_csv['Date published'] = pd.to_datetime(df_csv['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
 
