@@ -201,7 +201,7 @@ with st.spinner('Preparing digest...'):
                     df_csv = df_csv.sort_values(by=['Date published'], ascending=False)
                     for index, row in df_csv.iterrows():
                         formatted_entry = format_entry(row)
-
+                        st.caption(row['Abstract']) 
             st.subheader('📊 Trends')
             if df_csv['Publication type'].any() in ("", [], None, 0, False):
                 st.write('No data to visualise')
