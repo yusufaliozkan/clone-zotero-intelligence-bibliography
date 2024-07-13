@@ -99,7 +99,7 @@ with st.spinner('Preparing digest...'):
                 rg = previous_custom
             if range_day == 'Custom (select date)':
                 rg = st.date_input('From:', today-dt.timedelta(days=7), max_value=latest_added_date)
-                latest_added_date = st.date_input('To:', latest_added_date, max_value=latest_added_date, min_value=rg)
+                today = st.date_input('To:', latest_added_date, max_value=latest_added_date, min_value=rg)
                 a = latest_added_date - rg
                 a = str(a.days) + ' days'
         
