@@ -98,7 +98,6 @@ with st.spinner('Preparing digest...'):
                 today = st.date_input('To:', today, max_value=today, min_value=rg)
                 a = today - rg
                 a = str(a.days) + ' days'
-            df_csv
             filter = (df_csv['Date added']>rg) & (df_csv['Date added']<=today)
             rg2 = rg.strftime('%d/%m/%Y')
             df_csv = df_csv.loc[filter]
@@ -109,6 +108,7 @@ with st.spinner('Preparing digest...'):
             df_csv['Date months'] = df_csv['Date added'].dt.strftime('%Y-%m')
             df_csv['Date added'] = df_csv['Date added'].fillna('No date')
             df_csv.sort_values(by='Date added', ascending = False, inplace=True)    
+            df_csv
 
             sort_by_type = st.checkbox('Sort by publication type', key='type')
             st.caption('See [📊 trends](#trends) in the last ' + str(a))
