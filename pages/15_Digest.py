@@ -165,14 +165,14 @@ with st.spinner('Preparing digest...'):
                                     ", [Publication link]"+ '('+ df_csv['Link to publication'] + ')'
                                     )
                 df_last = df_last.dropna().reset_index(drop=True)
-                row_nu99 = len(df_last)
+                row_nu99 = len(df_csv)
                 st.info(f'**{row_nu99} paper(s) cited in {current_year}**.')
                 articles_list = []  # Store articles in a list
-                for index, row in df_cited.iterrows():
+                for index, row in df_csv.iterrows():
                     formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
                     articles_list.append(formatted_entry)        
                 
-                for index, row in df_cited.iterrows():
+                for index, row in df_csv.iterrows():
                     publication_type = row['Publication type']
                     title = row['Title']
                     authors = row['FirstName2']
@@ -199,27 +199,6 @@ with st.spinner('Preparing digest...'):
                         '[[Publication link]](' + str(link_to_publication) + ') ' +
                         '[[Zotero link]](' + str(zotero_link) + ')'
                     )
-                sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'), key=123)
-                display2 = st.checkbox('Display abstracts', key=1234)
-                if sort_by == 'Publication date :arrow_down:' or df_cited['Citation'].sum() == 0:
-                    count = 1
-                    df_cited = df_cited.sort_values(by=['Date published'], ascending=False)
-                    for index, row in df_cited.iterrows():
-                        formatted_entry = format_entry(row)
-                        st.write(f"{count}) {formatted_entry}")
-                        count += 1
-                        if display2:
-                            st.caption(row['Abstract']) 
-                else:
-                    df_cited = df_cited.sort_values(by=['Citation'], ascending=False)
-                    count = 1
-                    for index, row in df_cited.iterrows():
-                        formatted_entry = format_entry(row)
-                        st.write(f"{count}) {formatted_entry}")
-                        count += 1
-                        if display2:
-                            st.caption(row['Abstract']) 
-
 
             st.subheader('📊 Trends')
             if df_csv['Publication type'].any() in ("", [], None, 0, False):
