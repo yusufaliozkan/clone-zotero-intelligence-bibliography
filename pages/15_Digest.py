@@ -68,6 +68,7 @@ with st.spinner('Preparing digest...'):
     with st.expander('Publications:', expanded=ex):
         st.header('Publications')
         options = st.radio('Select an option', ('Recently added', 'Recently published', 'Recently cited'))
+
         if options=='Recently added':
             previous_10 = today - dt.timedelta(days=10)
             previous_30 = today - dt.timedelta(days=30)
@@ -104,6 +105,7 @@ with st.spinner('Preparing digest...'):
             filter = (df_csv['Date added']>rg) & (df_csv['Date added']<=today)
             rg2 = rg.strftime('%d/%m/%Y')
             df_csv = df_csv.loc[filter]
+            df_csv
 
             df_csv['Date published'] = pd.to_datetime(df_csv['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
 
