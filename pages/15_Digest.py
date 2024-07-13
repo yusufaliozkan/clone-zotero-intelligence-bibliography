@@ -127,7 +127,8 @@ with st.spinner('Preparing digest...'):
             else:
                 num_items = len(df_csv)
                 st.subheader('Sources added in the last ' + str(a))
-                difference = int(latest_added_date-rg2)
+                difference = (latest_added_date-rg2)
+                difference
                 st.write(f"{str(num_items)} sources added in the last  {difference}")    
 
             if df_csv['Title'].any() in ("", [], None, 0, False):
