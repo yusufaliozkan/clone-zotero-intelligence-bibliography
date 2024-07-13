@@ -189,21 +189,21 @@ with st.spinner('Preparing digest...'):
                         published_by_or_in = ''
                         published_source = ''
 
-                    formatted_entry = (
-                        '**' + str(publication_type) + '**' + ': ' +
-                        str(title) + ' ' +
-                        '(by ' + '*' + str(authors) + '*' + ') ' +
-                        '(Publication date: ' + str(date_published) + ') ' +
-                        ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
-                        '[[Publication link]](' + str(link_to_publication) + ') ' +
-                        '[[Zotero link]](' + str(zotero_link) + ')'
-                    )
-                    df_csv = df_csv.sort_values(by=['Date published'], ascending=False)
-                    count = 1
-                    for index, row in df_csv.iterrows():
-                        formatted_entry = format_entry(row)
-                        st.write(f"{count}) {formatted_entry}")
-                        count += 1
+                formatted_entry = (
+                    '**' + str(publication_type) + '**' + ': ' +
+                    str(title) + ' ' +
+                    '(by ' + '*' + str(authors) + '*' + ') ' +
+                    '(Publication date: ' + str(date_published) + ') ' +
+                    ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
+                    '[[Publication link]](' + str(link_to_publication) + ') ' +
+                    '[[Zotero link]](' + str(zotero_link) + ')'
+                )
+                df_csv = df_csv.sort_values(by=['Date published'], ascending=False)
+                count = 1
+                for index, row in df_csv.iterrows():
+                    formatted_entry = format_entry(row)
+                    st.write(f"{count}) {formatted_entry}")
+                    count += 1
             st.subheader('📊 Trends')
             if df_csv['Publication type'].any() in ("", [], None, 0, False):
                 st.write('No data to visualise')
