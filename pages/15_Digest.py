@@ -109,6 +109,7 @@ with st.spinner('Preparing digest...'):
 
             # Filter DataFrame based on the selected date range
             filter = (df_csv['Date added'] >= pd.Timestamp(rg)) & (df_csv['Date added'] <= pd.Timestamp(end_date if range_day == 'Custom (select date)' else today))
+            filter
 
             # Format the 'Date added' column
             df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], utc=True, errors='coerce').dt.tz_convert('Europe/London')
