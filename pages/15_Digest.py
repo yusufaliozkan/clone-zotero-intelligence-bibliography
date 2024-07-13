@@ -178,8 +178,7 @@ with st.spinner('Preparing digest...'):
                     formatted_entry = format_entry(row)
                     st.write(f"{count_by_type[current_type]}) {formatted_entry}")
                     count_by_type[current_type] += 1
-                    if display2:
-                        st.caption(row['Abstract'])
+
             else:
                 row_nu99 = len(df_csv)
                 articles_list = []  # Store articles in a list
