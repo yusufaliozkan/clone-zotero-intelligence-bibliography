@@ -357,7 +357,7 @@ with st.spinner('Preparing digest...'):
                             st.caption(row['Abstract']) 
         st.caption('[Go to top](#intelligence-studies-network-digest)')
 
-    with st.expander('Events:', expanded=True):
+    with st.expander('Events:', expanded=False):
         today = dt.date.today()
         today_datetime = pd.to_datetime(today)
 
