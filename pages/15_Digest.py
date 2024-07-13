@@ -126,17 +126,15 @@ with st.spinner('Preparing digest...'):
                 num_items = len(df_csv)
                 difference = (today-rg)
                 days_difference = difference.days
-                today
-                difference
                 today_2 = today.strftime('%d/%m/%Y')
                 st.subheader('Sources added between ' + '**'+ rg2 +' - ' + today_2+'**')
-                st.write(f"{num_items} sources added in the last {days_difference} day" if days_difference == 1 else f"{num_items} sources added in the last {days_difference} days")
+                st.write(f"**{num_items}** sources added in the last {days_difference} day" if days_difference == 1 else f"{num_items} sources added in the last {days_difference} days")
             else:
                 num_items = len(df_csv)
                 st.subheader('Sources added in the last ' + str(a))
                 difference = (today-rg)
                 days_difference = difference.days
-                st.write(f"{num_items} sources added in the last {days_difference} day" if days_difference == 1 else f"{num_items} sources added in the last {days_difference} days")
+                st.write(f"**{num_items}** sources added in the last {days_difference} day" if days_difference == 1 else f"{num_items} sources added in the last {days_difference} days")
 
             if df_csv['Title'].any() in ("", [], None, 0, False):
                 st.write('There is no publication added in the last '+ str(a))
