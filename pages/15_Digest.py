@@ -79,6 +79,9 @@ with st.spinner('Preparing digest...'):
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 
+            df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], errors='coerce').dt.date
+            latest_added_date = df_csv['Date added'].max()
+
             range_day = st.radio('Show sources added to the database in the last:', ('10 days','30 days', 'Custom (select date)'), key='days_recently_added')
             if range_day == '10 days':
                 rg = previous_10
@@ -96,14 +99,12 @@ with st.spinner('Preparing digest...'):
                 rg = previous_custom
             if range_day == 'Custom (select date)':
                 rg = st.date_input('From:', today-dt.timedelta(days=7), max_value=today-dt.timedelta(days=0))
-                today = st.date_input('To:', today, max_value=today, min_value=rg)
-                a = today - rg
+                latest_added_date = st.date_input('To:', latest_added_date, max_value=latest_added_date, min_value=rg)
+                a = latest_added_date - rg
                 a = str(a.days) + ' days'
 
-            df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], errors='coerce').dt.date
-            latest = df_csv['Date added'].max()
-            latest
-            filter = (df_csv['Date added']>rg) & (df_csv['Date added']<=latest)
+        
+            filter = (df_csv['Date added']>rg) & (df_csv['Date added']<=latest_added_date)
             rg2 = rg.strftime('%d/%m/%Y')
             df_csv = df_csv.loc[filter]
 
