@@ -199,9 +199,10 @@ with st.spinner('Preparing digest...'):
                         '[[Zotero link]](' + str(zotero_link) + ')'
                     )
                     df_csv = df_csv.sort_values(by=['Date published'], ascending=False)
+                    count = 1
                     for index, row in df_csv.iterrows():
                         formatted_entry = format_entry(row)
-                        st.write(f"{formatted_entry}")
+                        st.write(f"{count}) {formatted_entry}")
             st.subheader('📊 Trends')
             if df_csv['Publication type'].any() in ("", [], None, 0, False):
                 st.write('No data to visualise')
