@@ -112,7 +112,6 @@ with st.spinner('Preparing digest...'):
 
             df_csv['Date published'] = pd.to_datetime(df_csv['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
             df_csv['Date published new'] = df_csv['Date published'].dt.strftime('%d/%m/%Y')
-            df_csv
             df_csv['Date months'] = df_csv['Date published'].dt.strftime('%Y-%m')
             df_csv['Date published'] = df_csv['Date published'].fillna('No date')
             # df_csv.sort_values(by='Date published', ascending = False, inplace=True)    
@@ -167,7 +166,6 @@ with st.spinner('Preparing digest...'):
                         df_lasta=df_lasta.dropna().reset_index(drop=True)                
                         st.write(''+str(i+1)+') ' +df_lasta.iloc[i])
             else:
-
                 row_nu99 = len(df_csv)
                 articles_list = []  # Store articles in a list
                 for index, row in df_csv.iterrows():
@@ -178,7 +176,7 @@ with st.spinner('Preparing digest...'):
                     publication_type = row['Publication type']
                     title = row['Title']
                     authors = row['FirstName2']
-                    date_published = row['Date published']
+                    date_published = row['Date published new']
                     link_to_publication = row['Link to publication']
                     zotero_link = row['Zotero link']
 
