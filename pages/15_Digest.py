@@ -167,13 +167,7 @@ with st.spinner('Preparing digest...'):
                         df_lasta=df_lasta.dropna().reset_index(drop=True)                
                         st.write(''+str(i+1)+') ' +df_lasta.iloc[i])
             else:
-                df_last = ('**'+ df_csv['Publication type']+ '**'+ ": '"  + 
-                                    df_csv['Title'] +  "',"  +
-                                    ' (Author(s): ' + '*' + df_csv['FirstName2'] + '*'+ ') ' +
-                                    ' (Published on: ' + df_csv['Date published new'] + ')' +
-                                    ", [Publication link]"+ '('+ df_csv['Link to publication'] + ')'
-                                    )
-                df_last = df_last.dropna().reset_index(drop=True)
+
                 row_nu99 = len(df_csv)
                 articles_list = []  # Store articles in a list
                 for index, row in df_csv.iterrows():
