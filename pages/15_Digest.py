@@ -166,7 +166,6 @@ with st.spinner('Preparing digest...'):
                                     )
                 df_last = df_last.dropna().reset_index(drop=True)
                 row_nu99 = len(df_csv)
-                st.info(f'**{row_nu99} paper(s) cited in {current_year}**.')
                 articles_list = []  # Store articles in a list
                 for index, row in df_csv.iterrows():
                     formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
