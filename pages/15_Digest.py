@@ -81,6 +81,7 @@ with st.spinner('Preparing digest...'):
 
             df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], errors='coerce').dt.date
             latest_added_date = df_csv['Date added'].max()
+            df_csv
 
             range_day = st.radio('Show sources added to the database in the last:', ('10 days','30 days', 'Custom (select date)'), key='days_recently_added')
             if range_day == '10 days':
