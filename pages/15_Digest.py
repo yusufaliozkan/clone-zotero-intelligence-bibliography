@@ -120,15 +120,15 @@ with st.spinner('Preparing digest...'):
             if range_day == 'Custom (select date)':
                 num_items = len(df_csv)
                 today_2 = today.strftime('%d/%m/%Y')
-                st.subheader('Sources published between ' + '**'+ rg2 +' - ' + today_2+'**')
-                st.write('This list finds '+str(num_items)+' sources published between ' + '**'+ rg2 +' - ' + today_2+'**')
+                st.subheader('Sources added between ' + '**'+ rg2 +' - ' + today_2+'**')
+                st.write('This list finds '+str(num_items)+' sources added between ' + '**'+ rg2 +' - ' + today_2+'**')
             else:
                 num_items = len(df_csv)
-                st.subheader('Sources published in the last ' + str(a))
-                st.write('This list finds '+str(num_items)+' sources published between ' + '**'+ rg2 +' - ' + today2+'**')    
+                st.subheader('Sources added in the last ' + str(a))
+                st.write('This list finds '+str(num_items)+' sources added between ' + '**'+ rg2 +' - ' + today2+'**')    
 
             if df_csv['Title'].any() in ("", [], None, 0, False):
-                st.write('There is no publication published in the last '+ str(a))
+                st.write('There is no publication added in the last '+ str(a))
 
             if sort_by_type:
                 df_csv = df_csv.sort_values(by=['Publication type'], ascending = True)
