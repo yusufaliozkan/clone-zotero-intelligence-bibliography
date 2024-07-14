@@ -370,6 +370,7 @@ with st.spinner('Preparing digest...'):
             if df_csv['Title'].any() in ("", [], None, 0, False):
                 st.write('There is no publication published in the last '+ str(a))
 
+            df_csv['Date published'] = pd.to_datetime(df_csv['Date published'], errors='coerce').dt.date
             if sort_by_type:
                 df_csv = df_csv.sort_values(by=['Publication type'], ascending=True)
                 current_type = None
