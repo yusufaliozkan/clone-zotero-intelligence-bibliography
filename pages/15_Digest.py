@@ -92,7 +92,7 @@ with st.spinner('Preparing digest...'):
             range_day = st.radio('Show sources added to the database in the last:', ('7 days','30 days', 'Custom (select date)'), key='days_recently_added')
             if range_day == '7 days':
                 rg = previous_7
-                a='10 days'
+                a='7 days'
             if range_day == '30 days':
                 rg = previous_30
                 a = '30 days'
@@ -137,7 +137,7 @@ with st.spinner('Preparing digest...'):
                 st.write(f"**{num_items}** sources added in the last {days_difference} day" if days_difference == 1 else f"**{num_items}** sources added in the last {days_difference} days")
             else:
                 num_items = len(df_csv)
-                st.subheader('Sources added in the lasts ' + str(a))
+                st.subheader('Sources added in the last ' + str(a))
                 difference = (today-rg)
                 days_difference = difference.days
                 st.write(f"**{num_items}** sources added in the last {days_difference} day" if days_difference == 1 else f"**{num_items}** sources added in the last {days_difference} days")
