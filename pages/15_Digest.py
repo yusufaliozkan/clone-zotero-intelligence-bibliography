@@ -137,7 +137,7 @@ with st.spinner('Preparing digest...'):
                 st.write(f"**{num_items}** sources added in the last {days_difference} day" if days_difference == 1 else f"**{num_items}** sources added in the last {days_difference} days")
             else:
                 num_items = len(df_csv)
-                st.subheader('Sources added in the last ' + str(a))
+                st.subheader('Sources added in the lasts ' + str(a))
                 difference = (today-rg)
                 days_difference = difference.days
                 st.write(f"**{num_items}** sources added in the last {days_difference} day" if days_difference == 1 else f"**{num_items}** sources added in the last {days_difference} days")
