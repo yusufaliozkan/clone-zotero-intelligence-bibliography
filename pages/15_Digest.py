@@ -71,7 +71,7 @@ with st.spinner('Preparing digest...'):
         options = st.radio('Select an option', ('Recently added', 'Recently published', 'Recently cited'))
 
         if options=='Recently added':
-            previous_10 = today - dt.timedelta(days=10)
+            previous_7 = today - dt.timedelta(days=7)
             previous_30 = today - dt.timedelta(days=30)
             # previous_180 = today - dt.timedelta(days=180)
             # previous_360 = today - dt.timedelta(days=365)
