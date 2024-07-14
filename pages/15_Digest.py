@@ -75,7 +75,7 @@ with st.spinner('Preparing digest...'):
             previous_30 = today - dt.timedelta(days=30)
             # previous_180 = today - dt.timedelta(days=180)
             # previous_360 = today - dt.timedelta(days=365)
-            rg = previous_10
+            rg = previous_7
             a='30 days'
 
             df_csv['Date added'] = pd.to_datetime(df_csv['Date added'], errors='coerce').dt.date
