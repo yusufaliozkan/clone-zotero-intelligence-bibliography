@@ -89,9 +89,9 @@ with st.spinner('Preparing digest...'):
                 start_last_month = dt.date(current_year, 12, 1)
                 end_last_month = dt.date(current_year, 12, 31)
 
-            range_day = st.radio('Show sources added to the database in the last:', ('10 days','30 days', 'Custom (select date)'), key='days_recently_added')
-            if range_day == '10 days':
-                rg = previous_10
+            range_day = st.radio('Show sources added to the database in the last:', ('7 days','30 days', 'Custom (select date)'), key='days_recently_added')
+            if range_day == '7 days':
+                rg = previous_7
                 a='10 days'
             if range_day == '30 days':
                 rg = previous_30
