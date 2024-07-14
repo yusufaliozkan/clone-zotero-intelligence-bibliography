@@ -371,59 +371,60 @@ with st.spinner('Preparing digest...'):
                 st.write('There is no publication published in the last '+ str(a))
 
             if sort_by_type:
-                df_csv = df_csv.sort_values(by=['Publication type'], ascending = True)
-                types2 = df_csv['Publication type'].unique()
-                types2 = pd.DataFrame(types2, columns=['Publication type'])
-                row_nu_types2 = len(types2.index)
-                for i in range(row_nu_types2):
-                    st.subheader(types2['Publication type'].iloc[i])
-                    b = types2['Publication type'].iloc[i]
-                    df_csva = df_csv[df_csv['Publication type']==b]
-                    df_csva["Link to publication"].fillna("No link", inplace = True)
-                    publication_info = ''
-                    if df_csva['Publication type'].iloc[0] in ('Journal article', 'Magazine article', 'Newspaper article'):
-                        publication_info = ' (Published in: ' + '*' + df_csva['Journal'] + '*' +')'
-                    df_lasta = (
-                        '**' + df_csva['Publication type'] + '**' + ": '" +
-                        df_csva['Title'] + "'," +
-                        ' (Author(s): ' + '*' + df_csva['FirstName2'].astype(str) + '*' + ')' +
-                        # Concatenate 'publication_info' if it's required here
-                        # publication_info +
-                        ' (Published on: ' + df_csva['Date published new'].astype(str) + ')' +
-                        ", [Publication link](" + df_csva['Link to publication'] + ')'
-                    )
-                    # df_lasta=df_lasta.dropna().reset_index(drop=True)
-                    row_nu = len(df_csva.index)
-                    for i in range(row_nu):
-                        df_lasta=df_lasta.dropna().reset_index(drop=True)                
-                        st.write(''+str(i+1)+') ' +df_lasta.iloc[i])
-            else:
-                df_last = ('**'+ df_csv['Publication type']+ '**'+ ": '"  + 
-                                    df_csv['Title'] +  "',"  +
-                                    ' (Author(s): ' + '*' + df_csv['FirstName2'] + '*'+ ') ' +
-                                    ' (Published on: ' + df_csv['Date published new'] + ')' +
-                                    ", [Publication link]"+ '('+ df_csv['Link to publication'] + ')'
-                                    )
-                df_last = df_last.dropna().reset_index(drop=True)
-                row_nu = len(df_csv.index)
-                for i in range(row_nu):
-                    if df_csv['Publication type'].iloc[i] in ['Journal article', 'Magazine article', 'Newspaper article']:
-                        df_last = ('**'+ df_csv['Publication type']+ '**'+ ": '"  + 
-                            df_csv['Title'] +  "',"  +
-                            ' (Author(s): ' + '*' + df_csv['FirstName2'] + '*' +') ' +
-                            ' (Published in: ' + '*' + df_csv['Journal'] + '*' + ')' +
-                            ' (Published on: ' + df_csv['Date published new'] + ')' +
-                            ", [Publication link]"+ '('+ df_csv['Link to publication'] + ')'
-                            )
-                    else:
-                        df_last = ('**'+ df_csv['Publication type']+ '**'+ ": '"  + 
-                            df_csv['Title'] +  "',"  +
-                            ' (Author(s): ' + '*' + df_csv['FirstName2'] + '*'+') ' +
-                            ' (Published on: ' + df_csv['Date published new'] + ')' +
-                            ", [Publication link]"+ '('+ df_csv['Link to publication'] + ')'
-                            )
-                    st.write(''+str(i+1)+') ' +df_last.iloc[i])
+                df_csv = df_csv.sort_values(by=['Publication type'], ascending=True)
+                current_type = None
+                count_by_type = {}
+                for index, row in df_csv.iterrows():
+                    if row['Publication type'] != current_type:
+                        current_type = row['Publication type']
+                        st.subheader(current_type)
+                        count_by_type[current_type] = 1
+                    formatted_entry = format_entry(row)
+                    st.write(f"{count_by_type[current_type]}) {formatted_entry}")
+                    count_by_type[current_type] += 1
 
+            else:
+                row_nu99 = len(df_csv)
+                if row_nu99 == 0:
+                    st.write('Select a publication type')
+                else:
+                    articles_list = []  # Store articles in a list
+                    for index, row in df_csv.iterrows():
+                        formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
+                        articles_list.append(formatted_entry)        
+                    
+                    for index, row in df_csv.iterrows():
+                        publication_type = row['Publication type']
+                        title = row['Title']
+                        authors = row['FirstName2']
+                        date_published = row['Date published new']
+                        link_to_publication = row['Link to publication']
+                        zotero_link = row['Zotero link']
+
+                        if publication_type == 'Journal article':
+                            published_by_or_in = 'Published in'
+                            published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
+                        elif publication_type == 'Book':
+                            published_by_or_in = 'Published by'
+                            published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
+                        else:
+                            published_by_or_in = ''
+                            published_source = ''
+
+                    formatted_entry = (
+                        '**' + str(publication_type) + '**' + ': ' +
+                        str(title) + ' ' +
+                        '(by ' + '*' + str(authors) + '*' + ') ' +
+                        '(Publication date: ' + (date_published) + ') ' +
+                        ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
+                        '[[Publication link]](' + str(link_to_publication) + ') ' +
+                        '[[Zotero link]](' + str(zotero_link) + ')'
+                    )
+                    count = 1
+                    for index, row in df_csv.iterrows():
+                        formatted_entry = format_entry(row)
+                        st.write(f"{count}) {formatted_entry}")
+                        count += 1
 
             st.subheader('📊 Trends')
             if df_csv['Publication type'].any() in ("", [], None, 0, False):
