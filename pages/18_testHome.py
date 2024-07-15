@@ -445,7 +445,7 @@ with st.spinner('Retrieving data...'):
                 else:
                     test_filter = titles
                 test_filter
-                for index, row in filtered_collection_df_authors.iterrows():
+                for index, row in test_filter.iterrows():
                     publication_type = row['Publication type']
                     title = row['Title']
                     authors = row['FirstName2']
