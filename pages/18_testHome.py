@@ -496,7 +496,7 @@ with st.spinner('Retrieving data...'):
 
             st.subheader('Search keywords', anchor=False, divider='blue')
             @st.experimental_fragment
-            def search_keyword(): 
+            def search_keyword2(): 
                 @st.experimental_dialog("Search guide")
                 def guide(item):
                     st.write('''
@@ -1026,7 +1026,7 @@ with st.spinner('Retrieving data...'):
                             )
                 else:
                     st.write("Please enter a keyword or author name to search.")
-            search_keyword()
+            search_keyword2()
 
 
             # Example Streamlit code for context
