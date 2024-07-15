@@ -488,7 +488,7 @@ with st.spinner('Retrieving data...'):
                         formatted_entry = format_entry(row)
                         st.write(f"{index + 1}) {formatted_entry}")
                 else:
-                    st.write('sd')
+                    test_filter_title
             text_search()
 
             # Example Streamlit code for context
