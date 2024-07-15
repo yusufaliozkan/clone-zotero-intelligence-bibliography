@@ -489,9 +489,9 @@ with st.spinner('Retrieving data...'):
                         if display == 'Table':
                             st.write(f'{len(test_filter)} result(s) found')
                             st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
-                        status.update(label=f'Search complete for with {len(test_filter)} results')
+                        status.update(label=f'Search complete for with {len(test_filter)} results', state="complete", expanded=False)
                 else:
-                    st.write(f'{len(titles)} items in the database', state="complete", expanded=False)
+                    st.write(f'{len(titles)} items in the database')
             text_search()
 
             # Example Streamlit code for context
