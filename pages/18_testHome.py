@@ -437,7 +437,7 @@ with st.spinner('Retrieving data...'):
                 name = st_keyup("Enter city name", debounce=500)
                 @st.cache_data
                 def get_titles():
-                    df_csv1 = df_csv.copy()
+                    df_csv1 = df_dedup.copy()
                     return df_csv1
                 titles = get_titles()
                 if name:
