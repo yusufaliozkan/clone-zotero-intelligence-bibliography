@@ -27,6 +27,7 @@ from copyright import display_custom_license
 from events import evens_conferences
 from streamlit_dynamic_filters import DynamicFilters
 import requests
+from st_keyup import st_keyup
 
 st.set_page_config(layout = "wide", 
                     page_title='Intelligence history',
