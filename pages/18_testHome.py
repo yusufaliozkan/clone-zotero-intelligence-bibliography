@@ -490,7 +490,7 @@ with st.spinner('Retrieving data...'):
                 if display == 'Table':
                     st.write(f'{len(test_filter)} result(s) found')
                     st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
-                else:
+                if not display == 'Basic list' or not display=='Table':
                     st.write(f'{len(test_filter)} items in the database')
             text_search()
 
