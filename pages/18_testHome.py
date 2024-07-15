@@ -489,7 +489,7 @@ with st.spinner('Retrieving data...'):
                         st.write(f'{len(test_filter)} result(s) found')
                         st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
                 else:
-                    st.write(f'{len(test_filter)} items in the database')
+                    st.write(f'{len(titles)} items in the database')
             text_search()
 
             # Example Streamlit code for context
