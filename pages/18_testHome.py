@@ -39,7 +39,7 @@ from format_entry import format_entry
 from streamlit_dynamic_filters import DynamicFilters
 # from rss_feed import df_podcast, df_magazines
 from st_keyup import st_keyup
-import math
+
 
 # Connecting Zotero with API 
 library_id = '2514686'
@@ -440,35 +440,54 @@ with st.spinner('Retrieving data...'):
                     df_csv1 = df_dedup.copy()
                     return df_csv1
                 titles = get_titles()
-                if name:
+                if name: 
                     test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
-                    if len(test_filter)==0:
-                        st.write('No results found')
-                    else:
-                        test_filter = test_filter.reset_index(drop=True)
-                        test_filter_title = test_filter['Title']
-                        display = st.radio('Display as', ['Basic list', 'Table'])
-                        if display == 'Basic list':
-                            st.write(f'{len(test_filter)} result(s) found')
-                            results_per_tab = 20
+                    test_filter = test_filter.reset_index(drop=True)
+                    test_filter_title = test_filter['Title']
+                    display = st.radio('Display as', ['Basic list', 'Table'])
+                    if display == 'Basic list':
+                        st.write(f'{len(test_filter)} result(s) found')
+                        for index, row in test_filter.iterrows():
+                            publication_type = row['Publication type']
+                            title = row['Title']
+                            authors = row['FirstName2']
+                            date_published = row['Date published']
+                            link_to_publication = row['Link to publication']
+                            zotero_link = row['Zotero link']
+                            citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
+                            citation = int(float(citation))
+                            citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
+                            citation_link = citation_link.replace('api.', '')
 
-                            # Calculate the number of tabs needed
-                            num_tabs = math.ceil(len(test_filter) / results_per_tab)
+                            published_by_or_in_dict = {
+                                'Journal article': 'Published in',
+                                'Magazine article': 'Published in',
+                                'Newspaper article': 'Published in',
+                                'Book': 'Published by',
+                            }
 
-                            # Create tabs
-                            tabs = st.tabs([f"Tab {i+1}" for i in range(num_tabs)])
+                            publication_type = row['Publication type']
 
-                            # Populate tabs with results
-                            for tab_index in range(num_tabs):
-                                with tabs[tab_index]:
-                                    start_index = tab_index * results_per_tab
-                                    end_index = start_index + results_per_tab
-                                    for index, row in test_filter.iloc[start_index:end_index].iterrows():
-                                        formatted_entry = format_entry(row)  # Assuming format_entry function is defined elsewhere
-                                        st.write(f"{start_index + index + 1}) {formatted_entry}")
-                        if display == 'Table':
-                            st.write(f'{len(test_filter)} result(s) found')
-                            st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
+                            published_by_or_in = published_by_or_in_dict.get(publication_type, '')
+                            published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
+                            if publication_type == 'Book':
+                                published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
+
+                            formatted_entry = (
+                                '**' + str(publication_type) + '**' + ': ' +
+                                str(title) + ' ' +
+                                '(by ' + '*' + str(authors) + '*' + ') ' +
+                                '(Publication date: ' + str(date_published) + ') ' +
+                                ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
+                                '[[Publication link]](' + str(link_to_publication) + ') ' +
+                                '[[Zotero link]](' + str(zotero_link) + ') ' +
+                                ('Cited by [' + str(citation) + '](' + citation_link + ')' if citation > 0 else '')
+                            )
+                            formatted_entry = format_entry(row)
+                            st.write(f"{index + 1}) {formatted_entry}")
+                    if display == 'Table':
+                        st.write(f'{len(test_filter)} result(s) found')
+                        st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
                 else:
                     st.write(f'{len(titles)} items in the database')
             text_search()
