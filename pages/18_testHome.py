@@ -441,7 +441,7 @@ with st.spinner('Retrieving data...'):
                     return df_csv1
                 titles = get_titles()
                 if name:
-                    with st.status(f'Searching {name} in the database...'):
+                    with st.status(f'Searching in the database...'):
                         test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
                         test_filter = test_filter.reset_index(drop=True)
                         test_filter_title = test_filter['Title']
@@ -489,7 +489,7 @@ with st.spinner('Retrieving data...'):
                         if display == 'Table':
                             st.write(f'{len(test_filter)} result(s) found')
                             st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
-                        status.update(label=f'Search complete for {name} with {len(test_filter)} results')
+                        status.update(label=f'Search complete for with {len(test_filter)} results')
                 else:
                     st.write(f'{len(titles)} items in the database', state="complete", expanded=False)
             text_search()
