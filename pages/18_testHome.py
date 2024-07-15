@@ -445,7 +445,7 @@ with st.spinner('Retrieving data...'):
                 else:
                     test_filter = titles
                 st.write(f'{len(test_filter)} result(s) found')
-                test_filter
+                test_filter = test_filter.reset_index(drop=True)
                 display = st.button('Display as basic view')
                 if display:
                     for index, row in test_filter.iterrows():
