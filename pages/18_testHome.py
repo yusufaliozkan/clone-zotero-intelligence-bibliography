@@ -519,7 +519,8 @@ with st.spinner('Retrieving data...'):
                                 search_in_index = search_options.index(search_in_from_key)
                             except (ValueError, KeyError):
                                 pass
-                        with st.button('clear'):
+                        clear = st.button('clear')
+                        if clear:
                             st.rerun()
                         # Layout for input elements
                         cols, cola = st.columns([2, 6])
