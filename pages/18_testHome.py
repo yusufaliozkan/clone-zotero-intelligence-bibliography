@@ -433,11 +433,15 @@ with st.spinner('Retrieving data...'):
                 return highlighted_text
 
             name = st_keyup("Enter city name")
-            df_csv = df_duplicated.copy()
+            @st.cache_data
+            def get_titles():
+                df_csv = df_duplicated.copy()
+                return 
+            titles = get_titles()
             if name:
-                test_filter = df_csv[df_csv.Title.str.lower().str.contains(name.lower(), na=False)]
+                test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
             else:
-                test_filter = df_csv.copy()
+                test_filter = titles
             test_filter
 
             # Example Streamlit code for context
