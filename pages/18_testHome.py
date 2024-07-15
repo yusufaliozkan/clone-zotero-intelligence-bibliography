@@ -432,18 +432,21 @@ with st.spinner('Retrieving data...'):
                 
                 return highlighted_text
 
-            name = st_keyup("Enter city name", debounce=500)
-            @st.cache_data
-            def get_titles():
-                df_csv = df_duplicated.copy()
-                return df_csv
-            titles = get_titles()
-            if name:
-                test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
-            else:
-                test_filter = titles
-            test_filter
-
+            @st.experimental_fragment
+            def text_search():
+                name = st_keyup("Enter city name", debounce=500)
+                @st.cache_data
+                def get_titles():
+                    df_csv = df_duplicated.copy()
+                    return df_csv
+                titles = get_titles()
+                if name:
+                    test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
+                else:
+                    test_filter = titles
+                test_filter
+            text_search()
+            
             # Example Streamlit code for context
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
