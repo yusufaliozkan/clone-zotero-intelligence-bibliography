@@ -523,6 +523,8 @@ with st.spinner('Retrieving data...'):
                         if clear:
                             st.rerun()
                         # Layout for input elements
+                        if 'visibility' not in st.session_state:
+                            st.session_state.disabled = True
                         cols, cola = st.columns([2, 6])
 
                         # Selectbox for search options
@@ -540,7 +542,8 @@ with st.spinner('Retrieving data...'):
                                 st.session_state.search_term_input,
                                 key='search_term_input',
                                 placeholder='Type your keyword(s)',
-                                on_change=update_search_params
+                                on_change=update_search_params,
+                                disabled=st.session_state.disabled,
                             )
 
                         # Function to extract quoted phrases
