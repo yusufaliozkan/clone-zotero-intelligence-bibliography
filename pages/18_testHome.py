@@ -432,6 +432,66 @@ with st.spinner('Retrieving data...'):
                 
                 return highlighted_text
 
+            @st.experimental_fragment
+            def text_search():
+                name = st_keyup("Enter city name", debounce=300)
+                @st.cache_data
+                def get_titles():
+                    df_csv1 = df_dedup.copy()
+                    return df_csv1
+                titles = get_titles()
+                if name: 
+                    test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
+                    test_filter = test_filter.reset_index(drop=True)
+                    test_filter_title = test_filter['Title']
+                    display = st.radio('Display as', ['Basic list', 'Table'])
+                    if display == 'Basic list':
+                        st.write(f'{len(test_filter)} result(s) found')
+                        for index, row in test_filter.iterrows():
+                            publication_type = row['Publication type']
+                            title = row['Title']
+                            authors = row['FirstName2']
+                            date_published = row['Date published']
+                            link_to_publication = row['Link to publication']
+                            zotero_link = row['Zotero link']
+                            citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
+                            citation = int(float(citation))
+                            citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
+                            citation_link = citation_link.replace('api.', '')
+
+                            published_by_or_in_dict = {
+                                'Journal article': 'Published in',
+                                'Magazine article': 'Published in',
+                                'Newspaper article': 'Published in',
+                                'Book': 'Published by',
+                            }
+
+                            publication_type = row['Publication type']
+
+                            published_by_or_in = published_by_or_in_dict.get(publication_type, '')
+                            published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
+                            if publication_type == 'Book':
+                                published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
+
+                            formatted_entry = (
+                                '**' + str(publication_type) + '**' + ': ' +
+                                str(title) + ' ' +
+                                '(by ' + '*' + str(authors) + '*' + ') ' +
+                                '(Publication date: ' + str(date_published) + ') ' +
+                                ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
+                                '[[Publication link]](' + str(link_to_publication) + ') ' +
+                                '[[Zotero link]](' + str(zotero_link) + ') ' +
+                                ('Cited by [' + str(citation) + '](' + citation_link + ')' if citation > 0 else '')
+                            )
+                            formatted_entry = format_entry(row)
+                            st.write(f"{index + 1}) {formatted_entry}")
+                    if display == 'Table':
+                        st.write(f'{len(test_filter)} result(s) found')
+                        st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
+                else:
+                    st.write(f'{len(titles)} items in the database')
+            text_search()
+
             # Example Streamlit code for context
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
@@ -472,66 +532,6 @@ with st.spinner('Retrieving data...'):
                             if st.button("Search guide"):
                                 guide("Search guide")
                         container_refresh_button = st.container()
-
-                        # @st.experimental_fragment
-                        def text_search():
-                            name = st_keyup("Enter city name", debounce=300)
-                            @st.cache_data
-                            def get_titles():
-                                df_csv1 = df_dedup.copy()
-                                return df_csv1
-                            titles = get_titles()
-                            if name: 
-                                test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
-                                test_filter = test_filter.reset_index(drop=True)
-                                test_filter_title = test_filter['Title']
-                                display = st.radio('Display as', ['Basic list', 'Table'])
-                                if display == 'Basic list':
-                                    st.write(f'{len(test_filter)} result(s) found')
-                                    for index, row in test_filter.iterrows():
-                                        publication_type = row['Publication type']
-                                        title = row['Title']
-                                        authors = row['FirstName2']
-                                        date_published = row['Date published']
-                                        link_to_publication = row['Link to publication']
-                                        zotero_link = row['Zotero link']
-                                        citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
-                                        citation = int(float(citation))
-                                        citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
-                                        citation_link = citation_link.replace('api.', '')
-
-                                        published_by_or_in_dict = {
-                                            'Journal article': 'Published in',
-                                            'Magazine article': 'Published in',
-                                            'Newspaper article': 'Published in',
-                                            'Book': 'Published by',
-                                        }
-
-                                        publication_type = row['Publication type']
-
-                                        published_by_or_in = published_by_or_in_dict.get(publication_type, '')
-                                        published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
-                                        if publication_type == 'Book':
-                                            published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
-
-                                        formatted_entry = (
-                                            '**' + str(publication_type) + '**' + ': ' +
-                                            str(title) + ' ' +
-                                            '(by ' + '*' + str(authors) + '*' + ') ' +
-                                            '(Publication date: ' + str(date_published) + ') ' +
-                                            ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
-                                            '[[Publication link]](' + str(link_to_publication) + ') ' +
-                                            '[[Zotero link]](' + str(zotero_link) + ') ' +
-                                            ('Cited by [' + str(citation) + '](' + citation_link + ')' if citation > 0 else '')
-                                        )
-                                        formatted_entry = format_entry(row)
-                                        st.write(f"{index + 1}) {formatted_entry}")
-                                if display == 'Table':
-                                    st.write(f'{len(test_filter)} result(s) found')
-                                    st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
-                            else:
-                                st.write(f'{len(titles)} items in the database')
-                        text_search()
 
                         # if st.button('Search guide'):
                         #     st.toast('''
@@ -581,7 +581,9 @@ with st.spinner('Retrieving data...'):
                                 search_in_index = search_options.index(search_in_from_key)
                             except (ValueError, KeyError):
                                 pass
-
+                        clear = st.button('clear')
+                        if clear:
+                            st.rerun()
                         # Layout for input elements
                         if 'visibility' not in st.session_state:
                             st.session_state.disabled = False
