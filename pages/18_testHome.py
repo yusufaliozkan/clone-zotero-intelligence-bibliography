@@ -497,7 +497,7 @@ with st.spinner('Retrieving data...'):
             # Example Streamlit code for context
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-            # @st.experimental_fragment
+            @st.experimental_fragment
             def search_options_main_menu():
                 from authors_dict import name_replacements
                 total_rows = len(df_dedup)
@@ -510,7 +510,7 @@ with st.spinner('Retrieving data...'):
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
-                    @st.experimental_fragment
+                    # @st.experimental_fragment
                     def search_keyword(): 
                         @st.experimental_dialog("Search guide")
                         def guide(item):
