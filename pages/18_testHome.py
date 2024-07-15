@@ -524,7 +524,7 @@ with st.spinner('Retrieving data...'):
                             st.rerun()
                         # Layout for input elements
                         if 'visibility' not in st.session_state:
-                            st.session_state.disabled = True
+                            st.session_state.disabled = False
                         cols, cola = st.columns([2, 6])
 
                         # Selectbox for search options
