@@ -648,6 +648,9 @@ with st.spinner('Retrieving data...'):
                                 types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
                                 collections = filtered_df['Collection_Name'].dropna().unique()
 
+                                if len(filtered_df) > len(filtered_df)+1:
+                                    st.rerun()
+
                                         # if container_refresh_button.button('Refresh'):
                                 #     st.query_params.clear()
                                 #     st.rerun()
@@ -795,8 +798,6 @@ with st.spinner('Retrieving data...'):
                                     a = 'search-result-' + today
                                     container_download_button.download_button('💾 Download search', csv, (a+'.csv'), mime="text/csv", key='download-csv-1')
 
-                                    if len(filtered_df) > len(filtered_df)+1:
-                                        st.rerun()
 
                                     on = st.toggle('Generate dashboard')
 
