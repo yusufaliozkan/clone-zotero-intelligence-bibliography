@@ -242,30 +242,31 @@ with st.spinner('Retrieving data & updating dashboard...'):
             sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
             if view == 'Basic list':
                 articles_list = []  # Store articles in a list
-                for index, row in df_collections.iterrows():
-                    formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
-                    articles_list.append(formatted_entry)
+                with st.expander('**Basic list view**', expanded=True):
+                    for index, row in df_collections.iterrows():
+                        formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
+                        articles_list.append(formatted_entry)
 
-                tabs = []
-                num_tabs = (len(articles_list) // 20) + (1 if len(articles_list) % 20 != 0 else 0)
-                for i in range(num_tabs):
-                    start = i * 20
-                    end = start + 20
-                    tabs.append(f'Results {start + 1}-{min(end, len(articles_list))}')
-
-                tab_objs = st.tabs(tabs)
-
-                for i, tab in enumerate(tab_objs):
-                    with tab:
-                        st.write(f"### {tabs[i]}")
+                    tabs = []
+                    num_tabs = (len(articles_list) // 20) + (1 if len(articles_list) % 20 != 0 else 0)
+                    for i in range(num_tabs):
                         start = i * 20
                         end = start + 20
-                        for j, row in enumerate(df_collections.iloc[start:end].iterrows()):
-                            index, row_data = row
-                            formatted_entry = format_entry(row_data)
-                            st.write(f"{start + j + 1}) {formatted_entry}")
-                            if display2:
-                                st.caption(row_data['Abstract'])
+                        tabs.append(f'Results {start + 1}-{min(end, len(articles_list))}')
+
+                    tab_objs = st.tabs(tabs)
+
+                    for i, tab in enumerate(tab_objs):
+                        with tab:
+                            st.write(f"### {tabs[i]}")
+                            start = i * 20
+                            end = start + 20
+                            for j, row in enumerate(df_collections.iloc[start:end].iterrows()):
+                                index, row_data = row
+                                formatted_entry = format_entry(row_data)
+                                st.write(f"{start + j + 1}) {formatted_entry}")
+                                if display2:
+                                    st.caption(row_data['Abstract'])
 
                 # with st.expander('**Basic list view**', expanded=True):
                 #     if sort_by == 'Publication date :arrow_down:':  # or df_collections['Citation'].sum() == 0:
