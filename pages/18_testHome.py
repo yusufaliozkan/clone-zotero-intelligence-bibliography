@@ -732,7 +732,6 @@ with st.spinner('Retrieving data...'):
                                     on = st.toggle('Generate dashboard')
 
                                     if on and len(filtered_df) > 0:
-                                        st.rerun()
                                         st.info(f'Dashboard for search terms: {search_term}')
                                         search_df = filtered_df.copy()
                                         publications_by_type = search_df['Publication type'].value_counts()
