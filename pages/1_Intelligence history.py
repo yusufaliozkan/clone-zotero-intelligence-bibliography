@@ -252,7 +252,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     for i in range(num_tabs):
                         start = i * 20
                         end = start + 20
-                        tabs.append(f'Results {start + 1}-{min(end, len(articles_list))}')
+                        # tabs.append(f'Results {start + 1}-{min(end, len(articles_list))}')
 
                     tab_objs = st.tabs(tabs)
 
