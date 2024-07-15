@@ -438,6 +438,7 @@ with st.spinner('Retrieving data...'):
                 test_filter = df_csv[df_csv.Title.str.lower().str.contains(name.lower(), na=False)]
             else:
                 test_filter = df_csv.copy()
+            test_filter
 
             # Example Streamlit code for context
             st.header('Search in database', anchor=False)
