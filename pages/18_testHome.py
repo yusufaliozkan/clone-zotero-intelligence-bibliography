@@ -444,11 +444,12 @@ with st.spinner('Retrieving data...'):
                     test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
                 else:
                     test_filter = titles
-                st.write(f'{len(test_filter)} result(s) found')
+                st.write(f'{len(test_filter)} items in the database')
                 test_filter = test_filter.reset_index(drop=True)
                 test_filter_title = test_filter['Title']
                 display = st.radio('Display as', ['Table', 'Basic list'])
-                if not display == 'Basic list':
+                if display == 'Basic list':
+                    st.write(f'{len(test_filter)} result(s) found')
                     for index, row in test_filter.iterrows():
                         publication_type = row['Publication type']
                         title = row['Title']
@@ -488,6 +489,7 @@ with st.spinner('Retrieving data...'):
                         formatted_entry = format_entry(row)
                         st.write(f"{index + 1}) {formatted_entry}")
                 else:
+                    st.write(f'{len(test_filter)} result(s) found')
                     st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
             text_search()
 
