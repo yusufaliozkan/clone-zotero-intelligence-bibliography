@@ -527,6 +527,13 @@ with st.spinner('Retrieving data...'):
                         # Layout for input elements
                         if 'visibility' not in st.session_state:
                             st.session_state.disabled = False
+
+                        name = st_keyup("Enter city name", debounce=500 if debounce else None)
+                        df_csv = df_duplicated.copy()
+                        if name:
+                            test_filter = df_csv[df_csv.Title.str.lower().str.contains(name.lower(), na=False)]
+                        else:
+                            df_csv
                         cols, cola = st.columns([2, 6])
 
                         # Selectbox for search options
