@@ -444,7 +444,7 @@ with st.spinner('Retrieving data...'):
                     test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
                     test_filter = test_filter.reset_index(drop=True)
                     test_filter_title = test_filter['Title']
-                    display = st.radio('Display as', ['Table', 'Basic list'])
+                    display = st.radio('Display as', ['Basic list', 'Table'])
                     if display == 'Basic list':
                         st.write(f'{len(test_filter)} result(s) found')
                         for index, row in test_filter.iterrows():
