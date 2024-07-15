@@ -445,8 +445,9 @@ with st.spinner('Retrieving data...'):
                 else:
                     test_filter = titles
                 test_filter
+                st.write(test_filter['Title'])
             text_search()
-            
+
             # Example Streamlit code for context
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
