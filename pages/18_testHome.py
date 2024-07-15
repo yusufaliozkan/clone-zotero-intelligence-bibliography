@@ -512,13 +512,15 @@ with st.spinner('Retrieving data...'):
                         search_options = ["Title", "Title and abstract"]
 
                         # Handling the search_in select box selection
-                        search_in_index = 0
-                        if 'search_in' in query_params:
-                            try:
-                                search_in_from_key = query_params['search_in']
-                                search_in_index = search_options.index(search_in_from_key)
-                            except (ValueError, KeyError):
-                                pass
+                        search_in_index = search_options.index(search_in) if search_in in search_options else 0
+
+                        # search_in_index = 0
+                        # if 'search_in' in query_params:
+                        #     try:
+                        #         search_in_from_key = query_params['search_in']
+                        #         search_in_index = search_options.index(search_in_from_key)
+                        #     except (ValueError, KeyError):
+                        #         pass
 
                         # Layout for input elements
                         cols, cola = st.columns([2, 6])
@@ -554,6 +556,7 @@ with st.spinner('Retrieving data...'):
                             with st.status("Searching publications...", expanded=True) as status:
                                 search_tokens = parse_search_terms(search_term)
                                 print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
+                                filtered_df = pd.DataFrame()
                                 df_csv = df_duplicated.copy()
 
                                 filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
