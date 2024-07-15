@@ -795,7 +795,7 @@ with st.spinner('Retrieving data...'):
                                     a = 'search-result-' + today
                                     container_download_button.download_button('💾 Download search', csv, (a+'.csv'), mime="text/csv", key='download-csv-1')
 
-                                    if len(filtered_df) <= len(filtered_df)+1:
+                                    if len(filtered_df) > len(filtered_df)+1:
                                         st.rerun()
 
                                     on = st.toggle('Generate dashboard')
