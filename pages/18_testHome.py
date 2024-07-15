@@ -491,7 +491,7 @@ with st.spinner('Retrieving data...'):
                             st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
                         status.update(label=f'Search complete for {name} with {len(test_filter)} results')
                 else:
-                    st.write(f'{len(titles)} items in the database')
+                    st.write(f'{len(titles)} items in the database', state="complete", expanded=False)
             text_search()
 
             # Example Streamlit code for context
