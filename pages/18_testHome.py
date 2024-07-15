@@ -440,32 +440,35 @@ with st.spinner('Retrieving data...'):
                     df_csv1 = df_dedup.copy()
                     return df_csv1
                 titles = get_titles()
-                if name: 
-                    test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
-                    test_filter = test_filter.reset_index(drop=True)
-                    test_filter_title = test_filter['Title']
-                    display = st.radio('Display as', ['Basic list', 'Table'])
-                    if display == 'Basic list':
-                        st.write(f'{len(test_filter)} result(s) found')
-                        results_per_tab = 20
+                if name:
+                    if len(test_filter)==0:
+                        st.write('No results found')
+                    else:
+                        test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
+                        test_filter = test_filter.reset_index(drop=True)
+                        test_filter_title = test_filter['Title']
+                        display = st.radio('Display as', ['Basic list', 'Table'])
+                        if display == 'Basic list':
+                            st.write(f'{len(test_filter)} result(s) found')
+                            results_per_tab = 20
 
-                        # Calculate the number of tabs needed
-                        num_tabs = math.ceil(len(test_filter) / results_per_tab)
+                            # Calculate the number of tabs needed
+                            num_tabs = math.ceil(len(test_filter) / results_per_tab)
 
-                        # Create tabs
-                        tabs = st.tabs([f"Tab {i+1}" for i in range(num_tabs)])
+                            # Create tabs
+                            tabs = st.tabs([f"Tab {i+1}" for i in range(num_tabs)])
 
-                        # Populate tabs with results
-                        for tab_index in range(num_tabs):
-                            with tabs[tab_index]:
-                                start_index = tab_index * results_per_tab
-                                end_index = start_index + results_per_tab
-                                for index, row in test_filter.iloc[start_index:end_index].iterrows():
-                                    formatted_entry = format_entry(row)  # Assuming format_entry function is defined elsewhere
-                                    st.write(f"{start_index + index + 1}) {formatted_entry}")
-                    if display == 'Table':
-                        st.write(f'{len(test_filter)} result(s) found')
-                        st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
+                            # Populate tabs with results
+                            for tab_index in range(num_tabs):
+                                with tabs[tab_index]:
+                                    start_index = tab_index * results_per_tab
+                                    end_index = start_index + results_per_tab
+                                    for index, row in test_filter.iloc[start_index:end_index].iterrows():
+                                        formatted_entry = format_entry(row)  # Assuming format_entry function is defined elsewhere
+                                        st.write(f"{start_index + index + 1}) {formatted_entry}")
+                        if display == 'Table':
+                            st.write(f'{len(test_filter)} result(s) found')
+                            st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
                 else:
                     st.write(f'{len(titles)} items in the database')
             text_search()
