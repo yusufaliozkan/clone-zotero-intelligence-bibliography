@@ -431,6 +431,7 @@ with st.spinner('Retrieving data...'):
                     highlighted_text = highlighted_text.replace(f'___URL_PLACEHOLDER_{index}___', url)
                 
                 return highlighted_text
+                
             @st.experimental_fragment
             def text_search():
                 name = st.text_input("Enter city name", "").strip()
