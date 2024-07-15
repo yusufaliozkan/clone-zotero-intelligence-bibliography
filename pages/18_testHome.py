@@ -512,6 +512,8 @@ with st.spinner('Retrieving data...'):
                     st.subheader('Search keywords', anchor=False, divider='blue')
                     search_term = ""
 
+                    st.subheader('Search keywords', anchor=False, divider='blue')
+
                     @st.experimental_fragment
                     def search_keyword(): 
                         @st.experimental_dialog("Search guide")
@@ -531,22 +533,12 @@ with st.spinner('Retrieving data...'):
 
                                 You can share the link of your search result. Try: https://intelligence.streamlit.app/?search_in=Title&query=cia+OR+mi6
                                 ''')
-                        
+
                         if "guide" not in st.session_state:
                             if st.button("Search guide"):
                                 guide("Search guide")
                         container_refresh_button = st.container()
 
-                        # if st.button('Search guide'):
-                        #     st.toast('''
-                        #     **Search guide**
-
-                        #     The following Boolean operators are available: AND, OR, NOT (e.g. "covert action" NOT british).
-
-                        #     Search with double quote is available. (e.g. "covert action")
-
-                        #     Search with parantheses is **not** available.                   
-                        #     ''')
                         # Function to update search parameters in the query string
                         def update_search_params():
                             st.session_state.search_term = st.session_state.search_term_input
@@ -557,14 +549,14 @@ with st.spinner('Retrieving data...'):
 
                         # Extracting initial query parameters
                         query_params = st.query_params
-                        search_term = ""
-                        search_in = "Title"
 
                         # Retrieve the initial search term and search_in from query parameters if available
                         if 'query' in query_params:
                             search_term = query_params['query']
                         if 'search_in' in query_params:
                             search_in = query_params['search_in']
+                        else:
+                            search_in = "Title"
 
                         # Initialize session state variables
                         if 'search_term' not in st.session_state:
@@ -599,7 +591,7 @@ with st.spinner('Retrieving data...'):
                                 index=search_in_index,
                                 on_change=update_search_params
                             )
-                        
+
                         # Text input for search keywords
                         with cola:
                             st.text_input(
@@ -620,6 +612,8 @@ with st.spinner('Retrieving data...'):
 
                         # Stripping and processing the search term
                         search_term = st.session_state.search_term.strip()
+
+                    # Call the search_keyword function
                     search_keyword()
                     if search_term:
                         with st.status("Searching publications...", expanded=True) as status:
