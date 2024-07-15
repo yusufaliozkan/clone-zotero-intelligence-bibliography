@@ -80,9 +80,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
     container = st.container()
 
     unique_collections = list(df_collections['Collection_Name'].unique())
-
+    def clear_search():
+        st.session_state['name'] = ""
     def update_params():
         st.query_params.from_dict({'collection_id': collection_mapping[st.session_state.qp]})
+        clear_search()
 
     query_params = st.query_params
     ix = 0
@@ -94,10 +96,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
             ix = unique_collections.index(collection_name_from_key)
         except (ValueError, KeyError):
             pass
-    def clear_search():
-        st.session_state['name'] = ""
-    def update_params():
-        clear_search()
+
+
     radio = container.radio('Select a collection', unique_collections, index=ix, key="qp", on_change=update_params)
     query_params = st.query_params.to_dict()
 
