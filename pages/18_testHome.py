@@ -445,7 +445,44 @@ with st.spinner('Retrieving data...'):
                 else:
                     test_filter = titles
                 test_filter
-                st.write(test_filter['Title'])
+                for index, row in filtered_collection_df_authors.iterrows():
+                    publication_type = row['Publication type']
+                    title = row['Title']
+                    authors = row['FirstName2']
+                    date_published = row['Date published']
+                    link_to_publication = row['Link to publication']
+                    zotero_link = row['Zotero link']
+                    citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
+                    citation = int(float(citation))
+                    citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
+                    citation_link = citation_link.replace('api.', '')
+
+                    published_by_or_in_dict = {
+                        'Journal article': 'Published in',
+                        'Magazine article': 'Published in',
+                        'Newspaper article': 'Published in',
+                        'Book': 'Published by',
+                    }
+
+                    publication_type = row['Publication type']
+
+                    published_by_or_in = published_by_or_in_dict.get(publication_type, '')
+                    published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
+                    if publication_type == 'Book':
+                        published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
+
+                    formatted_entry = (
+                        '**' + str(publication_type) + '**' + ': ' +
+                        str(title) + ' ' +
+                        '(by ' + '*' + str(authors) + '*' + ') ' +
+                        '(Publication date: ' + str(date_published) + ') ' +
+                        ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
+                        '[[Publication link]](' + str(link_to_publication) + ') ' +
+                        '[[Zotero link]](' + str(zotero_link) + ') ' +
+                        ('Cited by [' + str(citation) + '](' + citation_link + ')' if citation > 0 else '')
+                    )
+                    formatted_entry = format_entry(row)
+                    st.write(f"{index + 1}) {formatted_entry}")
             text_search()
 
             # Example Streamlit code for context
