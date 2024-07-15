@@ -432,6 +432,13 @@ with st.spinner('Retrieving data...'):
                 
                 return highlighted_text
 
+            name = st_keyup("Enter city name")
+            df_csv = df_duplicated.copy()
+            if name:
+                test_filter = df_csv[df_csv.Title.str.lower().str.contains(name.lower(), na=False)]
+            else:
+                test_filter = df_csv.copy()
+
             # Example Streamlit code for context
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
@@ -528,12 +535,6 @@ with st.spinner('Retrieving data...'):
                         if 'visibility' not in st.session_state:
                             st.session_state.disabled = False
 
-                        name = st_keyup("Enter city name")
-                        df_csv = df_duplicated.copy()
-                        if name:
-                            test_filter = df_csv[df_csv.Title.str.lower().str.contains(name.lower(), na=False)]
-                        else:
-                            test_filter = df_csv.copy()
                         cols, cola = st.columns([2, 6])
 
                         # Selectbox for search options
