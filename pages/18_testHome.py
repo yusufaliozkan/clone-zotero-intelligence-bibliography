@@ -600,7 +600,7 @@ with st.spinner('Retrieving data...'):
                         
                         # Text input for search keywords
                         with cola:
-                            st.text_input(
+                            st_keyup(
                                 'Search keywords in titles or abstracts',
                                 st.session_state.search_term_input,
                                 key='search_term_input',
