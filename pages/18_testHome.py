@@ -648,7 +648,7 @@ with st.spinner('Retrieving data...'):
                                 types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
                                 collections = filtered_df['Collection_Name'].dropna().unique()
 
-                                if len(filtered_df) > len(filtered_df)+1:
+                                if len(filtered_df) < len(filtered_df)+1:
                                     st.rerun()
 
                                         # if container_refresh_button.button('Refresh'):
