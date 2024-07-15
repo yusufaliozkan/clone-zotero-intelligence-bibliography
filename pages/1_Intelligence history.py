@@ -152,7 +152,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
         return df_csv1
     df_collections = get_titles()
     if name:
-        test_filter = df_collections[df_collections.Title.str.lower().str.contains(name.lower(), na=False)]
+        df_collections = df_collections[df_collections.Title.str.lower().str.contains(name.lower(), na=False)]
 
 
     col1, col2, col3 = st.columns([1,2,4])
