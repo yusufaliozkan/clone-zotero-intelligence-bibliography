@@ -267,47 +267,47 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             if display2:
                                 st.caption(row_data['Abstract'])
 
-                with st.expander('**Basic list view**', expanded=True):
-                    if sort_by == 'Publication date :arrow_down:':  # or df_collections['Citation'].sum() == 0:
-                        count = 1
-                        for index, row in df_collections.iterrows():
-                            formatted_entry = format_entry(row)
-                            st.write(f"{count}) {formatted_entry}")
-                            count += 1
-                            if display2:
-                                st.caption(row['Abstract'])
-                    elif sort_by == 'Publication type':  # or df_collections['Citation'].sum() == 0:
-                        df_collections = df_collections.sort_values(by=['Publication type'], ascending=True)
-                        current_type = None
-                        count_by_type = {}
-                        for index, row in df_collections.iterrows():
-                            if row['Publication type'] != current_type:
-                                current_type = row['Publication type']
-                                st.subheader(current_type)
-                                count_by_type[current_type] = 1
-                            formatted_entry = format_entry(row)
-                            st.write(f"{count_by_type[current_type]}) {formatted_entry}")
-                            count_by_type[current_type] += 1
-                            if display2:
-                                st.caption(row['Abstract'])
-                    else:
-                        if df_collections['Citation'].sum() == 0:
-                            count = 1
-                            for index, row in df_collections.iterrows():
-                                formatted_entry = format_entry(row)
-                                st.write(f"{count}) {formatted_entry}")
-                                count += 1
-                                if display2:
-                                    st.caption(row['Abstract'])
-                        else:
-                            df_collections = df_collections.sort_values(by=['Citation'], ascending=False)
-                            count = 1
-                            for index, row in df_collections.iterrows():
-                                formatted_entry = format_entry(row)
-                                st.write(f"{count}) {formatted_entry}")
-                                count += 1
-                                if display2:
-                                    st.caption(row['Abstract'])
+                # with st.expander('**Basic list view**', expanded=True):
+                #     if sort_by == 'Publication date :arrow_down:':  # or df_collections['Citation'].sum() == 0:
+                #         count = 1
+                #         for index, row in df_collections.iterrows():
+                #             formatted_entry = format_entry(row)
+                #             st.write(f"{count}) {formatted_entry}")
+                #             count += 1
+                #             if display2:
+                #                 st.caption(row['Abstract'])
+                #     elif sort_by == 'Publication type':  # or df_collections['Citation'].sum() == 0:
+                #         df_collections = df_collections.sort_values(by=['Publication type'], ascending=True)
+                #         current_type = None
+                #         count_by_type = {}
+                #         for index, row in df_collections.iterrows():
+                #             if row['Publication type'] != current_type:
+                #                 current_type = row['Publication type']
+                #                 st.subheader(current_type)
+                #                 count_by_type[current_type] = 1
+                #             formatted_entry = format_entry(row)
+                #             st.write(f"{count_by_type[current_type]}) {formatted_entry}")
+                #             count_by_type[current_type] += 1
+                #             if display2:
+                #                 st.caption(row['Abstract'])
+                #     else:
+                #         if df_collections['Citation'].sum() == 0:
+                #             count = 1
+                #             for index, row in df_collections.iterrows():
+                #                 formatted_entry = format_entry(row)
+                #                 st.write(f"{count}) {formatted_entry}")
+                #                 count += 1
+                #                 if display2:
+                #                     st.caption(row['Abstract'])
+                #         else:
+                #             df_collections = df_collections.sort_values(by=['Citation'], ascending=False)
+                #             count = 1
+                #             for index, row in df_collections.iterrows():
+                #                 formatted_entry = format_entry(row)
+                #                 st.write(f"{count}) {formatted_entry}")
+                #                 count += 1
+                #                 if display2:
+                #                     st.caption(row['Abstract'])
             elif view == 'Table':
                 df_table_view = df_collections[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal', 'Citation', 'Collection_Name','Link to publication','Zotero link']]
                 df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
