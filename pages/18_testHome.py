@@ -528,7 +528,7 @@ with st.spinner('Retrieving data...'):
                         if 'visibility' not in st.session_state:
                             st.session_state.disabled = False
 
-                        name = st_keyup("Enter city name", debounce=500 if debounce else None)
+                        name = st_keyup("Enter city name")
                         df_csv = df_duplicated.copy()
                         if name:
                             test_filter = df_csv[df_csv.Title.str.lower().str.contains(name.lower(), na=False)]
