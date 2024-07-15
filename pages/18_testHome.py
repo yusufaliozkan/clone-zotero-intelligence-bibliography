@@ -441,10 +441,10 @@ with st.spinner('Retrieving data...'):
                     return df_csv1
                 titles = get_titles()
                 if name:
+                    test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
                     if len(test_filter)==0:
                         st.write('No results found')
                     else:
-                        test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
                         test_filter = test_filter.reset_index(drop=True)
                         test_filter_title = test_filter['Title']
                         display = st.radio('Display as', ['Basic list', 'Table'])
