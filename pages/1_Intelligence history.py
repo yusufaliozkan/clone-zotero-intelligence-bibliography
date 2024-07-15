@@ -96,6 +96,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
             pass
     def clear_search():
         st.session_state['name'] = ""
+    def update_params():
+        clear_search()
     radio = container.radio('Select a collection', unique_collections, index=ix, key="qp", on_change=update_params)
     query_params = st.query_params.to_dict()
 
