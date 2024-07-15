@@ -1041,9 +1041,7 @@ with st.spinner('Retrieving data...'):
                                     )
                         else:
                             st.write("Please enter a keyword or author name to search.")
-                    
-                    
-                    # search_keyword()
+                    search_keyword()
 
                 # SEARCH AUTHORS
                 elif search_option == "Search author":
