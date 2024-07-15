@@ -533,7 +533,7 @@ with st.spinner('Retrieving data...'):
                         if name:
                             test_filter = df_csv[df_csv.Title.str.lower().str.contains(name.lower(), na=False)]
                         else:
-                            df_csv
+                            test_filter = df_csv.copy()
                         cols, cola = st.columns([2, 6])
 
                         # Selectbox for search options
