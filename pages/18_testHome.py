@@ -447,7 +447,7 @@ with st.spinner('Retrieving data...'):
                 st.write(f'{len(test_filter)} result(s) found')
                 test_filter = test_filter.reset_index(drop=True)
                 test_filter_title = test_filter['Title']
-                display = st.button('Display as basic view')
+                display = st.radio('Display as', ['Table', 'Basic list'])
                 if display:
                     for index, row in test_filter.iterrows():
                         publication_type = row['Publication type']
