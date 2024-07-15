@@ -434,7 +434,7 @@ with st.spinner('Retrieving data...'):
 
             @st.experimental_fragment
             def text_search():
-                name = st_keyup("Enter city name", debounce=300)
+                name = st_keyup("Enter city name", debounce=250)
                 @st.cache_data
                 def get_titles():
                     df_csv1 = df_dedup.copy()
