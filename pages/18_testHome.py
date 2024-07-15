@@ -432,7 +432,7 @@ with st.spinner('Retrieving data...'):
                 
                 return highlighted_text
 
-            name = st_keyup("Enter city name")
+            name = st_keyup("Enter city name", debounce=500)
             @st.cache_data
             def get_titles():
                 df_csv = df_duplicated.copy()
