@@ -509,7 +509,6 @@ with st.spinner('Retrieving data...'):
                 citation_median = non_nan_cited_df_dedup['Citation'].median()
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
                 if search_option == "Search keywords":
-                    st.subheader('Search keywords', anchor=False, divider='blue')
                     search_term = ""
 
                     st.subheader('Search keywords', anchor=False, divider='blue')
