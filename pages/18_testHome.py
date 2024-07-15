@@ -447,44 +447,48 @@ with st.spinner('Retrieving data...'):
                     display = st.radio('Display as', ['Basic list', 'Table'])
                     if display == 'Basic list':
                         st.write(f'{len(test_filter)} result(s) found')
+                        num_items = len(test_filter)
+                        articles_list = []  # Store articles in a list
+                        abstracts_list = [] # Store abstracts in a list
                         for index, row in test_filter.iterrows():
-                            publication_type = row['Publication type']
-                            title = row['Title']
-                            authors = row['FirstName2']
-                            date_published = row['Date published']
-                            link_to_publication = row['Link to publication']
-                            zotero_link = row['Zotero link']
-                            citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
-                            citation = int(float(citation))
-                            citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
-                            citation_link = citation_link.replace('api.', '')
-
-                            published_by_or_in_dict = {
-                                'Journal article': 'Published in',
-                                'Magazine article': 'Published in',
-                                'Newspaper article': 'Published in',
-                                'Book': 'Published by',
-                            }
-
-                            publication_type = row['Publication type']
-
-                            published_by_or_in = published_by_or_in_dict.get(publication_type, '')
-                            published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
-                            if publication_type == 'Book':
-                                published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
-
-                            formatted_entry = (
-                                '**' + str(publication_type) + '**' + ': ' +
-                                str(title) + ' ' +
-                                '(by ' + '*' + str(authors) + '*' + ') ' +
-                                '(Publication date: ' + str(date_published) + ') ' +
-                                ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
-                                '[[Publication link]](' + str(link_to_publication) + ') ' +
-                                '[[Zotero link]](' + str(zotero_link) + ') ' +
-                                ('Cited by [' + str(citation) + '](' + citation_link + ')' if citation > 0 else '')
-                            )
                             formatted_entry = format_entry(row)
-                            st.write(f"{index + 1}) {formatted_entry}")
+                            articles_list.append(formatted_entry)  # Append formatted entry to the list
+                            abstract = row['Abstract']
+                            abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
+                        if num_items < 20:
+                            for i, article in enumerate(articles_list, start=1):
+                                highlighted_article = highlight_terms(article, search_tokens)
+                                st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
+                                
+                                if display_abstracts:
+                                    abstract = abstracts_list[i - 1]
+                                    if pd.notnull(abstract):
+                                        if search_in == 'Title and abstract':
+                                            highlighted_abstract = highlight_terms(abstract, search_tokens)
+                                        else:
+                                            highlighted_abstract = abstract 
+                                        st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
+                                    else:
+                                        st.caption(f"Abstract: No abstract")
+                        else:
+                            show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
+                            
+                            if show_first_20:
+                                filtered_df = filtered_df.head(20)
+                                for i, article in enumerate(articles_list[:20], start=1):
+                                    highlighted_article = highlight_terms(article, search_tokens)
+                                    st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
+                                    
+                                    if display_abstracts:
+                                        abstract = abstracts_list[i - 1]
+                                        if pd.notnull(abstract):
+                                            if search_in == 'Title and abstract':
+                                                highlighted_abstract = highlight_terms(abstract, search_tokens)
+                                            else:
+                                                highlighted_abstract = abstract 
+                                            st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
+                                        else:
+                                            st.caption(f"Abstract: No abstract")
                     if display == 'Table':
                         st.write(f'{len(test_filter)} result(s) found')
                         st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
