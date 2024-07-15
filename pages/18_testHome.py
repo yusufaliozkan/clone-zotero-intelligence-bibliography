@@ -648,8 +648,12 @@ with st.spinner('Retrieving data...'):
                                 types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
                                 collections = filtered_df['Collection_Name'].dropna().unique()
 
-                                # if len(filtered_df) < len(filtered_df)+1:
-                                #     st.rerun()
+                                if 'rerun_flag' not in st.session_state:
+                                    st.session_state.rerun_flag = False
+
+                                if len(filtered_df) < len(filtered_df)+1 and not st.session_state.rerun_flag:
+                                    st.session_state.rerun_flag = True
+                                    st.rerun()
 
                                         # if container_refresh_button.button('Refresh'):
                                 #     st.query_params.clear()
