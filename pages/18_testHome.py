@@ -444,7 +444,7 @@ with st.spinner('Retrieving data...'):
                     test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
                 else:
                     test_filter = titles
-                test_filter
+
                 for index, row in test_filter.iterrows():
                     publication_type = row['Publication type']
                     title = row['Title']
