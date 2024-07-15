@@ -474,7 +474,7 @@ with st.spinner('Retrieving data...'):
                             show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
                             
                             if show_first_20:
-                                filtered_df = filtered_df.head(20)
+                                test_filter = test_filter.head(20)
                                 for i, article in enumerate(articles_list[:20], start=1):
                                     highlighted_article = highlight_terms(article, search_tokens)
                                     st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
