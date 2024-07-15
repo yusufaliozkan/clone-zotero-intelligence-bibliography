@@ -484,8 +484,7 @@ with st.spinner('Retrieving data...'):
                                 ('Cited by [' + str(citation) + '](' + citation_link + ')' if citation > 0 else '')
                             )
                             formatted_entry = format_entry(row)
-                            with st.expander(f'{title}'):
-                                st.write(f"{index + 1}) {formatted_entry}")
+                            st.write(f"{index + 1}) {formatted_entry}")
                     if display == 'Table':
                         st.write(f'{len(test_filter)} result(s) found')
                         st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
