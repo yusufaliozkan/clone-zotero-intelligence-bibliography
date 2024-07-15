@@ -452,7 +452,7 @@ with st.spinner('Retrieving data...'):
                 test_filter_title = test_filter['Title']
                 display = st.radio('Display as', ['Table', 'Basic list'])
                 
-                if not display == 'Basic list':
+                if not display == 'Basic list': 
                     for index, row in test_filter.iterrows():
                         publication_type = row['Publication type']
                         title = row['Title']
