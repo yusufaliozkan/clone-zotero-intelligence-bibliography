@@ -437,8 +437,8 @@ with st.spinner('Retrieving data...'):
                 name = st_keyup("Enter city name", debounce=500)
                 @st.cache_data
                 def get_titles():
-                    df_csv = df_csv.copy()
-                    return df_csv
+                    df_csv1 = df_csv.copy()
+                    return df_csv1
                 titles = get_titles()
                 if name:
                     test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
