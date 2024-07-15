@@ -38,6 +38,8 @@ import requests
 from format_entry import format_entry
 from streamlit_dynamic_filters import DynamicFilters
 # from rss_feed import df_podcast, df_magazines
+from st_keyup import st_keyup
+
 
 # Connecting Zotero with API 
 library_id = '2514686'
@@ -537,16 +539,14 @@ with st.spinner('Retrieving data...'):
                         
                         # Text input for search keywords
                         with cola:
-                            refresh = st.button('search', key='disabled')
-                            if refresh:
-                                st.text_input(
-                                    'Search keywords in titles or abstracts',
-                                    st.session_state.search_term_input,
-                                    key='search_term_input',
-                                    placeholder='Type your keyword(s)',
-                                    on_change=update_search_params,
-                                    disabled=st.session_state.disabled,
-                                )
+                            st.text_input(
+                                'Search keywords in titles or abstracts',
+                                st.session_state.search_term_input,
+                                key='search_term_input',
+                                placeholder='Type your keyword(s)',
+                                on_change=update_search_params,
+                                disabled=st.session_state.disabled,
+                            )
 
                         # Function to extract quoted phrases
                         def extract_quoted_phrases(text):
