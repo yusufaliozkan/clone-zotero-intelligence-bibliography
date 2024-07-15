@@ -146,6 +146,15 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     st.markdown('#### Collection theme: ' + collection_name)
 
+    name = st_keyup("Enter keywords to search in title", debounce=500)
+    @st.cache_data
+    def get_titles():
+        df_csv1 = df_collections.copy()
+        return df_csv1
+    df_collections = get_titles()
+    if name:
+        df_collections = df_collections[df_collections.Title.str.lower().str.contains(name.lower(), na=False)]
+
     col1, col2, col3 = st.columns([1,2,4])
     with col1:
         container_metric = st.container()
