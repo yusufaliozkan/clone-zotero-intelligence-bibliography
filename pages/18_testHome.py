@@ -537,7 +537,7 @@ with st.spinner('Retrieving data...'):
                         
                         # Text input for search keywords
                         with cola:
-                            refresh = st.button('search')
+                            refresh = st.button('search', key='disabled')
                             if refresh:
                                 st.text_input(
                                     'Search keywords in titles or abstracts',
