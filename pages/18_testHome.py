@@ -660,59 +660,59 @@ with st.spinner('Retrieving data...'):
                                 #     st.rerun()
                                 if len(filtered_df)==0:
                                     num_items=0
-                                colsearch1, colsearch2, colsearch3, colsearch4 = st.columns(4)
-                                with colsearch1:
-                                    container_metric = st.container()
-                                with colsearch2:
-                                    with st.popover('More metrics'):
-                                        container_citation = st.container()
-                                        container_citation_average = st.container()
-                                        container_oa = st.container() 
-                                        container_type = st.container()
-                                        container_author_no = st.container()
-                                        container_author_pub_ratio= st.container()
-                                        container_publication_ratio = st.container()
-                                with colsearch3:
-                                    with st.popover('Relevant themes'):
-                                        st.markdown(f'##### Top relevant publication themes')
-                                        filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
-                                        filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
-                                        filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
-                                        filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on='Collection_Name', how='left').drop_duplicates(subset='Collection_Name').reset_index(drop=True)
-                                        def remove_numbers(name):
-                                            return re.sub(r'^\d+(\.\d+)*\s*', '', name)
-                                        filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
-                                        row_nu = len(filtered_df_for_collections)
-                                        formatted_rows = []
-                                        for i in range(row_nu):
-                                            collection_name = filtered_df_for_collections['Collection_Name'].iloc[i]
-                                            number_of_items = filtered_df_for_collections['Number_of_Items'].iloc[i]
-                                            zotero_collection_link = filtered_df_for_collections['Collection_Link'].iloc[i]
-                                            formatted_row = (
-                                                f"[{collection_name}]({zotero_collection_link}) "  # Hyperlink format in markdown
-                                                f"{number_of_items} items"
-                                            )
-                                            formatted_rows.append(f"{i+1}) " + formatted_row)
+                                # colsearch1, colsearch2, colsearch3, colsearch4 = st.columns(4)
+                                # with colsearch1:
+                                #     container_metric = st.container()
+                                # with colsearch2:
+                                #     with st.popover('More metrics'):
+                                #         container_citation = st.container()
+                                #         container_citation_average = st.container()
+                                #         container_oa = st.container() 
+                                #         container_type = st.container()
+                                #         container_author_no = st.container()
+                                #         container_author_pub_ratio= st.container()
+                                #         container_publication_ratio = st.container()
+                                # with colsearch3:
+                                #     with st.popover('Relevant themes'):
+                                #         st.markdown(f'##### Top relevant publication themes')
+                                #         filtered_df_for_collections = filtered_df_for_collections[['Zotero link', 'Collection_Key', 'Collection_Name', 'Collection_Link']].reset_index(drop=True)
+                                #         filtered_df_for_collections_2 = filtered_df_for_collections['Collection_Name'].value_counts().reset_index().head(5)
+                                #         filtered_df_for_collections_2.columns = ['Collection_Name', 'Number_of_Items']
+                                #         filtered_df_for_collections = pd.merge(filtered_df_for_collections_2, filtered_df_for_collections, on='Collection_Name', how='left').drop_duplicates(subset='Collection_Name').reset_index(drop=True)
+                                #         def remove_numbers(name):
+                                #             return re.sub(r'^\d+(\.\d+)*\s*', '', name)
+                                #         filtered_df_for_collections['Collection_Name'] = filtered_df_for_collections['Collection_Name'].apply(remove_numbers)
+                                #         row_nu = len(filtered_df_for_collections)
+                                #         formatted_rows = []
+                                #         for i in range(row_nu):
+                                #             collection_name = filtered_df_for_collections['Collection_Name'].iloc[i]
+                                #             number_of_items = filtered_df_for_collections['Number_of_Items'].iloc[i]
+                                #             zotero_collection_link = filtered_df_for_collections['Collection_Link'].iloc[i]
+                                #             formatted_row = (
+                                #                 f"[{collection_name}]({zotero_collection_link}) "  # Hyperlink format in markdown
+                                #                 f"{number_of_items} items"
+                                #             )
+                                #             formatted_rows.append(f"{i+1}) " + formatted_row)
 
-                                        # Use st.write to print each row
-                                        for row in formatted_rows:
-                                            st.caption(row)
+                                #         # Use st.write to print each row
+                                #         for row in formatted_rows:
+                                #             st.caption(row)
 
 
-                                with colsearch4:
-                                    with st.popover("Filters and more"):
-                                        types2 = st.multiselect('Publication types', types, key='original2')
-                                        collections = st.multiselect('Collection', collections, key='original_collection')
-                                        container_download_button = st.container()
+                                # with colsearch4:
+                                #     with st.popover("Filters and more"):
+                                #         types2 = st.multiselect('Publication types', types, key='original2')
+                                #         collections = st.multiselect('Collection', collections, key='original_collection')
+                                #         container_download_button = st.container()
 
-                                        display_abstracts = st.checkbox('Display abstracts')
-                                        only_citation = st.checkbox('Show cited items only')
-                                        if only_citation:
-                                            filtered_df = filtered_df[(filtered_df['Citation'].notna()) & (filtered_df['Citation'] != 0)]
+                                #         display_abstracts = st.checkbox('Display abstracts')
+                                #         only_citation = st.checkbox('Show cited items only')
+                                #         if only_citation:
+                                #             filtered_df = filtered_df[(filtered_df['Citation'].notna()) & (filtered_df['Citation'] != 0)]
 
-                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
-                                        # with col114:
-                                        #     table_view = st.checkbox('See results in table')
+                                #         view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                #         # with col114:
+                                #         #     table_view = st.checkbox('See results in table')
 
                                 if types2:
                                     filtered_df = filtered_df[filtered_df['Publication type'].isin(types2)]                 
