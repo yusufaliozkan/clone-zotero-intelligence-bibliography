@@ -146,7 +146,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     st.markdown('#### Collection theme: ' + collection_name)
 
-    search = st.button('Search in collection')
+    search = st.toggle('Search in collection')
     if search:
         name = st_keyup("Enter keywords to search in title", debounce=500)
         if name:
