@@ -94,35 +94,13 @@ with st.spinner('Retrieving data & updating dashboard...'):
             ix = unique_collections.index(collection_name_from_key)
         except (ValueError, KeyError):
             pass
-
+    def clear_search():
+        st.session_state['name'] = ""
     radio = container.radio('Select a collection', unique_collections, index=ix, key="qp", on_change=update_params)
     query_params = st.query_params.to_dict()
 
     collection_name = radio
     collection_key = collection_mapping[collection_name]
-    
-    # query_params = st.query_params.to_dict()
-    # selected_collection_key  = query_params.get("collection_id", None)
-
-    # unique_collections = list(df_collections['Collection_Name'].unique())
-
-    # selected_collection_name = reverse_collection_mapping.get(selected_collection_key, None)
-
-    # if selected_collection_name in unique_collections:
-    #     # Set the default value to the selected collection from the query params
-    #     radio = container.radio('Select a collection', unique_collections, index=unique_collections.index(selected_collection_name))
-    # else:
-    #     radio = container.radio('Select a collection', unique_collections)
-
-    # # radio = container.radio('Select a collection', unique_collections)
-    # # collection_name = st.selectbox('Select a collection:', clist)
-    # collection_name = radio
-    # collection_key = collection_mapping[collection_name]
-    # # if collection_name:
-    # st.query_params.from_dict({"collection_id": collection_key})
-
-    # if collection_name:
-#    st.query_params.from_dict({"collection_id": collection_key})
 
     df_collections = df_collections.loc[df_collections['Collection_Name']==collection_name]
 
@@ -148,7 +126,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     search = st.toggle('Search in collection')
     if search:
-        name = st_keyup("Enter keywords to search in title", debounce=500)
+        name = st_keyup("Enter keywords to search in title", debounce=500, key='name')
         if name:
             df_collections = df_collections[df_collections.Title.str.lower().str.contains(name.lower(), na=False)]
 
