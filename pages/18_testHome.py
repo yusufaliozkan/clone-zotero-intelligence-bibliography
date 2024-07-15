@@ -447,7 +447,6 @@ with st.spinner('Retrieving data...'):
                 st.write(f'{len(test_filter)} result(s) found')
                 test_filter = test_filter.reset_index(drop=True)
                 test_filter_title = test_filter['Title']
-                test_filter_title
                 display = st.button('Display as basic view')
                 if display:
                     for index, row in test_filter.iterrows():
@@ -488,6 +487,8 @@ with st.spinner('Retrieving data...'):
                         )
                         formatted_entry = format_entry(row)
                         st.write(f"{index + 1}) {formatted_entry}")
+                else:
+                    test_filter_title
             text_search()
 
             # Example Streamlit code for context
