@@ -431,28 +431,24 @@ with st.spinner('Retrieving data...'):
                     highlighted_text = highlighted_text.replace(f'___URL_PLACEHOLDER_{index}___', url)
                 
                 return highlighted_text
-                
+
             @st.experimental_fragment
             def text_search():
-                name = st.text_input("Enter city name", "").strip()
-                
+                name = st.text_input("Enter city name")
                 @st.cache_data
                 def get_titles():
                     df_csv1 = df_dedup.copy()
                     return df_csv1
-                
                 titles = get_titles()
                 if name:
                     test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
                 else:
-                    test_filter = titles.head(10)
-                
+                    test_filter = titles
                 st.write(f'{len(test_filter)} result(s) found')
                 test_filter = test_filter.reset_index(drop=True)
                 test_filter_title = test_filter['Title']
                 display = st.radio('Display as', ['Table', 'Basic list'])
-                
-                if not display == 'Basic list':
+                if display == 'Basic list':
                     for index, row in test_filter.iterrows():
                         publication_type = row['Publication type']
                         title = row['Title']
@@ -472,6 +468,8 @@ with st.spinner('Retrieving data...'):
                             'Book': 'Published by',
                         }
 
+                        publication_type = row['Publication type']
+
                         published_by_or_in = published_by_or_in_dict.get(publication_type, '')
                         published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
                         if publication_type == 'Book':
@@ -487,10 +485,10 @@ with st.spinner('Retrieving data...'):
                             '[[Zotero link]](' + str(zotero_link) + ') ' +
                             ('Cited by [' + str(citation) + '](' + citation_link + ')' if citation > 0 else '')
                         )
+                        formatted_entry = format_entry(row)
                         st.write(f"{index + 1}) {formatted_entry}")
                 else:
-                    st.dataframe(test_filter_title, hide_index=True, use_container_width=True)
-
+                    st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
             text_search()
 
             # Example Streamlit code for context
