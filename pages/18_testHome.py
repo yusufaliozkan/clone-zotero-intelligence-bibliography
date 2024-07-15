@@ -39,7 +39,7 @@ from format_entry import format_entry
 from streamlit_dynamic_filters import DynamicFilters
 # from rss_feed import df_podcast, df_magazines
 from st_keyup import st_keyup
-
+import math
 
 # Connecting Zotero with API 
 library_id = '2514686'
@@ -447,48 +447,22 @@ with st.spinner('Retrieving data...'):
                     display = st.radio('Display as', ['Basic list', 'Table'])
                     if display == 'Basic list':
                         st.write(f'{len(test_filter)} result(s) found')
-                        num_items = len(test_filter)
-                        articles_list = []  # Store articles in a list
-                        abstracts_list = [] # Store abstracts in a list
-                        for index, row in test_filter.iterrows():
-                            formatted_entry = format_entry(row)
-                            articles_list.append(formatted_entry)  # Append formatted entry to the list
-                            abstract = row['Abstract']
-                            abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
-                        if num_items < 20:
-                            for i, article in enumerate(articles_list, start=1):
-                                highlighted_article = highlight_terms(article, search_tokens)
-                                st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
-                                
-                                if display_abstracts:
-                                    abstract = abstracts_list[i - 1]
-                                    if pd.notnull(abstract):
-                                        if search_in == 'Title and abstract':
-                                            highlighted_abstract = highlight_terms(abstract, search_tokens)
-                                        else:
-                                            highlighted_abstract = abstract 
-                                        st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
-                                    else:
-                                        st.caption(f"Abstract: No abstract")
-                        else:
-                            show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
-                            
-                            if show_first_20:
-                                test_filter = test_filter.head(20)
-                                for i, article in enumerate(articles_list[:20], start=1):
-                                    highlighted_article = highlight_terms(article, search_tokens)
-                                    st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
-                                    
-                                    if display_abstracts:
-                                        abstract = abstracts_list[i - 1]
-                                        if pd.notnull(abstract):
-                                            if search_in == 'Title and abstract':
-                                                highlighted_abstract = highlight_terms(abstract, search_tokens)
-                                            else:
-                                                highlighted_abstract = abstract 
-                                            st.caption(f"Abstract: {highlighted_abstract}", unsafe_allow_html=True)
-                                        else:
-                                            st.caption(f"Abstract: No abstract")
+                        results_per_tab = 20
+
+                        # Calculate the number of tabs needed
+                        num_tabs = math.ceil(len(test_filter) / results_per_tab)
+
+                        # Create tabs
+                        tabs = st.tabs([f"Tab {i+1}" for i in range(num_tabs)])
+
+                        # Populate tabs with results
+                        for tab_index in range(num_tabs):
+                            with tabs[tab_index]:
+                                start_index = tab_index * results_per_tab
+                                end_index = start_index + results_per_tab
+                                for index, row in test_filter.iloc[start_index:end_index].iterrows():
+                                    formatted_entry = format_entry(row)  # Assuming format_entry function is defined elsewhere
+                                    st.write(f"{start_index + index + 1}) {formatted_entry}")
                     if display == 'Table':
                         st.write(f'{len(test_filter)} result(s) found')
                         st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
