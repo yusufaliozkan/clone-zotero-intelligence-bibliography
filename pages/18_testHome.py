@@ -651,7 +651,7 @@ with st.spinner('Retrieving data...'):
                                 if 'rerun_flag' not in st.session_state:
                                     st.session_state.rerun_flag = False
 
-                                if len(filtered_df) < len(filtered_df)+1 and not st.session_state.rerun_flag:
+                                if len(filtered_df) > len(filtered_df)+1 and not st.session_state.rerun_flag:
                                     st.session_state.rerun_flag = True
                                     st.rerun()
 
