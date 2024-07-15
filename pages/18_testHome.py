@@ -436,7 +436,7 @@ with st.spinner('Retrieving data...'):
             @st.cache_data
             def get_titles():
                 df_csv = df_duplicated.copy()
-                return 
+                return df_csv
             titles = get_titles()
             if name:
                 test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
