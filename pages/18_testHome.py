@@ -581,9 +581,7 @@ with st.spinner('Retrieving data...'):
                                 search_in_index = search_options.index(search_in_from_key)
                             except (ValueError, KeyError):
                                 pass
-                        clear = st.button('clear')
-                        if clear:
-                            st.rerun()
+
                         # Layout for input elements
                         if 'visibility' not in st.session_state:
                             st.session_state.disabled = False
