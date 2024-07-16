@@ -521,6 +521,25 @@ with st.spinner('Retrieving data...'):
                                     st.markdown(all_bibliographies, unsafe_allow_html=True)
 
                                 num_items = len(df_quick_search_titles)
+
+                                if num_items < 20:
+                                    display_bibliographies(df_quick_search_titles)
+                                else:
+                                    show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
+
+                                    if show_first_20:
+                                        df_quick_search_titles = df_quick_search_titles.head(20)
+                                        display_bibliographies(df_quick_search_titles)
+                                    else:
+                                        num_tabs = (num_items // 20) + 1
+                                        tab_titles = [f"Results {i*20+1}-{min((i+1)*20, num_items)}" for i in range(num_tabs)]
+
+                                        tabs = st.tabs(tab_titles)
+                                        for tab_index, tab in enumerate(tabs):
+                                            with tab:
+                                                start_idx = tab_index * 20
+                                                end_idx = min(start_idx + 20, num_items)
+                                                display_bibliographies(df_quick_search_titles.iloc[start_idx:end_idx])
                             status.update(label=f'Search complete for **{name}** with **{len(df_quick_search_titles)}** results', state="complete", expanded=True)
                     else:
                         st.write(f'{len(titles)} items in the database')
