@@ -453,7 +453,9 @@ with st.spinner('Retrieving data...'):
                             search_pattern = fr'\b{name.lower()}\b'
                             test_filter = titles[titles.Title.str.lower().str.contains(search_pattern.lower(), na=False)]
                             test_filter = test_filter.reset_index(drop=True)
-                            test_filter_title = test_filter['Title']
+                            df_table_view = test_filter[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Collection_Name','Link to publication','Zotero link']]
+                            df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
+                            
                             display = st.radio('Display as', ['Basic list', 'Table'])
                             if display == 'Basic list':
                                 st.write(f'{len(test_filter)} result(s) found')
@@ -497,7 +499,7 @@ with st.spinner('Retrieving data...'):
                                     st.write(f"{index + 1}) {formatted_entry}")
                             if display == 'Table':
                                 st.write(f'{len(test_filter)} result(s) found')
-                                st.dataframe(test_filter_title,hide_index=True, use_container_width=True)
+                                st.dataframe(df_table_view,hide_index=True, use_container_width=True)
                             status.update(label=f'Search complete for **{name}** with **{len(test_filter)}** results', state="complete", expanded=True)
                     else:
                         st.write(f'{len(titles)} items in the database')
