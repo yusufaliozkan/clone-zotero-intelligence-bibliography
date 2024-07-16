@@ -522,7 +522,7 @@ with st.spinner('Retrieving data...'):
                                     st.markdown(all_bibliographies, unsafe_allow_html=True)
 
                                 num_items = len(df_quick_search_titles)
-                            status.update(label=f'Search complete for **{name}** with **{len(test_filter)}** results', state="complete", expanded=True)
+                            status.update(label=f'Search complete for **{name}** with **{len(df_quick_search_titles)}** results', state="complete", expanded=True)
                     else:
                         st.write(f'{len(titles)} items in the database')
                 text_search()
