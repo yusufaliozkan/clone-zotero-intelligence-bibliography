@@ -447,19 +447,19 @@ with st.spinner('Retrieving data...'):
                     def get_titles():
                         df_csv1 = df_dedup.copy()
                         return df_csv1
-                    titles = get_titles()
+                    df_quick_search_titles = get_titles()
                     if name:
                         with st.status(f'Searching **{name}** in the database...') as status:
                             search_pattern = fr'\b{name.lower()}\b'
-                            test_filter = titles[titles.Title.str.lower().str.contains(search_pattern.lower(), na=False)]
-                            test_filter = test_filter.reset_index(drop=True)
-                            df_table_view = test_filter[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Link to publication','Zotero link']]
+                            df_quick_search_titles = df_quick_search_titles[df_quick_search_titles.Title.str.lower().str.contains(search_pattern.lower(), na=False)]
+                            df_quick_search_titles = df_quick_search_titles.reset_index(drop=True)
+                            df_table_view = df_quick_search_titles[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Link to publication','Zotero link']]
                             df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                             
                             display = st.radio('Display as', ['Basic list', 'Table'])
                             if display == 'Basic list':
-                                st.write(f'{len(test_filter)} result(s) found')
-                                for index, row in test_filter.iterrows():
+                                st.write(f'{len(df_quick_search_titles)} result(s) found')
+                                for index, row in df_quick_search_titles.iterrows():
                                     publication_type = row['Publication type']
                                     title = row['Title']
                                     authors = row['FirstName2']
@@ -498,8 +498,30 @@ with st.spinner('Retrieving data...'):
                                     formatted_entry = format_entry(row)
                                     st.write(f"{index + 1}) {formatted_entry}")
                             if display == 'Table':
-                                st.write(f'{len(test_filter)} result(s) found')
+                                st.write(f'{len(df_quick_search_titles)} result(s) found')
                                 st.dataframe(df_table_view,hide_index=True, use_container_width=True)
+                            if view == 'Bibliography':
+                                if sort_by == 'Publication type':
+                                    filtered_df = filtered_df.sort_values(by=['Publication type'], ascending=True)
+                                elif sort_by == 'Citation':
+                                    filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
+                                df_zotero_id = pd.read_csv('zotero_citation_format.csv')
+                                filtered_df['zotero_item_key'] = filtered_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                filtered_df = pd.merge(filtered_df, df_zotero_id, on='zotero_item_key', how='left')
+
+                                def display_bibliographies(df):
+                                    df['bibliography'] = df['bibliography'].fillna('').astype(str)
+                                    all_bibliographies = ""
+                                    for index, row in df.iterrows():
+                                        # Add a horizontal line between bibliographies
+                                        if index > 0:
+                                            all_bibliographies += '<p><p>'
+                                        
+                                        # Display bibliography
+                                        all_bibliographies += row['bibliography']
+                                    st.markdown(all_bibliographies, unsafe_allow_html=True)
+
+                                num_items = len(filtered_df)
                             status.update(label=f'Search complete for **{name}** with **{len(test_filter)}** results', state="complete", expanded=True)
                     else:
                         st.write(f'{len(titles)} items in the database')
