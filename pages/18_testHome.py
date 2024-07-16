@@ -500,7 +500,7 @@ with st.spinner('Retrieving data...'):
                             if display == 'Table':
                                 st.write(f'{len(df_quick_search_titles)} result(s) found')
                                 st.dataframe(df_table_view,hide_index=True, use_container_width=True)
-                            if view == 'Bibliographic list':
+                            if display == 'Bibliographic list':
                                 if sort_by == 'Publication type':
                                     filtered_df = df_quick_search_titles.sort_values(by=['Publication type'], ascending=True)
                                 elif sort_by == 'Citation':
