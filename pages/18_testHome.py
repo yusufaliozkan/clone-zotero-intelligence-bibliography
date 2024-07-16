@@ -502,12 +502,12 @@ with st.spinner('Retrieving data...'):
                                 st.dataframe(df_table_view,hide_index=True, use_container_width=True)
                             if display == 'Bibliographic list':
                                 if sort_by == 'Publication type':
-                                    filtered_df = df_quick_search_titles.sort_values(by=['Publication type'], ascending=True)
+                                    df_quick_search_titles = df_quick_search_titles.sort_values(by=['Publication type'], ascending=True)
                                 elif sort_by == 'Citation':
-                                    filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
+                                    df_quick_search_titles = df_quick_search_titles.sort_values(by=['Citation'], ascending=False)
                                 df_zotero_id = pd.read_csv('zotero_citation_format.csv')
-                                filtered_df['zotero_item_key'] = filtered_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
-                                filtered_df = pd.merge(filtered_df, df_zotero_id, on='zotero_item_key', how='left')
+                                df_quick_search_titles['zotero_item_key'] = df_quick_search_titles['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                df_quick_search_titles = pd.merge(df_quick_search_titles, df_zotero_id, on='zotero_item_key', how='left')
 
                                 def display_bibliographies(df):
                                     df['bibliography'] = df['bibliography'].fillna('').astype(str)
@@ -521,7 +521,7 @@ with st.spinner('Retrieving data...'):
                                         all_bibliographies += row['bibliography']
                                     st.markdown(all_bibliographies, unsafe_allow_html=True)
 
-                                num_items = len(filtered_df)
+                                num_items = len(df_quick_search_titles)
                             status.update(label=f'Search complete for **{name}** with **{len(test_filter)}** results', state="complete", expanded=True)
                     else:
                         st.write(f'{len(titles)} items in the database')
