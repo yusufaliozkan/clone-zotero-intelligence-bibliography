@@ -18,3 +18,4 @@ shillelagh==1.2.19
 streamlit_dynamic_filters
 pdfkit==1.0.0
 fuzzywuzzy==0.18.0
+pyparsing 3.1.2
