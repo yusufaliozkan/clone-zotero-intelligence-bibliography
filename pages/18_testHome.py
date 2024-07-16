@@ -623,7 +623,7 @@ with st.spinner('Retrieving data...'):
                             return parsed_expr
 
                         def evaluate_search_terms(parsed_expr, df, column):
-                            search_set = {term: df[column].str.contains(term, case=False, na=False) for term in re.findall(r'\b\w+\b', parsed_expr.value)}
+                            search_set = {term: df[column].str.contains(term, case=False, na=False) for term in re.findall(r'\b\w+\b', str(parsed_expr))}
                             return parsed_expr.eval(search_set)
 
                         def update_search_params():
