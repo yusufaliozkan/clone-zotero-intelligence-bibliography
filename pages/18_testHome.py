@@ -432,6 +432,10 @@ with st.spinner('Retrieving data...'):
                 
                 return highlighted_text
 
+            # Example Streamlit code for context
+            st.header('Search in database', anchor=False)
+            st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+
             @st.experimental_fragment
             def text_search():
                 st.subheader('Quick search', anchor=False, divider='blue')
@@ -496,10 +500,7 @@ with st.spinner('Retrieving data...'):
                 else:
                     st.write(f'{len(titles)} items in the database')
             text_search()
-
-            # Example Streamlit code for context
-            st.header('Search in database', anchor=False)
-            st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+            
             # @st.experimental_fragment
             def search_options_main_menu():
                 from authors_dict import name_replacements
