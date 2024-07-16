@@ -442,7 +442,7 @@ with st.spinner('Retrieving data...'):
                 def text_search():
                     st.subheader('Quick search', anchor=False, divider='blue')
 
-                    name = st_keyup("Search keyword in title", debounce=500)
+                    name = st_keyup("Search keyword in title", debounce=500, placeholder='Type your keyword(s)')
                     @st.cache_data
                     def get_titles():
                         df_csv1 = df_dedup.copy()
