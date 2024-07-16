@@ -126,7 +126,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     st.markdown('#### Collection theme: ' + collection_name)
 
-    name = st.text_input("Enter keywords to search in title", key='name', placeholder='Search keyword(s)')#, debounce=250, key='name')
+    # name = st.text_input("Enter keywords to search in title", key='name', placeholder='Search keyword(s)')#, debounce=250, key='name')
+    name = st_keyup("Enter keywords to search in title", key='name', placeholder='Search keyword(s)', debounce=400)#, debounce=250, key='name')
     if name:
         df_collections = df_collections[df_collections.Title.str.lower().str.contains(name.lower(), na=False)]
 
