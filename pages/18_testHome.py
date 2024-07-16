@@ -39,7 +39,7 @@ from format_entry import format_entry
 from streamlit_dynamic_filters import DynamicFilters
 # from rss_feed import df_podcast, df_magazines
 from st_keyup import st_keyup
-from pyparsing import infixNotation, opAssoc, Keyword, Word, alphanums, QuotedString
+from pyparsing import infixNotation, opAssoc, Keyword, Word, alphanums, QuotedString, ParserElement
 
 
 # Connecting Zotero with API 
@@ -591,6 +591,9 @@ with st.spinner('Retrieving data...'):
                         #     Search with parantheses is **not** available.                   
                         #     ''')
                         # Function to update search parameters in the query string
+                        ParserElement.enablePackrat()
+
+                        # Define the boolean search parser classes
                         class BooleanOperand:
                             def __init__(self, tokens):
                                 self.value = tokens[0]
@@ -621,12 +624,12 @@ with st.spinner('Retrieving data...'):
                                 [
                                     (Keyword("AND"), 2, opAssoc.LEFT, BooleanAnd),
                                     (Keyword("OR"), 2, opAssoc.LEFT, BooleanOr),
-                                ])
+                                ], lpar=Keyword("("), rpar=Keyword(")"))
                             parsed_expr = boolean_expr.parseString(search_term, parseAll=True)[0]
                             return parsed_expr
 
                         def evaluate_search_terms(parsed_expr, df, column):
-                            search_set = {term: df[column].str.contains(term.strip('"'), case=False, na=False) for term in re.findall(r'[\w\s]+|"[^"]+"', str(parsed_expr))}
+                            search_set = {term.strip('"'): df[column].str.contains(term.strip('"'), case=False, na=False) for term in re.findall(r'[\w\s]+|"[^"]+"', str(parsed_expr))}
                             return parsed_expr.eval(search_set)
 
                         def update_search_params():
