@@ -450,7 +450,7 @@ with st.spinner('Retrieving data...'):
                     st.subheader('Search keywords', anchor=False, divider='blue')
                     advanced_search = st.toggle('Advanced search')
                     if not advanced_search:
-                        @st.experimental_fragment
+                        # @st.experimental_fragment
                         def text_search():
                             name = st_keyup("Enter city name", debounce=500)
                             @st.cache_data
@@ -512,7 +512,7 @@ with st.spinner('Retrieving data...'):
                                 st.write(f'{len(titles)} items in the database')
                         text_search()
                     else:
-                        @st.experimental_fragment
+                        # @st.experimental_fragment
                         def search_keyword(): 
                             @st.experimental_dialog("Search guide")
                             def guide(item):
