@@ -540,7 +540,7 @@ with st.spinner('Retrieving data...'):
                                                 display_bibliographies(df_quick_search_titles.iloc[start_idx:end_idx])
                             status.update(label=f'Search complete for **{name}** with **{len(df_quick_search_titles)}** results', state="complete", expanded=True)
                     else:
-                        st.write(f'{len(df_quick_search_titles)} items in the database')
+                        st.write(f'{item_count} items in the database')
                 text_search()
             else:
                 # @st.experimental_fragment
