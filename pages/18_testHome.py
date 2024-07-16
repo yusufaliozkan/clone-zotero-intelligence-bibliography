@@ -456,7 +456,7 @@ with st.spinner('Retrieving data...'):
                             df_table_view = df_quick_search_titles[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Link to publication','Zotero link']]
                             df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                             
-                            display = st.radio('Display as', ['Basic list', 'Table'])
+                            display = st.radio('Display as', ['Basic list', 'Table', 'Bibliographic list'])
                             if display == 'Basic list':
                                 st.write(f'{len(df_quick_search_titles)} result(s) found')
                                 for index, row in df_quick_search_titles.iterrows():
