@@ -501,10 +501,7 @@ with st.spinner('Retrieving data...'):
                                 st.write(f'{len(df_quick_search_titles)} result(s) found')
                                 st.dataframe(df_table_view,hide_index=True, use_container_width=True)
                             if display == 'Bibliographic list':
-                                if sort_by == 'Publication type':
-                                    df_quick_search_titles = df_quick_search_titles.sort_values(by=['Publication type'], ascending=True)
-                                elif sort_by == 'Citation':
-                                    df_quick_search_titles = df_quick_search_titles.sort_values(by=['Citation'], ascending=False)
+
                                 df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                                 df_quick_search_titles['zotero_item_key'] = df_quick_search_titles['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
                                 df_quick_search_titles = pd.merge(df_quick_search_titles, df_zotero_id, on='zotero_item_key', how='left')
