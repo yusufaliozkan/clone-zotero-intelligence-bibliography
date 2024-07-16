@@ -596,7 +596,10 @@ with st.spinner('Retrieving data...'):
                                 self.value = tokens[0]
 
                             def eval(self, search_set):
-                                return search_set[self.value]
+                                if self.value in search_set:
+                                    return search_set[self.value]
+                                else:
+                                    return np.array([False] * len(next(iter(search_set.values()))))
 
                         class BooleanAnd:
                             def __init__(self, tokens):
@@ -613,7 +616,7 @@ with st.spinner('Retrieving data...'):
                                 return np.logical_or.reduce([arg.eval(search_set) for arg in self.args])
 
                         def parse_search_terms(search_term):
-                            term = Word(alphanums + ' ')
+                            term = Word(alphanums + ' ') | QuotedString('"')
                             boolean_expr = infixNotation(term,
                                 [
                                     (Keyword("AND"), 2, opAssoc.LEFT, BooleanAnd),
@@ -623,7 +626,7 @@ with st.spinner('Retrieving data...'):
                             return parsed_expr
 
                         def evaluate_search_terms(parsed_expr, df, column):
-                            search_set = {term: df[column].str.contains(term, case=False, na=False) for term in re.findall(r'\b\w+\b', str(parsed_expr))}
+                            search_set = {term: df[column].str.contains(term, case=False, na=False) for term in re.findall(r'[\w\s]+|"[^"]+"', str(parsed_expr))}
                             return parsed_expr.eval(search_set)
 
                         def update_search_params():
@@ -634,15 +637,15 @@ with st.spinner('Retrieving data...'):
                             })
 
                         # Extracting initial query parameters
-                        query_params = st.query_params
+                        query_params = st.experimental_get_query_params()
                         search_term = ""
                         search_in = "Title"
 
                         # Retrieve the initial search term and search_in from query parameters if available
                         if 'query' in query_params:
-                            search_term = query_params['query']
+                            search_term = query_params['query'][0]
                         if 'search_in' in query_params:
-                            search_in = query_params['search_in']
+                            search_in = query_params['search_in'][0]
 
                         # Initialize session state variables
                         if 'search_term' not in st.session_state:
@@ -659,7 +662,7 @@ with st.spinner('Retrieving data...'):
                         search_in_index = 0
                         if 'search_in' in query_params:
                             try:
-                                search_in_from_key = query_params['search_in']
+                                search_in_from_key = query_params['search_in'][0]
                                 search_in_index = search_options.index(search_in_from_key)
                             except (ValueError, KeyError):
                                 pass
@@ -692,7 +695,7 @@ with st.spinner('Retrieving data...'):
                         # Stripping and processing the search term
                         search_term = st.session_state.search_term.strip()
                         if search_term:
-                            with st.status(f"Searching publications for '**{search_term}**...", expanded=True) as status:
+                            with st.spinner(f"Searching publications for '**{search_term}**..."):
                                 parsed_expr = parse_search_terms(search_term)
                                 df_csv = df_duplicated.copy()
 
@@ -714,7 +717,7 @@ with st.spinner('Retrieving data...'):
                                     filtered_df['Date published'] = ''
                                     filtered_df['No date flag'] = 1
 
-                                print(f"Final Filtered DataFrame:\n{filtered_df}")  # Debugging: Print final DataFrame
+                                st.write(f"Final Filtered DataFrame:\n{filtered_df}")  
 
                                 types = filtered_df['Publication type'].dropna().unique()  # Exclude NaN values
                                 collections = filtered_df['Collection_Name'].dropna().unique()
