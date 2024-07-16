@@ -436,7 +436,7 @@ with st.spinner('Retrieving data...'):
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-            advanced_search = st.toggle()
+            advanced_search = st.toggle('Advanced search')
             if not advanced_search:
                 @st.experimental_fragment
                 def text_search():
