@@ -434,7 +434,7 @@ with st.spinner('Retrieving data...'):
 
             @st.experimental_fragment
             def text_search():
-                name = st_keyup("Enter city name", debounce=500)
+                name = st_keyup("Search keyword in title", debounce=500)
                 @st.cache_data
                 def get_titles():
                     df_csv1 = df_dedup.copy()
@@ -442,6 +442,7 @@ with st.spinner('Retrieving data...'):
                 titles = get_titles()
                 if name:
                     with st.status(f'Searching **{name}** in the database...') as status:
+                        st.subheader('Quick search', anchor=False, divider='blue')
                         search_pattern = fr'\b{name.lower()}\b'
                         test_filter = titles[titles.Title.str.lower().str.contains(search_pattern.lower(), na=False)]
                         test_filter = test_filter.reset_index(drop=True)
