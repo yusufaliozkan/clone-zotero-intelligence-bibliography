@@ -443,7 +443,7 @@ with st.spinner('Retrieving data...'):
                 if name:
                     with st.status(f'Searching **{name}** in the database...') as status:
                         search_pattern = fr'\b{name.lower()}\b'
-                        test_filter = titles[titles.Title.str.lower().str.contains(search_pattern.lower(), na=False)]
+                        test_filter = titles[titles.Title.str.lower().str.contains(name.lower(), na=False)]
                         test_filter = test_filter.reset_index(drop=True)
                         test_filter_title = test_filter['Title']
                         display = st.radio('Display as', ['Basic list', 'Table'])
