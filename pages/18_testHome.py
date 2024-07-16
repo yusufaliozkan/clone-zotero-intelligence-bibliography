@@ -503,10 +503,8 @@ with st.spinner('Retrieving data...'):
                             if display == 'Bibliographic list':
 
                                 df_zotero_id = pd.read_csv('zotero_citation_format.csv')
-                                df_quick_search_titles
                                 df_quick_search_titles['zotero_item_key'] = df_quick_search_titles['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
                                 df_quick_search_titles = pd.merge(df_quick_search_titles, df_zotero_id, on='zotero_item_key', how='left')
-                                df_quick_search_titles
 
                                 def display_bibliographies(df):
                                     df['bibliography'] = df['bibliography'].fillna('').astype(str)
