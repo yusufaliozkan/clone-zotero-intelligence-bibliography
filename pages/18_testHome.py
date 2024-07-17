@@ -1642,6 +1642,17 @@ with st.spinner('Retrieving data...'):
 
                                 else:
                                     if not on:
+                                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down'))
+                                        if sort_by == 'Publication date :arrow_down:' or filtered_collection_df['Citation'].sum() == 0:
+                                            filtered_collection_df = filtered_collection_df.sort_values(by=['Date published'], ascending=False)
+                                            filtered_collection_df = filtered_collection_df.reset_index(drop=True)
+                                        if sort_by=='Citation':
+                                            filtered_collection_df = filtered_collection_df.sort_values(by=['Citation'], ascending=False)
+                                            filtered_collection_df = filtered_collection_df.reset_index(drop=True)
+                                        if sort_by == 'Date added :arrow_down':
+                                            filtered_collection_df = filtered_collection_df.sort_values(by=['Date added'], ascending=False)
+                                            filtered_collection_df = filtered_collection_df.reset_index(drop=True)
+
                                         sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
                                         if sort_by == 'Publication date :arrow_down:' or filtered_collection_df['Citation'].sum() == 0:
                                             filtered_collection_df = filtered_collection_df.sort_values(by=['Date published'], ascending=False)
