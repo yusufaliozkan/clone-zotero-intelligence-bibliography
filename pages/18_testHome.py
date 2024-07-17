@@ -1387,7 +1387,7 @@ with st.spinner('Retrieving data...'):
                             return re.sub(r'^\d+(\.\d+)*\s*', '', name)
 
                         df_csv_collections['Collection_Name'] = df_csv_collections['Collection_Name'].apply(remove_numbers)
-                        excluded_collections = ['Arab-Israeli Conflict', '97 KCL intelligence']
+                        excluded_collections = ['97 KCL intelligence']
                         # numeric_start_collections = df_csv_collections[df_csv_collections['Collection_Name'].str[0].str.isdigit()]['Collection_Name'].unique()
                         all_unique_collections = df_csv_collections['Collection_Name'].unique()
                         # filtered_collections = [col for col in numeric_start_collections if col not in excluded_collections]
