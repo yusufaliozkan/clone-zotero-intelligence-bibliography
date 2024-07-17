@@ -3135,14 +3135,18 @@ with st.spinner('Retrieving data...'):
                                     plt.show()
                                     st.set_option('deprecation.showPyplotGlobalUse', False)
                                     st.pyplot()
-                            else: 
-                                sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
+                            else:
+                                sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'))
                                 if sort_by == 'Publication date :arrow_down:' or df_cited['Citation'].sum() == 0:
                                     df_cited = df_cited.sort_values(by=['Date published'], ascending=False)
                                     df_cited = df_cited.reset_index(drop=True)
-                                else:  
+                                if sort_by=='Citation':
                                     df_cited = df_cited.sort_values(by=['Citation'], ascending=False)
                                     df_cited = df_cited.reset_index(drop=True)
+                                if sort_by == 'Date added :arrow_down:':
+                                    df_cited = df_cited.sort_values(by=['Date added'], ascending=False)
+                                    df_cited = df_cited.reset_index(drop=True)
+
                                 if number_of_items > 20:
                                     show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True, key='all_items')
                                     if show_first_20:
