@@ -1307,7 +1307,7 @@ with st.spinner('Retrieving data...'):
                                         if sort_by=='Citation':
                                             filtered_collection_df_authors = filtered_collection_df_authors.sort_values(by=['Citation'], ascending=False)
                                             filtered_collection_df_authors = filtered_collection_df_authors.reset_index(drop=True)
-                                        else:
+                                        if sort_by == 'Date added':
                                             filtered_collection_df_authors = filtered_collection_df_authors.sort_values(by=['Date added'], ascending=False)
                                             filtered_collection_df_authors = filtered_collection_df_authors.reset_index(drop=True)
 
