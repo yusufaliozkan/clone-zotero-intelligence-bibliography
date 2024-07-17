@@ -1556,6 +1556,7 @@ with st.spinner('Retrieving data...'):
                                     collection_author_df['Author_name'] = collection_author_df['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                                     collection_author_df = collection_author_df.explode('Author_name')
                                     collection_author_df.reset_index(drop=True, inplace=True)
+                                    from authors_dict import name_replacements
                                     collection_author_df['Author_name'] = collection_author_df['Author_name'].map(name_replacements).fillna(collection_author_df['Author_name'])
                                     collection_author_df = collection_author_df['Author_name'].value_counts().head(10)
                                     fig = px.bar(collection_author_df, x=collection_author_df.index, y=collection_author_df.values)
