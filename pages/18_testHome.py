@@ -937,7 +937,7 @@ with st.spinner('Retrieving data...'):
                                         st.pyplot()
 
                                     else:
-                                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
+                                        sort_by = st.radio('Sort by:', ('Publication dates :arrow_down:', 'Citation'))
                                         if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
                                             filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False)
                                             filtered_df = filtered_df.reset_index(drop=True)
