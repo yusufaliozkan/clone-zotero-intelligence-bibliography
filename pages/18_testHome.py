@@ -2342,13 +2342,17 @@ with st.spinner('Retrieving data...'):
                                     st.pyplot()
 
                                 else:
-                                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
+                                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'))
                                     if sort_by == 'Publication date :arrow_down:' or selected_journal_df['Citation'].sum() == 0:
                                         selected_journal_df = selected_journal_df.sort_values(by=['Date published'], ascending=False)
                                         selected_journal_df = selected_journal_df.reset_index(drop=True)
-                                    else:
+                                    if sort_by=='Citation':
                                         selected_journal_df = selected_journal_df.sort_values(by=['Citation'], ascending=False)
                                         selected_journal_df = selected_journal_df.reset_index(drop=True)
+                                    if sort_by == 'Date added :arrow_down:':
+                                        selected_journal_df = selected_journal_df.sort_values(by=['Date added'], ascending=False)
+                                        selected_journal_df = selected_journal_df.reset_index(drop=True)
+
                                     if num_items_collections > 20:
                                         show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
                                         if show_first_20:
