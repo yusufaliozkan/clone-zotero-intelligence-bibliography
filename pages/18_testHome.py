@@ -941,7 +941,7 @@ with st.spinner('Retrieving data...'):
                                         if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
                                             filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False)
                                             filtered_df = filtered_df.reset_index(drop=True)
-                                        elif sort_by=='Citation':
+                                        if sort_by=='Citation':
                                             filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
                                             filtered_df = filtered_df.reset_index(drop=True)
                                         else:
