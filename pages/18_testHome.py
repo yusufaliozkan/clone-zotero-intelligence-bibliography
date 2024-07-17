@@ -1983,14 +1983,18 @@ with st.spinner('Retrieving data...'):
                                     plt.show()
                                     st.set_option('deprecation.showPyplotGlobalUse', False)
                                     st.pyplot()
-                                else: 
-                                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
+                                else:
+                                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'))
                                     if sort_by == 'Publication date :arrow_down:' or filtered_type_df['Citation'].sum() == 0:
                                         filtered_type_df = filtered_type_df.sort_values(by=['Date published'], ascending=False)
                                         filtered_type_df = filtered_type_df.reset_index(drop=True)
-                                    else:
+                                    if sort_by=='Citation':
                                         filtered_type_df = filtered_type_df.sort_values(by=['Citation'], ascending=False)
                                         filtered_type_df = filtered_type_df.reset_index(drop=True)
+                                    if sort_by == 'Date added :arrow_down:':
+                                        filtered_type_df = filtered_type_df.sort_values(by=['Date added'], ascending=False)
+                                        filtered_type_df = filtered_type_df.reset_index(drop=True)
+
                                     if num_items_collections > 20:
                                         show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
                                         if show_first_20:
