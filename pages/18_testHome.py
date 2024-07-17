@@ -1392,7 +1392,14 @@ with st.spinner('Retrieving data...'):
                         all_unique_collections = df_csv_collections['Collection_Name'].unique()
                         # filtered_collections = [col for col in numeric_start_collections if col not in excluded_collections]
                         filtered_collections = [col for col in all_unique_collections if col not in excluded_collections]
-        
+
+                        collection_publications = df_authors['Collection_Name'].value_counts().to_dict()
+                        sorted_collections_by_publications = sorted(all_unique_collections, key=lambda author: collection_publications.get(author, 0), reverse=True)
+                        select_options = [''] + [f"{author} ({collection_publications.get(author, 0)})" for author in sorted_collections_by_publications]
+
+                        selected_author_display = st.selectbox('Select author', select_options)
+                        selected_collection = selected_author_display.split(' (')[0] if selected_author_display else None
+
                         # def remove_numbers(name):
                         #     return re.sub(r'^\d+(\.\d+)*\s*', '', name)
                         # filtered_collections = filtered_collections.apply(remove_numbers)
