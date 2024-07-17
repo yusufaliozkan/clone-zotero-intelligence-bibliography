@@ -1388,15 +1388,15 @@ with st.spinner('Retrieving data...'):
 
                         df_csv_collections['Collection_Name'] = df_csv_collections['Collection_Name'].apply(remove_numbers)
                         excluded_collections = ['97 KCL intelligence']
-                        numeric_start_collections = df_csv_collections[df_csv_collections['Collection_Name'].str[0].str.isdigit()]['Collection_Name'].unique()
+                        # numeric_start_collections = df_csv_collections[df_csv_collections['Collection_Name'].str[0].str.isdigit()]['Collection_Name'].unique()
                         all_unique_collections = df_csv_collections['Collection_Name'].unique()
-                        filtered_collections = [col for col in numeric_start_collections if col not in excluded_collections]
+                        # filtered_collections = [col for col in numeric_start_collections if col not in excluded_collections]
         
                         # def remove_numbers(name):
                         #     return re.sub(r'^\d+(\.\d+)*\s*', '', name)
                         # filtered_collections = filtered_collections.apply(remove_numbers)
 
-                        select_options = [''] + sorted(list(filtered_collections))
+                        select_options = [''] + sorted(list(all_unique_collections))
                         selected_collection = st.selectbox('Select a collection', select_options)
 
                         if not selected_collection or selected_collection == '':
