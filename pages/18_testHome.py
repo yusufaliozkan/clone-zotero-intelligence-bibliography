@@ -1393,12 +1393,17 @@ with st.spinner('Retrieving data...'):
                         def remove_numbers(name):
                             return re.sub(r'^\d+(\.\d+)*\s*', '', name)
 
-                        # Apply the function to filtered_collections
-                        filtered_collections = [remove_numbers(col) for col in filtered_collections]
+                        # Create a dictionary to map original names to cleaned names
+                        collection_mapping = {col: remove_numbers(col) for col in filtered_collections}
 
-                        # Construct the select options
-                        select_options = [''] + sorted(list(filtered_collections))
-                        selected_collection = st.selectbox('Select a collection', select_options)
+                        # Extract cleaned names
+                        cleaned_collections = [collection_mapping[col] for col in filtered_collections]
+
+                        # Construct the select options with cleaned names
+                        select_options = [''] + sorted(cleaned_collections)
+
+                        # Display the select box
+                        selected_cleaned_collection = st.selectbox('Select a collection', select_options)
 
                         if not selected_collection or selected_collection == '':
                             st.write('Pick a collection to see items')
