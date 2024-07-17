@@ -1404,6 +1404,7 @@ with st.spinner('Retrieving data...'):
 
                         # Display the select box
                         selected_cleaned_collection = st.selectbox('Select a collection', select_options)
+                        selected_original_collection = next((original for original, cleaned in collection_mapping.items() if cleaned == selected_cleaned_collection), None)
 
                         if not selected_collection or selected_collection == '':
                             st.write('Pick a collection to see items')
