@@ -318,7 +318,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 if display2:
                                     st.caption(row['Abstract'])
                     else: #elif sort_by == 'Date added :arrow_down:':
-                        df_collections = df_collections.sort_values(by=['Date added'], ascending=True)
+                        df_collections = df_collections.sort_values(by=['Date added'], ascending=False)
                         current_type = None
                         count_by_type = {}
                         for index, row in df_collections.iterrows():
