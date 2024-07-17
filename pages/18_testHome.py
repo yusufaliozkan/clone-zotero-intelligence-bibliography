@@ -1388,11 +1388,15 @@ with st.spinner('Retrieving data...'):
                         numeric_start_collections = df_csv_collections[df_csv_collections['Collection_Name'].str[0].str.isdigit()]['Collection_Name'].unique()
                         all_unique_collections = df_csv_collections['Collection_Name'].unique()
                         filtered_collections = [col for col in numeric_start_collections if col not in excluded_collections]
-        
-                        # def remove_numbers(name):
-                        #     return re.sub(r'^\d+(\.\d+)*\s*', '', name)
-                        # filtered_collections = filtered_collections.apply(remove_numbers)
 
+                        # Define the function to remove numbers at the beginning
+                        def remove_numbers(name):
+                            return re.sub(r'^\d+(\.\d+)*\s*', '', name)
+
+                        # Apply the function to filtered_collections
+                        filtered_collections = [remove_numbers(col) for col in filtered_collections]
+
+                        # Construct the select options
                         select_options = [''] + sorted(list(filtered_collections))
                         selected_collection = st.selectbox('Select a collection', select_options)
 
