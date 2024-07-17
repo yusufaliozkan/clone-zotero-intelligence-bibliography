@@ -1300,13 +1300,17 @@ with st.spinner('Retrieving data...'):
                                     st.pyplot()
                                 else:
                                     if not on:  # If the toggle is off, display the publications
-                                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
+                                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added'))
                                         if sort_by == 'Publication date :arrow_down:' or filtered_collection_df_authors['Citation'].sum() == 0:
                                             filtered_collection_df_authors = filtered_collection_df_authors.sort_values(by=['Date published'], ascending=False)
-                                            filtered_collection_df_authors =filtered_collection_df_authors.reset_index(drop=True)
-                                        else:
+                                            filtered_collection_df_authors = filtered_collection_df_authors.reset_index(drop=True)
+                                        if sort_by=='Citation':
                                             filtered_collection_df_authors = filtered_collection_df_authors.sort_values(by=['Citation'], ascending=False)
-                                            filtered_collection_df_authors =filtered_collection_df_authors.reset_index(drop=True)
+                                            filtered_collection_df_authors = filtered_collection_df_authors.reset_index(drop=True)
+                                        else:
+                                            filtered_collection_df_authors = filtered_collection_df_authors.sort_values(by=['Date added'], ascending=False)
+                                            filtered_collection_df_authors = filtered_collection_df_authors.reset_index(drop=True)
+
                                         if view == 'Basic list':                              
                                             for index, row in filtered_collection_df_authors.iterrows():
                                                 publication_type = row['Publication type']
