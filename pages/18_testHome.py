@@ -1400,11 +1400,11 @@ with st.spinner('Retrieving data...'):
                         sorted_collections_by_publications = sorted(filtered_collections, key=lambda col: collection_publications.get(col, 0), reverse=True)
 
                         # Format collection names with the publication count
-                        select_options_collection_with_counts = [''] + [f"{col} - {collection_publications.get(col, 0)}" for col in sorted_collections_by_publications]
+                        select_options_collection_with_counts = [''] + [f"{col} [{collection_publications.get(col, 0)} items]" for col in sorted_collections_by_publications]
 
                         # Create the selectbox
                         selected_collection_display = st.selectbox('Select a collection', select_options_collection_with_counts)
-                        selected_collection = selected_collection_display.rsplit(' - ', 1)[0] if selected_collection_display else None
+                        selected_collection = selected_collection_display.rsplit(' [', 1)[0] if selected_collection_display else None
 
                         if not selected_collection or selected_collection == '':
                             st.write('Pick a collection to see items')
