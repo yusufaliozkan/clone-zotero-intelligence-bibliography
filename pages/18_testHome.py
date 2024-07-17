@@ -1397,7 +1397,7 @@ with st.spinner('Retrieving data...'):
                         #     return re.sub(r'^\d+(\.\d+)*\s*', '', name)
                         # filtered_collections = filtered_collections.apply(remove_numbers)
 
-                        select_options = [''] + sorted(list(all_unique_collections))
+                        select_options = [''] + sorted(list(filtered_collections))
                         selected_collection = st.selectbox('Select a collection', select_options)
 
                         if not selected_collection or selected_collection == '':
