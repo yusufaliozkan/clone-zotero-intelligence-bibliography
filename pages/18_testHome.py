@@ -1389,24 +1389,22 @@ with st.spinner('Retrieving data...'):
 
                         df_csv_collections['Collection_Name'] = df_csv_collections['Collection_Name'].apply(remove_numbers)
                         excluded_collections = ['KCL intelligence']
+                        all_unique_collections = df_csv_collections['Collection_Name'].unique()
 
-                        # Count publications per collection
-                        collection_counts = df_csv_collections['Collection_Name'].value_counts()
+                        filtered_collections = [col for col in all_unique_collections if col not in excluded_collections]
 
-                        # Filter out excluded collections
-                        collection_counts = collection_counts[~collection_counts.index.isin(excluded_collections)]
+                        # Calculate the number of publications for each collection
+                        collection_publications = df_csv_collections['Collection_Name'].value_counts().to_dict()
 
-                        # Create list of collections with counts
-                        filtered_collections_with_counts = [f"{col} ({count})" for col, count in collection_counts.items()]
+                        # Sort collections by the number of publications
+                        sorted_collections_by_publications = sorted(filtered_collections, key=lambda col: collection_publications.get(col, 0), reverse=True)
 
-                        # Sort collections by number of publications (descending)
-                        filtered_collections_with_counts = sorted(filtered_collections_with_counts, key=lambda x: int(re.search(r'\((\d+)\)', x).group(1)), reverse=True)
+                        # Format collection names with the publication count
+                        select_options_collection_with_counts = [''] + [f"{col} ({collection_publications.get(col, 0)})" for col in sorted_collections_by_publications]
 
-                        # Insert empty option at the top
-                        select_options = [''] + filtered_collections_with_counts
-
-                        # Streamlit selectbox
-                        selected_collection = st.selectbox('Select a collection', select_options)
+                        # Create the selectbox
+                        selected_collection_display = st.selectbox('Select a collection', select_options_collection_with_counts)
+                        selected_collection = selected_collection_display.split(' (')[0] if selected_collection_display else None
 
                         if not selected_collection or selected_collection == '':
                             st.write('Pick a collection to see items')
