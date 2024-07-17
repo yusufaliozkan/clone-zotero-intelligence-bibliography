@@ -946,7 +946,6 @@ with st.spinner('Retrieving data...'):
                                             filtered_df = filtered_df.reset_index(drop=True)
                                         else:
                                             filtered_df = filtered_df.sort_values(by=['Date added'], ascending=False)
-                                            filtered_df
 
                                         articles_list = []  # Store articles in a list
                                         abstracts_list = [] # Store abstracts in a list
