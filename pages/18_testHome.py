@@ -1388,7 +1388,7 @@ with st.spinner('Retrieving data...'):
                             return re.sub(r'^\d+(\.\d+)*\s*', '', name)
 
                         df_csv_collections['Collection_Name'] = df_csv_collections['Collection_Name'].apply(remove_numbers)
-                        excluded_collections = ['KCL intelligence', 'Events', 'Journals', '']
+                        excluded_collections = ['KCL intelligence', 'Events', 'Journals','']
                         all_unique_collections = df_csv_collections['Collection_Name'].unique()
 
                         filtered_collections = [col for col in all_unique_collections if col not in excluded_collections]
@@ -1410,18 +1410,17 @@ with st.spinner('Retrieving data...'):
                             st.write('Pick a collection to see items')
                         else:
                             filtered_collection_df = df_csv_collections[df_csv_collections['Collection_Name'] == selected_collection]
+                            # filtered_collection_df = filtered_collection_df.sort_values(by='Date published', ascending=False).reset_index(drop=True)
 
-                            if not filtered_collection_df.empty:
-                                # Ensure 'Date published' column is in datetime format
-                                filtered_collection_df['Date published'] = pd.to_datetime(filtered_collection_df['Date published'], utc=True, errors='coerce').dt.tz_convert('Europe/London')
-                                filtered_collection_df['Date published'] = filtered_collection_df['Date published'].dt.strftime('%Y-%m-%d')
-                                filtered_collection_df['Date published'] = filtered_collection_df['Date published'].fillna('')
-                                filtered_collection_df['No date flag'] = filtered_collection_df['Date published'].isnull().astype(np.uint8)
-                                filtered_collection_df = filtered_collection_df.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
+                            filtered_collection_df['Date published'] = pd.to_datetime(filtered_collection_df['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
+                            filtered_collection_df['Date published'] = filtered_collection_df['Date published'].dt.strftime('%Y-%m-%d')
+                            filtered_collection_df['Date published'] = filtered_collection_df['Date published'].fillna('')
+                            filtered_collection_df['No date flag'] = filtered_collection_df['Date published'].isnull().astype(np.uint8)
+                            filtered_collection_df = filtered_collection_df.sort_values(by=['No date flag', 'Date published'], ascending=[True, True])
 
-                                publications_by_type = filtered_collection_df['Publication type'].value_counts()
+                            publications_by_type = filtered_collection_df['Publication type'].value_counts()
 
-                                collection_link = filtered_collection_df['Collection_Link'].iloc[0]
+                            collection_link = df_csv_collections[df_csv_collections['Collection_Name'] == selected_collection]['Collection_Link'].iloc[0]
                             
                             with st.expander('Click to expand', expanded=True):
                                 st.markdown('#### Collection theme: ' + selected_collection)
