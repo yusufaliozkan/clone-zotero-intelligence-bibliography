@@ -944,7 +944,7 @@ with st.spinner('Retrieving data...'):
                                         if sort_by=='Citation':
                                             filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
                                             filtered_df = filtered_df.reset_index(drop=True)
-                                        else:
+                                        if sort_by == 'Date added':
                                             filtered_df = filtered_df.sort_values(by=['Date added'], ascending=False)
                                             filtered_df = filtered_df.reset_index(drop=True)
 
