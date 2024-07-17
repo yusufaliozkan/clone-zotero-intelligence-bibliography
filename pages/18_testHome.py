@@ -1383,6 +1383,9 @@ with st.spinner('Retrieving data...'):
                     @st.experimental_fragment
                     def search_collection():
                         df_csv_collections = df_duplicated.copy()
+                        def remove_numbers(name):
+                            return re.sub(r'^\d+(\.\d+)*\s*', '', name)
+                        df_csv_collections['Collection_Name'] = df_csv_collections['Collection_Name'].apply(remove_numbers)
                         excluded_collections = ['97 KCL intelligence']
                         numeric_start_collections = df_csv_collections[df_csv_collections['Collection_Name'].str[0].str.isdigit()]['Collection_Name'].unique()
                         all_unique_collections = df_csv_collections['Collection_Name'].unique()
