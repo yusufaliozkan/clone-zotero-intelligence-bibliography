@@ -1301,7 +1301,7 @@ with st.spinner('Retrieving data...'):
                                 else:
                                     if not on:  # If the toggle is off, display the publications
                                         sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added'))
-                                        if sort_by == 'Publication date :arrow_down:':# or filtered_collection_df_authors['Citation'].sum() == 0:
+                                        if sort_by == 'Publication date :arrow_down:' or filtered_collection_df_authors['Citation'].sum() == 0:
                                             filtered_collection_df_authors = filtered_collection_df_authors.sort_values(by=['Date published'], ascending=False)
                                             filtered_collection_df_authors = filtered_collection_df_authors.reset_index(drop=True)
                                         if sort_by=='Citation':
