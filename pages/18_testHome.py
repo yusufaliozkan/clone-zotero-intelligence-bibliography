@@ -1383,21 +1383,29 @@ with st.spinner('Retrieving data...'):
                     @st.experimental_fragment
                     def search_collection():
                         df_csv_collections = df_duplicated.copy()
+
                         def remove_numbers(name):
                             return re.sub(r'^\d+(\.\d+)*\s*', '', name)
 
                         df_csv_collections['Collection_Name'] = df_csv_collections['Collection_Name'].apply(remove_numbers)
-                        excluded_collections = ['97 KCL intelligence']
-                        # numeric_start_collections = df_csv_collections[df_csv_collections['Collection_Name'].str[0].str.isdigit()]['Collection_Name'].unique()
-                        all_unique_collections = df_csv_collections['Collection_Name'].unique()
-                        # filtered_collections = [col for col in numeric_start_collections if col not in excluded_collections]
-                        filtered_collections = [col for col in all_unique_collections if col not in excluded_collections]
-                        
-                        # def remove_numbers(name):
-                        #     return re.sub(r'^\d+(\.\d+)*\s*', '', name)
-                        # filtered_collections = filtered_collections.apply(remove_numbers)
+                        excluded_collections = ['KCL intelligence']
 
-                        select_options = [''] + sorted(list(filtered_collections))
+                        # Count publications per collection
+                        collection_counts = df_csv_collections['Collection_Name'].value_counts()
+
+                        # Filter out excluded collections
+                        collection_counts = collection_counts[~collection_counts.index.isin(excluded_collections)]
+
+                        # Create list of collections with counts
+                        filtered_collections_with_counts = [f"{col} ({count})" for col, count in collection_counts.items()]
+
+                        # Sort collections by number of publications (descending)
+                        filtered_collections_with_counts = sorted(filtered_collections_with_counts, key=lambda x: int(re.search(r'\((\d+)\)', x).group(1)), reverse=True)
+
+                        # Insert empty option at the top
+                        select_options = [''] + filtered_collections_with_counts
+
+                        # Streamlit selectbox
                         selected_collection = st.selectbox('Select a collection', select_options)
 
                         if not selected_collection or selected_collection == '':
