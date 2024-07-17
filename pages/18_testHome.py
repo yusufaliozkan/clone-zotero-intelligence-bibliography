@@ -1391,6 +1391,7 @@ with st.spinner('Retrieving data...'):
                         # numeric_start_collections = df_csv_collections[df_csv_collections['Collection_Name'].str[0].str.isdigit()]['Collection_Name'].unique()
                         all_unique_collections = df_csv_collections['Collection_Name'].unique()
                         # filtered_collections = [col for col in numeric_start_collections if col not in excluded_collections]
+                        filtered_collections = [col for col in all_unique_collections if col not in excluded_collections]
         
                         # def remove_numbers(name):
                         #     return re.sub(r'^\d+(\.\d+)*\s*', '', name)
