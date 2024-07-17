@@ -1390,9 +1390,9 @@ with st.spinner('Retrieving data...'):
                         filtered_collections = [col for col in numeric_start_collections if col not in excluded_collections]
                         filtered_collections
         
-                        def remove_numbers(name):
-                            return re.sub(r'^\d+(\.\d+)*\s*', '', name)
-                        filtered_collections = filtered_collections.apply(remove_numbers)
+                        # def remove_numbers(name):
+                        #     return re.sub(r'^\d+(\.\d+)*\s*', '', name)
+                        # filtered_collections = filtered_collections.apply(remove_numbers)
 
                         select_options = [''] + sorted(list(filtered_collections))
                         selected_collection = st.selectbox('Select a collection', select_options)
