@@ -3745,6 +3745,8 @@ with st.spinner('Retrieving data...'):
                         with coly2:
                             years = st.slider('Publication years between:', min_y, max_y, (min_y, max_y), key='years3')
                             df_year_updated = df_year[(df_year['Publication year'] >= years[0]) & (df_year['Publication year'] <= years[1])]
+                            min_y
+                            max_y
 
                         fig = px.bar(df_year_updated, x='Publication year', y='Count')
                         fig.update_xaxes(tickangle=-70)
