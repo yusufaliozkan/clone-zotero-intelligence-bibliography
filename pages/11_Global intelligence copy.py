@@ -592,7 +592,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 if display2:
                                     st.caption(row['Abstract']) 
                         else:
-                            df_collections = df_collections.sort_values(by=['Date added'], ascending=False)
+                            df_countries = df_countries.sort_values(by=['Date added'], ascending=False)
                             count = 1
                             for index, row in df_collections.iterrows():
                                 formatted_entry = format_entry(row)
