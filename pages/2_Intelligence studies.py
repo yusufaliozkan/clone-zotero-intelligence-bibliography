@@ -25,6 +25,7 @@ from sidebar_content import sidebar_content
 from format_entry import format_entry
 from copyright import display_custom_license
 from events import evens_conferences
+from st_keyup import st_keyup
 
 
 st.set_page_config(layout = "wide", 
@@ -118,6 +119,12 @@ with st.spinner('Retrieving data & updating dashboard...'):
     collection_link = df_collections[df_collections['Collection_Name'] == collection_name]['Collection_Link'].iloc[0]
 
     st.markdown('#### Collection theme: ' + collection_name)
+
+    # name = st.text_input("Enter keywords to search in title", key='name', placeholder='Search keyword(s)')#, debounce=250, key='name')
+    name = st_keyup("Enter keywords to search in title", key='name', placeholder='Search keyword(s)', debounce=500)#, debounce=250, key='name')
+    if name:
+        df_collections = df_collections[df_collections.Title.str.lower().str.contains(name.lower(), na=False)]
+        
     col1, col2, col3 = st.columns([1,2,4])
     with col1:
         container_metric = st.container()
