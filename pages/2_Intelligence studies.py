@@ -124,7 +124,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     name = st_keyup("Enter keywords to search in title", key='name', placeholder='Search keyword(s)', debounce=500)#, debounce=250, key='name')
     if name:
         df_collections = df_collections[df_collections.Title.str.lower().str.contains(name.lower(), na=False)]
-        
+
     col1, col2, col3 = st.columns([1,2,4])
     with col1:
         container_metric = st.container()
@@ -232,7 +232,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
             # st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
             # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
-            sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
+            sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation', 'Date added :arrow_down:'))
             if view == 'Basic list':
                 articles_list = []  # Store articles in a list
                 for index, row in df_collections.iterrows():
@@ -268,7 +268,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     )
                                 
                 with st.expander('**Basic list view**', expanded=True):
-
                     if sort_by == 'Publication date :arrow_down:': # or df_collections['Citation'].sum() == 0:
                         count = 1
                         for index, row in df_collections.iterrows():
@@ -291,7 +290,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             count_by_type[current_type] += 1
                             if display2:
                                 st.caption(row['Abstract'])
-                    else:
+                    elif sort_by =='Citation':
                         if df_collections['Citation'].sum() == 0:
                             count = 1
                             for index, row in df_collections.iterrows():
@@ -308,7 +307,16 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 st.write(f"{count}) {formatted_entry}")
                                 count += 1
                                 if display2:
-                                    st.caption(row['Abstract']) 
+                                    st.caption(row['Abstract'])
+                    else: #elif sort_by == 'Date added :arrow_down:':
+                        df_collections = df_collections.sort_values(by=['Date added'], ascending=False)
+                        count = 1
+                        for index, row in df_collections.iterrows():
+                            formatted_entry = format_entry(row)
+                            st.write(f"{count}) {formatted_entry}")
+                            count += 1
+                            if display2:
+                                st.caption(row['Abstract']) 
             elif view == 'Table':
                 df_table_view = df_collections[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal', 'Citation', 'Collection_Name','Link to publication','Zotero link']]
                 df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
