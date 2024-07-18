@@ -3736,7 +3736,7 @@ with st.spinner('Retrieving data...'):
                             last_10_years = st.checkbox('Limit to last 10 years', value=False)
                             if last_10_years:
                                 current_year = datetime.datetime.now().year
-                                min_y = current_year - 14
+                                min_y = current_year - 9
                                 max_y = current_year
                             else:
                                 min_y = int(df_year['Publication year'].min())
