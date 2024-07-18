@@ -3730,26 +3730,31 @@ with st.spinner('Retrieving data...'):
                             st.plotly_chart(fig, use_container_width = True)
                     with col2:
                         coly1, coly2 = st.columns(2)
+
                         with coly1:
                             df_year['Publication year'] = df_year['Publication year'].astype(int)
                             last_5_years = st.checkbox('Limit to the last 5 years', value=False)
                             if last_5_years:
                                 current_year = datetime.datetime.now().year
-                                df_year_updated = df_year_updated[df_year_updated['Publication year'] >= (current_year - 5)]  
+                                min_y = current_year - 5
+                                max_y = current_year
+                            else:
+                                min_y = int(df_year['Publication year'].min())
+                                max_y = int(df_year['Publication year'].max())
+
                         with coly2:
-                            df_year['Publication year'] = df_year['Publication year'].astype(int)
-                            max_y = int(df_year['Publication year'].max())
-                            min_y = int(df_year['Publication year'].min())
-                            years = st.slider('Publication years between:', min_y, max_y, (min_y,max_y), key='years3')
+                            years = st.slider('Publication years between:', min_y, max_y, (min_y, max_y), key='years3')
                             df_year_updated = df_year[(df_year['Publication year'] >= years[0]) & (df_year['Publication year'] <= years[1])]
+
                         fig = px.bar(df_year_updated, x='Publication year', y='Count')
                         fig.update_xaxes(tickangle=-70)
                         fig.update_layout(
                             autosize=False,
                             width=1200,
-                            height=600,)
-                        fig.update_layout(title={'text':'All items in the library by publication year', 'yanchor':'top'})
-                        st.plotly_chart(fig, use_container_width = True)
+                            height=600,
+                        )
+                        fig.update_layout(title={'text': 'All items in the library by publication year', 'yanchor': 'top'})
+                        st.plotly_chart(fig, use_container_width=True)
                 types_pubyears()
 
                 st.divider()
