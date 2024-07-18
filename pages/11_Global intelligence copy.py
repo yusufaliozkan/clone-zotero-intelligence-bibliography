@@ -199,6 +199,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
     name = st_keyup("Enter keywords to search in title", key='name', placeholder='Search keyword(s)', debounce=500)#, debounce=250, key='name')
     if name:
         df_collections = df_collections[df_collections.Title.str.lower().str.contains(name.lower(), na=False)]
+        df_countries = df_countries[df_countries.Title.str.lower().str.contains(name.lower(), na=False)]
 
     if selected_country!='':
         col1, col2, col3 = st.columns([2,2,2])
