@@ -3733,8 +3733,8 @@ with st.spinner('Retrieving data...'):
 
                         with coly1:
                             df_year['Publication year'] = df_year['Publication year'].astype(int)
-                            last_5_years = st.checkbox('Limit to last 5 years', value=False)
-                            if last_5_years:
+                            last_10_years = st.checkbox('Limit to last 10 years', value=False)
+                            if last_10_years:
                                 current_year = datetime.datetime.now().year
                                 min_y = current_year - 14
                                 max_y = current_year
