@@ -460,7 +460,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     num_items_collections = len(df_countries)
                     breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type_country.items()])                    
 
-                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
+                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation', 'Date added :arrow_down:',))
                     display2 = container_abstract.checkbox('Display abstracts', key='type_country_2')
 
                     articles_list = []  # Store articles in a list
@@ -582,10 +582,19 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 count_by_type[current_type] += 1
                                 if display2:
                                     st.caption(row['Abstract'])
-                        else:
+                        elif sort_by == 'Citation':
                             df_countries = df_countries.sort_values(by=['Citation'], ascending=False)
                             count = 1
                             for index, row in df_countries.iterrows():
+                                formatted_entry = format_entry(row)
+                                st.write(f"{count}) {formatted_entry}")
+                                count += 1
+                                if display2:
+                                    st.caption(row['Abstract']) 
+                        else:
+                            df_collections = df_collections.sort_values(by=['Date added'], ascending=False)
+                            count = 1
+                            for index, row in df_collections.iterrows():
                                 formatted_entry = format_entry(row)
                                 st.write(f"{count}) {formatted_entry}")
                                 count += 1
