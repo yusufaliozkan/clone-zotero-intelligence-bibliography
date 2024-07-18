@@ -241,6 +241,23 @@ with st.spinner('Retrieving data & updating dashboard...'):
             # st.write(f'Number of citations: **{int(citation_count)}**, Open access coverage (journal articles only): **{int(oa_ratio)}%**')
             # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
             sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation', 'Date added :arrow_down:'))
+
+            if sort_by == 'Publication date :arrow_down:': # or df_collections['Citation'].sum() == 0:
+                df_collections = df_collections.sort_values(by=['Publication date'], ascending=True)
+                df_collections = df_collections.reset_index()
+
+            elif sort_by == 'Publication type': # or df_collections['Citation'].sum() == 0:
+                df_collections = df_collections.sort_values(by=['Publication type'], ascending=True)
+                df_collections = df_collections.reset_index()
+
+            elif sort_by =='Citation':
+                df_collections = df_collections.sort_values(by=['Citation'], ascending=False)
+                df_collections = df_collections.reset_index()
+
+            else: #elif sort_by == 'Date added :arrow_down:':
+                df_collections = df_collections.sort_values(by=['Date added'], ascending=False)
+                df_collections = df_collections.reset_index()
+
             if view == 'Basic list':
                 articles_list = []  # Store articles in a list
                 for index, row in df_collections.iterrows():
@@ -338,10 +355,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 with st.expander('**Table view**', expanded=True):
                     df_table_view
             else:
-                if sort_by == 'Publication type':
-                    df_collections = df_collections.sort_values(by=['Publication type'], ascending=True)
-                elif sort_by == 'Citation':
-                    df_collections = df_collections.sort_values(by=['Citation'], ascending=False)
                 with st.expander('**Bibliographic listing**', expanded=True):
                     df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
                     df_zotero_id = pd.read_csv('zotero_citation_format.csv')
