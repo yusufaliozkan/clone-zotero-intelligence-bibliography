@@ -3739,7 +3739,7 @@ with st.spinner('Retrieving data...'):
                         with coly2:
                             last_5_years = st.checkbox('Limit to the last 5 years', value=False)
                             if last_5_years:
-                                current_year = datetime.now().year
+                                current_year = datetime.datetime.now().year
                                 df_year_updated = df_year_updated[df_year_updated['Publication year'] >= (current_year - 5)]  
                         fig = px.bar(df_year_updated, x='Publication year', y='Count')
                         fig.update_xaxes(tickangle=-70)
