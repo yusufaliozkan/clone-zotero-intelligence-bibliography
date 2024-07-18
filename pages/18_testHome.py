@@ -1088,7 +1088,7 @@ with st.spinner('Retrieving data...'):
                                     expanded=True
                                     )
                         else:
-                            st.write("Please enter a keyword or author name to search.")
+                            st.info("Please enter a keyword to search in title or abstract.")
                     search_keyword()
 
                 # SEARCH AUTHORS
