@@ -243,7 +243,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
             sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation', 'Date added :arrow_down:'))
 
             if sort_by == 'Publication date :arrow_down:': # or df_collections['Citation'].sum() == 0:
-                df_collections
                 df_collections = df_collections.sort_values(by=['Date published'], ascending=True)
                 df_collections = df_collections.reset_index()
 
