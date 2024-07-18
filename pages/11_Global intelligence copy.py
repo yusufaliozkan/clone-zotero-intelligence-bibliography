@@ -321,7 +321,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
                     # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
-                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation'))
+                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation', 'Date added :arrow_down:',))
                     display2 = container_abstract.checkbox('Display abstracts', key='type_count2')
 
                     if view == 'Basic list':
@@ -380,7 +380,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 count_by_type[current_type] += 1
                                 if display2:
                                     st.caption(row['Abstract'])
-                        else:
+                        elif sort_by == 'Citation':
                             df_collections = df_collections.sort_values(by=['Citation'], ascending=False)
                             count = 1
                             for index, row in df_collections.iterrows():
@@ -389,6 +389,16 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 count += 1
                                 if display2:
                                     st.caption(row['Abstract']) 
+                        else:
+                            df_collections = df_collections.sort_values(by=['Date added'], ascending=False)
+                            count = 1
+                            for index, row in df_collections.iterrows():
+                                formatted_entry = format_entry(row)
+                                st.write(f"{count}) {formatted_entry}")
+                                count += 1
+                                if display2:
+                                    st.caption(row['Abstract']) 
+
                     elif view == 'Table':
                         df_table_view = df_collections[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal', 'Citation', 'Collection_Name','Link to publication','Zotero link']]
                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
