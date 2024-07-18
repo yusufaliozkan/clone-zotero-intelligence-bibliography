@@ -3752,7 +3752,7 @@ with st.spinner('Retrieving data...'):
                             autosize=False,
                             width=1200,
                             height=600,
-                        )
+                        ) 
                         fig.update_layout(title={'text': f'All items in the library by publication year {min_y} - {max_y}', 'yanchor': 'top'})
                         st.plotly_chart(fig, use_container_width=True)
                 types_pubyears()
