@@ -244,7 +244,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             if sort_by == 'Publication date :arrow_down:': # or df_collections['Citation'].sum() == 0:
                 df_collections
-                df_collections = df_collections.sort_values(by=['Publication date'], ascending=True)
+                df_collections = df_collections.sort_values(by=['Date published'], ascending=True)
                 df_collections = df_collections.reset_index()
 
             elif sort_by == 'Publication type': # or df_collections['Citation'].sum() == 0:
