@@ -61,7 +61,7 @@ with col1:
             programme_name = row['Programme_name']
             programme_info = ""
             
-            if programme_name:
+            if pd.notna(programme_name):
                 if show_programme_level and column_name == 'Academic programs':
                     programme_info = f"{row['Programme_level']}: [{programme_name}]({row['Link']}), *{row['Institution']}*, {row['Country']}"
                 else:
@@ -113,7 +113,7 @@ with col1:
                     st.write(f'**{len(type_programs)} {prog_type} found in {num_unique_countries} countries**')
                     for country in selected_countries:
                         country_programs = type_programs[type_programs['Country'] == country]
-                        st.markdown(f'##### {country} sd')
+                        st.markdown(f'##### {country}')
                         display_numbered_list(country_programs, prog_type, show_country=False, show_programme_level=False)
         else:
             with st.expander(f"**{prog_type} ({len(type_programs)})**"):
