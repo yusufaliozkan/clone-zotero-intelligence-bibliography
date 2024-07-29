@@ -3664,15 +3664,15 @@ with st.spinner('Retrieving data...'):
                             collection_line_legend_check = st.checkbox('Show legend', key='collection_line_legend_check')
                         with colcum2:
                             last_10_year = st.checkbox('Limit to last 10 years', key= 'last10yearscollectioncummulative')
-                            if last_10_year:
-                                df_collections_22
-                                max_year = df_collections_22["Date year"].max()
-                                df_collections_22 = df_collections_22[df_collections_22["Date year"] >= (max_year - 5)]
                         if collection_line_legend_check:
                             collection_line_legend=True
                         else:
                             collection_line_legend=False
-                        df_collections_22 = df_collections_2.copy()            
+                        df_collections_22 = df_collections_2.copy()
+                        if last_10_year:
+                            df_collections_22
+                            max_year = df_collections_22["Date year"].max()
+                            df_collections_22 = df_collections_22[df_collections_22["Date year"] >= (max_year - 5)]     
                         collection_counts = df_collections_22.groupby(['Date year', 'Collection_Name']).size().unstack().fillna(0)
                         collection_counts = collection_counts.reset_index()
                         collection_counts.iloc[:, 1:] = collection_counts.iloc[:, 1:].cumsum()
