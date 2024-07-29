@@ -3659,13 +3659,18 @@ with st.spinner('Retrieving data...'):
                         fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
                         st.plotly_chart(fig, use_container_width = True)
                     with col2:
-                        collection_line_legend_check = st.checkbox('Show legend', key='collection_line_legend_check')
+                        colcum1, colcum2 = st.columns(2)
+                        with colcum1:
+                            collection_line_legend_check = st.checkbox('Show legend', key='collection_line_legend_check')
+                        with colcum2:
+                            last_10_year = st.checkbox('Limit to last 10 years', key= 'last10yearscollectioncummulative')
+                            if last_10_year:
+                                df_collections_22 = df_collections_22[df_collections_22["Date year"] >= (max_year - 5)]
                         if collection_line_legend_check:
                             collection_line_legend=True
                         else:
                             collection_line_legend=False
-                        df_collections_22 = df_collections_2.copy()
-                        df_collections_22
+                        df_collections_22 = df_collections_2.copy()            
                         collection_counts = df_collections_22.groupby(['Date year', 'Collection_Name']).size().unstack().fillna(0)
                         collection_counts = collection_counts.reset_index()
                         collection_counts.iloc[:, 1:] = collection_counts.iloc[:, 1:].cumsum()
