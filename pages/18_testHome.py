@@ -3671,7 +3671,7 @@ with st.spinner('Retrieving data...'):
                         df_collections_22 = df_collections_2.copy()
                         if last_10_year:
                             df_collections_22
-                            df_collections_22 = df_collections_22[df_collections_22['Date year']=!'No date']
+                            df_collections_22 = df_collections_22[df_collections_22['Date year']!='No date']
                             max_year = df_collections_22["Date year"].max()
                             max_year
                             df_collections_22 = df_collections_22[df_collections_22["Date year"] >= (max_year - 10)]     
