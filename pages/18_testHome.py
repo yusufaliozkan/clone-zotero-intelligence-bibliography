@@ -3665,6 +3665,7 @@ with st.spinner('Retrieving data...'):
                         with colcum2:
                             last_10_year = st.checkbox('Limit to last 10 years', key= 'last10yearscollectioncummulative')
                             if last_10_year:
+                                df_collections_22
                                 df_collections_22 = df_collections_22[df_collections_22["Date year"] >= (max_year - 5)]
                         if collection_line_legend_check:
                             collection_line_legend=True
