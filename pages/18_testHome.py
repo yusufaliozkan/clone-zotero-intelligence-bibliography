@@ -3673,7 +3673,7 @@ with st.spinner('Retrieving data...'):
                             df_collections_22 = df_collections_22[df_collections_22['Date year']!='No date']
                             df_collections_22['Date year'] = df_collections_22['Date year'].astype(int)
                             current_year = datetime.datetime.now().year
-                            df_collections_22 = df_collections_22[df_collections_22['Date year'] >= (current_year - 10)]
+                            df_collections_22 = df_collections_22[df_collections_22['Date year'] >= (current_year - 20)]
                         collection_counts = df_collections_22.groupby(['Date year', 'Collection_Name']).size().unstack().fillna(0)
                         collection_counts = collection_counts.reset_index()
                         collection_counts.iloc[:, 1:] = collection_counts.iloc[:, 1:].cumsum()
