@@ -3659,11 +3659,14 @@ with st.spinner('Retrieving data...'):
                         fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
                         st.plotly_chart(fig, use_container_width = True)
                     with col2:
-                        colcum1, colcum2 = st.columns(2)
+                        colcum1, colcum2, colcum3 = st.columns(3)
                         with colcum1:
                             collection_line_legend_check = st.checkbox('Show legend', key='collection_line_legend_check')
                         with colcum2:
-                            last_10_year = st.checkbox('Limit to last 10 years', key= 'last10yearscollectioncummulative')
+                            last_10_year = st.checkbox('Limit to last 10 years', key='last10yearscollectioncummulative')
+                        with colcum3:
+                            top_5_collections = st.checkbox('Show top 5 collections', key='top5collections')
+                        
                         if collection_line_legend_check:
                             collection_line_legend=True
                         else:
