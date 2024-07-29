@@ -3672,7 +3672,8 @@ with st.spinner('Retrieving data...'):
                         if last_10_year:
                             df_collections_22
                             max_year = df_collections_22["Date year"].max()
-                            df_collections_22 = df_collections_22[df_collections_22["Date year"] >= (max_year - 5)]     
+                            max_year
+                            df_collections_22 = df_collections_22[df_collections_22["Date year"] >= (max_year - 10)]     
                         collection_counts = df_collections_22.groupby(['Date year', 'Collection_Name']).size().unstack().fillna(0)
                         collection_counts = collection_counts.reset_index()
                         collection_counts.iloc[:, 1:] = collection_counts.iloc[:, 1:].cumsum()
