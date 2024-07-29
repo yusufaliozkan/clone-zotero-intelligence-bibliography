@@ -3667,35 +3667,31 @@ with st.spinner('Retrieving data...'):
                         with colcum3:
                             top_5_collections = st.checkbox('Show top 5 collections', key='top5collections')
                         
-                        if collection_line_legend_check:
-                            collection_line_legend=True
-                        else:
-                            collection_line_legend=False
+                        collection_line_legend = collection_line_legend_check
+
                         df_collections_22 = df_collections_2.copy()
                         if last_10_year:
-                            df_collections_22 = df_collections_22[df_collections_22['Date year']!='No date']
+                            df_collections_22 = df_collections_22[df_collections_22['Date year'] != 'No date']
                             df_collections_22['Date year'] = df_collections_22['Date year'].astype(int)
                             current_year = datetime.datetime.now().year
                             df_collections_22 = df_collections_22[df_collections_22['Date year'] > (current_year - 10)]
+                        
                         collection_counts = df_collections_22.groupby(['Date year', 'Collection_Name']).size().unstack().fillna(0)
                         collection_counts = collection_counts.reset_index()
                         collection_counts.iloc[:, 1:] = collection_counts.iloc[:, 1:].cumsum()
+
+                        # Determine the top 5 collections if the checkbox is checked
                         if top_5_collections:
                             top_5 = df_collections_22['Collection_Name'].value_counts().head(5).index.tolist()
                         else:
                             top_5 = df_collections_22['Collection_Name'].unique().tolist()
-
-                        selected_collections = df_collections_21.head(number0 + 1)['Collection_Name'].tolist()
-                        collection_counts_filtered = collection_counts[['Date year'] + selected_collections]
-                        column_to_exclude = '01 Intelligence history'
-                        if column_to_exclude in selected_collections:
-                            selected_collections.remove(column_to_exclude)
-                        collection_counts_filtered = collection_counts[['Date year'] + selected_collections]
+                        
+                        collection_counts_filtered = collection_counts[['Date year'] + top_5]
                         collection_counts_filtered['Date year'] = pd.to_numeric(collection_counts_filtered['Date year'], errors='coerce')
-                        collection_counts_filtered = collection_counts_filtered.sort_values(by=['Date year'] + selected_collections, ascending=True)
+                        collection_counts_filtered = collection_counts_filtered.sort_values(by=['Date year'] + top_5, ascending=True)
 
                         # Plotting the line graph using Plotly Express
-                        fig = px.line(collection_counts_filtered, x='Date year', y=selected_collections, 
+                        fig = px.line(collection_counts_filtered, x='Date year', y=top_5, 
                                     markers=True, line_shape='linear', labels={'value': 'Cumulative Count'},
                                     title='Cumulative changes in collection over years')
                         fig.update_layout(showlegend=collection_line_legend)
