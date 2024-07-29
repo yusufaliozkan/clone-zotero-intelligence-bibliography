@@ -3661,13 +3661,13 @@ with st.spinner('Retrieving data...'):
                     with col2:
                         colcum1, colcum2, colcum3 = st.columns(3)
                         with colcum1:
-                            collection_line_legend_check = st.checkbox('Show legend', key='collection_line_legend_check')
+                            collection_line_legend_check = st.checkbox('Hide legend', key='collection_line_legend_check')
                         with colcum2:
                             last_10_year = st.checkbox('Limit to last 10 years', key='last10yearscollectioncummulative')
                         with colcum3:
                             top_5_collections = st.checkbox('Show top 5 collections', key='top5collections')
                         
-                        collection_line_legend = collection_line_legend_check
+                        collection_line_legend = not collection_line_legend_check
 
                         df_collections_22 = df_collections_2.copy()
                         if last_10_year:
