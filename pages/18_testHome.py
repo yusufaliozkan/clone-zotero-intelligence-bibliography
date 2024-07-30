@@ -3640,14 +3640,18 @@ with st.spinner('Retrieving data...'):
                     df_collections_21 = df_collections_2.copy()
                     df_collections_21 = df_collections_21['Collection_Name'].value_counts().reset_index()
                     df_collections_21.columns = ['Collection_Name', 'Number_of_Items']
-                    number0 = st.slider('Select a number collections', 3,len(df_collections_21),15, key='slider01')
+                    
                     col1, col2 = st.columns(2)
                     with col1:
-                        collection_bar_legend_check = st.checkbox('Show legend', key='collection_bar_legend_check')
-                        if collection_bar_legend_check:
-                            collection_bar_legend=True
-                        else:
-                            collection_bar_legend=False
+                        colallcol1, colallcol2 = st.columns(2)
+                        with colallcol1:
+                            collection_bar_legend_check = st.checkbox('Show legend', key='collection_bar_legend_check')
+                            if collection_bar_legend_check:
+                                collection_bar_legend=True
+                            else:
+                                collection_bar_legend=False
+                        with colallcol2:
+                            number0 = st.slider('Select a number collections', 3,len(df_collections_21),15, key='slider01')
                         plot= df_collections_21.head(number0+1)
                         plot = plot[plot['Collection_Name']!='01 Intelligence history']
                         fig = px.bar(plot, x='Collection_Name', y='Number_of_Items', color='Collection_Name')
