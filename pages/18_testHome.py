@@ -3644,7 +3644,7 @@ with st.spinner('Retrieving data...'):
                     
                     col1, col2 = st.columns(2)
                     with col1:
-                        colallcol1, colallcol2 = st.columns([1,3])
+                        colallcol1, colallcol2 = st.columns([2,3])
                         with colallcol1:
                             collection_bar_legend_check = st.checkbox('Show legend', key='collection_bar_legend_check')
                             if collection_bar_legend_check:
