@@ -3856,6 +3856,7 @@ with st.spinner('Retrieving data...'):
                             with colauthor11:
                                 selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
                             with colauthor12:
+                                df_authors = df_authors[df_authors['Publication type']==selected_type]
                                 last_5_year = st.checkbox('Limit to last 5 years', key='last5yearsauthorsallspecified')
                             if last_5_year:
                                 df_authors = df_csv.copy()
@@ -3869,7 +3870,6 @@ with st.spinner('Retrieving data...'):
                                 df_authors.reset_index(drop=True)
                             else:                            
                                 df_authors = df_csv.copy()              
-                            df_authors = df_authors[df_authors['Publication type']==selected_type]
                             if len(df_authors) == 0:
                                 st.write('No data to visualize')
                             else:
