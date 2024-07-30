@@ -3651,13 +3651,13 @@ with st.spinner('Retrieving data...'):
                                 collection_bar_legend=True
                             else:
                                 collection_bar_legend=False
-                            last_10_year = st.checkbox('Limit to last 10 years', key='last10yearscollections')
-                            if last_10_year:
+                            last_5_year = st.checkbox('Limit to last 5 years', key='last5yearscollections')
+                            if last_5_year:
                                 df_collections_21 = df_collections_2.copy()
                                 df_collections_21 = df_collections_21[df_collections_21['Date year'] != 'No date']
                                 df_collections_21['Date year'] = df_collections_21['Date year'].astype(int)
                                 current_year = datetime.datetime.now().year
-                                df_collections_21 = df_collections_21[df_collections_21['Date year'] > (current_year - 10)]
+                                df_collections_21 = df_collections_21[df_collections_21['Date year'] > (current_year - 5)]
                                 df_collections_21 = df_collections_21['Collection_Name'].value_counts().reset_index()
                                 df_collections_21.columns = ['Collection_Name', 'Number_of_Items']
                         with colallcol2:
@@ -3677,18 +3677,18 @@ with st.spinner('Retrieving data...'):
                         with colcum1:
                             collection_line_legend_check = st.checkbox('Hide legend', key='collection_line_legend_check')
                         with colcum2:
-                            last_10_year = st.checkbox('Limit to last 10 years', key='last10yearscollectioncummulative')
+                            last_5_year = st.checkbox('Limit to last 5 years', key='last5yearscollectioncummulative')
                         with colcum3:
                             top_5_collections = st.checkbox('Show top 5 collections', key='top5collections')
                         
                         collection_line_legend = not collection_line_legend_check
 
                         df_collections_22 = df_collections_2.copy()
-                        if last_10_year:
+                        if last_5_year:
                             df_collections_22 = df_collections_22[df_collections_22['Date year'] != 'No date']
                             df_collections_22['Date year'] = df_collections_22['Date year'].astype(int)
                             current_year = datetime.datetime.now().year
-                            df_collections_22 = df_collections_22[df_collections_22['Date year'] > (current_year - 10)]
+                            df_collections_22 = df_collections_22[df_collections_22['Date year'] > (current_year - 5)]
                         
                         collection_counts = df_collections_22.groupby(['Date year', 'Collection_Name']).size().unstack().fillna(0)
                         collection_counts = collection_counts.reset_index()
