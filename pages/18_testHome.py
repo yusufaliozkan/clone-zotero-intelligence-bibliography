@@ -3852,7 +3852,22 @@ with st.spinner('Retrieving data...'):
                                 df_authors.columns = ['Author name', 'Publication count']
                                 df_authors
                     with col2:
-                            selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
+                            colauthor11, colauthor12 = st.columns(2)
+                            with colauthor11:
+                                selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
+                            with colauthor12:
+                                last_5_year = st.checkbox('Limit to last 5 years', key='last5yearsauthorsall')
+                            if last_5_year:
+                                df_authors = df_csv.copy()
+                                df_authors2 = df_csv.copy()
+                                df_authors = df_authors[df_authors['Date year'] != 'No date']
+                                df_authors['Date year'] = df_authors['Date year'].astype(int)
+                                current_year = datetime.datetime.now().year
+                                df_authors = df_authors[df_authors['Date year'] > (current_year - 5)]
+                                df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
+                                df_authors = df_authors.explode('Author_name')
+                                df_authors.reset_index(drop=True)
+                            
                             df_authors = df_csv.copy()              
                             df_authors = df_authors[df_authors['Publication type']==selected_type]
                             if len(df_authors) == 0:
