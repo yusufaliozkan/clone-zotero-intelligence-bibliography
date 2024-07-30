@@ -3736,7 +3736,7 @@ with st.spinner('Retrieving data...'):
                         df_csv_2['Date year'] = df_csv_2['Date year'].astype(int)
                         current_year = datetime.datetime.now().year
                         df_csv_2 = df_csv_2[df_csv_2['Date year'] > (current_year - 5)]
-                        df_types = pd.DataFrame(df_csv['Publication type'].value_counts())
+                        df_types = pd.DataFrame(df_csv_2['Publication type'].value_counts())
                         df_types = df_types.sort_values(['Publication type'], ascending=[False])
                         df_types=df_types.reset_index()
                         df_types = df_types.rename(columns={'index':'Publication type','Publication type':'Count'})
