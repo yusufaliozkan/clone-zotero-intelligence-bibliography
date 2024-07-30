@@ -3817,7 +3817,21 @@ with st.spinner('Retrieving data...'):
                     num_authors = st.slider('Select number of authors to display:', 5, min(30, max_authors), 20, key='author2')
                     col1, col2 = st.columns(2)
                     with col1:
-                            table_view = st.radio('Choose visual type', ['Bar chart', 'Table view'], key='author')
+                            colauthor1, colauthor2 = st.columns(2)
+                            with colauthor1:
+                                table_view = st.radio('Choose visual type', ['Bar chart', 'Table view'], key='author')
+                            with colauthor2:
+                                last_5_year = st.checkbox('Limit to last 5 years', key='last5yearsauthorsall')
+                            if last_5_year:
+                                df_authors = df_csv.copy()
+                                df_authors2 = df_csv.copy()
+                                df_authors = df_authors[df_authors['Date year'] != 'No date']
+                                df_authors['Date year'] = df_authors['Date year'].astype(int)
+                                current_year = datetime.datetime.now().year
+                                df_authors = df_authors[df_authors['Date year'] > (current_year - 5)]
+                                df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
+                                df_authors = df_authors.explode('Author_name')
+                                df_authors.reset_index(drop=True)
                             df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
                             df_authors = df_authors[df_authors['Author_name'] != 'nan']
                             df_authors = df_authors['Author_name'].value_counts().head(num_authors)
