@@ -3719,6 +3719,7 @@ with st.spinner('Retrieving data...'):
                 def types_pubyears():
                     # PUBLICATION TYPES
                     df_types = pd.DataFrame(df_csv['Publication type'].value_counts())
+                    df_types
                     df_types = df_types.sort_values(['Publication type'], ascending=[False])
                     df_types=df_types.reset_index()
                     df_types = df_types.rename(columns={'index':'Publication type','Publication type':'Count'})
