@@ -3652,6 +3652,15 @@ with st.spinner('Retrieving data...'):
                                 collection_bar_legend=True
                             else:
                                 collection_bar_legend=False
+                            last_10_year = st.checkbox('Limit to last 10 years', key='last10yearscollections')
+                            if last_10_year:
+                                df_collections_21 = df_collections_2.copy()
+                                df_collections_21 = df_collections_21[df_collections_21['Date year'] != 'No date']
+                                df_collections_21['Date year'] = df_collections_21['Date year'].astype(int)
+                                current_year = datetime.datetime.now().year
+                                df_collections_21 = df_collections_21[df_collections_21['Date year'] > (current_year - 10)]
+                                df_collections_21 = df_collections_21['Collection_Name'].value_counts().reset_index()
+                                df_collections_21.columns = ['Collection_Name', 'Number_of_Items']
                         with colallcol2:
                             number0 = st.slider('Select a number collections', 3,len(df_collections_21),10, key='slider01')
                         plot= df_collections_21.head(number0+1)
