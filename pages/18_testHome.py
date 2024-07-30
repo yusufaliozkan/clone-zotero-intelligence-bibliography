@@ -3862,7 +3862,8 @@ with st.spinner('Retrieving data...'):
                                 df_authors['Date year'] = df_authors['Date year'].astype(int)
                                 current_year = datetime.datetime.now().year
                                 df_authors = df_authors[df_authors['Date year'] > (current_year - 5)]
-                            df_authors = df_csv.copy()              
+                            else:
+                                df_authors = df_csv.copy()              
                             df_authors = df_authors[df_authors['Publication type']==selected_type]
                             df_authors
                             if len(df_authors) == 0:
