@@ -3638,7 +3638,6 @@ with st.spinner('Retrieving data...'):
                 @st.experimental_fragment
                 def collection_chart():
                     df_collections_21 = df_collections_2.copy()
-                    df_collections_21
 
                     df_collections_21 = df_collections_21['Collection_Name'].value_counts().reset_index()
                     df_collections_21.columns = ['Collection_Name', 'Number_of_Items']
