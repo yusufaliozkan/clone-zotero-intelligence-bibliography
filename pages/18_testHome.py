@@ -3734,7 +3734,10 @@ with st.spinner('Retrieving data...'):
                         with coltype1:
                             last_5_year = st.checkbox('Limit to last 5 years', key='last5yearsitemtypes')
                         with coltype2:
-                            log0 = st.checkbox('Show in log scale', key='log0')
+                            if chart_type == 'Pie chart':
+                                log0 = st.checkbox('Show in log scale', key='log0', disabled=True)
+                            else:
+                                log0 = st.checkbox('Show in log scale', key='log0')
                         if last_5_year:
                             df_csv_2 = df_csv[df_csv['Date year'] != 'No date']
                             df_csv_2['Date year'] = df_csv_2['Date year'].astype(int)
