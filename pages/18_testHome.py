@@ -3730,9 +3730,24 @@ with st.spinner('Retrieving data...'):
 
                     col1, col2 = st.columns(2)
                     with col1:
-                        if chart_type == 'Bar chart':
+                        coltype1, coltype2 = st.columns(2)
+                        with coltype1:
+                            last_5_year = st.checkbox('Limit to last 5 years', key='last5yearsitemtypes')
+                        with coltype2:
                             log0 = st.checkbox('Show in log scale', key='log0')
-
+                        if last_5_year:
+                            df_csv_2 = df_csv[df_csv['Date year'] != 'No date']
+                            df_csv_2['Date year'] = df_csv_2['Date year'].astype(int)
+                            current_year = datetime.datetime.now().year
+                            df_csv_2 = df_csv_2[df_csv_2['Date year'] > (current_year - 5)]
+                            df_types = pd.DataFrame(df_csv_2['Publication type'].value_counts())
+                            df_types = df_types.sort_values(['Publication type'], ascending=[False])
+                            df_types=df_types.reset_index()
+                            df_types = df_types.rename(columns={'index':'Publication type','Publication type':'Count'})
+                            # TEMPORARY SOLUTION FOR COLUMN NAME CHANGE ERROR
+                            df_types.columns = ['Publication type', 'Count']
+                            # TEMP SOLUTION ENDS
+                        if chart_type == 'Bar chart':
                             if log0:
                                 fig = px.bar(df_types, x='Publication type', y='Count', color='Publication type', log_y=True)
                                 fig.update_layout(
