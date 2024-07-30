@@ -3850,9 +3850,18 @@ with st.spinner('Retrieving data...'):
                             else:
                                 st.markdown(f'###### Top {num_authors} Authors by Publication Count (all items)')
                                 df_authors.columns = ['Author name', 'Publication count']
-                                df_authors
                     with col2:
-                            selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
+                            colauthor11, colauthor12 = st.columns(2)
+                            with colauthor11:
+                                selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
+                            with colauthor12:
+                                last_5_year = st.checkbox('Limit to last 5 years', key='last5yearsauthorsallspecified')
+                            if las_5_year:
+                                df_authors = df_csv.copy()
+                                df_authors = df_authors[df_authors['Date year'] != 'No date']
+                                df_authors['Date year'] = df_authors['Date year'].astype(int)
+                                current_year = datetime.datetime.now().year
+                                df_authors = df_authors[df_authors['Date year'] > (current_year - 5)]
                             df_authors = df_csv.copy()              
                             df_authors = df_authors[df_authors['Publication type']==selected_type]
                             df_authors
