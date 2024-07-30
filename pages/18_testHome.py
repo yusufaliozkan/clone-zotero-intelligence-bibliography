@@ -3855,6 +3855,7 @@ with st.spinner('Retrieving data...'):
                             selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
                             df_authors = df_csv.copy()              
                             df_authors = df_authors[df_authors['Publication type']==selected_type]
+                            df_authors
                             if len(df_authors) == 0:
                                 st.write('No data to visualize')
                             else:
