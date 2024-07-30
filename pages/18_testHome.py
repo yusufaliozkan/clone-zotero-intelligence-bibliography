@@ -3856,7 +3856,7 @@ with st.spinner('Retrieving data...'):
                             with colauthor11:
                                 selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
                             with colauthor12:
-                                last_5_year = st.checkbox('Limit to last 5 years', key='last5yearsauthorsall')
+                                last_5_year = st.checkbox('Limit to last 5 years', key='last5yearsauthorsallspecified')
                             if last_5_year:
                                 df_authors = df_csv.copy()
                                 df_authors2 = df_csv.copy()
