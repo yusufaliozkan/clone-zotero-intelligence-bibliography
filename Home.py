@@ -8,6 +8,7 @@ intelligence_history = st.Page('pages/1_Intelligence history.py', title='Intelli
 intelligence_studies = st.Page('pages/2_Intelligence studies.py', title='Intelligence studies')
 intelligence_analysis = st.Page('pages/3_Intelligence analysis.py', title='Intelligence analysis')
 intelligence_organisations = st.Page('pages/4_Intelligence organisations.py', title='Intelligence organisations')
+intelligence_failures = st.Page('pages/5_Intelligence failures.py', title='Intelligence failures')
 
 pg = st.navigation(
     {
@@ -16,7 +17,8 @@ pg = st.navigation(
             intelligence_history, 
             intelligence_studies,
             intelligence_analysis,
-            intelligence_organisations
+            intelligence_organisations,
+            intelligence_failures
             ]
     }
 )
