@@ -7,6 +7,10 @@ def sidebar_content():
     
     with st.sidebar:
         st.image(image, width=150)
+        st.logo(
+            image=image,
+            icon_image='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtoX76TyVQs-o1vEvNuAnYX0zahtSui173gg&s'
+            )
         st.sidebar.markdown("# Intelligence studies network")
         with st.expander('About'):
             st.write('''This website lists secondary sources on intelligence studies and intelligence history.
