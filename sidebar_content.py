@@ -9,7 +9,7 @@ def sidebar_content():
         st.image(image, width=150)
         st.logo(
             image=image,
-            icon_image='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtoX76TyVQs-o1vEvNuAnYX0zahtSui173gg&s'
+            icon_image=image
             )
         st.sidebar.markdown("# Intelligence studies network")
         with st.expander('About'):
