@@ -11,6 +11,7 @@ intelligence_organisations = st.Page('pages/4_Intelligence organisations.py', ti
 intelligence_failures = st.Page('pages/5_Intelligence failures.py', title='Intelligence failures')
 intelligence_oversight = st.Page('pages/6_Intelligence oversight and ethics.py', title='Intelligence oversight and ethics')
 intelligence_collection = st.Page('pages/7_Intelligence collection.py', title='Intelligence collection')
+counterintelligence = st.Page('pages/8_Counterintelligence.py')
 
 pg = st.navigation(
     {
@@ -22,7 +23,8 @@ pg = st.navigation(
             intelligence_organisations,
             intelligence_failures,
             intelligence_oversight,
-            intelligence_collection
+            intelligence_collection,
+            counterintelligence
             ]
     }
 )
