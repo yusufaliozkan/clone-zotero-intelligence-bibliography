@@ -15,7 +15,7 @@ counterintelligence = st.Page('pages/8_Counterintelligence.py')
 covert_action = st.Page('pages/9_Covert action.py')
 intelligence_cybersphere = st.Page('pages/10_Intelligence and cybersphere.py')
 global_intelligence = st.Page('pages/11_Global intelligence.py')
-special_collections = st.Page('pages/12_Special collections.py')
+special_collections = st.Page('pages/13_Special collections.py')
 
 pg = st.navigation(
     {
