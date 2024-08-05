@@ -1000,7 +1000,7 @@ with st.spinner('Retrieving data...'):
                                                     for i, article in enumerate(articles_list[:20], start=1):
                                                         highlighted_article = highlight_terms(article, search_tokens)
                                                         st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
-                                                        st.button('Test')
+                                                        st.write('Test')
                                                         
                                                         if display_abstracts:
                                                             abstract = abstracts_list[i - 1]
