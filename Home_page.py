@@ -983,7 +983,7 @@ with st.spinner('Retrieving data...'):
                                                     st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
                                                     citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'
                                                     citation = int(float(citation))
-                                                    if citation >0:
+                                                    if citation <0:
                                                         st.button('test', key=f'key{i}')
                                                     
                                                     if display_abstracts:
