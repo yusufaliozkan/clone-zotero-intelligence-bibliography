@@ -21,7 +21,7 @@ special_collections = st.Page('pages/13_Special collections.py')
 events = st.Page('pages/14_Events.py')
 digest = st.Page('pages/15_Digest.py')
 institutions = st.Page('pages/16_Institutions.py')
-item_monitoring = st.Page('17_Item monitoring.py')
+item_monitoring = st.Page('pages/17_Item monitoring.py')
 
 pg = st.navigation(
     {
