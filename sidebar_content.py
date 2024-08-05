@@ -9,7 +9,8 @@ def sidebar_content():
         st.image(image, width=150)
         st.logo(
             image=image,
-            icon_image=image
+            icon_image=image,
+            link='https://intelligence.streamlit.app/'
             )
         st.sidebar.markdown("# Intelligence studies network")
         with st.expander('About'):
