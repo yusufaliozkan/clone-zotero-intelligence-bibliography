@@ -3451,6 +3451,43 @@ with st.spinner('Retrieving data...'):
                         'Intelligence analysis',
                     ):
                         st.switch_page('pages/3_Intelligence analysis.py')
+                    if st.button(
+                        'Intelligence organisations',
+                    ):
+                        st.switch_page('pages/4_Intelligence organisations.py')
+                    if st.button(
+                        'Intelligence failures',
+                    ):
+                        st.switch_page('pages/5_Intelligence failures.py')
+                    if st.button(
+                        'Intelligence oversight and ethics',
+                    ):
+                        st.switch_page('pages/6_Intelligence oversight and ethics.py')
+                    if st.button(
+                        'Intelligence collection',
+                    ):
+                        st.switch_page('pages/7_Intelligence collection.py')
+                    if st.button(
+                        'Counterintelligence',
+                    ):
+                        st.switch_page('pages/8_Counterintelligence.py')
+                    if st.button(
+                        'Covert action',
+                    ):
+                        st.switch_page('pages/9_Covert action.py')
+                    if st.button(
+                        'Intelligence and cybersphere',
+                    ):
+                        st.switch_page('pages/10_Intelligence and cybersphere.py')
+                    if st.button(
+                        'Global intelligence',
+                    ):
+                        st.switch_page('pages/11_Global intelligence.py')
+                    if st.button(
+                        'Special collections',
+                    ):
+                        st.switch_page('pages/12_Special collections.py')
+
                     st.caption('[Intelligence history](https://intelligence.streamlit.app/Intelligence_history)')
                     st.caption('[Intelligence studies](https://intelligence.streamlit.app/Intelligence_studies)')
                     st.caption('[Intelligence analysis](https://intelligence.streamlit.app/Intelligence_analysis)')
