@@ -3436,6 +3436,18 @@ with st.spinner('Retrieving data...'):
         with col2:
             st.info('Join the [mailing list](https://groups.google.com/g/intelligence-studies-network)')
             with st.expander('Collections', expanded=True):
+                if st.button(
+                    'Intelligence history',
+                ):
+                    st.switch_page('pages/1_Intelligence history.py')
+                if st.button(
+                    'Intelligence studies',
+                ):
+                    st.switch_page('pages/1_Intelligence studies.py')
+                if st.button(
+                    'Intelligence analysis',
+                ):
+                    st.switch_page('pages/3_Intelligence analysis.py')
                 st.caption('[Intelligence history](https://intelligence.streamlit.app/Intelligence_history)')
                 st.caption('[Intelligence studies](https://intelligence.streamlit.app/Intelligence_studies)')
                 st.caption('[Intelligence analysis](https://intelligence.streamlit.app/Intelligence_analysis)')
