@@ -3446,7 +3446,7 @@ with st.spinner('Retrieving data...'):
                     if st.button(
                         'Intelligence studies',
                     ):
-                        st.switch_page('pages/1_Intelligence studies.py')
+                        st.switch_page('pages/2_Intelligence studies.py')
                     if st.button(
                         'Intelligence analysis',
                     ):
