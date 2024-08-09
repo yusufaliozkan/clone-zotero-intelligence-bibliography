@@ -432,6 +432,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         'Special collections',
                     ):
                         st.switch_page('pages/12_Special collections.py')
+            events()
                 # st.caption('[Intelligence history](https://intelligence.streamlit.app/Intelligence_history)')
                 # st.caption('[Intelligence studies](https://intelligence.streamlit.app/Intelligence_studies)')
                 # st.caption('[Intelligence analysis](https://intelligence.streamlit.app/Intelligence_analysis)')
@@ -445,7 +446,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 # st.caption('[Global intelligence](https://intelligence.streamlit.app/Global_intelligence)')
                 # st.caption('[AI and intelligence](https://intelligence.streamlit.app/AI_and_intelligence)')
                 # st.caption('[Special collections](https://intelligence.streamlit.app/Special_collections)')
-
             with st.expander('Events', expanded=True):
                 # Create a connection object.
                 event_info = evens_conferences()
