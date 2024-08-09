@@ -385,6 +385,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
             def events():
                 with st.expander('Collections', expanded=True):
                     if st.button(
+                        'Home',
+                    ):
+                        st.switch_page('Home_page.py')
+                    if st.button(
                         'Intelligence history',
                     ):
                         st.switch_page('pages/1_Intelligence history.py')
