@@ -224,7 +224,9 @@ Therefore, this bibliography offers a carefully curated selection of publication
 Join our Google Groups to get updates and learn  new features about the website and the database. 
 You can also ask questions or make suggestions. (https://groups.google.com/g/intelligence-studies-network)
 
-Check out the following guides for a quick intoduction about the website:
+Resources about the website:
+
+Ozkan, Yusuf A. “‘Intelligence Studies Network’: A Human-Curated Database for Indexing Resources with Open-Source Tools.” arXiv, August 7, 2024. https://doi.org/10.48550/arXiv.2408.03868.
 
 Ozkan, Yusuf Ali. “Introduction to ‘Intelligence Studies Bibliography.’” Medium (blog), December 26, 2023. https://medium.com/@yaliozkan/introduction-to-intelligence-studies-network-ed63461d1353.
 
