@@ -348,6 +348,7 @@ with col1:
             feeds = [
                 {"url": "https://rss.app/feeds/uBBTAmA7a9rMr7JA.xml", "label": "Brunel University"},
                 {"url": "https://rss.app/feeds/S566whCCjTbiXmns.xml", "label": "Leiden University"}
+                {"url":"https://www.aspistrategist.org.au/feed/", "label":"Australia"}
             ]
 
             # Fetch and combine data from both RSS feeds
