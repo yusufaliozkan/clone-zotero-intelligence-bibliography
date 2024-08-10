@@ -380,6 +380,9 @@ with col1:
             df_not = df_not[df_not['_merge'] == 'left_only']
             df_not.drop(['_merge', 'Similar_Title'], axis=1, inplace=True)
             df_not = df_not.reset_index(drop=True)
+
+            # Optionally, rename Title_x back to Title if desired
+            df_not.rename(columns={'Title_x': 'Title'}, inplace=True)
             df_not
 
 with col2:
