@@ -347,7 +347,7 @@ with col1:
             # URLs of the RSS feeds with their respective labels
             feeds = [
                 {"url": "https://rss.app/feeds/uBBTAmA7a9rMr7JA.xml", "label": "Brunel University"},
-                {"url": "https://rss.app/feeds/S566whCCjTbiXmns.xml", "label": "Leiden University"}
+                {"url": "https://rss.app/feeds/S566whCCjTbiXmns.xml", "label": "Leiden University"},
                 {"url":"https://www.aspistrategist.org.au/feed/", "label":"Australia"}
             ]
 
