@@ -330,7 +330,7 @@ with col1:
                 items_not_in_df_item_magazines        
             status.update(label="Search complete!", state="complete", expanded=True)
 
-            st.write('**Institutional repositories**')
+            st.write('**Other resources**')
 
             def fetch_rss_data(url, label):
                 response = requests.get(url)
@@ -346,8 +346,6 @@ with col1:
 
             # URLs of the RSS feeds with their respective labels
             feeds = [
-                {"url": "https://rss.app/feeds/uBBTAmA7a9rMr7JA.xml", "label": "Brunel University"},
-                {"url": "https://rss.app/feeds/S566whCCjTbiXmns.xml", "label": "Leiden University"},
                 {"url":"https://www.aspistrategist.org.au/feed/", "label":"Australia"}
             ]
 
@@ -363,7 +361,6 @@ with col1:
             pattern = '|'.join(words_to_filter)
 
             df = df[df['title'].str.contains(pattern, case=False, na=False)].reset_index(drop=True)
-            df['title'] = df['title'].str.replace('Brunel University Research Archive:', '', regex=False)
             df = df.rename(columns={'title':'Title'})
             df['Title'] = df['Title'].str.upper()
             df_titles['Title'] = df_titles['Title'].str.upper()
