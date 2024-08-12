@@ -375,9 +375,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
             @st.experimental_fragment
             def events():
                 with st.expander('Collections', expanded=True):
-                    if st.button(
-                        'Home',
-                    ):
+                    if st.write(['Home']('Home')):
+
                         st.switch_page('Home_page.py')
                     if st.button(
                         'Intelligence history',
