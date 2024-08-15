@@ -32,6 +32,14 @@ from st_keyup import st_keyup
 
 def collection_template():
 
+        df_collections = pd.read_csv('all_items_duplicated.csv')
+        # df_collections = df_collections[~df_collections['Collection_Name'].str.contains('01.98')]
+        df_collections = df_collections[df_collections['Collection_Name'] != '01 Intelligence history']
+
+
+        df_collections = df_collections.sort_values(by='Collection_Name')
+        df_collections=df_collections[df_collections['Collection_Name'].str.contains("01.")]
+
         def remove_numbers(name):
             return re.sub(r'^\d+(\.\d+)*\s*', '', name)
 
