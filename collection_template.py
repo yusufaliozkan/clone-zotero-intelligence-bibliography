@@ -31,7 +31,6 @@ from st_keyup import st_keyup
 
 
 def collection_template():
-        global df_collections
         def remove_numbers(name):
             return re.sub(r'^\d+(\.\d+)*\s*', '', name)
 
