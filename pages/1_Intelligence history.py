@@ -67,7 +67,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     df_collections = df_collections.sort_values(by='Collection_Name')
     df_collections=df_collections[df_collections['Collection_Name'].str.contains("01.")]
-    df_collections
     
     def remove_numbers(name):
         return re.sub(r'^\d+(\.\d+)*\s*', '', name)
