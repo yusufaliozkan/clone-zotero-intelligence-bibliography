@@ -30,7 +30,7 @@ import requests
 from st_keyup import st_keyup
 
 
-def collection_template():
+def collection_template(df_collections):
 
         def remove_numbers(name):
             return re.sub(r'^\d+(\.\d+)*\s*', '', name)
@@ -756,3 +756,4 @@ def collection_template():
         #     """
         # )
         display_custom_license()
+df_collections = collection_template(df_collections)
