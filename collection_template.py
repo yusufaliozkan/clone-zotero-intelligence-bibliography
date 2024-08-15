@@ -757,3 +757,5 @@ def collection_template():
         #     """
         # )
         display_custom_license()
+
+df_collections = collection_template()
