@@ -756,4 +756,6 @@ def collection_template(df_collections):
         #     """
         # )
         display_custom_license()
+        return df_collections
+
 df_collections = collection_template(df_collections)
