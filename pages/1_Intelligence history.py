@@ -67,5 +67,5 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
     df_collections = df_collections.sort_values(by='Collection_Name')
     df_collections=df_collections[df_collections['Collection_Name'].str.contains("01.")]
-    
+    df_collections = collection_template()
     collection_template()
