@@ -333,7 +333,7 @@ else:
                     publication_date = row['Date published']  # Extract the publication date
                     link = row['Link to publication']
 
-                    post_text = f"{publication_type}: {title} ({publication_date})\n\n{link}"
+                    post_text = f"{publication_type}: {title} (published {publication_date})\n\n{link}"
 
                     if len(post_text) > 300:
                         max_title_length = 300 - len(f"{publication_type}: \n{link}") - len(f" (published {publication_date})")
