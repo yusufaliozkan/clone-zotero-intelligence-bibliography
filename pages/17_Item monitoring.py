@@ -193,7 +193,10 @@ else:
 
             limit = st.number_input('Limit to:')
 
-            df = df.head(limit)
+            if limit==0:
+                df
+            else:
+                df = df.head(limit)
             df
 
 
