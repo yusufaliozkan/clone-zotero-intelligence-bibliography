@@ -301,7 +301,7 @@ with col1:
                     dois_without_https = []
                     journals = []
 
-                    today = datetime.datetime.today().date()
+                    today = datetime.today().date()
 
                     for result in results:
                         if result is None:
