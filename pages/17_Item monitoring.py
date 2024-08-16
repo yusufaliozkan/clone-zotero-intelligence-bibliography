@@ -67,6 +67,8 @@ with st.sidebar:
 
     sidebar_content()
 
+password_input = st.text_input("Enter the password:", type="password")
+
 
 test_bluesky = st.button('Run API')
 if test_bluesky:
