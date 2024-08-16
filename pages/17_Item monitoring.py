@@ -46,6 +46,8 @@ from atproto import Client
 import os
 from bs4 import BeautifulSoup
 from grapheme import length as grapheme_length
+from typing import List, Dict
+
 
 st.set_page_config(layout = "wide", 
                     page_title='Intelligence studies network',
