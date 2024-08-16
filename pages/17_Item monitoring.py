@@ -192,7 +192,7 @@ else:
             df = df[df['Date added'] >= last_hours]
             df
 
-            limit = st.number_input('Limit to:')
+            limit = st.number_input('Limit to:', value='int')
 
             if limit==0:
                 df
