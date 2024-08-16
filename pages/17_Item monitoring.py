@@ -312,7 +312,7 @@ with col1:
                             continue
 
                         try:
-                            pub_date = datetime.datetime.strptime(pub_date_str, '%Y-%m-%d').date()
+                            pub_date = datetime.strptime(pub_date_str, '%Y-%m-%d').date()
                         except ValueError:
                             continue  # Skip this result if the date is not in the expected format
 
