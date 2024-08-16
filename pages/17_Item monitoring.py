@@ -69,7 +69,7 @@ if not password_input:
     st.info('Enter the password')
 else:
     if password_input == st.secrets['item_monitoring_password']:
-        st.write('Correct')
+        st.success('Wellcome to the admin dashboard')
 
         display_recently_added_items = st.button('Display recently added items')
         if display_recently_added_items:
