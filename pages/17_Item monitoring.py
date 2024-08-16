@@ -51,6 +51,7 @@ with st.sidebar:
 test_bluesky = st.button('Run API')
 if test_bluesky:
     client = Client(base_url='https://bsky.social')
+    bluesky_password = st.secrets["bluesky_password"]
     client.login('intelbase.bsky.social', bluesky_password)
 
     library_id = '2514686'
