@@ -66,7 +66,7 @@ with st.sidebar:
 password_input = st.text_input("Enter the password to access admin dashboard:", type="password")
 
 if not password_input:
-    st.write('Enter the password')
+    st.info('Enter the password')
 else:
     if password_input == st.secrets['item_monitoring_password']:
         st.write('Correct')
@@ -696,7 +696,7 @@ else:
                 df_not
 
     else:
-        st.write('Incorrect passcode')
+        st.error('Incorrect passcode')
 st.write('---')
 
 components.html(
