@@ -12,7 +12,7 @@ import datetime
 import datetime as dt
 # import plotly.express as px
 # import numpy as np
-# import re
+import re
 # from fpdf import FPDF
 # import base64
 from sidebar_content import sidebar_content
@@ -21,6 +21,10 @@ from rss_feed import df_podcast, df_magazines
 from events import evens_conferences
 import xml.etree.ElementTree as ET
 from fuzzywuzzy import fuzz
+
+from atproto import Client
+import os
+from bs4 import BeautifulSoup
 
 st.set_page_config(layout = "wide", 
                     page_title='Intelligence studies network',
@@ -39,6 +43,10 @@ image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
 with st.sidebar:
 
     sidebar_content()
+
+
+test_bluesky = st.button('Run API')
+
 
 col1, col2 = st.columns([5,2])
 
