@@ -345,15 +345,16 @@ if password_input == st.secrets['item_monitoring_password']:
                 )
 
     ## ITEMS MONITORING
-    st.info('''
-            The following items are not in the library yet. Book reviews will not be included!
-            ''')
+
     col1, col2 = st.columns([5,2])
 
     with col1:
 
         item_monitoring = st.button("Item monitoring")
         if item_monitoring:
+            st.info('''
+                    The following items are not in the library yet. Book reviews will not be included!
+                    ''')
             st.subheader('Monitoring section')
             st.write('The following items are not in the library yet. Book reviews will not be included!')
             with st.status("Scanning sources to find items...", expanded=True) as status:
