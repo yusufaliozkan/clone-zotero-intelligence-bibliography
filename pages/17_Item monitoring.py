@@ -25,6 +25,7 @@ from fuzzywuzzy import fuzz
 from atproto import Client
 import os
 from bs4 import BeautifulSoup
+from grapheme import length as grapheme_length
 
 st.set_page_config(layout = "wide", 
                     page_title='Intelligence studies network',
