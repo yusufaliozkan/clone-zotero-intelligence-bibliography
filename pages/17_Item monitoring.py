@@ -188,18 +188,16 @@ else:
             # df = df[df['Date added'].dt.date >= days_ago]
 
             now = datetime.now(pytz.UTC)
-            last_hours = now - timedelta(hours=96)
+            last_hours = now - timedelta(hours=120)
             df = df[df['Date added'] >= last_hours]
             df
 
             limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
 
             if limit==0:
-                df
+                st.info('Enter a value to limit the number of items.')
             else:
                 df = df.head(limit)
-            df
-
 
             post_bluesky = st.button('Post items on Bluesky')
             if post_bluesky:
