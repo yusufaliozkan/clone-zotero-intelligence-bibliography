@@ -184,7 +184,7 @@ if test_bluesky:
     # df = df[df['Date added'].dt.date >= days_ago]
 
     now = datetime.now(pytz.UTC)
-    last_24_hours = now - timedelta(hours=24)
+    last_24_hours = now - timedelta(hours=48)
     df = df[df['Date added'] >= last_24_hours]
 
     df
