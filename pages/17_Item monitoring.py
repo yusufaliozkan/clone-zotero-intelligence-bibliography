@@ -68,7 +68,8 @@ with st.sidebar:
     sidebar_content()
 
 password_input = st.text_input("Enter the password:", type="password")
-if password_input == st.secrets['item_monitoring_password']
+item_monitoring_password = st.secrets['item_monitoring_password']
+if password_input == item_monitoring_password:
     st.write('Correct')
 else:
     st.write('Incorrect passcode')
