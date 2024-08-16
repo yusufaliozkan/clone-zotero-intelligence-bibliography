@@ -198,6 +198,7 @@ else:
                 st.info('Enter a value to limit the number of items.')
             else:
                 df = df.head(limit)
+                df
 
             post_bluesky = st.button('Post items on Bluesky')
             if post_bluesky:
