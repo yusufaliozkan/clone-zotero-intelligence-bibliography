@@ -183,8 +183,8 @@ if password_input == st.secrets['item_monitoring_password']:
         # df = df[df['Date added'].dt.date >= days_ago]
 
         now = datetime.now(pytz.UTC)
-        last_24_hours = now - timedelta(hours=24)
-        df = df[df['Date added'] >= last_24_hours]
+        last_hours = now - timedelta(hours=72)
+        df = df[df['Date added'] >= last_hours]
 
         df
 
