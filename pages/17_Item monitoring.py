@@ -357,13 +357,8 @@ else:
                     )
 
             ## ITEMS MONITORING
-
-
             item_monitoring = st.button("Item monitoring")
             if item_monitoring:
-                st.info('''
-                        The following items are not in the library yet. Book reviews will not be included!
-                        ''')
                 st.subheader('Monitoring section')
                 st.write('The following items are not in the library yet. Book reviews will not be included!')
                 with st.status("Scanning sources to find items...", expanded=True) as status:
@@ -471,7 +466,7 @@ else:
                             dois_without_https = []
                             journals = []
 
-                            today = datetime.today().date()
+                            today = datetime.datetime.today().date()
 
                             for result in results:
                                 if result is None:
@@ -482,7 +477,7 @@ else:
                                     continue
 
                                 try:
-                                    pub_date = datetime.strptime(pub_date_str, '%Y-%m-%d').date()
+                                    pub_date = datetime.datetime.strptime(pub_date_str, '%Y-%m-%d').date()
                                 except ValueError:
                                     continue  # Skip this result if the date is not in the expected format
 
@@ -558,14 +553,14 @@ else:
                     mask = ~items_not_in_df2['Title'].str.contains('|'.join(words_to_exclude), case=False)
                     items_not_in_df2 = items_not_in_df2[mask]
                     items_not_in_df2 = items_not_in_df2.reset_index(drop=True)
-                    st.write('**Journal articles (DOI based filtering)**')
-                    row_nu = len(items_not_in_df2.index)
-                    if row_nu == 0:
-                        st.write('No new podcast published!')
-                    else:
-                        items_not_in_df2 = items_not_in_df2.sort_values(by=['Publication Date'], ascending=False)
-                        items_not_in_df2 = items_not_in_df2.reset_index(drop=True)
-                        items_not_in_df2
+                    # st.write('**Journal articles (DOI based filtering)**')
+                    # row_nu = len(items_not_in_df2.index)
+                    # if row_nu == 0:
+                    #     st.write('No new podcast published!')
+                    # else:
+                    #     items_not_in_df2 = items_not_in_df2.sort_values(by=['Publication Date'], ascending=False)
+                    #     items_not_in_df2 = items_not_in_df2.reset_index(drop=True)
+                    #     items_not_in_df2
 
                     ## Title based filtering
                     df_titles = df_dedup.copy()
@@ -584,14 +579,14 @@ else:
                     st.write('**Journal articles (future publications)**')
                     ## Future publications
                     items_not_in_df2['Publication Date'] = pd.to_datetime(items_not_in_df2['Publication Date'])
-                    current_date = datetime.now()
+                    current_date = datetime.datetime.now()
                     future_df = items_not_in_df2[items_not_in_df2['Publication Date']>=current_date]
                     future_df = future_df.reset_index(drop=True)
                     future_df
 
                     ## Published in the last 30 days
                     st.write('**Journal articles (published in last 30 days)**')
-                    current_date = datetime.now()
+                    current_date = datetime.datetime.now()
                     date_30_days_ago = current_date - timedelta(days=30)
                     last_30_days_df = items_not_in_df2[(items_not_in_df2['Publication Date']<=current_date) & (items_not_in_df2['Publication Date']>=date_30_days_ago)]
                     last_30_days_df = last_30_days_df.reset_index(drop=True)
@@ -619,7 +614,6 @@ else:
                     df_item_podcast.dropna(subset=['Title'], inplace=True)
                     column_to_keep = 'Title'
                     df_item_podcast = df_item_podcast[[column_to_keep]]
-                    from rss_feed import df_podcast, df_magazines
                     df_podcast = pd.merge(df_podcast, df_item_podcast[['Title']], on='Title', how='left', indicator=True)
                     items_not_in_df_item_podcast = df_podcast[df_podcast['_merge'] == 'left_only']
                     items_not_in_df_item_podcast.drop('_merge', axis=1, inplace=True)
@@ -648,6 +642,7 @@ else:
                         items_not_in_df_item_magazines = items_not_in_df_item_magazines.sort_values(by=['PubDate'], ascending=False)
                         items_not_in_df_item_magazines        
                     status.update(label="Search complete!", state="complete", expanded=True)
+
 
                     st.write('**Other resources**')
 
@@ -703,7 +698,10 @@ else:
                     df_not.drop(['_merge', 'Similar_Title'], axis=1, inplace=True)
                     df_not = df_not.reset_index(drop=True)
                     df_not
-        admin_dashboard()
+
+                admin_dashboard()
+            
+            
     else:
         st.error('Incorrect passcode')
 st.write('---')
