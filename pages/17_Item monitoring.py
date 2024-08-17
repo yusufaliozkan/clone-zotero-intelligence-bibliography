@@ -335,7 +335,7 @@ else:
                             "features": [
                                 {
                                     "$type": "app.bsky.richtext.facet#link",  # Using the same type as a link for hashtag
-                                    "uri": f"https://bsky.app/hashtag/q={h['tag']}",  # Link to a search for the hashtag
+                                    "uri": f"https://bsky.app/hashtag/{h['tag']}",  # Link to a search for the hashtag
                                 }
                             ],
                         })
