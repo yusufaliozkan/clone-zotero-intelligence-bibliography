@@ -195,6 +195,7 @@ else:
 
             @st.experimental_fragment
             def limit_dataframe():
+                df
                 limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
 
                 if limit==0:
