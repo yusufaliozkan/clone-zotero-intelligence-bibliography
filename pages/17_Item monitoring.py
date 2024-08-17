@@ -195,13 +195,16 @@ else:
             df = df[[last_column] + list(df.columns[:-1])]
             df = st.data_editor(df)
 
-            limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
+            df = df[df['Include?']==True]
+            df
 
-            if limit==0:
-                st.info('Enter a value to limit the number of items.')
-            else:
-                df = df.head(limit)
-                df
+            # limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
+
+            # if limit==0:
+            #     st.info('Enter a value to limit the number of items.')
+            # else:
+            #     df = df.head(limit)
+            #     df
 
             post_bluesky = st.button('Post items on Bluesky')
             if post_bluesky:
