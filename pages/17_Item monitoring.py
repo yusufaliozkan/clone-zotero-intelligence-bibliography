@@ -190,7 +190,9 @@ else:
             now = datetime.now(pytz.UTC)
             last_hours = now - timedelta(hours=120)
             df = df[df['Date added'] >= last_hours]
-            df['Include?'] = True
+            df['Include?'] = False
+            last_column = df.columns[-1]
+            df = df[[last_column] + list(df.columns[:-1])]
             df = st.data_editor(df)
 
             limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
