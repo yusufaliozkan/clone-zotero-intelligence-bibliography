@@ -614,6 +614,7 @@ else:
                     df_item_podcast.dropna(subset=['Title'], inplace=True)
                     column_to_keep = 'Title'
                     df_item_podcast = df_item_podcast[[column_to_keep]]
+                    from rss_feed import df_podcast, df_magazines
                     df_podcast = pd.merge(df_podcast, df_item_podcast[['Title']], on='Title', how='left', indicator=True)
                     items_not_in_df_item_podcast = df_podcast[df_podcast['_merge'] == 'left_only']
                     items_not_in_df_item_podcast.drop('_merge', axis=1, inplace=True)
