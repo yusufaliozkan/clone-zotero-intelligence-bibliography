@@ -196,6 +196,7 @@ else:
             df = st.data_editor(df)
 
             df = df[df['Include?']==True]
+            df = df.reset_index(drop=True)
             df
 
             # limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
