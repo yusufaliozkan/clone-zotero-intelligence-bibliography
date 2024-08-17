@@ -192,18 +192,13 @@ else:
             df = df[df['Date added'] >= last_hours]
             df
 
+            limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
 
-            @st.experimental_fragment
-            def limit_dataframe():
+            if limit==0:
+                st.info('Enter a value to limit the number of items.')
+            else:
+                df = df.head(limit)
                 df
-                limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
-
-                if limit==0:
-                    st.info('Enter a value to limit the number of items.')
-                else:
-                    df = df.head(limit)
-                    df
-            limit_dataframe()
 
             post_bluesky = st.button('Post items on Bluesky')
             if post_bluesky:
