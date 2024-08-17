@@ -340,12 +340,12 @@ else:
                     publication_date = row['Date published']  # Extract the publication date
                     link = row['Link to publication']
 
-                    post_text = f"{publication_type}: {title} (published {publication_date})\n\n{link}"
+                    post_text = f"New addition #intelstudies\n\n{publication_type}: {title} (published {publication_date})\n\n{link}"
 
                     if len(post_text) > 300:
                         max_title_length = 300 - len(f"{publication_type}: \n{link}") - len(f" (published {publication_date})")
                         truncated_title = truncate_text(title, max_title_length)
-                        post_text = f"{publication_type}: {truncated_title} (published {publication_date})\n{link}"
+                        post_text = f"New addition #intelstudies\n\n{publication_type}: {truncated_title} (published {publication_date})\n{link}"
 
                     parsed = parse_facets_and_embed(post_text, client)
                     
