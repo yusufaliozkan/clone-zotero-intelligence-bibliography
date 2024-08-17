@@ -279,21 +279,9 @@ else:
                             "url": m.group(1).decode("UTF-8"),
                         })
                     return spans
-                                    
-                def parse_hashtags(text: str) -> List[Dict]:
-                    hashtags = []
-                    for match in re.finditer(r"#\w+", text):
-                        hashtags.append({
-                            "start": match.start(),
-                            "end": match.end(),
-                            "tag": match.group(0)
-                        })
-                    return hashtags
 
                 def parse_facets(text: str) -> List[Dict]:
                     facets = []
-                    
-                    # Parse mentions
                     for m in parse_mentions(text):
                         resp = requests.get(
                             "https://bsky.social/xrpc/com.atproto.identity.resolveHandle",
@@ -309,8 +297,6 @@ else:
                             },
                             "features": [{"$type": "app.bsky.richtext.facet#mention", "did": did}],
                         })
-                    
-                    # Parse URLs
                     for u in parse_urls(text):
                         facets.append({
                             "index": {
@@ -324,22 +310,6 @@ else:
                                 }
                             ],
                         })
-                    
-                    # Parse hashtags
-                    for h in parse_hashtags(text):
-                        facets.append({
-                            "index": {
-                                "byteStart": h["start"],
-                                "byteEnd": h["end"],
-                            },
-                            "features": [
-                                {
-                                    "$type": "app.bsky.richtext.facet#link",  # Using the same type as a link for hashtag
-                                    "uri": f"https://bsky.social/search?q={h['tag']}",  # Link to a search for the hashtag
-                                }
-                            ],
-                        })
-                    
                     return facets
 
                 def parse_facets_and_embed(text: str, client) -> Dict:
@@ -370,12 +340,12 @@ else:
                     publication_date = row['Date published']  # Extract the publication date
                     link = row['Link to publication']
 
-                    post_text = f"New addition #intelstudies\n\n{publication_type}: {title} (published {publication_date})\n\n{link}"
+                    post_text = f"New addition\n\n{publication_type}: {title} (published {publication_date})\n\n{link}"
 
                     if len(post_text) > 300:
                         max_title_length = 300 - len(f"{publication_type}: \n{link}") - len(f" (published {publication_date})")
                         truncated_title = truncate_text(title, max_title_length)
-                        post_text = f"New addition #intelstudies\n\n{publication_type}: {truncated_title} (published {publication_date})\n{link}"
+                        post_text = f"New addition\n\n{publication_type}: {truncated_title} (published {publication_date})\n{link}"
 
                     parsed = parse_facets_and_embed(post_text, client)
                     
