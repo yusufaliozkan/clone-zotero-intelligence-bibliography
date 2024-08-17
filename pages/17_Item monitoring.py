@@ -286,7 +286,7 @@ else:
                         hashtags.append({
                             "start": match.start(),
                             "end": match.end(),
-                            "tag": match.group(0)
+                            "tag": match.group(0).lstrip('#')  # Remove the '#' for the link
                         })
                     return hashtags
 
