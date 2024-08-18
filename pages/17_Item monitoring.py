@@ -208,8 +208,9 @@ else:
             )
             df_db['Date published'] = df_db['Date published'].dt.strftime('%d-%m-%Y')
             df_db['Date published'] = df_db['Date published'].fillna('No date')
-
             name = st_keyup("Enter keywords to search in title", key='name', placeholder='Search keyword(s)', debounce=500)
+            if name:
+                df_db = df_db[df_db.Title.str.lower().str.contains(name.lower(), na=False)]
             df_db
 
             # limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
