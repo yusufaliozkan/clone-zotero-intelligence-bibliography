@@ -214,6 +214,9 @@ else:
             if name:
                 df_db = df_db[df_db.Title.str.lower().str.contains(name.lower(), na=False)]
             df_db = st.data_editor(df_db)
+            df_db = df_db[df_db['Include?']==True]
+            df_db = df_db.reset_index(drop=True)
+            df_db
 
             # limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
 
