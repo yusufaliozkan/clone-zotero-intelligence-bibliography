@@ -372,13 +372,14 @@ else:
                     title = row['Title']
                     publication_date = row['Date published']  # Extract the publication date
                     link = row['Link to publication']
+                    author_name = row['FirstName2']  # Extract the author name
 
-                    post_text = f"{header}{publication_type}: {title} (published {publication_date})\n\n{link}"
+                    post_text = f"{header}{publication_type}: {title} by {author_name} (published {publication_date})\n\n{link}"
 
                     if len(post_text) > 300:
-                        max_title_length = 300 - len(f"{publication_type}: \n{link}") - len(f" (published {publication_date})")
+                        max_title_length = 300 - len(f"{publication_type}: by {author_name}\n{link}") - len(f" (published {publication_date})")
                         truncated_title = truncate_text(title, max_title_length)
-                        post_text = f"{header}{publication_type}: {truncated_title} (published {publication_date})\n{link}"
+                        post_text = f"{header}{publication_type}: {truncated_title} by {author_name} (published {publication_date})\n{link}"
 
                     parsed = parse_facets_and_embed(post_text, client)
                     
