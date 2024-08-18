@@ -361,6 +361,7 @@ else:
                     }
 
                 def truncate_text(text: str, max_length: int) -> str:
+                    """Truncate text to fit within the max_length, considering full graphemes."""
                     if len(text) <= max_length:
                         return text
                     else:
