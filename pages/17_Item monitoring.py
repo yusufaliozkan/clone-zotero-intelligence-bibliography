@@ -229,6 +229,7 @@ else:
                 header ='Recently published\n\n'
             else:
                 header = st.text_input('Write a custom header')
+                header = f'{header}\n\n'
             # limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
 
             # if limit==0:
