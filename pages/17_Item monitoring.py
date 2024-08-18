@@ -216,7 +216,7 @@ else:
             df_db = st.data_editor(df_db)
             df_db = df_db[df_db['Include?']==True]
             df_db = df_db.reset_index(drop=True)
-            df_db
+            df = df_db.copy()
 
             item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Nothing'])
             if item_header=='New addition':
