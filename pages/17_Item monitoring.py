@@ -218,6 +218,13 @@ else:
             df_db = df_db.reset_index(drop=True)
             df_db
 
+            item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Nothing'])
+            if item_header=='New addition':
+                header='New addition\n\n'
+            elif item_header=='Recently published':
+                header ='Recently published\n\n'
+            else:
+                header=''
             # limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
 
             # if limit==0:
@@ -353,18 +360,18 @@ else:
                         return text[:max_length-3] + "..."  # Reserve space for the ellipsis
 
                 # Iterate through the dataframe and create posts with link cards
-                for index, row in df_db.iterrows():
+                for index, row in df.iterrows():
                     publication_type = row['Publication type']
                     title = row['Title']
                     publication_date = row['Date published']  # Extract the publication date
                     link = row['Link to publication']
 
-                    post_text = f"New addition\n\n{publication_type}: {title} (published {publication_date})\n\n{link}"
+                    post_text = f"{header}{publication_type}: {title} (published {publication_date})\n\n{link}"
 
                     if len(post_text) > 300:
                         max_title_length = 300 - len(f"{publication_type}: \n{link}") - len(f" (published {publication_date})")
                         truncated_title = truncate_text(title, max_title_length)
-                        post_text = f"New addition\n\n{publication_type}: {truncated_title} (published {publication_date})\n{link}"
+                        post_text = f"{header}{publication_type}: {truncated_title} (published {publication_date})\n{link}"
 
                     parsed = parse_facets_and_embed(post_text, client)
                     
