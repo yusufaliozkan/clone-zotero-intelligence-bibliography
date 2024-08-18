@@ -47,6 +47,7 @@ import os
 from bs4 import BeautifulSoup
 from grapheme import length as grapheme_length
 from typing import List, Dict
+from st_keyup import st_keyup
 
 
 st.set_page_config(layout = "wide", 
