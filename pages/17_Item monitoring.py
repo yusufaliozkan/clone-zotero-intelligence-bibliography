@@ -253,10 +253,16 @@ else:
                     return metadata
 
                 def upload_image_to_bluesky(client, image_url: str) -> str:
-                    response = requests.get(image_url)
-                    # Assuming the client.upload_blob only needs the image content
-                    image_blob = client.upload_blob(response.content)
-                    return image_blob['blob']  # Assuming blob is the key where the blob reference is stored
+                    try:
+                        response = requests.get(image_url)
+                        image_blob = client.upload_blob(response.content)
+                        return image_blob['blob']  # Assuming `blob` is the key where the blob reference is stored
+                    except requests.exceptions.RequestException as e:
+                        print(f"Error downloading image: {e}")
+                        return None
+                    except Exception as e:
+                        print(f"Error uploading image to Bluesky: {e}")
+                        return None
 
 
                 def create_link_card_embed(client, url: str) -> Dict:
