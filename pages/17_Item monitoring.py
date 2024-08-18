@@ -215,6 +215,7 @@ else:
             if name:
                 df_db = df_db[df_db.Title.str.lower().str.contains(name.lower(), na=False)]
             df_db = df_db[['Include?', 'Title', 'Publication type', 'Link to publication', 'Zotero link', 'Date added', 'Date published', 'FirstName2']]
+            df_db = df_db.rename(columns={'FirstName2':'Authors'})
             df_db = st.data_editor(df_db)
             df_db = df_db[df_db['Include?']==True]
             df_db = df_db.reset_index(drop=True)
@@ -375,7 +376,7 @@ else:
                     title = row['Title']
                     publication_date = row['Date published']
                     link = row['Link to publication']
-                    author_name = row['FirstName2']  # Extract the author name
+                    author_name = row['Authors']  # Extract the author name
 
                     post_text = f"{header}{publication_type}: {title} by {author_name} (published {publication_date})\n\n{link}"
 
