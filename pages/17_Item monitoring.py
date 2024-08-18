@@ -219,7 +219,7 @@ else:
             df_db = st.data_editor(df_db)
             df_db = df_db[df_db['Include?']==True]
             df_db = df_db.reset_index(drop=True)
-            df = df_db.copy()
+            df = pd.concat([df, df_db])
             df
 
             item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Nothing'])
