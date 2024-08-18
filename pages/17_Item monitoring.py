@@ -180,8 +180,8 @@ else:
             # df['Date added'] = df['Date added'].dt.strftime('%d-%m-%Y')
             df['Date added'] = pd.to_datetime(df['Date added'], errors='coerce', utc=True)
 
-            df['Date modified'] = pd.to_datetime(df['Date modified'], errors='coerce')
-            df['Date modified'] = df['Date modified'].dt.strftime('%d/%m/%Y, %H:%M')
+            # df['Date modified'] = pd.to_datetime(df['Date modified'], errors='coerce')
+            # df['Date modified'] = df['Date modified'].dt.strftime('%d/%m/%Y, %H:%M')
 
             # today = datetime.now(pytz.UTC).date()
             # days_ago = today - timedelta(days=3)
@@ -214,7 +214,7 @@ else:
             name = st_keyup("Enter keywords to search in title", key='name', placeholder='Search keyword(s)', debounce=500)
             if name:
                 df_db = df_db[df_db.Title.str.lower().str.contains(name.lower(), na=False)]
-            df_db = df_db[['Include?', 'Title', 'Publication type', 'Link to publication', 'Zotero link', 'Date added', 'Date published', 'Date modified', 'FirstName2']]
+            df_db = df_db[['Include?', 'Title', 'Publication type', 'Link to publication', 'Zotero link', 'Date added', 'Date published', 'FirstName2']]
             df_db = st.data_editor(df_db)
             df_db = df_db[df_db['Include?']==True]
             df_db = df_db.reset_index(drop=True)
