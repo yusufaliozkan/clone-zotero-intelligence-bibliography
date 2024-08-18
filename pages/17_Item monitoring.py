@@ -205,7 +205,7 @@ else:
             df_db['Date published'] = df_db['Date published'].dt.strftime('%Y-%m-%d')
             df_db['Date published'] = df_db['Date published'].fillna('')
             df_db = df_db.sort_values(by=['Date published'], ascending=False)
-            df_db = df_db.drop(columns=['Unnamed: 0'], inplace=True)
+            df_db = df_db.drop(columns=['Unnamed: 0'])
             df_db
             # df_db = df_db.reset_index(drop=True)
             df_db['Include?'] = False
