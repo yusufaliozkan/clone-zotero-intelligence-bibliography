@@ -214,6 +214,7 @@ else:
             name = st_keyup("Enter keywords to search in title", key='name', placeholder='Search keyword(s)', debounce=500)
             if name:
                 df_db = df_db[df_db.Title.str.lower().str.contains(name.lower(), na=False)]
+            df_db = df_db[['Include?', 'Title', 'Publication type', 'Link to publication', 'Zotero link', 'Date added', 'Date published', 'Date modified', 'FirstName2']]
             df_db = st.data_editor(df_db)
             df_db = df_db[df_db['Include?']==True]
             df_db = df_db.reset_index(drop=True)
