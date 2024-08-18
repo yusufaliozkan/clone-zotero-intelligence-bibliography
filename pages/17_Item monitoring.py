@@ -353,7 +353,7 @@ else:
                         return text[:max_length-3] + "..."  # Reserve space for the ellipsis
 
                 # Iterate through the dataframe and create posts with link cards
-                for index, row in df.iterrows():
+                for index, row in df_db.iterrows():
                     publication_type = row['Publication type']
                     title = row['Title']
                     publication_date = row['Date published']  # Extract the publication date
