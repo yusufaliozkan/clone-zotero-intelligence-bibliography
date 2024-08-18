@@ -205,6 +205,12 @@ else:
             df_db['Date published'] = df_db['Date published'].dt.strftime('%Y-%m-%d')
             df_db['Date published'] = df_db['Date published'].fillna('')
             df_db = df_db.sort_values(by=['Date published'], ascending=False)
+            df_db = df_db.drop(columns=['Unnamed: 0'], inplace=True)
+            df_db = df_db.reset_index(drop=True)
+            df_db['Include?'] = False
+            last_column = df_db.columns[-1]
+            df_db = df_db[[last_column] + list(df_db.columns[:-1])]
+            df_db = st.data_editor(df_db)
             name = st_keyup("Enter keywords to search in title", key='name', placeholder='Search keyword(s)', debounce=500)
             if name:
                 df_db = df_db[df_db.Title.str.lower().str.contains(name.lower(), na=False)]
