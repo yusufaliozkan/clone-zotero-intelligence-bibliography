@@ -222,13 +222,13 @@ else:
             df = df.reset_index(drop=True)
             df
 
-            item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Nothing'])
+            item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'])
             if item_header=='New addition':
                 header='New addition\n\n'
             elif item_header=='Recently published':
                 header ='Recently published\n\n'
             else:
-                header=''
+                header = st.text_input('Write a custom header')
             # limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
 
             # if limit==0:
