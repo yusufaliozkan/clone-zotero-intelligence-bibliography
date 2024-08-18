@@ -373,8 +373,9 @@ else:
                     title = row['Title']
                     publication_date = row['Date published']
                     link = row['Link to publication']
+                    author_name = row['FirstName2']  # Extract the author name
 
-                    post_text = f"{header}{publication_type}: {title} (published {publication_date})\n\n{link}"
+                    post_text = f"{header}{publication_type}: {title} by {author_name} (published {publication_date})\n\n{link}"
 
                     if len(post_text) > 300:
                         max_title_length = 300 - len(f"{publication_type}: \n{link}") - len(f" (published {publication_date})")
