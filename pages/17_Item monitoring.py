@@ -204,6 +204,7 @@ else:
             df_db['Date published'] = pd.to_datetime(df_db['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
             df_db['Date published'] = df_db['Date published'].dt.strftime('%Y-%m-%d')
             df_db['Date published'] = df_db['Date published'].fillna('')
+            df_db = df_db.sort_values(by=['Date published'], ascending=False)
             name = st_keyup("Enter keywords to search in title", key='name', placeholder='Search keyword(s)', debounce=500)
             if name:
                 df_db = df_db[df_db.Title.str.lower().str.contains(name.lower(), na=False)]
