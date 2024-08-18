@@ -202,7 +202,7 @@ else:
 
             df_db = pd.read_csv('all_items.csv')
             df_db['Date published'] = pd.to_datetime(df_db['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
-            df_db['Date published'] = df_db['Date published'].dt.strftime('%Y-%m-%d')
+            df_db['Date published'] = df_db['Date published'].dt.strftime('%d-%m-%Y')
             df_db['Date published'] = df_db['Date published'].fillna('')
             df_db = df_db.sort_values(by=['Date published'], ascending=False)
             df_db = df_db.drop(columns=['Unnamed: 0'])
