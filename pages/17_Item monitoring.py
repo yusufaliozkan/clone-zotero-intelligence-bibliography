@@ -220,6 +220,7 @@ else:
             df_db = df_db[df_db['Include?']==True]
             df_db = df_db.reset_index(drop=True)
             df = pd.concat([df, df_db])
+            df = df.reset_index(drop=True)
             df
 
             item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Nothing'])
