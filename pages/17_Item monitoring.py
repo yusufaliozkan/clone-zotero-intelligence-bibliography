@@ -199,6 +199,9 @@ else:
             df = df.reset_index(drop=True)
             df
 
+            df_db = pd.read_csv('all_items.csv')
+            df_db
+
             # limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
 
             # if limit==0:
