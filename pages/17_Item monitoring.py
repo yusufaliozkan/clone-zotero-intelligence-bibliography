@@ -200,6 +200,9 @@ else:
             df
 
             df_db = pd.read_csv('all_items.csv')
+            df_db['Date published'] = df_db['Date published'].map(lambda x: x.strftime('%d/%m/%Y') if x else 'No date')
+            df_db['Date added'] = pd.to_datetime(df_db['Date added'], errors='coerce')
+            df_db['Date added'] = df_db['Date added'].dt.strftime('%d-%m-%Y')
             df_db
 
             # limit = st.number_input('Limit to:', min_value=0, max_value=100, value=0, step=1, format="%d")
