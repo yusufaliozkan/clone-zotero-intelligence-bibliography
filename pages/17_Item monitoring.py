@@ -440,7 +440,7 @@ else:
             df_forms = df_forms.reset_index(drop=True)
             df_forms
 
-            post_bluesky = st.button('Post items on Bluesky')
+            post_events_bluesky = st.button('Post events on Bluesky')
             if post_bluesky:
                     
                 for index, row in df_forms.iterrows():
