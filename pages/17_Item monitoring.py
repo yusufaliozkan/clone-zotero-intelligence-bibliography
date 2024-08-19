@@ -469,6 +469,13 @@ else:
             df_cfp['deadline'] = df_cfp['deadline'].dt.strftime('%Y-%m-%d')
             df_cfp['deadline'] = pd.to_datetime(df_cfp['deadline'], dayfirst = True).dt.strftime('%Y-%m-%d')
             df_cfp = df_cfp[df_cfp['deadline'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
+            df_cfp = df_cfp.reset_index(drop=True)
+            df_cfp['Include?'] = False
+            last_column = df_cfp.columns[-1]
+            df_cfp = df_cfp[[last_column] + list(df_cfp.columns[:-1])]
+            df_cfp.sort_values(by='deadline', ascending=True, inplace=True)
+            df_cfp['venue'] = 'Call for Papers'
+            df_cfp = st.data_editor(df_cfp)
             df_cfp
 
             post_events_bluesky = st.button('Post events on Bluesky')
