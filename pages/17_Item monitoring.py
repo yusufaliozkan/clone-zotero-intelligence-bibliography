@@ -464,6 +464,9 @@ else:
             df_con = df_con.rename(columns={'conference_name':'event_name'})
             df_con
 
+            df_cfp = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=135096406') 
+            df_cfp
+
             post_events_bluesky = st.button('Post events on Bluesky')
             if post_events_bluesky:
                 for index, row in df_forms.iterrows():
