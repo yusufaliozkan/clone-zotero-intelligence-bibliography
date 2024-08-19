@@ -455,6 +455,7 @@ else:
             df_con['Include?'] = False
             last_column = df_con.columns[-1]
             df_con = df_con[[last_column] + list(df_con.columns[:-1])]
+            df_con.sort_values(by='date_new', ascending=True, inplace=True)
             df_con = st.data_editor(df_con)
 
             df_con = df_con[df_con['Include?']==True]
