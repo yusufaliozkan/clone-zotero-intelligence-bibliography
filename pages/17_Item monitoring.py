@@ -492,12 +492,12 @@ else:
                         link = row['link']
                         venue = row['venue']  # Extract the author name
 
-                        post_text = f"{venue}\n\n {event_name} by {organiser} (on {event_date})\n\n{link}"
+                        post_text = f"{venue}\n\n{event_name} by {organiser} (on {event_date})\n\n{link}"
 
                         if len(post_text) > 300:
                             max_title_length = 300 - len(f"{venue}: \n{link}") - len(f" (on {event_date})")
                             truncated_title = truncate_text(event_name, max_title_length)
-                            post_text = f"{venue}\n\n {event_name} (on {event_date})\n{link}"
+                            post_text = f"{venue}\n\n{event_name} (on {event_date})\n{link}"
 
                         # Make sure the entire post_text fits within 300 graphemes
                         post_text = truncate_text(post_text, 300)
