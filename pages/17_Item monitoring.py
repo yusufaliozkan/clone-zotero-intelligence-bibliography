@@ -238,6 +238,7 @@ else:
             df_forms['Include?'] = False
             last_column = df_forms.columns[-1]
             df_forms = df_forms[[last_column] + list(df_forms.columns[:-1])]
+            df = st.data_editor(df_forms)
             
             item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Event', 'Custom'])
             if item_header=='New addition':
@@ -245,7 +246,8 @@ else:
             elif item_header=='Recently published':
                 header ='Recently published\n\n'
             elif item_header=='Event':
-                df = st.data_editor(df_forms)
+                df_forms = df_Forms[df_forms['Include?']==True]
+                df = df_forms.copy()
                 df
 
             else:
