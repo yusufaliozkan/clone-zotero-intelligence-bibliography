@@ -423,101 +423,103 @@ else:
                             print(f"Failed to post: {e}")
             post_pubs()
         elif admin_task=='Post events':
-            st.subheader('Post events on Bluesky', anchor=False)
-            conn = st.connection("gsheets", type=GSheetsConnection)
-            df_forms = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
-            df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
-            df_forms['date'] = pd.to_datetime(df_forms['date'])
-            df_forms['date_new'] = df_forms['date'].dt.strftime('%Y-%m-%d')
-            df_forms['month'] = df_forms['date'].dt.strftime('%m')
-            df_forms['year'] = df_forms['date'].dt.strftime('%Y')
-            df_forms['month_year'] = df_forms['date'].dt.strftime('%Y-%m')
-            df_forms.sort_values(by='date', ascending=True, inplace=True)
-            df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
-            df_forms = df_forms[df_forms['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
-            df_forms = df_forms.reset_index(drop=True)
-            df_forms['Include?'] = False
-            last_column = df_forms.columns[-1]
-            df_forms = df_forms[[last_column] + list(df_forms.columns[:-1])]
-            df_forms = st.data_editor(df_forms)
-    
-            df_forms = df_forms[df_forms['Include?']==True]
-            df_forms = df_forms.reset_index(drop=True)
-            df_forms = df_forms[['event_name', 'organiser', 'link', 'venue', 'date_new']]
-            df_forms
+            @st.experimental_fragment
+            def post_events():
+                st.subheader('Post events on Bluesky', anchor=False)
+                conn = st.connection("gsheets", type=GSheetsConnection)
+                df_forms = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
+                df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
+                df_forms['date'] = pd.to_datetime(df_forms['date'])
+                df_forms['date_new'] = df_forms['date'].dt.strftime('%Y-%m-%d')
+                df_forms['month'] = df_forms['date'].dt.strftime('%m')
+                df_forms['year'] = df_forms['date'].dt.strftime('%Y')
+                df_forms['month_year'] = df_forms['date'].dt.strftime('%Y-%m')
+                df_forms.sort_values(by='date', ascending=True, inplace=True)
+                df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
+                df_forms = df_forms[df_forms['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
+                df_forms = df_forms.reset_index(drop=True)
+                df_forms['Include?'] = False
+                last_column = df_forms.columns[-1]
+                df_forms = df_forms[[last_column] + list(df_forms.columns[:-1])]
+                df_forms = st.data_editor(df_forms)
+        
+                df_forms = df_forms[df_forms['Include?']==True]
+                df_forms = df_forms.reset_index(drop=True)
+                df_forms = df_forms[['event_name', 'organiser', 'link', 'venue', 'date_new']]
+                df_forms
 
-            df_con = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=939232836')
-            df_con['date'] = pd.to_datetime(df_con['date'])
-            df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
-            df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%Y-%m-%d')
-            df_con = df_con[df_con['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
-            df_con = df_con.reset_index(drop=True)
-            df_con['Include?'] = False
-            last_column = df_con.columns[-1]
-            df_con = df_con[[last_column] + list(df_con.columns[:-1])]
-            df_con.sort_values(by='date_new', ascending=True, inplace=True)
-            df_con = st.data_editor(df_con)
+                df_con = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=939232836')
+                df_con['date'] = pd.to_datetime(df_con['date'])
+                df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
+                df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%Y-%m-%d')
+                df_con = df_con[df_con['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
+                df_con = df_con.reset_index(drop=True)
+                df_con['Include?'] = False
+                last_column = df_con.columns[-1]
+                df_con = df_con[[last_column] + list(df_con.columns[:-1])]
+                df_con.sort_values(by='date_new', ascending=True, inplace=True)
+                df_con = st.data_editor(df_con)
 
-            df_con = df_con[df_con['Include?']==True]
-            df_con = df_con.reset_index(drop=True)
-            df_con = df_con[['conference_name', 'organiser', 'link', 'venue', 'date_new']]
-            df_con = df_con.rename(columns={'conference_name':'event_name'})
+                df_con = df_con[df_con['Include?']==True]
+                df_con = df_con.reset_index(drop=True)
+                df_con = df_con[['conference_name', 'organiser', 'link', 'venue', 'date_new']]
+                df_con = df_con.rename(columns={'conference_name':'event_name'})
 
-            df_cfp = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=135096406') 
-            df_cfp['deadline'] = pd.to_datetime(df_cfp['deadline'])
-            df_cfp['deadline'] = df_cfp['deadline'].dt.strftime('%Y-%m-%d')
-            df_cfp['deadline'] = pd.to_datetime(df_cfp['deadline'], dayfirst = True).dt.strftime('%Y-%m-%d')
-            df_cfp = df_cfp[df_cfp['deadline'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
-            df_cfp = df_cfp.reset_index(drop=True)
-            df_cfp['Include?'] = False
-            last_column = df_cfp.columns[-1]
-            df_cfp = df_cfp[[last_column] + list(df_cfp.columns[:-1])]
-            df_cfp.sort_values(by='deadline', ascending=True, inplace=True)
-            df_cfp['venue'] = 'Call for Papers'
-            df_cfp = df_cfp.rename(columns={'name':'event_name', 'deadline':'date_new'})
-            df_cfp = df_cfp[['event_name', 'organiser', 'link', 'venue', 'date_new']]
-            df_cfp = st.data_editor(df_cfp)
-            df_cfp = df_cfp[df_cfp['Include?']==True]
-            df_cfp
+                df_cfp = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=135096406') 
+                df_cfp['deadline'] = pd.to_datetime(df_cfp['deadline'])
+                df_cfp['deadline'] = df_cfp['deadline'].dt.strftime('%Y-%m-%d')
+                df_cfp['deadline'] = pd.to_datetime(df_cfp['deadline'], dayfirst = True).dt.strftime('%Y-%m-%d')
+                df_cfp = df_cfp[df_cfp['deadline'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
+                df_cfp = df_cfp.reset_index(drop=True)
+                df_cfp['Include?'] = False
+                last_column = df_cfp.columns[-1]
+                df_cfp = df_cfp[[last_column] + list(df_cfp.columns[:-1])]
+                df_cfp.sort_values(by='deadline', ascending=True, inplace=True)
+                df_cfp['venue'] = 'Call for Papers'
+                df_cfp = df_cfp.rename(columns={'name':'event_name', 'deadline':'date_new'})
+                df_cfp = df_cfp[['event_name', 'organiser', 'link', 'venue', 'date_new']]
+                df_cfp = st.data_editor(df_cfp)
+                df_cfp = df_cfp[df_cfp['Include?']==True]
+                df_cfp
 
-            post_events_bluesky = st.button('Post events on Bluesky')
-            if post_events_bluesky:
-                for index, row in df_forms.iterrows():
-                    event_name = row['event_name']
-                    organiser = row['organiser']
-                    event_date = row['date_new']
-                    link = row['link']
-                    venue = row['venue']  # Extract the author name
+                post_events_bluesky = st.button('Post events on Bluesky')
+                if post_events_bluesky:
+                    for index, row in df_forms.iterrows():
+                        event_name = row['event_name']
+                        organiser = row['organiser']
+                        event_date = row['date_new']
+                        link = row['link']
+                        venue = row['venue']  # Extract the author name
 
-                    post_text = f"Event\n\n{venue}: {event_name} by {organiser} (on {event_date})\n\n{link}"
+                        post_text = f"Event\n\n{venue}: {event_name} by {organiser} (on {event_date})\n\n{link}"
 
-                    if len(post_text) > 300:
-                        max_title_length = 300 - len(f"{venue}: \n{link}") - len(f" (on {event_date})")
-                        truncated_title = truncate_text(event_name, max_title_length)
-                        post_text = f"Event\n\n{venue}: {event_name} (on {event_date})\n{link}"
+                        if len(post_text) > 300:
+                            max_title_length = 300 - len(f"{venue}: \n{link}") - len(f" (on {event_date})")
+                            truncated_title = truncate_text(event_name, max_title_length)
+                            post_text = f"Event\n\n{venue}: {event_name} (on {event_date})\n{link}"
 
-                    # Make sure the entire post_text fits within 300 graphemes
-                    post_text = truncate_text(post_text, 300)
+                        # Make sure the entire post_text fits within 300 graphemes
+                        post_text = truncate_text(post_text, 300)
 
-                    parsed = parse_facets_and_embed(post_text, client)
-                    
-                    post_payload = {
-                        "$type": "app.bsky.feed.post",
-                        "text": post_text,
-                        "facets": parsed['facets'],
-                        "embed": parsed['embed'],  # Include the embed if present
-                        "createdAt": pd.Timestamp.utcnow().isoformat() + "Z"
-                    }
+                        parsed = parse_facets_and_embed(post_text, client)
+                        
+                        post_payload = {
+                            "$type": "app.bsky.feed.post",
+                            "text": post_text,
+                            "facets": parsed['facets'],
+                            "embed": parsed['embed'],  # Include the embed if present
+                            "createdAt": pd.Timestamp.utcnow().isoformat() + "Z"
+                        }
 
-                    try:
-                        post = client.send_post(
-                            text=post_payload["text"],  
-                            facets=post_payload["facets"],  
-                            embed=post_payload.get("embed"),  # Pass the embed if it exists
-                        )
-                    except Exception as e:
-                        print(f"Failed to post: {e}")
-
+                        try:
+                            post = client.send_post(
+                                text=post_payload["text"],  
+                                facets=post_payload["facets"],  
+                                embed=post_payload.get("embed"),  # Pass the embed if it exists
+                            )
+                        except Exception as e:
+                            print(f"Failed to post: {e}")
+            post_events()
         else:
             st.subheader('Item monitoring section', anchor=False)
             item_monitoring = st.button("Item monitoring")
