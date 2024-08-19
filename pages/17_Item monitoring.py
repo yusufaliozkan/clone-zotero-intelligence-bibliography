@@ -475,7 +475,7 @@ else:
             df_cfp.sort_values(by='deadline', ascending=True, inplace=True)
             df_cfp['venue'] = 'Call for Papers'
             df_cfp = df_cfp.rename(columns={'event_name':'name', 'deadline':'date_new'})
-            df_cfp = df_cfp[['conference_name', 'organiser', 'link', 'venue', 'date_new']]
+            df_cfp = df_cfp[['event_name', 'organiser', 'link', 'venue', 'date_new']]
             df_cfp = st.data_editor(df_cfp)
 
 
