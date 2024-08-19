@@ -465,6 +465,10 @@ else:
             df_con
 
             df_cfp = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=135096406') 
+            df_cfp['deadline'] = pd.to_datetime(df_cfp['deadline'])
+            df_cfp['deadline'] = df_cfp['deadline'].dt.strftime('%Y-%m-%d')
+            df_cfp['deadline'] = pd.to_datetime(df_cfp['deadline'], dayfirst = True).dt.strftime('%Y-%m-%d')
+            df_cfp = df_cfp[df_cfp['deadline'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
             df_cfp
 
             post_events_bluesky = st.button('Post events on Bluesky')
