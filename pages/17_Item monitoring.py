@@ -446,19 +446,19 @@ else:
             df_forms = df_forms[['event_name', 'organiser', 'link', 'venue', 'date_new']]
             df_forms
 
-            df_con = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=939232836')
-            df_con['date'] = pd.to_datetime(df_con['date'])
-            df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
-            df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%d/%m/%Y')
-            df_con['date_new_end'] = pd.to_datetime(df_con['date_end'], dayfirst = True).dt.strftime('%d/%m/%Y')
-            df_con.sort_values(by='date', ascending = True, inplace=True)
-            df_con['details'] = df_con['details'].fillna('No details')
-            df_con['location'] = df_con['location'].fillna('No details')
-            df_con = df_con.fillna('')
-            df_con['date_end'] = pd.to_datetime(df_con['date'], dayfirst=True) 
-            filter = df_con['date_end']>=pd.to_datetime(today)
-            df_con = df_con.loc[filter]
-            df_con
+            # df_con = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=939232836')
+            # df_con['date'] = pd.to_datetime(df_con['date'])
+            # df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
+            # df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%d/%m/%Y')
+            # df_con['date_new_end'] = pd.to_datetime(df_con['date_end'], dayfirst = True).dt.strftime('%d/%m/%Y')
+            # df_con.sort_values(by='date', ascending = True, inplace=True)
+            # df_con['details'] = df_con['details'].fillna('No details')
+            # df_con['location'] = df_con['location'].fillna('No details')
+            # df_con = df_con.fillna('')
+            # df_con['date_end'] = pd.to_datetime(df_con['date'], dayfirst=True) 
+            # filter = df_con['date_end']>=pd.to_datetime(today)
+            # df_con = df_con.loc[filter]
+            # df_con
 
             post_events_bluesky = st.button('Post events on Bluesky')
             if post_events_bluesky:
