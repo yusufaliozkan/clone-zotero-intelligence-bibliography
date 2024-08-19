@@ -477,7 +477,7 @@ else:
             st.write('event')
         
         else:
-            st.subheader('Monitoring section')
+            st.subheader('Monitoring section', anchor=False)
             item_monitoring = st.button("Item monitoring")
             if item_monitoring:
                 st.write('The following items are not in the library yet. Book reviews will not be included!')
