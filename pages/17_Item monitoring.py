@@ -442,6 +442,9 @@ else:
 
             post_events_bluesky = st.button('Post events on Bluesky')
             if post_events_bluesky:
+                client = Client(base_url='https://bsky.social')
+                bluesky_password = st.secrets["bluesky_password"]
+                client.login('intelbase.bsky.social', bluesky_password)
                 def fetch_link_metadata(url: str) -> Dict:
                     response = requests.get(url)
                     soup = BeautifulSoup(response.text, 'html.parser')
