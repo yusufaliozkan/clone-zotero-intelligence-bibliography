@@ -462,7 +462,6 @@ else:
             df_con = df_con.reset_index(drop=True)
             df_con = df_con[['conference_name', 'organiser', 'link', 'venue', 'date_new']]
             df_con = df_con.rename(columns={'conference_name':'event_name'})
-            df_con
 
             df_cfp = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=135096406') 
             df_cfp['deadline'] = pd.to_datetime(df_cfp['deadline'])
@@ -475,10 +474,10 @@ else:
             df_cfp = df_cfp[[last_column] + list(df_cfp.columns[:-1])]
             df_cfp.sort_values(by='deadline', ascending=True, inplace=True)
             df_cfp['venue'] = 'Call for Papers'
-            df_cfp = df_cfp.rename(columns={'name':'event_name', 'deadline':'date_new'})
+            df_cfp = df_cfp.rename(columns={'event_name':'name', 'deadline':'date_new'})
             df_cfp = df_cfp[['conference_name', 'organiser', 'link', 'venue', 'date_new']]
             df_cfp = st.data_editor(df_cfp)
-            df_cfp
+
 
             post_events_bluesky = st.button('Post events on Bluesky')
             if post_events_bluesky:
