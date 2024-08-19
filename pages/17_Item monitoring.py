@@ -75,8 +75,9 @@ else:
     if password_input == st.secrets['item_monitoring_password']:
         st.success('Wellcome to the admin dashboard')
 
-        @st.experimental_fragment
-        def admin_dashboard():
+        admin_task = st.radio('Select an option', ['Item monitoring', 'Post publications', 'Post events'])
+
+        if admin_task=='Post publications':
 
             client = Client(base_url='https://bsky.social')
             bluesky_password = st.secrets["bluesky_password"]
@@ -471,7 +472,7 @@ else:
                             )
                         except Exception as e:
                             print(f"Failed to post: {e}")
-
+        else:
             ## ITEMS MONITORING
             item_monitoring = st.button("Item monitoring")
             if item_monitoring:
@@ -816,8 +817,6 @@ else:
                     df_not = df_not.reset_index(drop=True)
                     df_not
 
-                
-        admin_dashboard()
     else:
         st.error('Incorrect passcode')
 st.write('---')
