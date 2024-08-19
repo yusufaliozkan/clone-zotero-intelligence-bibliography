@@ -478,7 +478,8 @@ else:
         
         else:
             ## ITEMS MONITORING
-            # item_monitoring = st.button("Item monitoring")
+            item_monitoring = st.button("Item monitoring")
+            st.write('test')
             if item_monitoring:
                 st.subheader('Monitoring section')
                 st.write('The following items are not in the library yet. Book reviews will not be included!')
