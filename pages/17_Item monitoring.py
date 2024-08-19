@@ -443,6 +443,7 @@ else:
     
             df_forms = df_forms[df_forms['Include?']==True]
             df_forms = df_forms.reset_index(drop=True)
+            df_forms = df_forms[['event_name', 'organiser', 'link', 'venue', 'date_new']]
             df_forms
 
             df_con = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=939232836')
