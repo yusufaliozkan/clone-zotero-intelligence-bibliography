@@ -473,13 +473,12 @@ else:
                         except Exception as e:
                             print(f"Failed to post: {e}")
         
-        if admin_task=='Post events':
+        elif admin_task=='Post events':
             st.write('event')
         
         else:
             ## ITEMS MONITORING
             item_monitoring = st.button("Item monitoring")
-            st.write('test')
             if item_monitoring:
                 st.subheader('Monitoring section')
                 st.write('The following items are not in the library yet. Book reviews will not be included!')
