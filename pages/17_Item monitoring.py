@@ -48,6 +48,7 @@ from bs4 import BeautifulSoup
 from grapheme import length as grapheme_length
 from typing import List, Dict
 from st_keyup import st_keyup
+from streamlit_gsheets import GSheetsConnection
 
 
 st.set_page_config(layout = "wide", 
