@@ -226,6 +226,13 @@ else:
             conn = st.connection("gsheets", type=GSheetsConnection)
             df_forms = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
             df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
+            df_forms['date'] = pd.to_datetime(df_forms['date'])
+            df_forms['date_new'] = df_forms['date'].dt.strftime('%Y-%m-%d')
+            df_forms['month'] = df_forms['date'].dt.strftime('%m')
+            df_forms['year'] = df_forms['date'].dt.strftime('%Y')
+            df_forms['month_year'] = df_forms['date'].dt.strftime('%Y-%m')
+            df_forms.sort_values(by='date', ascending=True, inplace=True)
+            df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
             df_forms
 
             item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'])
