@@ -233,7 +233,7 @@ else:
             df_forms['month_year'] = df_forms['date'].dt.strftime('%Y-%m')
             df_forms.sort_values(by='date', ascending=True, inplace=True)
             df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
-            df_forms = df_forms[df_forms['date_new'] <= pd.to_datetime('today')]
+            df_forms = df_forms[df_forms['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
             df_forms
 
             item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'])
