@@ -246,7 +246,7 @@ else:
             elif item_header=='Recently published':
                 header ='Recently published\n\n'
             elif item_header=='Event':
-                df_forms = df_Forms[df_forms['Include?']==True]
+                df_forms = df_forms[df_forms['Include?']==True]
                 df = df_forms.copy()
                 df = df.reset_index(drop=True)
                 df
