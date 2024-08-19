@@ -441,7 +441,7 @@ else:
             df_forms
 
             post_events_bluesky = st.button('Post events on Bluesky')
-            if post_bluesky:
+            if post_events_bluesky:
                     
                 for index, row in df_forms.iterrows():
                     event_name = row['event_name']
