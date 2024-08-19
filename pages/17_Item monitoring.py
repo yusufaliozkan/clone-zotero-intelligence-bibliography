@@ -78,6 +78,7 @@ else:
         admin_task = st.radio('Select an option', ['Item monitoring', 'Post publications', 'Post events'])
 
         if admin_task=='Post publications':
+            st.subheader('Post publications on Bluesky', anchor=False)
 
             client = Client(base_url='https://bsky.social')
             bluesky_password = st.secrets["bluesky_password"]
@@ -225,33 +226,12 @@ else:
             df = pd.concat([df, df_db])
             df = df.reset_index(drop=True)
             df
-
-            conn = st.connection("gsheets", type=GSheetsConnection)
-            df_forms = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
-            df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
-            df_forms['date'] = pd.to_datetime(df_forms['date'])
-            df_forms['date_new'] = df_forms['date'].dt.strftime('%Y-%m-%d')
-            df_forms['month'] = df_forms['date'].dt.strftime('%m')
-            df_forms['year'] = df_forms['date'].dt.strftime('%Y')
-            df_forms['month_year'] = df_forms['date'].dt.strftime('%Y-%m')
-            df_forms.sort_values(by='date', ascending=True, inplace=True)
-            df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
-            df_forms = df_forms[df_forms['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
-            df_forms = df_forms.reset_index(drop=True)
-            df_forms['Include?'] = False
-            last_column = df_forms.columns[-1]
-            df_forms = df_forms[[last_column] + list(df_forms.columns[:-1])]
-            df_forms = st.data_editor(df_forms)
             
-            item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Event', 'Custom'])
+            item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'])
             if item_header=='New addition':
                 header='New addition\n\n'
             elif item_header=='Recently published':
                 header ='Recently published\n\n'
-            elif item_header=='Event':
-                df_forms = df_forms[df_forms['Include?']==True]
-                df_forms = df_forms.reset_index(drop=True)
-                df_forms
             else:
                 header = st.text_input('Write a custom header')
                 if not header:
@@ -400,84 +380,107 @@ else:
                         return text[:max_length-3] + "..."  # Reserve space for the ellipsis
 
                 # Iterate through the dataframe and create posts with link cards
-                if item_header=='Event':
-                    for index, row in df_forms.iterrows():
-                        event_name = row['event_name']
-                        organiser = row['organiser']
-                        event_date = row['date_new']
-                        link = row['link']
-                        venue = row['venue']  # Extract the author name
 
-                        post_text = f"Event\n\n{venue}: {event_name} by {organiser} (on {event_date})\n\n{link}"
+                for index, row in df.iterrows():
+                    publication_type = row['Publication type']
+                    title = row['Title']
+                    publication_date = row['Date published']
+                    link = row['Link to publication']
+                    author_name = row['Authors']  # Extract the author name
 
-                        if len(post_text) > 300:
-                            max_title_length = 300 - len(f"{venue}: \n{link}") - len(f" (on {event_date})")
-                            truncated_title = truncate_text(event_name, max_title_length)
-                            post_text = f"Event\n\n{venue}: {event_name} (on {event_date})\n{link}"
+                    post_text = f"{header}{publication_type}: {title} by {author_name} (published {publication_date})\n\n{link}"
 
-                        # Make sure the entire post_text fits within 300 graphemes
-                        post_text = truncate_text(post_text, 300)
+                    if len(post_text) > 300:
+                        max_title_length = 300 - len(f"{publication_type}: \n{link}") - len(f" (published {publication_date})")
+                        truncated_title = truncate_text(title, max_title_length)
+                        post_text = f"{header}{publication_type}: {truncated_title} (published {publication_date})\n{link}"
 
-                        parsed = parse_facets_and_embed(post_text, client)
-                        
-                        post_payload = {
-                            "$type": "app.bsky.feed.post",
-                            "text": post_text,
-                            "facets": parsed['facets'],
-                            "embed": parsed['embed'],  # Include the embed if present
-                            "createdAt": pd.Timestamp.utcnow().isoformat() + "Z"
-                        }
+                    # Make sure the entire post_text fits within 300 graphemes
+                    post_text = truncate_text(post_text, 300)
 
-                        try:
-                            post = client.send_post(
-                                text=post_payload["text"],  
-                                facets=post_payload["facets"],  
-                                embed=post_payload.get("embed"),  # Pass the embed if it exists
-                            )
-                        except Exception as e:
-                            print(f"Failed to post: {e}")
-                else:
-                    for index, row in df.iterrows():
-                        publication_type = row['Publication type']
-                        title = row['Title']
-                        publication_date = row['Date published']
-                        link = row['Link to publication']
-                        author_name = row['Authors']  # Extract the author name
+                    parsed = parse_facets_and_embed(post_text, client)
+                    
+                    post_payload = {
+                        "$type": "app.bsky.feed.post",
+                        "text": post_text,
+                        "facets": parsed['facets'],
+                        "embed": parsed['embed'],  # Include the embed if present
+                        "createdAt": pd.Timestamp.utcnow().isoformat() + "Z"
+                    }
 
-                        post_text = f"{header}{publication_type}: {title} by {author_name} (published {publication_date})\n\n{link}"
-
-                        if len(post_text) > 300:
-                            max_title_length = 300 - len(f"{publication_type}: \n{link}") - len(f" (published {publication_date})")
-                            truncated_title = truncate_text(title, max_title_length)
-                            post_text = f"{header}{publication_type}: {truncated_title} (published {publication_date})\n{link}"
-
-                        # Make sure the entire post_text fits within 300 graphemes
-                        post_text = truncate_text(post_text, 300)
-
-                        parsed = parse_facets_and_embed(post_text, client)
-                        
-                        post_payload = {
-                            "$type": "app.bsky.feed.post",
-                            "text": post_text,
-                            "facets": parsed['facets'],
-                            "embed": parsed['embed'],  # Include the embed if present
-                            "createdAt": pd.Timestamp.utcnow().isoformat() + "Z"
-                        }
-
-                        try:
-                            post = client.send_post(
-                                text=post_payload["text"],  
-                                facets=post_payload["facets"],  
-                                embed=post_payload.get("embed"),  # Pass the embed if it exists
-                            )
-                        except Exception as e:
-                            print(f"Failed to post: {e}")
+                    try:
+                        post = client.send_post(
+                            text=post_payload["text"],  
+                            facets=post_payload["facets"],  
+                            embed=post_payload.get("embed"),  # Pass the embed if it exists
+                        )
+                    except Exception as e:
+                        print(f"Failed to post: {e}")
         
         elif admin_task=='Post events':
-            st.write('event')
-        
+            st.subheader('Post events on Bluesky', anchor=False)
+            conn = st.connection("gsheets", type=GSheetsConnection)
+            df_forms = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
+            df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
+            df_forms['date'] = pd.to_datetime(df_forms['date'])
+            df_forms['date_new'] = df_forms['date'].dt.strftime('%Y-%m-%d')
+            df_forms['month'] = df_forms['date'].dt.strftime('%m')
+            df_forms['year'] = df_forms['date'].dt.strftime('%Y')
+            df_forms['month_year'] = df_forms['date'].dt.strftime('%Y-%m')
+            df_forms.sort_values(by='date', ascending=True, inplace=True)
+            df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
+            df_forms = df_forms[df_forms['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
+            df_forms = df_forms.reset_index(drop=True)
+            df_forms['Include?'] = False
+            last_column = df_forms.columns[-1]
+            df_forms = df_forms[[last_column] + list(df_forms.columns[:-1])]
+            df_forms = st.data_editor(df_forms)
+    
+            df_forms = df_forms[df_forms['Include?']==True]
+            df_forms = df_forms.reset_index(drop=True)
+            df_forms
+
+            post_bluesky = st.button('Post items on Bluesky')
+            if post_bluesky:
+                    
+                for index, row in df_forms.iterrows():
+                    event_name = row['event_name']
+                    organiser = row['organiser']
+                    event_date = row['date_new']
+                    link = row['link']
+                    venue = row['venue']  # Extract the author name
+
+                    post_text = f"Event\n\n{venue}: {event_name} by {organiser} (on {event_date})\n\n{link}"
+
+                    if len(post_text) > 300:
+                        max_title_length = 300 - len(f"{venue}: \n{link}") - len(f" (on {event_date})")
+                        truncated_title = truncate_text(event_name, max_title_length)
+                        post_text = f"Event\n\n{venue}: {event_name} (on {event_date})\n{link}"
+
+                    # Make sure the entire post_text fits within 300 graphemes
+                    post_text = truncate_text(post_text, 300)
+
+                    parsed = parse_facets_and_embed(post_text, client)
+                    
+                    post_payload = {
+                        "$type": "app.bsky.feed.post",
+                        "text": post_text,
+                        "facets": parsed['facets'],
+                        "embed": parsed['embed'],  # Include the embed if present
+                        "createdAt": pd.Timestamp.utcnow().isoformat() + "Z"
+                    }
+
+                    try:
+                        post = client.send_post(
+                            text=post_payload["text"],  
+                            facets=post_payload["facets"],  
+                            embed=post_payload.get("embed"),  # Pass the embed if it exists
+                        )
+                    except Exception as e:
+                        print(f"Failed to post: {e}")
+
         else:
-            st.subheader('Monitoring section', anchor=False)
+            st.subheader('Item monitoring section', anchor=False)
             item_monitoring = st.button("Item monitoring")
             if item_monitoring:
                 st.write('The following items are not in the library yet. Book reviews will not be included!')
