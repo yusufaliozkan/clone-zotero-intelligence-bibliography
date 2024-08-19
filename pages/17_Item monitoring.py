@@ -472,6 +472,10 @@ else:
                             )
                         except Exception as e:
                             print(f"Failed to post: {e}")
+        
+        if admin_task=='Post events':
+            st.write('event')
+        
         else:
             ## ITEMS MONITORING
             item_monitoring = st.button("Item monitoring")
