@@ -246,6 +246,7 @@ else:
                 header ='Recently published\n\n'
             elif item_header=='Event':
                 df = st.data_editor(df_forms)
+                df
 
             else:
                 header = st.text_input('Write a custom header')
