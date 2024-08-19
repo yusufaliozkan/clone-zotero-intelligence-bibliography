@@ -451,11 +451,15 @@ else:
             df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
             df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%Y-%m-%d')
             df_con = df_con[df_con['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
-            df_con
+            df_con = df_con.reset_index(drop=True)
+            df_con['Include?'] = False
+            last_column = df_con.columns[-1]
+            df_con = df_con[[last_column] + list(df_con.columns[:-1])]
+            df_con = st.data_editor(df_con)
 
-            df_con['date_end'] = pd.to_datetime(df_con['date'], dayfirst=True) 
-            filter = df_con['date_end']>=pd.to_datetime(today)
-            df_con = df_con.loc[filter]
+            df_con = df_con[df_con['Include?']==True]
+            df_con = df_con.reset_index(drop=True)
+            df_con = df_con[['event_name', 'organiser', 'link', 'venue', 'date_new']]
             df_con
 
             post_events_bluesky = st.button('Post events on Bluesky')
