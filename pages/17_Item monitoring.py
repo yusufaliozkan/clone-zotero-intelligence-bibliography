@@ -60,6 +60,8 @@ st.title("Intelligence studies network")
 st.header('Item monitoring')
 
 image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
+st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+
 
 with st.sidebar:
 
