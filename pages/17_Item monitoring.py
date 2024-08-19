@@ -446,7 +446,6 @@ else:
                 df_forms = df_forms[df_forms['Include?']==True]
                 df_forms = df_forms.reset_index(drop=True)
                 df_forms = df_forms[['event_name', 'organiser', 'link', 'venue', 'date_new']]
-                df_forms
 
                 df_con = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=939232836')
                 df_con['date'] = pd.to_datetime(df_con['date'])
@@ -466,7 +465,6 @@ else:
                 df_con = df_con.rename(columns={'conference_name':'event_name'})
 
                 df_cfp = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=135096406') 
-                df_cfp
                 df_cfp['deadline'] = pd.to_datetime(df_cfp['deadline'])
                 df_cfp['deadline'] = df_cfp['deadline'].dt.strftime('%Y-%m-%d')
                 df_cfp['deadline'] = pd.to_datetime(df_cfp['deadline'], dayfirst = True).dt.strftime('%Y-%m-%d')
@@ -482,7 +480,8 @@ else:
                 df_cfp = df_cfp.rename(columns={'name':'event_name', 'deadline':'date_new'})
                 df_cfp = df_cfp[['event_name', 'organiser', 'link', 'venue', 'date_new']]
 
-                df_cfp
+                df_forms = pd.concat([df_forms, df_con, df_cfp])
+                df_forms
 
                 post_events_bluesky = st.button('Post events on Bluesky')
                 if post_events_bluesky:
