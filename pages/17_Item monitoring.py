@@ -234,13 +234,19 @@ else:
             df_forms.sort_values(by='date', ascending=True, inplace=True)
             df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
             df_forms = df_forms[df_forms['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
-            df_forms
+            df_forms = df_forms.reset_index(drop=True)
+            df_forms['Include?'] = False
+            last_column = df_forms.columns[-1]
+            df_forms = df_forms[[last_column] + list(df_forms.columns[:-1])]
+            df_forms = st.data_editor(df_forms)
 
-            item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'])
+            item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Event', 'Custom'])
             if item_header=='New addition':
                 header='New addition\n\n'
             elif item_header=='Recently published':
                 header ='Recently published\n\n'
+            elif item_header=='Event':
+                df = df_forms.copy()
             else:
                 header = st.text_input('Write a custom header')
                 if not header:
