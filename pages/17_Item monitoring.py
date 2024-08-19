@@ -477,10 +477,11 @@ else:
                 df_cfp = df_cfp[[last_column] + list(df_cfp.columns[:-1])]
                 df_cfp.sort_values(by='deadline', ascending=True, inplace=True)
                 df_cfp['venue'] = 'Call for Papers'
+                df_cfp = st.data_editor(df_cfp)
+                df_cfp = df_cfp[df_cfp['Include?']==True]
                 df_cfp = df_cfp.rename(columns={'name':'event_name', 'deadline':'date_new'})
                 df_cfp = df_cfp[['event_name', 'organiser', 'link', 'venue', 'date_new']]
-                df_cfp = st.data_editor(df_cfp)
-                # df_cfp = df_cfp[df_cfp['Include?']==True]
+
                 df_cfp
 
                 post_events_bluesky = st.button('Post events on Bluesky')
