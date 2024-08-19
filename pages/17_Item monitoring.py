@@ -224,8 +224,9 @@ else:
             df
 
             conn = st.connection("gsheets", type=GSheetsConnection)
-            df_gs = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=0')
-            df_gs
+            df_forms = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
+            df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
+            df_forms
 
             item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'])
             if item_header=='New addition':
