@@ -461,6 +461,7 @@ else:
             df_con = df_con[df_con['Include?']==True]
             df_con = df_con.reset_index(drop=True)
             df_con = df_con[['conference_name', 'organiser', 'link', 'venue', 'date_new']]
+            df_con = df_con.rename(columns={'conference_name':'event_name'})
             df_con
 
             post_events_bluesky = st.button('Post events on Bluesky')
