@@ -222,6 +222,10 @@ else:
             df = df.reset_index(drop=True)
             df
 
+            conn = st.connection("gsheets", type=GSheetsConnection)
+            df_gs = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=0')
+            df_gs
+
             item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'])
             if item_header=='New addition':
                 header='New addition\n\n'
