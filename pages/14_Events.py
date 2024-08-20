@@ -72,8 +72,7 @@ with tab1:
     df_forms2.sort_values(by='date_new', ascending = False, inplace=True)
     df_forms2['Timestamp'] = pd.to_datetime(df_forms2['Timestamp'], format='%m/%d/%Y %H:%M:%S')
     df_forms2['Timestamp'] = df_forms2['Timestamp'].dt.strftime('%Y-%m-%d %H:%M')
-    df_forms2
-    container.write('The events page last updated on ' + '**'+ df_forms2.loc[0]['Timestamp']+'**')
+    container.write('The events page last updated on ' + '**'+ df_forms2.iloc[0]['Timestamp']+'**')
     
     df_forms['date_new'] = pd.to_datetime(df_forms['date'], dayfirst = True).dt.strftime('%d/%m/%Y')
     df_forms['month'] = pd.to_datetime(df_forms['date'], dayfirst = True).dt.strftime('%m')
