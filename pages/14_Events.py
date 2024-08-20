@@ -70,6 +70,8 @@ with tab1:
     df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
     df_forms2 = df_forms.copy()
     df_forms2.sort_values(by='date_new', ascending = False, inplace=True)
+    df_forms2['Timestamp'] = pd.to_datetime(df_forms2['Timestamp'], format='%m/%d/%Y %H:%M:%S')
+    df_forms2['Timestamp'] = df_forms2['Timestamp'].dt.strftime('%Y-%m-%d')
     df_forms2
     container.write('The events page last updated on ' + '**'+ df_forms2.loc[0]['date_new']+'**')
     
