@@ -335,8 +335,8 @@ else:
                 last_column = df.columns[-1]
                 df = df[[last_column] + list(df.columns[:-1])]
                 df = df[['Include?', 'Title', 'Publication type', 'Link to publication', 'Zotero link', 'Date added', 'Date published', 'Date modified', 'Authors']]
+                st.markdown('##### Recently added items')
                 df = st.data_editor(df)
-
                 df = df[df['Include?']==True]
                 df = df.reset_index(drop=True)
 
