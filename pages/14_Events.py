@@ -69,7 +69,7 @@ with tab1:
     df_forms.sort_values(by='date', ascending=True, inplace=True)
     df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
     df_forms2 = df_forms.copy()
-    df_forms2
+    df_forms
     
     container.write('The events page last updated on ' + '**'+ df_forms2.loc[0]['Timestamp']+'**')
 
