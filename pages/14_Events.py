@@ -57,8 +57,12 @@ with tab1:
     st.header('Events')
 
     # Convert and format dates in df_gs
-    df_gs['date'] = pd.to_datetime(df_gs['date'])
+
+    df_gs['date'] = pd.to_datetime(dfdf_gs_forms['date'])
     df_gs['date_new'] = df_gs['date'].dt.strftime('%Y-%m-%d')
+    df_gs['month'] = df_gs['date'].dt.strftime('%m')
+    df_gs['year'] = df_gs['date'].dt.strftime('%Y')
+    df_gs['month_year'] = df_gs['date'].dt.strftime('%Y-%m')
     df_gs
 
     # Convert and format dates in df_forms
