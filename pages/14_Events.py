@@ -35,7 +35,7 @@ sidebar_content()
 
 today = dt.date.today()
 today2 = dt.date.today().strftime('%d/%m/%Y')
-st.write('Today is: '+ str(today))
+st.write('Today is: '+ str(today2))
 container = st.container()
 with st.popover('Download events data'):
     st.write('''
@@ -69,6 +69,7 @@ with tab1:
     df_forms.sort_values(by='date', ascending=True, inplace=True)
     df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
     df_forms2 = df_forms.copy()
+    df_forms2
     
     container.write('The events page last updated on ' + '**'+ df_forms2.loc[0]['date_new']+'**')
 
