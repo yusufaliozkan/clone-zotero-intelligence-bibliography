@@ -63,7 +63,6 @@ with tab1:
     df_gs['month'] = df_gs['date'].dt.strftime('%m')
     df_gs['year'] = df_gs['date'].dt.strftime('%Y')
     df_gs['month_year'] = df_gs['date'].dt.strftime('%Y-%m')
-    df_gs
 
     # Convert and format dates in df_forms
     df_forms['date'] = pd.to_datetime(df_forms['date'])
@@ -94,7 +93,6 @@ with tab1:
     df_gs = df_gs.reset_index(drop=True)
     df_gs = df_gs.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
     df_gs_plot = df_gs.copy()
-    df_gs
         
     col1, col2 = st.columns(2)
 
