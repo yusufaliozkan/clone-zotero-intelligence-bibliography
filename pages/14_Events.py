@@ -35,7 +35,7 @@ sidebar_content()
 
 today = dt.date.today()
 today2 = dt.date.today().strftime('%d/%m/%Y')
-st.write('Today is: '+ str(today2))
+st.write('Today is: '+ str(today))
 container = st.container()
 with st.popover('Download events data'):
     st.write('''
