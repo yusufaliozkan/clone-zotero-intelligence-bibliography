@@ -59,6 +59,7 @@ with tab1:
     # Convert and format dates in df_gs
     df_gs['date'] = pd.to_datetime(df_gs['date'])
     df_gs['date_new'] = df_gs['date'].dt.strftime('%Y-%m-%d')
+    df_gs
 
     # Convert and format dates in df_forms
     df_forms['date'] = pd.to_datetime(df_forms['date'])
