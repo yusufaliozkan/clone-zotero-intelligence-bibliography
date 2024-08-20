@@ -37,6 +37,13 @@ today = dt.date.today()
 today2 = dt.date.today().strftime('%d/%m/%Y')
 st.write('Today is: '+ str(today2))
 container = st.container()
+with st.popover('Download events data'):
+    st.write('''
+    The data for all events, conferences, and calls for papers is available on Zenodo. 
+    Use the following link to access the dataset:
+
+    Ozkan, Yusuf A. ‘Intelligence Studies Network Dataset’. Zenodo, 15 August 2024. https://doi.org/10.5281/zenodo.13325698.
+    ''')
 
 # Create a connection object.
 conn = st.connection("gsheets", type=GSheetsConnection)
@@ -64,14 +71,6 @@ with tab1:
     df_forms2 = df_forms.copy()
     
     container.write('The events page last updated on ' + '**'+ df_forms2.loc[0]['date_new']+'**')
-
-    with st.popover('Download events data'):
-        st.write('''
-        The data for all events, conferences, and calls for papers is available on Zenodo. 
-        Use the following link to access the dataset:
-
-        Ozkan, Yusuf A. ‘Intelligence Studies Network Dataset’. Zenodo, 15 August 2024. https://doi.org/10.5281/zenodo.13325698.
-        ''')
 
     df_forms['date_new'] = pd.to_datetime(df_forms['date'], dayfirst = True).dt.strftime('%d/%m/%Y')
     df_forms['month'] = pd.to_datetime(df_forms['date'], dayfirst = True).dt.strftime('%m')
