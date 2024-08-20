@@ -355,6 +355,7 @@ else:
                     df_db = df_db[df_db.Title.str.lower().str.contains(name.lower(), na=False)]
                 df_db = df_db[['Include?', 'Title', 'Publication type', 'Link to publication', 'Zotero link', 'Date added', 'Date published', 'FirstName2']]
                 df_db = df_db.rename(columns={'FirstName2':'Authors'})
+                st.markdown('##### All items')
                 df_db = st.data_editor(df_db)
                 df_db = df_db[df_db['Include?']==True]
                 df_db = df_db.reset_index(drop=True)
