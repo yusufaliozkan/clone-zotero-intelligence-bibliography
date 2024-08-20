@@ -49,7 +49,7 @@ with st.popover('Download events data'):
 conn = st.connection("gsheets", type=GSheetsConnection)
 df_gs = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=0')
 df_gs['organiser'] = df_gs['organiser'].replace('North American Society for Intelligence History (NASIH)', 'The Society for Intelligence History (SIH)')
-df_gs
+
 df_forms = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
 df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
 df_forms['organiser'] = df_forms['organiser'].replace('North American Society for Intelligence History (NASIH)','The Society for Intelligence History (SIH)')
