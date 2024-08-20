@@ -336,6 +336,10 @@ else:
                 df = df[[last_column] + list(df.columns[:-1])]
                 df = df[['Include?', 'Title', 'Publication type', 'Link to publication', 'Zotero link', 'Date added', 'Date published', 'Date modified', 'Authors']]
                 st.markdown('##### Recently added items')
+                st.write('''
+                Pick item(s) from the 'Include?' column.
+                The selected items will be appear in the 'Items to be posted' table below.
+                ''')
                 df = st.data_editor(df)
                 df = df[df['Include?']==True]
                 df = df.reset_index(drop=True)
@@ -356,11 +360,16 @@ else:
                 df_db = df_db[['Include?', 'Title', 'Publication type', 'Link to publication', 'Zotero link', 'Date added', 'Date published', 'FirstName2']]
                 df_db = df_db.rename(columns={'FirstName2':'Authors'})
                 st.markdown('##### All items')
+                st.write('''
+                Pick item(s) from the 'Include?' column.
+                The selected items will be appear in the 'Items to be posted' table below.
+                ''')
                 df_db = st.data_editor(df_db)
                 df_db = df_db[df_db['Include?']==True]
                 df_db = df_db.reset_index(drop=True)
                 df = pd.concat([df, df_db])
                 df = df.reset_index(drop=True)
+                st.markdown('##### Items to be posted')
                 df
                 
                 item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'])
