@@ -69,7 +69,6 @@ with tab1:
     df_forms.sort_values(by='date', ascending=True, inplace=True)
     df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
     df_forms2 = df_forms.copy()
-    df_forms2
     
     df_forms['date_new'] = pd.to_datetime(df_forms['date'], dayfirst = True).dt.strftime('%d/%m/%Y')
     df_forms['month'] = pd.to_datetime(df_forms['date'], dayfirst = True).dt.strftime('%m')
@@ -77,6 +76,7 @@ with tab1:
     df_forms['month_year'] = pd.to_datetime(df_forms['date'], dayfirst = True).dt.strftime('%Y-%m')
     df_forms.sort_values(by='date', ascending = True, inplace=True)
     df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
+    df_forms
     container.write('The events page last updated on ' + '**'+ df_forms.loc[0]['date_new']+'**')
     
     df_forms['details'] = df_forms['details'].fillna('No details')
