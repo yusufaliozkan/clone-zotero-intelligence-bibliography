@@ -451,6 +451,11 @@ else:
                 df_forms['Include?'] = False
                 last_column = df_forms.columns[-1]
                 df_forms = df_forms[[last_column] + list(df_forms.columns[:-1])]
+                st.markdown('##### Events')
+                st.write('''
+                Pick item(s) from the 'Include?' column.
+                The selected items will be appear in the 'Items to be posted' table below.
+                ''')
                 df_forms = st.data_editor(df_forms)
         
                 df_forms = df_forms[df_forms['Include?']==True]
@@ -467,6 +472,11 @@ else:
                 last_column = df_con.columns[-1]
                 df_con = df_con[[last_column] + list(df_con.columns[:-1])]
                 df_con.sort_values(by='date_new', ascending=True, inplace=True)
+                st.markdown('##### Conferences')
+                st.write('''
+                Pick item(s) from the 'Include?' column.
+                The selected items will be appear in the 'Items to be posted' table below.
+                ''')
                 df_con = st.data_editor(df_con)
 
                 df_con = df_con[df_con['Include?']==True]
@@ -485,12 +495,18 @@ else:
                 df_cfp = df_cfp[[last_column] + list(df_cfp.columns[:-1])]
                 df_cfp.sort_values(by='deadline', ascending=True, inplace=True)
                 df_cfp['venue'] = 'Call for Papers'
+                st.markdown('##### Call for Papers')
+                st.write('''
+                Pick item(s) from the 'Include?' column.
+                The selected items will be appear in the 'Items to be posted' table below.
+                ''')
                 df_cfp = st.data_editor(df_cfp)
                 df_cfp = df_cfp[df_cfp['Include?']==True]
                 df_cfp = df_cfp.rename(columns={'name':'event_name', 'deadline':'date_new'})
                 df_cfp = df_cfp[['event_name', 'organiser', 'link', 'venue', 'date_new']]
 
                 df_forms = pd.concat([df_forms, df_con, df_cfp])
+                st.markdown('##### Items to be posted')
                 df_forms
 
                 post_events_bluesky = st.button('Post events on Bluesky')
