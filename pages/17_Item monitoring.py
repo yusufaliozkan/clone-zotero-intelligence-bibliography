@@ -338,7 +338,7 @@ else:
                 st.markdown('##### Recently added items')
                 st.write('''
                 Pick item(s) from the 'Include?' column.
-                The selected items will be appear in the 'Items to be posted' table below.sdf
+                The selected items will be appear in the 'Items to be posted' table below.
                 ''')
                 df = st.data_editor(df)
                 df = df[df['Include?']==True]
@@ -369,7 +369,7 @@ else:
                 df_db = df_db.reset_index(drop=True)
                 df = pd.concat([df, df_db])
                 df = df.reset_index(drop=True)
-                select_all = st.checkbox('Select all') 
+                select_all = st.checkbox("I agree")
                 df
                 
                 item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'])
