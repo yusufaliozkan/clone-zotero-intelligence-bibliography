@@ -338,7 +338,7 @@ else:
                 st.markdown('##### Recently added items')
                 st.write('''
                 Pick item(s) from the 'Include?' column.
-                The selected items will be appear in the 'Items to be posted' table below.
+                The selected items will be appear in the 'Items to be posted' table below.sdf
                 ''')
                 df = st.data_editor(df)
                 df = df[df['Include?']==True]
