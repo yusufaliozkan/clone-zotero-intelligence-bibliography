@@ -340,6 +340,9 @@ else:
                 Pick item(s) from the 'Include?' column.
                 The selected items will be appear in the 'Items to be posted' table below.
                 ''')
+                select_all = st.checkbox("Select all")
+                if select_all:
+                    df['Include?']= True
                 df = st.data_editor(df)
                 df = df[df['Include?']==True]
                 df = df.reset_index(drop=True)
@@ -369,7 +372,6 @@ else:
                 df_db = df_db.reset_index(drop=True)
                 df = pd.concat([df, df_db])
                 df = df.reset_index(drop=True)
-                select_all = st.checkbox("I agree")
                 df
                 
                 item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'])
