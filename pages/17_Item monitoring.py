@@ -369,7 +369,7 @@ else:
                 df_db = df_db.reset_index(drop=True)
                 df = pd.concat([df, df_db])
                 df = df.reset_index(drop=True)
-                st.markdown('##### Items to be posted')
+                select_all = st.radio('Select all')
                 df
                 
                 item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'])
