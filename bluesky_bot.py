@@ -15,7 +15,7 @@ bluesky_password = os.getenv("BLUESKY_PASSWORD")
 client.login('intelbase.bsky.social', bluesky_password)
 
 # post_content = 'Check out my profile: https://bsky.app/profile/intelbase.bsky.social'
-# post = client.send_post(post_content)
+post = client.send_post(post_content)
 
 # def mark_urls(text):
 #     import re
