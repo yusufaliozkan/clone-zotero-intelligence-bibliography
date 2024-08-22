@@ -384,7 +384,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     ):
                         st.switch_page('pages/1_Intelligence history.py')
                     if st.button(
-                        'Intelligence studies',
+                        'Intelligence studies', 
                     ):
                         st.switch_page('pages/2_Intelligence studies.py')
                     if st.button(
