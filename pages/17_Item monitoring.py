@@ -312,6 +312,7 @@ else:
                     .str.strip()
                     .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
                 )
+                df
                 df['Date published'] = df['Date published'].dt.strftime('%d-%m-%Y')
                 df['Date published'] = df['Date published'].fillna('No date')
                 # df['Date published'] = df['Date published'].map(lambda x: x.strftime('%d/%m/%Y') if x else 'No date')
