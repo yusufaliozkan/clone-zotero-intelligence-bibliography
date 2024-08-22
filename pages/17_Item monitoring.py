@@ -329,7 +329,7 @@ else:
                 # df = df[df['Date added'].dt.date >= days_ago]
 
                 now = datetime.now(pytz.UTC)
-                last_hours = now - timedelta(hours=1)
+                last_hours = now - timedelta(hours=120)
                 df = df[df['Date added'] >= last_hours]
                 df
                 df['Include?'] = False
