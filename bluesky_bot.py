@@ -14,37 +14,32 @@ client = Client(base_url='https://bsky.social')
 bluesky_password = os.getenv("BLUESKY_PASSWORD")
 client.login('intelbase.bsky.social', bluesky_password)
 
-# post_content = 'Check out my profile: https://bsky.app/profile/intelbase.bsky.social'
-# post = client.send_post(post_content)
-
-# def mark_urls(text):
-#     import re
-
-#     # Define the regex pattern for URLs
-#     regex = r'(https?://[^\s]+)'
-#     matches = re.finditer(regex, text)
-
-#     url_data = []
-
-#     # Find all matches and store their positions and URLs
-#     for match in matches:
-#         url = match.group(0)
-#         start = match.start()
-#         end = match.end()
-
-#         url_data.append({
-#             'start': start,
-#             'end': end,
-#             'url': url,
-#         })
-
-#     return url_data
-
-
-# Post content
+# Define the post content
 post_content = 'Check out my profile: https://bsky.app/profile/intelbase.bsky.social'
-post = client.send_post(post_content)
 
+# Define the mark_urls function (previously commented out)
+def mark_urls(text):
+    import re
+
+    # Define the regex pattern for URLs
+    regex = r'(https?://[^\s]+)'
+    matches = re.finditer(regex, text)
+
+    url_data = []
+
+    # Find all matches and store their positions and URLs
+    for match in matches:
+        url = match.group(0)
+        start = match.start()
+        end = match.end()
+
+        url_data.append({
+            'start': start,
+            'end': end,
+            'url': url,
+        })
+
+    return url_data
 
 # Parse URLs to get their positions
 urls = mark_urls(post_content)
