@@ -312,7 +312,6 @@ else:
                     .str.strip()
                     .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
                 )
-                df
                 df['Date published'] = df['Date published'].dt.strftime('%d-%m-%Y')
                 df['Date published'] = df['Date published'].fillna('No date')
                 # df['Date published'] = df['Date published'].map(lambda x: x.strftime('%d/%m/%Y') if x else 'No date')
@@ -330,6 +329,7 @@ else:
                 # df = df[df['Date added'].dt.date >= days_ago]
 
                 now = datetime.now(pytz.UTC)
+                now
                 last_hours = now - timedelta(hours=120)
                 df = df[df['Date added'] >= last_hours]
                 df['Include?'] = False
