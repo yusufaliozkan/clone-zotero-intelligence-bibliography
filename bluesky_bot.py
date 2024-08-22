@@ -41,31 +41,31 @@ def mark_urls(text):
     return url_data
 
 
-# Post content
-post_content = 'Check out my profile: https://bsky.app/profile/intelbase.bsky.social'
+# # Post content
+# post_content = 'Check out my profile: https://bsky.app/profile/intelbase.bsky.social'
 
-# Parse URLs to get their positions
-urls = mark_urls(post_content)
+# # Parse URLs to get their positions
+# urls = mark_urls(post_content)
 
-# Create the facets for the link
-facets = []
-for url in urls:
-    facets.append({
-        "index": {
-            "byteStart": url['start'],
-            "byteEnd": url['end']
-        },
-        "features": [
-            {
-                "$type": "app.bsky.richtext.facet#link",
-                "uri": url['url']
-            }
-        ]
-    })
+# # Create the facets for the link
+# facets = []
+# for url in urls:
+#     facets.append({
+#         "index": {
+#             "byteStart": url['start'],
+#             "byteEnd": url['end']
+#         },
+#         "features": [
+#             {
+#                 "$type": "app.bsky.richtext.facet#link",
+#                 "uri": url['url']
+#             }
+#         ]
+#     })
 
-# Send post with text and facets
-post = client.send_post(
-    text=post_content,
-    facets=facets,
-    langs=['en']
-)
+# # Send post with text and facets
+# post = client.send_post(
+#     text=post_content,
+#     facets=facets,
+#     langs=['en']
+# )
