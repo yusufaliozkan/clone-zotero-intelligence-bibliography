@@ -314,6 +314,8 @@ last_hours = now - timedelta(hours=1)
 df = df[df['Date added'] >= last_hours]
 df = df[['Title', 'Publication type', 'Link to publication', 'Zotero link', 'Date added', 'Date published', 'Date modified', 'Authors']]
 
+header='New addition\n\n'
+
 for index, row in df.iterrows():
     publication_type = row['Publication type']
     title = row['Title']
