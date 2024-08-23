@@ -283,15 +283,6 @@ with tab1:
 with tab2:
     st.subheader('Conferences')
     df_con = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=939232836')
-    df_con_v2 = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=312814443')
-    df_con_v2['date'] = pd.to_datetime(df_con_v2['date'])
-    df_con_v2['date'] = df_con_v2['date'].dt.strftime('%Y-%m-%d')
-    df_con_v2['date_new'] = pd.to_datetime(df_con_v2['date'], dayfirst = True).dt.strftime('%d/%m/%Y')
-    df_con_v2['date_end'] = pd.to_datetime(df_con_v2['date_end'])
-    df_con_v2['date_end'] = df_con_v2['date_end'].dt.strftime('%Y-%m-%d')
-    df_con_v2['date_new_end'] = pd.to_datetime(df_con_v2['date_end'], dayfirst = True).dt.strftime('%d/%m/%Y')
-    df_con_v2 = df_con_v2.drop('Timestamp', axis=1)
-    df_con_v2
     df_con['date'] = pd.to_datetime(df_con['date'])
     df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
     df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%d/%m/%Y')
@@ -303,6 +294,18 @@ with tab2:
     df_con['date_end'] = pd.to_datetime(df_con['date'], dayfirst=True)
     df_con
 
+    df_con_v2 = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=312814443')
+    df_con_v2['date'] = pd.to_datetime(df_con_v2['date'])
+    df_con_v2['date'] = df_con_v2['date'].dt.strftime('%Y-%m-%d')
+    df_con_v2['date_new'] = pd.to_datetime(df_con_v2['date'], dayfirst = True).dt.strftime('%d/%m/%Y')
+    df_con_v2['date_end'] = pd.to_datetime(df_con_v2['date_end'])
+    df_con_v2['date_end'] = df_con_v2['date_end'].dt.strftime('%Y-%m-%d')
+    df_con_v2['date_new_end'] = pd.to_datetime(df_con_v2['date_end'], dayfirst = True).dt.strftime('%d/%m/%Y')
+    df_con_v2 = df_con_v2.drop('Timestamp', axis=1)
+    df_con_v2.sort_values(by='date', ascending = True, inplace=True)
+    df_con_v2['details'] = df_con_v2['details'].fillna('No details')
+    df_con_v2['location'] = df_con_v2['location'].fillna('No details')
+    df_con_v2
     
     col1, col2 = st.columns(2)
     with col1:
