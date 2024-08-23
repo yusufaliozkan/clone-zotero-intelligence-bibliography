@@ -305,7 +305,12 @@ with tab2:
     df_con_v2.sort_values(by='date', ascending = True, inplace=True)
     df_con_v2['details'] = df_con_v2['details'].fillna('No details')
     df_con_v2['location'] = df_con_v2['location'].fillna('No details')
+    df_con_v2 = df_con_v2.fillna('')
     df_con_v2
+
+    df_con = pd.concat([df_con, df_con_v2])
+    df_con.sort_values(by='date', ascending = True, inplace=True)
+    df_con
     
     col1, col2 = st.columns(2)
     with col1:
