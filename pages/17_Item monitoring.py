@@ -470,6 +470,15 @@ else:
                 df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%Y-%m-%d')
                 df_con = df_con[df_con['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
                 df_con = df_con.reset_index(drop=True)
+
+                df_con_2 = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=312814443')
+                df_con_2['date'] = pd.to_datetime(df_con_2['date'])
+                df_con_2['date_new'] = df_con_2['date'].dt.strftime('%Y-%m-%d')
+                df_con_2['date_new'] = pd.to_datetime(df_con_2['date'], dayfirst = True).dt.strftime('%Y-%m-%d')
+                df_con_2 = df_con_2[df_con_2['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
+                df_con_2 = df_con_2.reset_index(drop=True)
+                df_con_2
+
                 df_con['Include?'] = False
                 last_column = df_con.columns[-1]
                 df_con = df_con[[last_column] + list(df_con.columns[:-1])]
