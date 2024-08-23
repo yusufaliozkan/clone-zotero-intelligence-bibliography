@@ -85,7 +85,7 @@ def evens_conferences():
     df_con_v2['details'] = df_con_v2['details'].fillna('No details')
     df_con_v2['location'] = df_con_v2['location'].fillna('No details')
     df_con_v2 = df_con_v2.fillna('')
-    df_con = df_con_v2.copy()
+    df_con = pd.concat([df_con, df_con_v2])
 
     filter = df_con['date_end']>=pd.to_datetime(today)
     df_con = df_con.loc[filter]
