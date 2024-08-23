@@ -478,7 +478,7 @@ else:
                 df_con_2 = df_con_2[df_con_2['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
                 df_con_2 = df_con_2.drop('Timestamp', axis=1)
                 df_con_2 = df_con_2.reset_index(drop=True)
-                df_con_2
+                df_con = pd.concat([df_con, df_con_2])
 
                 df_con['Include?'] = False
                 last_column = df_con.columns[-1]
