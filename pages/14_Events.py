@@ -284,6 +284,7 @@ with tab2:
     st.subheader('Conferences')
     df_con = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=939232836')
     df_con_v2 = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=312814443')
+    df_con_v2['date'] = pd.to_datetime(df_con_v2['date'])
     df_con_v2
     df_con['date'] = pd.to_datetime(df_con['date'])
     df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
