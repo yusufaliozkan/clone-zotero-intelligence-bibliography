@@ -356,7 +356,6 @@ with tab3:
     df_cfp_v2 = df_cfp_v2.fillna('')
 
     df_cfp = pd.concat([df_cfp, df_cfp_v2])
-    df_cfp
     df_cfp = df_cfp.drop_duplicates(subset=['name', 'link', 'deadline'], keep='first')
     
     display = st.checkbox('Show details', key='cfp')
