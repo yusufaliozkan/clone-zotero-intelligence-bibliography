@@ -510,7 +510,7 @@ else:
                 df_cfp_2 = df_cfp_2[df_cfp_2['deadline'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
                 df_cfp_2 = df_cfp_2.reset_index(drop=True)
                 df_cfp_2 = df_cfp_2.drop('Timestamp', axis=1)
-                df_cfp_2 = pd.concat([df_cfp, df_cfp_2])
+                df_cfp = pd.concat([df_cfp, df_cfp_2])
 
                 df_cfp['Include?'] = False
                 last_column = df_cfp.columns[-1]
