@@ -501,16 +501,15 @@ else:
                 df_cfp['deadline'] = df_cfp['deadline'].dt.strftime('%Y-%m-%d')
                 df_cfp['deadline'] = pd.to_datetime(df_cfp['deadline'], dayfirst = True).dt.strftime('%Y-%m-%d')
                 df_cfp = df_cfp[df_cfp['deadline'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
-                df_cfp = df_cfp.reset_index(drop=True)
 
                 df_cfp_2 = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1589739166') 
                 df_cfp_2['deadline'] = pd.to_datetime(df_cfp_2['deadline'])
                 df_cfp_2['deadline'] = df_cfp_2['deadline'].dt.strftime('%Y-%m-%d')
                 df_cfp_2['deadline'] = pd.to_datetime(df_cfp_2['deadline'], dayfirst = True).dt.strftime('%Y-%m-%d')
                 df_cfp_2 = df_cfp_2[df_cfp_2['deadline'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
-                df_cfp_2 = df_cfp_2.reset_index(drop=True)
                 df_cfp_2 = df_cfp_2.drop('Timestamp', axis=1)
                 df_cfp = pd.concat([df_cfp, df_cfp_2])
+                df_cfp = df_cfp.reset_index(drop=True)
 
                 df_cfp['Include?'] = False
                 last_column = df_cfp.columns[-1]
