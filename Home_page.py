@@ -40,6 +40,7 @@ from format_entry import format_entry
 # from rss_feed import df_podcast, df_magazines
 from st_keyup import st_keyup
 from pyparsing import infixNotation, opAssoc, Keyword, Word, alphanums
+from events import evens_conferences
 
 
 # Connecting Zotero with API 
@@ -3514,6 +3515,9 @@ with st.spinner('Retrieving data...'):
             events()
             with st.expander('Events & conferences', expanded=True):
                 st.markdown('##### Next event')
+                event_info = evens_conferences()
+                for info in event_info:
+                    st.write(info)
 
                 conn = st.connection("gsheets", type=GSheetsConnection)
 
