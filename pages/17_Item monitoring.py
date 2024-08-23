@@ -476,6 +476,7 @@ else:
                 df_con_2['date_new'] = df_con_2['date'].dt.strftime('%Y-%m-%d')
                 df_con_2['date_new'] = pd.to_datetime(df_con_2['date'], dayfirst = True).dt.strftime('%Y-%m-%d')
                 df_con_2 = df_con_2[df_con_2['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
+                df_con_2 = df_con_2.drop('Timestamp', axis=1)
                 df_con_2 = df_con_2.reset_index(drop=True)
                 df_con_2
 
