@@ -15,29 +15,6 @@ client = Client(base_url='https://bsky.social')
 bluesky_password = os.getenv("BLUESKY_PASSWORD")
 client.login('intelbase.bsky.social', bluesky_password)
 
-# Create the facets for the link
-facets = []
-for url in urls:
-    facets.append({
-        "index": {
-            "byteStart": url['start'],
-            "byteEnd": url['end']
-        },
-        "features": [
-            {
-                "$type": "app.bsky.richtext.facet#link",
-                "uri": url['url']
-            }
-        ]
-    })
-
-# Send post with text and facets
-post = client.send_post(
-    text=post_content,
-    facets=facets,
-    langs=['en']
-)
-
 ### POST ITEMS
 
 def fetch_link_metadata(url: str) -> Dict:
