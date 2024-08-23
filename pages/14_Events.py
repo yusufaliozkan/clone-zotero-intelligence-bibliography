@@ -343,6 +343,9 @@ with tab3:
     st.subheader('Call for papers')
     df_cfp = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=135096406') 
 
+    df_cfp_v2 = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1589739166')
+    df_cfp_v2
+
     df_cfp['deadline'] = pd.to_datetime(df_cfp['deadline'])
     df_cfp['deadline_new'] = df_cfp['deadline'].dt.strftime('%Y-%m-%d')
     df_cfp.sort_values(by='deadline', ascending = True, inplace=True)
