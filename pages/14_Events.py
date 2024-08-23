@@ -292,7 +292,6 @@ with tab2:
     df_con['location'] = df_con['location'].fillna('No details')
     df_con = df_con.fillna('')
     df_con['date_end'] = pd.to_datetime(df_con['date'], dayfirst=True)
-    df_con
 
     df_con_v2 = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=312814443')
     df_con_v2['date'] = pd.to_datetime(df_con_v2['date'])
@@ -306,11 +305,9 @@ with tab2:
     df_con_v2['details'] = df_con_v2['details'].fillna('No details')
     df_con_v2['location'] = df_con_v2['location'].fillna('No details')
     df_con_v2 = df_con_v2.fillna('')
-    df_con_v2
 
     df_con = pd.concat([df_con, df_con_v2])
     df_con.sort_values(by='date', ascending = True, inplace=True)
-    df_con
     
     col1, col2 = st.columns(2)
     with col1:
