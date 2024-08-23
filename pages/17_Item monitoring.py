@@ -484,6 +484,7 @@ else:
                 last_column = df_con.columns[-1]
                 df_con = df_con[[last_column] + list(df_con.columns[:-1])]
                 df_con.sort_values(by='date_new', ascending=True, inplace=True)
+                df_con = df_con.reset_index(drop=True)
                 st.markdown('##### Conferences')
                 st.write('''
                 Pick item(s) from the 'Include?' column.
