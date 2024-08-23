@@ -3514,7 +3514,6 @@ with st.spinner('Retrieving data...'):
                     # st.caption('[Special collections](https://intelligence.streamlit.app/Special_collections)')
             events()
             with st.expander('Events & conferences', expanded=True):
-                st.markdown('##### Next event')
                 event_info = evens_conferences()
                 for info in event_info:
                     st.write(info)
