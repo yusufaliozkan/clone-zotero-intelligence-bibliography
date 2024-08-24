@@ -10,7 +10,6 @@ from grapheme import length as grapheme_length
 from datetime import datetime, timedelta
 import pytz
 import re 
-import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 
 client = Client(base_url='https://bsky.social')
