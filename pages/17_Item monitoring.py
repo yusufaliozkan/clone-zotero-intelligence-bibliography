@@ -412,16 +412,15 @@ else:
                 conn = st.connection("gsheets", type=GSheetsConnection)
                 df_forms = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
                 df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
-                # Assuming df_forms is already created and renamed as per your code
                 df_forms['date'] = pd.to_datetime(df_forms['date'])
                 df_forms['date_new'] = df_forms['date'].dt.strftime('%Y-%m-%d')
 
-                # Calculate the date range: 5 days before today
-                start_date = pd.to_datetime('today').normalize() - pd.Timedelta(days=3)
-                end_date = pd.to_datetime('today').normalize()
+                # Calculate the date range: today + 4 days
+                start_date = pd.to_datetime('today').normalize()
+                end_date = start_date + pd.Timedelta(days=5)
 
-                # Filter the DataFrame to include only events within the last 5 days
-                df_forms = df_forms[(df_forms['date'] >= start_date) & (df_forms['date'] < end_date)]
+                # Filter the DataFrame to include only events within the date range
+                df_forms = df_forms[(df_forms['date'] >= start_date) & (df_forms['date'] <= end_date)]
 
                 df_forms['month'] = df_forms['date'].dt.strftime('%m')
                 df_forms['year'] = df_forms['date'].dt.strftime('%Y')
@@ -438,7 +437,7 @@ else:
                 Pick item(s) from the 'Include?' column.
                 The selected items will appear in the 'Items to be posted' table below.
                 ''')
-                df_forms = st.data_editor(df_forms)        
+                df_forms = st.data_editor(df_forms)              
                 
                 
                 df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
