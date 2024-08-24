@@ -411,7 +411,7 @@ else:
                 st.subheader('Post events on Bluesky', anchor=False)
                 conn = st.connection("gsheets", type=GSheetsConnection)
                 df_forms = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
-                
+                df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
                 df_forms['date'] = pd.to_datetime(df_forms['date'])
                 df_forms['date_new'] = df_forms['date'].dt.strftime('%Y-%m-%d')
 
