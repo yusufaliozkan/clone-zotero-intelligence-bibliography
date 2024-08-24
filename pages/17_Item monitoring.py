@@ -417,7 +417,7 @@ else:
                 df_forms['date_new'] = df_forms['date'].dt.strftime('%Y-%m-%d')
 
                 # Calculate the date range: 5 days before today
-                start_date = pd.to_datetime('today').normalize() - pd.Timedelta(days=6)
+                start_date = pd.to_datetime('today').normalize() - pd.Timedelta(days=3)
                 end_date = pd.to_datetime('today').normalize()
 
                 # Filter the DataFrame to include only events within the last 5 days
