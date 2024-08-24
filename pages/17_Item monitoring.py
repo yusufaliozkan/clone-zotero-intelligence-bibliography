@@ -417,7 +417,7 @@ else:
 
                 # Calculate the date range: today + 4 days
                 start_date = pd.to_datetime('today').normalize()
-                end_date = start_date + pd.Timedelta(days=1)
+                end_date = start_date + pd.Timedelta(days=3)
                 end_date
 
                 # Filter the DataFrame to include only events within the date range
