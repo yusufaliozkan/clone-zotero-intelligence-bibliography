@@ -422,7 +422,7 @@ else:
 
                 # Filter the DataFrame to include only events within the date range
                 # df_forms = df_forms[(df_forms['date'] >= start_date) & (df_forms['date'] <= end_date)]
-                df_forms = df_forms[(df_forms['date'] == end_date]
+                df_forms = df_forms[df_forms['date'] == end_date]
 
 
                 df_forms['month'] = df_forms['date'].dt.strftime('%m')
