@@ -20,7 +20,7 @@ from grapheme import length as grapheme_length
 from typing import List, Dict
 from st_keyup import st_keyup
 from streamlit_gsheets import GSheetsConnection
-
+import gspread
 
 st.set_page_config(layout = "wide", 
                     page_title='Intelligence studies network',
