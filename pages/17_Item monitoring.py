@@ -407,10 +407,11 @@ else:
             post_pubs()
         elif admin_task=='Post events':
 
+            # The URL of your Google Sheets document
             sheet_url = 'https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997'
 
-            # Use gspread to open the Google Sheets document without authentication
-            gc = gspread.client.Client(None)  # This initializes the client without authentication
+            # Use gspread to open the Google Sheets document
+            gc = gspread.public()  # This is the correct way to initialize for public sheets
 
             # Open the sheet using the URL
             spreadsheet = gc.open_by_url(sheet_url)
@@ -424,7 +425,6 @@ else:
             # Convert the data to a pandas DataFrame
             df = pd.DataFrame(data)
             df
-
 
             @st.experimental_fragment
             def post_events():
