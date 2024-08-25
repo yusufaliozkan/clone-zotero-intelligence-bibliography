@@ -1,3 +1,4 @@
+import gspread
 import os
 from atproto import Client
 import pandas as pd
@@ -10,7 +11,7 @@ from grapheme import length as grapheme_length
 from datetime import datetime, timedelta
 import pytz
 import re 
-import gspread
+
 
 client = Client(base_url='https://bsky.social')
 bluesky_password = os.getenv("BLUESKY_PASSWORD")
