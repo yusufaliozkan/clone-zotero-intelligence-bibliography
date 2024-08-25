@@ -406,6 +406,27 @@ else:
                             print(f"Failed to post: {e}")
             post_pubs()
         elif admin_task=='Post events':
+
+            # The URL of your Google Sheets document
+            sheet_url = 'https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997'
+
+            # Use gspread to open the Google Sheets document
+            gc = gspread.service_account()  # This is needed if you use a service account
+
+            # Open the sheet using the URL
+            spreadsheet = gc.open_by_url(sheet_url)
+
+            # Select the first worksheet (or specify by name)
+            worksheet = spreadsheet.get_worksheet(0)  # You can also use .worksheet('Sheet1')
+
+            # Get all data from the worksheet
+            data = worksheet.get_all_records()
+
+            # Convert the data to a pandas DataFrame
+            df = pd.DataFrame(data)
+            df
+
+
             @st.experimental_fragment
             def post_events():
                 st.subheader('Post events on Bluesky', anchor=False)
