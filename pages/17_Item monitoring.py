@@ -408,7 +408,7 @@ else:
         elif admin_task=='Post events':
 
             # Connect to the Google Sheet without authentication (assuming the sheet is public)
-            gc = gspread.Client()
+            gc = gspread.public()
             # Open the Google Sheet using the URL
             sheet = gc.open_by_url('https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
             sheet
