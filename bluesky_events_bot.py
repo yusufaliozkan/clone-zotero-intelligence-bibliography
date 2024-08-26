@@ -1,4 +1,3 @@
-import gspread
 import os
 from atproto import Client
 import pandas as pd
