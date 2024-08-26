@@ -411,7 +411,7 @@ else:
             sheet_url = 'https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997'
 
             # Use gspread to open the Google Sheets document
-            gc = gspread.public()  # This is the correct way to initialize for public sheets
+            gc = gspread.oauth()  # This initializes the client with no explicit credentials (assumes public access)
 
             # Open the sheet using the URL
             spreadsheet = gc.open_by_url(sheet_url)
