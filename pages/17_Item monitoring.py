@@ -406,6 +406,8 @@ else:
                             print(f"Failed to post: {e}")
             post_pubs()
         elif admin_task=='Post events':
+            from io import StringIO
+
             csv_url = 'https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&id=10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI'
 
             # Send a GET request to fetch the CSV data
