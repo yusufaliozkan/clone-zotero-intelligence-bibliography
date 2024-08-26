@@ -407,23 +407,20 @@ else:
             post_pubs()
         elif admin_task=='Post events':
 
-            # The URL of your Google Sheets document
-            sheet_url = 'https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997'
+            # Connect to the Google Sheet
+            gc = gspread.service_account()  # Requires Google Service Account credentials in your environment.
 
-            # Use gspread to open the Google Sheets document
-            gc = gspread.oauth()  # This initializes the client with no explicit credentials (assumes public access)
+            # Open the Google Sheet using the URL or sheet ID
+            sheet = gc.open_by_url('https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
 
-            # Open the sheet using the URL
-            spreadsheet = gc.open_by_url(sheet_url)
+            # Select the worksheet by name or index (0-based)
+            worksheet = sheet.get_worksheet(0)  # Change the index if you want to access other sheets
 
-            # Select the first worksheet (or specify by name)
-            worksheet = spreadsheet.get_worksheet(0)  # You can also use .worksheet('Sheet1')
+            # Get all records from the sheet as a list of dictionaries
+            records = worksheet.get_all_records()
 
-            # Get all data from the worksheet
-            data = worksheet.get_all_records()
-
-            # Convert the data to a pandas DataFrame
-            df = pd.DataFrame(data)
+            # Convert the list of records to a Pandas DataFrame
+            df = pd.DataFrame(records)
             df
 
             @st.experimental_fragment
