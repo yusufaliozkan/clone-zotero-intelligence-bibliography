@@ -406,15 +406,10 @@ else:
                             print(f"Failed to post: {e}")
             post_pubs()
         elif admin_task=='Post events':
-            from io import StringIO
+            sheet_url = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=1941981997"
 
-            csv_url = 'https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&id=10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI'
-
-            # Send a GET request to fetch the CSV data
-            response = requests.get(csv_url)
-
-            # Convert the CSV content into a Pandas DataFrame
-            df = pd.read_csv(pd.compat.StringIO(response.text))
+            # Read the Google Sheet into a DataFrame
+            df = pd.read_csv(sheet_url)
             df
 
             @st.experimental_fragment
