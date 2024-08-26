@@ -406,11 +406,6 @@ else:
                             print(f"Failed to post: {e}")
             post_pubs()
         elif admin_task=='Post events':
-            sheet_url = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=1941981997"
-
-            # Read the Google Sheet into a DataFrame
-            df = pd.read_csv(sheet_url)
-            df
 
             @st.experimental_fragment
             def post_events():
