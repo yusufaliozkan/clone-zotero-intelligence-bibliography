@@ -150,15 +150,10 @@ def truncate_text(text: str, max_length: int) -> str:
     else:
         return text[:max_length-3] + "..."  # Reserve space for the ellipsis
 
-gc = gspread.service_account() 
-sheet_url = 'https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997'
-sh = gc.open_by_url(sheet_url)
+sheet_url = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=1941981997"
 
-# Select the sheet by name or index
-worksheet = sh.get_worksheet(0)  # You can specify the sheet index or name
-
-# Retrieve all data from the worksheet as a DataFrame
-df_forms = pd.DataFrame(worksheet.get_all_records())
+# Read the Google Sheet into a DataFrame
+df_forms = pd.read_csv(sheet_url)
 
 df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
 df_forms['date'] = pd.to_datetime(df_forms['date'])
