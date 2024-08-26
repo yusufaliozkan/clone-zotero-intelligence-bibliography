@@ -174,11 +174,7 @@ df_forms = df_forms.reset_index(drop=True)
 df_forms['Include?'] = False
 last_column = df_forms.columns[-1]
 df_forms = df_forms[[last_column] + list(df_forms.columns[:-1])]
-st.markdown('##### Events')
-st.write('''
-Pick item(s) from the 'Include?' column.
-The selected items will appear in the 'Items to be posted' table below.
-''')
+
 
 for index, row in df_forms.iterrows():
     event_name = row['event_name']
