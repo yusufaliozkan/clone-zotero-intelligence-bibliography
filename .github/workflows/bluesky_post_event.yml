@@ -26,4 +26,4 @@ jobs:
         env:
           BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
         run: |
-          python bluesky_events_bot.py
+          python bluesky_posts/bluesky_events_bot.py
