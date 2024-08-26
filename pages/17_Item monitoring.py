@@ -406,12 +406,11 @@ else:
                             print(f"Failed to post: {e}")
             post_pubs()
         elif admin_task=='Post events':
+            gc = gspread.Client()
 
-            # Connect to the Google Sheet without authentication (assuming the sheet is public)
-            gc = gspread.public()
             # Open the Google Sheet using the URL
             sheet = gc.open_by_url('https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
-            sheet
+
             # Select the worksheet by index (0-based)
             worksheet = sheet.get_worksheet(0)
 
@@ -419,6 +418,7 @@ else:
             records = worksheet.get_all_records()
 
             # Convert the list of records to a Pandas DataFrame
+            import pandas as pd
             df = pd.DataFrame(records)
             df
 
