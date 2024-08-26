@@ -1,4 +1,4 @@
-name: Post to Bluesky
+name: Post publications to Bluesky
 
 on:
   schedule:
