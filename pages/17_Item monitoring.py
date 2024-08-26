@@ -406,19 +406,13 @@ else:
                             print(f"Failed to post: {e}")
             post_pubs()
         elif admin_task=='Post events':
-            gc = gspread.service_account() 
+            csv_url = 'https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&id=10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI'
 
-            # Open the Google Sheet using the URL
-            sheet = gc.open_by_url('https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
+            # Send a GET request to fetch the CSV data
+            response = requests.get(csv_url)
 
-            # Select the worksheet by index (0-based)
-            worksheet = sheet.get_worksheet(0)
-
-            # Get all records from the sheet as a list of dictionaries
-            records = worksheet.get_all_records()
-
-            # Convert the list of records to a Pandas DataFrame
-            df = pd.DataFrame(records)
+            # Convert the CSV content into a Pandas DataFrame
+            df = pd.read_csv(pd.compat.StringIO(response.text))
             df
 
             @st.experimental_fragment
