@@ -407,14 +407,14 @@ else:
             post_pubs()
         elif admin_task=='Post events':
 
-            # Connect to the Google Sheet
-            gc = gspread.service_account()  # Requires Google Service Account credentials in your environment.
+            # Connect to the Google Sheet without authentication (assuming the sheet is public)
+            gc = gspread.Client(None)
 
-            # Open the Google Sheet using the URL or sheet ID
+            # Open the Google Sheet using the URL
             sheet = gc.open_by_url('https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
 
-            # Select the worksheet by name or index (0-based)
-            worksheet = sheet.get_worksheet(0)  # Change the index if you want to access other sheets
+            # Select the worksheet by index (0-based)
+            worksheet = sheet.get_worksheet(0)
 
             # Get all records from the sheet as a list of dictionaries
             records = worksheet.get_all_records()
