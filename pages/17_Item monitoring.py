@@ -409,10 +409,9 @@ else:
 
             # Connect to the Google Sheet without authentication (assuming the sheet is public)
             gc = gspread.Client(None)
-            gc
             # Open the Google Sheet using the URL
             sheet = gc.open_by_url('https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
-
+            sheet
             # Select the worksheet by index (0-based)
             worksheet = sheet.get_worksheet(0)
 
