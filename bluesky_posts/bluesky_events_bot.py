@@ -149,10 +149,10 @@ def truncate_text(text: str, max_length: int) -> str:
     else:
         return text[:max_length-3] + "..."  # Reserve space for the ellipsis
 
-sheet_url = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=1941981997"
+events_sheet_url = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=1941981997"
 
 # Read the Google Sheet into a DataFrame
-df_forms = pd.read_csv(sheet_url)
+df_forms = pd.read_csv(events_sheet_url)
 
 df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
 df_forms['date'] = pd.to_datetime(df_forms['date'])
@@ -174,6 +174,30 @@ df_forms = df_forms.reset_index(drop=True)
 df_forms['Include?'] = False
 last_column = df_forms.columns[-1]
 df_forms = df_forms[[last_column] + list(df_forms.columns[:-1])]
+
+
+conf_sheet_url_1 = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=939232836"
+df_con = pd.read_csv(conf_sheet_url_1)
+df_con['date'] = pd.to_datetime(df_con['date'])
+df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
+df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%Y-%m-%d')
+df_con = df_con[df_con['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
+df_con = df_con.reset_index(drop=True)
+
+conf_sheet_url_2 = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=312814443"
+df_con_2 = pd.read_csv(conf_sheet_url_2)
+df_con_2['date'] = pd.to_datetime(df_con_2['date'])
+df_con_2['date_new'] = df_con_2['date'].dt.strftime('%Y-%m-%d')
+df_con_2['date_new'] = pd.to_datetime(df_con_2['date'], dayfirst = True).dt.strftime('%Y-%m-%d')
+df_con_2 = df_con_2[df_con_2['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
+df_con_2 = df_con_2.drop('Timestamp', axis=1)
+df_con_2 = df_con_2.reset_index(drop=True)
+df_con = pd.concat([df_con, df_con_2])
+
+df_con = df_con[['conference_name', 'organiser', 'link', 'venue', 'date_new']]
+df_con = df_con.rename(columns={'conference_name':'event_name'})
+
+df_forms = pd.concat([df_forms, df_con])
 
 
 for index, row in df_forms.iterrows():
