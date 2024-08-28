@@ -165,21 +165,14 @@ end_date
 # Filter the DataFrame to include only events within the date range
 # df_forms = df_forms[(df_forms['date'] >= start_date) & (df_forms['date'] <= end_date)]
 df_forms = df_forms[df_forms['date'] == end_date]
-df_forms['month'] = df_forms['date'].dt.strftime('%m')
-df_forms['year'] = df_forms['date'].dt.strftime('%Y')
-df_forms['month_year'] = df_forms['date'].dt.strftime('%Y-%m')
-df_forms.sort_values(by='date', ascending=True, inplace=True)
 df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
-# df_forms = df_forms.reset_index(drop=True)
-# df_forms['Include?'] = False
-# last_column = df_forms.columns[-1]
-# df_forms = df_forms[[last_column] + list(df_forms.columns[:-1])]
-
 
 # conf_sheet_url_1 = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=939232836"
 # df_con = pd.read_csv(conf_sheet_url_1)
 # df_con['date'] = pd.to_datetime(df_con['date'], format='%d %b %Y', errors='coerce')
 # df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
+# df_con = df_con[df_con['date'] == end_date]
+
 # df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%Y-%m-%d')
 # df_con = df_con[df_con['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
 # df_con = df_con.reset_index(drop=True)
