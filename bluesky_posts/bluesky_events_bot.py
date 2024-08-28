@@ -159,7 +159,7 @@ df_forms['date'] = pd.to_datetime(df_forms['date'])
 df_forms['date_new'] = df_forms['date'].dt.strftime('%Y-%m-%d')
 # Calculate the date range: today + 2 days
 start_date = pd.to_datetime('today').normalize()
-end_date = start_date + pd.Timedelta(days=1)
+end_date = start_date + pd.Timedelta(days=0)
 end_date
 
 # Filter the DataFrame to include only events within the date range
