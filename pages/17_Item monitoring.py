@@ -466,7 +466,7 @@ else:
                 df_forms = df_forms[['event_name', 'organiser', 'link', 'venue', 'date_new']]
 
                 start_date = pd.to_datetime('today').normalize()
-                end_date = start_date + pd.Timedelta(days=1)
+                end_date = start_date + pd.Timedelta(days=0)
                 end_date
                 end_date_str = end_date.strftime('%Y-%m-%d')
                 end_date_str
