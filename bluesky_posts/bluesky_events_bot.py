@@ -167,11 +167,13 @@ end_date
 df_forms = df_forms[df_forms['date'] == end_date]
 df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
 
-# conf_sheet_url_1 = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=939232836"
-# df_con = pd.read_csv(conf_sheet_url_1)
-# df_con['date'] = pd.to_datetime(df_con['date'], format='%d %b %Y', errors='coerce')
-# df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
-# df_con = df_con[df_con['date'] == end_date]
+conf_sheet_url_1 = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=939232836"
+df_con = pd.read_csv(conf_sheet_url_1)
+df_con['date'] = pd.to_datetime(df_con['date'], format='%d %b %Y', errors='coerce')
+df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
+df_con = df_con[df_con['date'] == end_date]
+df_con = df_con.rename(columns={'conference_name':'event_name'})
+
 
 # df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%Y-%m-%d')
 # df_con = df_con[df_con['date_new'] >= pd.to_datetime('today').strftime('%Y-%m-%d')]
@@ -190,7 +192,7 @@ df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep=
 # df_con = df_con[['conference_name', 'organiser', 'link', 'venue', 'date_new']]
 # df_con = df_con.rename(columns={'conference_name':'event_name'})
 
-# df_forms = pd.concat([df_forms, df_con])
+df_forms = pd.concat([df_forms, df_con])
 
 
 for index, row in df_forms.iterrows():
