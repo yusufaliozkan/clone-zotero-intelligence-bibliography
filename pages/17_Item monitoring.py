@@ -467,6 +467,7 @@ else:
 
                 start_date = pd.to_datetime('today').normalize()
                 end_date = start_date + pd.Timedelta(days=1)
+                end_date
                 conf_sheet_url_1 = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=939232836"
                 df_con = pd.read_csv(conf_sheet_url_1)
                 df_con['date'] = pd.to_datetime(df_con['date'], format='%d %b %Y', errors='coerce')
