@@ -470,8 +470,8 @@ else:
                 end_date
                 conf_sheet_url_1 = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=939232836"
                 df_con = pd.read_csv(conf_sheet_url_1)
-                df_con['date'] = pd.to_datetime(df_con['date'], format='%d %b %Y')
-                df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
+                # df_con['date'] = pd.to_datetime(df_con['date'], format='%d %b %Y')
+                # df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
                 # df_con = df_con[df_con['date'] == '2024-08-28']
                 df_con = df_con.rename(columns={'conference_name':'event_name'})
                 df_con
