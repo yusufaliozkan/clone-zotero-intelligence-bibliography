@@ -465,16 +465,6 @@ else:
                 df_forms = df_forms.reset_index(drop=True)
                 df_forms = df_forms[['event_name', 'organiser', 'link', 'venue', 'date_new']]
 
-                start_date = pd.to_datetime('today').normalize()
-                end_date = start_date + pd.Timedelta(days=0)
-                conf_sheet_url_1 = "https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/export?format=csv&gid=312814443"
-                df_con_2 = pd.read_csv(conf_sheet_url_1)
-                df_con_2['date'] = pd.to_datetime(df_con_2['date'], errors='coerce')
-                df_con_2['date_new'] = df_con_2['date'].dt.strftime('%Y-%m-%d')
-                df_con_2 = df_con_2[df_con_2['date'] == end_date]
-                df_con_2 = df_con_2.rename(columns={'conference_name':'event_name'})
-                df_con_2
-
                 df_con = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=939232836')
                 df_con['date'] = pd.to_datetime(df_con['date'])
                 df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
