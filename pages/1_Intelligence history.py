@@ -764,7 +764,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 plt.imshow(wordcloud)
                 plt.axis("off")
                 plt.show()
-                st.set_option('deprecation.showPyplotGlobalUse', False)
+                # st.set_option('deprecation.showPyplotGlobalUse', False)
                 st.pyplot() 
             else:
                 st.warning('Please bear in mind that not all items listed in this bibliography have an abstract. Therefore, this wordcloud should not be considered as authoritative.')
@@ -779,7 +779,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 plt.imshow(wordcloud)
                 plt.axis("off")
                 plt.show()
-                st.set_option('deprecation.showPyplotGlobalUse', False)
+                # st.set_option('deprecation.showPyplotGlobalUse', False)
                 st.pyplot() 
         else:
             st.info('Toggle to see the dashboard!')
