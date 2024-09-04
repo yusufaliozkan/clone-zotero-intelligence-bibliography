@@ -25,8 +25,8 @@ from streamlit_gsheets import GSheetsConnection
 
 set_page_config_centered()
 
-st.title("Intelligence studies network")
-st.header('Digest')
+st.title("IntelArchive", anchor=False)
+st.header('Digest', anchor=False)
 
 with st.spinner('Preparing digest...'):
 
