@@ -596,7 +596,7 @@ with st.spinner('Preparing digest...'):
                         count += 1
                         if display2:
                             st.caption(row['Abstract']) 
-        st.caption('[Go to top](#intelligence-studies-network-digest)')
+        st.caption('[Go to top](#IntelArchive)')
 
     with st.expander('Events:', expanded=False):
         today = dt.date.today()
@@ -656,7 +656,7 @@ with st.spinner('Preparing digest...'):
         st.write('Visit the [Events on intelligence](https://intelligence.streamlit.app/Events) page to see more!')
 
 
-        st.caption('[Go to top](#intelligence-studies-network-digest)')
+        st.caption('[Go to top](#IntelArchive)')
 
     with st.expander('Conferences:', expanded=ex):
         st.header('Conferences')
@@ -704,7 +704,7 @@ with st.spinner('Preparing digest...'):
                 st.caption('Conference place:'+'\n '+ df_con['location'].iloc[i])
                 st.caption('Details:'+'\n '+ df_con['details'].iloc[i])
 
-        st.caption('[Go to top](#intelligence-studies-network-digest)')
+        st.caption('[Go to top](#IntelArchive)')
 
     with st.expander('Call for papers:', expanded=ex):
         st.header('Call for papers')
@@ -734,7 +734,7 @@ with st.spinner('Preparing digest...'):
             if display:
                 st.caption('Details:'+'\n '+ df_cfp['details'].iloc[i])
 
-    st.caption('[Go to top](#intelligence-studies-network-digest)')
+    st.caption('[Go to top](#IntelArchive)')
 
     st.write('---')
 
