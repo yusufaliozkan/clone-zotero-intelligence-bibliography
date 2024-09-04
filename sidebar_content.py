@@ -50,3 +50,10 @@ def sidebar_content():
         st.write('Check the digest [here](https://intelligence.streamlit.app/Digest)')
         st.toast('Join our [mailing list](https://groups.google.com/g/intelligence-studies-network) to receive updates.')
 
+def set_page_config():
+    st.set_page_config(
+        layout="wide",
+        page_title="IntelArchive",
+        page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
+        initial_sidebar_state="auto"
+    )
