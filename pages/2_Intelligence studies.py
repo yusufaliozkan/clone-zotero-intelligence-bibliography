@@ -34,7 +34,7 @@ st.set_page_config(layout = "wide",
                     initial_sidebar_state="auto") 
 
 st.title("IntelArchive", anchor=False)
-st.header('Intelligence history', anchor=False)
+st.header('Intelligence studies', anchor=False)
 
 with st.spinner('Retrieving data & updating dashboard...'):
 
