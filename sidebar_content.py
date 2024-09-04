@@ -57,3 +57,11 @@ def set_page_config():
         page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
         initial_sidebar_state="auto"
     )
+
+def set_page_config_centered():
+    st.set_page_config(
+        layout="centered",
+        page_title="IntelArchive",
+        page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
+        initial_sidebar_state="auto"
+    )

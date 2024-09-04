@@ -18,15 +18,15 @@ nltk.download('stopwords')
 from wordcloud import WordCloud
 import datetime as dt
 import base64
-from sidebar_content import sidebar_content, set_page_config
+from sidebar_content import sidebar_content, set_page_config_centered
 from format_entry import format_entry
 from streamlit_gsheets import GSheetsConnection
 
 
-set_page_config()
+set_page_config_centered()
 
-st.title("Intelligence studies network", anchor=False)
-st.header('Digest', anchor=False)
+st.title("Intelligence studies network")
+st.header('Digest')
 
 with st.spinner('Preparing digest...'):
 
