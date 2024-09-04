@@ -12,7 +12,7 @@ def sidebar_content():
             icon_image=image,
             link='https://intelligence.streamlit.app/'
             )
-        st.sidebar.markdown("# Intelligence studies network")
+        st.sidebar.markdown("# IntelArchive: Intelligence Studies Database")
         with st.expander('About'):
             st.write('''This website lists secondary sources on intelligence studies and intelligence history.
             The sources are originally listed in the [Intelligence bibliography Zotero library](https://www.zotero.org/groups/2514686/intelligence_bibliography).
