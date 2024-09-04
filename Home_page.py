@@ -218,10 +218,10 @@ st.header('Intelligence Studies Database', anchor=False)
 cite_today = datetime.date.today().strftime("%d %B %Y")
 
 into = f'''
-Welcome to **Intelligence studies bibliography**.
-The Intelligence studies bibliography is one of the most comprehensive databases listing sources on intelligence studies and history. 
+Welcome to **IntelArchive**.
+The IntelArchive is one of the most comprehensive databases listing sources on intelligence studies and history. 
 Finding sources on intelligence can sometimes be challening because of various reasons. 
-Therefore, this bibliography offers a carefully curated selection of publications, serving as an invaluable research assistant to guide you through exploring various sources.
+Therefore, IntelArchive offers a carefully curated selection of publications, serving as an invaluable research assistant to guide you through exploring various sources.
 
 Join our Google Groups to get updates and learn  new features about the website and the database. 
 You can also ask questions or make suggestions. (https://groups.google.com/g/intelligence-studies-network)
