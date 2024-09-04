@@ -3407,7 +3407,7 @@ with st.spinner('Retrieving data...'):
                 # st.download_button('💾 Download all items', csv, (a+'.csv'), mime="text/csv", key='download-csv-2')
                 # df_all_items
                 st.write('''
-                The entire dataset containing the metadata of publications within the Intelligence Studies Network database is available on Zenodo. 
+                The entire dataset containing the metadata of publications within the IntelArchive database is available on Zenodo. 
                 The dataset will be updated quarterly. You can access the dataset from the following link:
 
                 Ozkan, Yusuf A. ‘Intelligence Studies Network Dataset’. Zenodo, 15 August 2024. https://doi.org/10.5281/zenodo.13325698.
