@@ -210,8 +210,8 @@ df = df.fillna('')
 
 # Streamlit app
 
-st.title("IntelArchive: Intelligence Studies Database", anchor=False)
-# st.header('Intelligence Studies Database', anchor=False)
+st.title("IntelArchive", anchor=False)
+st.subheader('Intelligence Studies Database', anchor=False)
 # st.header("[Zotero group library](https://www.zotero.org/groups/2514686/intelligence_bibliography/library)")
 
 # cite_today = datetime.date.today().isoformat()
