@@ -23,7 +23,7 @@ from format_entry import format_entry
 from streamlit_gsheets import GSheetsConnection
 
 
-set_page_config
+set_page_config()
 
 st.title("Intelligence studies network", anchor=False)
 st.header('Digest', anchor=False)
