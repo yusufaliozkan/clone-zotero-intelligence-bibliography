@@ -53,7 +53,7 @@ df_forms['organiser'] = df_forms['organiser'].replace('North American Society fo
 
 tab1, tab2, tab3 = st.tabs(['Events', 'Conferences','Call for papers'])
 with tab1:
-    st.header('Events')
+    st.header('Events', anchor=False)
 
     # Convert and format dates in df_gs
 
@@ -188,7 +188,7 @@ with tab1:
         #             if display:
         #                 st.caption(f"Details:\n{df_mon.iloc[i]['details']}")
 
-    st.header('Past events')
+    st.header('Past events', anchor=False)
     with st.expander('Expand to see the list'):
         st.warning('Some of the event links may not be working anymore.')
         years = df_gs2['year'].unique()[::-1]
@@ -203,7 +203,7 @@ with tab1:
                     for i, event_str in enumerate(event_strs):
                         st.write(f"{i+1}) {event_str}")
     
-    st.header('Event visuals')
+    st.header('Event visuals', anchor=False)
     ap = ''
     ap2 = ''
     ap3 = ''
