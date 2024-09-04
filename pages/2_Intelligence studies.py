@@ -33,8 +33,7 @@ st.set_page_config(layout = "wide",
                     page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
                     initial_sidebar_state="auto") 
 
-st.title("IntelArchive", anchor=False)
-st.header('Intelligence studies', anchor=False)
+st.title('Intelligence studies', anchor=False)
 
 with st.spinner('Retrieving data & updating dashboard...'):
 
