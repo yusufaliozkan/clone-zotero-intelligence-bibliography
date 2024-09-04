@@ -18,16 +18,13 @@ nltk.download('stopwords')
 from wordcloud import WordCloud
 import datetime as dt
 from urllib.parse import urlparse
-from sidebar_content import sidebar_content
+from sidebar_content import sidebar_content, set_page_config
 from streamlit_gsheets import GSheetsConnection
 
-st.set_page_config(layout = "centered", 
-                    page_title='Intelligence studies network',
-                    page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
-                    initial_sidebar_state="auto") 
+set_page_config()
 
-st.title("Intelligence studies network")
-st.header("Events on intelligence")
+st.title("IntelArchive", anchor=False)
+st.header("Events on intelligence", anchor=False)
 image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
 
 
