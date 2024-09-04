@@ -29,11 +29,12 @@ from st_keyup import st_keyup
 
 
 st.set_page_config(layout = "wide", 
-                    page_title='Intelligence studies network',
+                    page_title='IntelArchive',
                     page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
                     initial_sidebar_state="auto") 
 
-st.title("Intelligence studies")
+st.title("IntelArchive", anchor=False)
+st.header('Intelligence history', anchor=False)
 
 with st.spinner('Retrieving data & updating dashboard...'):
 
