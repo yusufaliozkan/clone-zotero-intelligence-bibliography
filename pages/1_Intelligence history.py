@@ -32,7 +32,7 @@ from collection_template import collection_template
 
 set_page_config()
 
-st.title("Intelligence history")
+st.title("Intelligence history", anchor=False)
 
 with st.spinner('Retrieving data & updating dashboard...'):
 
