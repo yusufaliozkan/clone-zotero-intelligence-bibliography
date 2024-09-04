@@ -23,12 +23,12 @@ from streamlit_gsheets import GSheetsConnection
 import gspread
 
 st.set_page_config(layout = "wide", 
-                    page_title='Intelligence studies network',
+                    page_title='IntelArchive',
                     page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
                     initial_sidebar_state="auto") 
 
-st.title("Intelligence studies network")
-st.header('Item monitoring')
+st.title("IntelArchive", anchor=False)
+st.header('Item monitoring', anchor=False)
 
 image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
