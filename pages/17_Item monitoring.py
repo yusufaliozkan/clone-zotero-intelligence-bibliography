@@ -76,22 +76,7 @@ def upload_image_to_bluesky(client, image_url: str) -> str:
 
 def create_link_card_embed(client, url: str) -> Dict:
     metadata = fetch_link_metadata(url)
-
-    # Define the maximum length for the title and link combined
-    max_length = 300  # Adjust as needed
-    link_length = len(metadata['url'])
-    title_length = len(metadata['title'])
-    description_length = len(metadata['description'])
-
-    # Only truncate the title if the combined length is too long
-    if link_length + title_length + description_length > max_length:
-        max_title_length = max_length - link_length - description_length
-        if max_title_length > 0:
-            metadata['title'] = truncate_text(metadata['title'], max_title_length)
-        else:
-            # If the title itself is too long, truncate the title to a reasonable length
-            metadata['title'] = truncate_text(metadata['title'], 50)
-
+    
     # Check if the image URL is valid
     if metadata["image"]:
         try:
@@ -127,7 +112,8 @@ def parse_mentions(text: str) -> List[Dict]:
 
 def parse_urls(text: str) -> List[Dict]:
     spans = []
-    url_regex = rb"[$|\W](https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*[-a-zA-Z0-9@%_\+~#//=])?)"
+    # Improved regex to capture the entire URL
+    url_regex = rb"(https?:\/\/[^\s]+)"
     text_bytes = text.encode("UTF-8")
     for m in re.finditer(url_regex, text_bytes):
         spans.append({
@@ -136,6 +122,7 @@ def parse_urls(text: str) -> List[Dict]:
             "url": m.group(1).decode("UTF-8"),
         })
     return spans
+
 
 def parse_facets(text: str) -> List[Dict]:
     facets = []
@@ -185,14 +172,11 @@ def parse_facets_and_embed(text: str, client) -> Dict:
     }
 
 def truncate_text(text: str, max_length: int) -> str:
-    """
-    Truncate text to fit within the max_length, considering full graphemes.
-    If the text is longer than max_length, it adds an ellipsis at the end.
-    """
+    """Truncate text to fit within the max_length, considering full graphemes."""
     if len(text) <= max_length:
         return text
     else:
-        return text[:max_length - 3] + "..."  # Reserve space for the ellipsis
+        return text[:max_length-3] + "..."  # Reserve space for the ellipsis
 ### Bluesky posting functions end here
 
 password_input = st.text_input("Enter the password to access admin dashboard:", type="password")
