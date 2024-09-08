@@ -90,7 +90,7 @@ def create_link_card_embed(client, url: str) -> Dict:
     embed = {
         '$type': 'app.bsky.embed.external',
         'external': {
-            'uri': metadata['url'],
+            'uri': metadata['url'],  # Full URL should be here
             'title': metadata['title'],
             'description': metadata['description'],
             'thumb': image_blob,  # This can be None if the image was invalid
@@ -150,7 +150,7 @@ def parse_facets(text: str) -> List[Dict]:
             "features": [
                 {
                     "$type": "app.bsky.richtext.facet#link",
-                    "uri": u["url"],
+                    "uri": u["url"],  # Ensure full URL is used
                 }
             ],
         })
@@ -172,11 +172,26 @@ def parse_facets_and_embed(text: str, client) -> Dict:
     }
 
 def truncate_text(text: str, max_length: int) -> str:
-    """Truncate text to fit within the max_length, considering full graphemes."""
+    """Truncate text to fit within the max_length, but keep URLs intact."""
     if len(text) <= max_length:
         return text
-    else:
-        return text[:max_length-3] + "..."  # Reserve space for the ellipsis
+
+    # Split text into words
+    words = text.split(' ')
+    truncated_text = ""
+    
+    for word in words:
+        if len(truncated_text) + len(word) + 1 <= max_length:
+            truncated_text += (word + " ")
+        else:
+            # Do not truncate URLs
+            if word.startswith("http://") or word.startswith("https://"):
+                break
+            else:
+                truncated_text += "..."
+                break
+
+    return truncated_text.strip()
 ### Bluesky posting functions end here
 
 password_input = st.text_input("Enter the password to access admin dashboard:", type="password")
