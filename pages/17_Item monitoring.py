@@ -75,7 +75,9 @@ def upload_image_to_bluesky(client, image_url: str) -> str:
 
 
 def create_link_card_embed(client, url: str) -> Dict:
-    metadata = fetch_link_metadata(url)
+    # Sanitize the URL to handle special characters correctly
+    sanitized_url = sanitize_url(url)
+    metadata = fetch_link_metadata(sanitized_url)
     
     # Check if the image URL is valid
     if metadata["image"]:
@@ -90,7 +92,7 @@ def create_link_card_embed(client, url: str) -> Dict:
     embed = {
         '$type': 'app.bsky.embed.external',
         'external': {
-            'uri': metadata['url'],  # Full URL should be here
+            'uri': sanitized_url,  # Use the sanitized URL here
             'title': metadata['title'],
             'description': metadata['description'],
             'thumb': image_blob,  # This can be None if the image was invalid
@@ -110,16 +112,38 @@ def parse_mentions(text: str) -> List[Dict]:
         })
     return spans
 
+def sanitize_url(url: str) -> str:
+    """
+    Manually sanitize the URL by replacing problematic characters with percent-encoded equivalents.
+    """
+    # Define characters to be replaced
+    replacements = {
+        ',': '%2C',
+        ' ': '%20',
+        # Add more replacements as needed for other characters
+    }
+
+    # Replace each problematic character in the URL
+    sanitized_url = url
+    for char, replacement in replacements.items():
+        sanitized_url = sanitized_url.replace(char, replacement)
+
+    return sanitized_url
+
+
 def parse_urls(text: str) -> List[Dict]:
     spans = []
     # Improved regex to capture the entire URL
     url_regex = rb"(https?:\/\/[^\s]+)"
     text_bytes = text.encode("UTF-8")
     for m in re.finditer(url_regex, text_bytes):
+        url = m.group(1).decode("UTF-8")
+        # Sanitize URL to handle special characters
+        sanitized_url = sanitize_url(url)
         spans.append({
             "start": m.start(1),
             "end": m.end(1),
-            "url": m.group(1).decode("UTF-8"),
+            "url": sanitized_url,  # Use the sanitized URL here
         })
     return spans
 
@@ -395,12 +419,15 @@ else:
                         link = row['Link to publication']
                         author_name = row['Authors']  # Extract the author name
 
-                        post_text = f"{header}{publication_type}: {title} by {author_name} (published {publication_date})\n\n{link}"
+                        # Sanitize the URL to handle special characters like commas
+                        sanitized_link = sanitize_url(link)
+
+                        post_text = f"{header}{publication_type}: {title} by {author_name} (published {publication_date})\n\n{sanitized_link}"
 
                         if len(post_text) > 300:
-                            max_title_length = 300 - len(f"{publication_type}: \n{link}") - len(f" (published {publication_date})")
+                            max_title_length = 300 - len(f"{publication_type}: \n{sanitized_link}") - len(f" (published {publication_date})")
                             truncated_title = truncate_text(title, max_title_length)
-                            post_text = f"{header}{publication_type}: {truncated_title} (published {publication_date})\n{link}"
+                            post_text = f"{header}{publication_type}: {truncated_title} (published {publication_date})\n{sanitized_link}"
 
                         # Make sure the entire post_text fits within 300 graphemes
                         post_text = truncate_text(post_text, 300)
@@ -423,6 +450,7 @@ else:
                             )
                         except Exception as e:
                             print(f"Failed to post: {e}")
+
             post_pubs()
         elif admin_task=='Post events':
 
