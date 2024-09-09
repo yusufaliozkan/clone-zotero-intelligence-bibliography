@@ -122,6 +122,7 @@ def parse_urls(text: str) -> List[Dict]:
         })
     return spans
 
+
 def parse_facets(text: str) -> List[Dict]:
     facets = []
     for m in parse_mentions(text):
