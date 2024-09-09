@@ -22,7 +22,7 @@ from st_keyup import st_keyup
 from streamlit_gsheets import GSheetsConnection
 import gspread
 from copyright import display_custom_license
-
+from urllib.parse import quote
 
 st.set_page_config(layout = "wide", 
                     page_title='IntelArchive',
