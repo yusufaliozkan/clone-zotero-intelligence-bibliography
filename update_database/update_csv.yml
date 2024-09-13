@@ -1,0 +1,43 @@
+name: Update Zotero Data
+
+# Schedule the workflow to run once a day
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs at midnight UTC every day
+
+jobs:
+  update_csv:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Checkout the repository
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # or whichever version you need
+
+      # Install necessary dependencies
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install jupyter nbconvert
+
+      # Run the Jupyter Notebook
+      - name: Run Jupyter Notebook
+        run: |
+          jupyter nbconvert --to notebook --execute all_items.ipynb
+
+      # Commit and push changes to CSV file
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git add all_items.csv
+          git commit -m "Update Zotero data"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
