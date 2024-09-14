@@ -9,7 +9,8 @@ on:
 jobs:
   update_csv:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write  # Add this line to grant write permissions
     steps:
       # Checkout the repository
       - name: Check out repository
