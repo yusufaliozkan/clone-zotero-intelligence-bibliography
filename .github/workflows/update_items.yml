@@ -40,6 +40,9 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git pull origin main  # Pull the latest changes from the remote repository
+          git status  # Check the status of the repository to see what files are changed
+          ls -la  # List files to confirm 'countries.csv' is present
+          git add countries.csv  # Ensure 'countries.csv' is added explicitly
           git add *.csv  # Add all CSV files in the repository
           git diff-index --quiet HEAD || git commit -m "Update Zotero data"
           git push
