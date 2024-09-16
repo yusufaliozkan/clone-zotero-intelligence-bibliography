@@ -446,3 +446,4 @@ duplicated_df = pd.merge(duplicated_df, df_doi, on='Zotero link', how='left')
 
 df.to_csv('all_items.csv')
 duplicated_df.to_csv('all_items_duplicated.csv')
+df_countries.to_csv('countries.csv',index=False)
