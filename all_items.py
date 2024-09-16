@@ -479,7 +479,7 @@ base_url = 'https://api.zotero.org'
 # Initialize an empty string to accumulate bibliographies
 all_bibliographies = ""
 
-# List to store bibliographies
+# List to store bibliographies 
 bibliographies = []
 
 # Iterate through each item key in the DataFrame
