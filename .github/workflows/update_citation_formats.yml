@@ -1,4 +1,4 @@
-name: Update Database
+name: Update Citation Formats
 
 # Schedule the workflow to run once a day
 on:
@@ -32,7 +32,7 @@ jobs:
       # Run the Python Script
       - name: Run Run Python Script
         run: |
-          python all_items.py  # Execute the Python script
+          python database_update/all_items_citation_format_retrieval.py  # Execute the Python script
 
       # Pull, commit, and push changes to CSV files
       - name: Pull, commit, and push changes
