@@ -354,6 +354,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     df_table_view
             else:
                 with st.expander('**Bibliographic listing**', expanded=True):
+                    df_collections
                     df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
                     df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                     df_zotero_id.drop(columns=['Unnamed: 0'], errors='ignore', inplace=True)
