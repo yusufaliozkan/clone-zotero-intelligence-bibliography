@@ -355,12 +355,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
             else:
                 with st.expander('**Bibliographic listing**', expanded=True):
                     df_collections['zotero_item_key'] = df_collections['Zotero link'].str.replace('https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/', '')
-                    df_collections
                     df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                     df_zotero_id.drop(columns=['Unnamed: 0'], errors='ignore', inplace=True)
-                    df_zotero_id
                     df_collections = pd.merge(df_collections, df_zotero_id, on='zotero_item_key', how='left')
-                    df_collections
                     df_zotero_id = df_collections[['zotero_item_key']]
 
                     def display_bibliographies(df):
