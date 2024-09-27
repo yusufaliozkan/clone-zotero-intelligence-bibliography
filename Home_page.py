@@ -206,7 +206,8 @@ df = merged_df.copy()
 df = df.fillna('')
 
 # Streamlit app
-
+image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
+st.image(image, width=150)
 st.title("IntelArchive", anchor=False)
 st.subheader('Intelligence Studies Database', anchor=False)
 # st.header("[Zotero group library](https://www.zotero.org/groups/2514686/intelligence_bibliography/library)")
