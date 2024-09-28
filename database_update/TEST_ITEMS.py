@@ -79,12 +79,12 @@ for index, row in df_doi.iterrows():
 
 # Calculate the difference between First_citation_year and Publication_year
 df_doi['Year_difference'] = df_doi['First_citation_year'] - df_doi['Publication_year']
-df_doi.to_csv('citations.csv')
+df_doi.to_csv('TEST_citations.csv')
 
-df_doi = df_doi.drop(columns=['DOI'])
-df = pd.merge(df, df_doi, on='Zotero link', how='left')
-duplicated_df = pd.merge(duplicated_df, df_doi, on='Zotero link', how='left')
+# df_doi = df_doi.drop(columns=['DOI'])
+# df = pd.merge(df, df_doi, on='Zotero link', how='left')
+# duplicated_df = pd.merge(duplicated_df, df_doi, on='Zotero link', how='left')
 
-df.to_csv('all_items.csv')
-duplicated_df.to_csv('all_items_duplicated.csv')
-df_countries.to_csv('countries.csv',index=False)
+# df.to_csv('all_items.csv')
+# duplicated_df.to_csv('all_items_duplicated.csv')
+# df_countries.to_csv('countries.csv',index=False)
