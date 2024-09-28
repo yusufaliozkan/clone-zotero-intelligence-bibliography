@@ -17,6 +17,7 @@ from datetime import datetime, timedelta
 ### RETRIEVING CITATION COUNT AND OA STATUS FROM OPENALEX
 df = pd.read_csv('zotero_items.csv')
 df_doi = pd.read_csv('zotero_items.csv')
+duplicated_df = pd.read_csv('duplicated_zotero_items.csv')
 
 df_doi = df_doi[['Zotero link', 'DOI']].dropna()
 df_doi = df_doi.drop(df_doi[df_doi['DOI'] == ''].index)
