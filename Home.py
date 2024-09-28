@@ -17,6 +17,7 @@ covert_action = st.Page('pages/9_Covert action.py')
 intelligence_cybersphere = st.Page('pages/10_Intelligence and cybersphere.py')
 global_intelligence = st.Page('pages/11_Global intelligence.py')
 special_collections = st.Page('pages/13_Special collections.py')
+test_home = st.Page('pages/18_testHome.py')
 
 events = st.Page('pages/14_Events.py')
 digest = st.Page('pages/15_Digest.py')
@@ -38,7 +39,9 @@ pg = st.navigation(
             covert_action,
             intelligence_cybersphere,
             global_intelligence,
-            special_collections
+            special_collections,
+            test_home
+
             ],
         'Other resources':[
             events,
