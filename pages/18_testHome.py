@@ -31,7 +31,7 @@ from authors_dict import df_authors, name_replacements
 from authors_dict import name_replacements
 
 from copyright import display_custom_license
-from sidebar_content import sidebar_content
+from sidebar_content import sidebar_content, set_page_config
 import plotly.graph_objs as go
 import feedparser
 import requests
@@ -40,6 +40,7 @@ from format_entry import format_entry
 # from rss_feed import df_podcast, df_magazines
 from st_keyup import st_keyup
 from pyparsing import infixNotation, opAssoc, Keyword, Word, alphanums
+from events import evens_conferences
 
 
 # Connecting Zotero with API 
@@ -50,10 +51,7 @@ api_key = '' # api_key is only needed for private groups and libraries
 # Bringing recently changed items
 
 
-st.set_page_config(layout = "wide", 
-                    page_title='Intelligence studies network',
-                    page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
-                    initial_sidebar_state="auto") 
+set_page_config()
 pd.set_option('display.max_colwidth', None)
 
 zot = zotero.Zotero(library_id, library_type)
@@ -118,7 +116,8 @@ type_map = {
     'audioRecording' : 'Podcast',
     'preprint':'Preprint',
     'document':'Document',
-    'computerProgram':'Computer program'
+    'computerProgram':'Computer program',
+    'dataset':'Dataset'
 }
 
 mapping_thesis_type ={
@@ -207,30 +206,33 @@ df = merged_df.copy()
 df = df.fillna('')
 
 # Streamlit app
-
-st.title("Intelligence studies network", anchor=False)
-st.header('Intelligence studies bibliography', anchor=False)
+st.title("IntelArchive", anchor=False)
+st.subheader('Intelligence Studies Database', anchor=False)
 # st.header("[Zotero group library](https://www.zotero.org/groups/2514686/intelligence_bibliography/library)")
 
 # cite_today = datetime.date.today().isoformat()
 cite_today = datetime.date.today().strftime("%d %B %Y")
 
 into = f'''
-Welcome to **Intelligence studies bibliography**.
-The Intelligence studies bibliography is one of the most comprehensive databases listing sources on intelligence studies and history. 
+Welcome to **IntelArchive**.
+The IntelArchive is one of the most comprehensive databases listing sources on intelligence studies and history. 
 Finding sources on intelligence can sometimes be challening because of various reasons. 
-Therefore, this bibliography offers a carefully curated selection of publications, serving as an invaluable research assistant to guide you through exploring various sources.
+Therefore, IntelArchive offers a carefully curated selection of publications, serving as an invaluable research assistant to guide you through exploring various sources.
 
 Join our Google Groups to get updates and learn  new features about the website and the database. 
 You can also ask questions or make suggestions. (https://groups.google.com/g/intelligence-studies-network)
 
-Check out the following guides for a quick intoduction about the website:
+Resources about the website:
+
+Ozkan, Yusuf A. “‘Intelligence Studies Network’: A Human-Curated Database for Indexing Resources with Open-Source Tools.” arXiv, August 7, 2024. https://doi.org/10.48550/arXiv.2408.03868.
+
+Ozkan, Yusuf A. ‘Intelligence Studies Network Dataset’. Zenodo, 15 August 2024. https://doi.org/10.5281/zenodo.13325699.
 
 Ozkan, Yusuf Ali. “Introduction to ‘Intelligence Studies Bibliography.’” Medium (blog), December 26, 2023. https://medium.com/@yaliozkan/introduction-to-intelligence-studies-network-ed63461d1353.
 
 Ozkan, Yusuf Ali. ‘Enhancing the “Intelligence Studies Network” Website’. Medium (blog), 20 January 2024. https://medium.com/@yaliozkan/enhancing-the-intelligence-studies-network-website-13aa0c80f7f4.
 
-**Cite this page:** Ozkan, Yusuf A. ‘*Intelligence Studies Network*’, Created 1 June 2020, Accessed {cite_today}. https://intelligence.streamlit.app/.
+**Cite this page:** IntelArchive. ‘*Intelligence Studies Network*’, Created 1 June 2020, Accessed {cite_today}. https://intelligence.streamlit.app/.
 '''
 
 with st.spinner('Retrieving data...'): 
@@ -285,7 +287,7 @@ with st.spinner('Retrieving data...'):
                 label="Average citation", 
                 value=citation_average,
                 help=f'''**{outlier_count}** outliers detected that have more than 1000 citations. 
-                The citation count without outliers is **{citation_average_wo_outliers}**.
+                The average citation count without outliers is **{citation_average_wo_outliers}**.
                 Citation median: **{round(citation_median, 1)}**.
                 '''
             )
@@ -502,7 +504,7 @@ with st.spinner('Retrieving data...'):
             #             if display == 'Bibliographic list':
 
             #                 df_zotero_id = pd.read_csv('zotero_citation_format.csv')
-            #                 df_quick_search_titles['zotero_item_key'] = df_quick_search_titles['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+            #                 df_quick_search_titles['zotero_item_key'] = df_quick_search_titles['Zotero link'].str.replace('https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/', '')
             #                 df_quick_search_titles = pd.merge(df_quick_search_titles, df_zotero_id, on='zotero_item_key', how='left')
 
             #                 def display_bibliographies(df):
@@ -933,7 +935,7 @@ with st.spinner('Retrieving data...'):
                                         plt.imshow(wordcloud)
                                         plt.axis("off")
                                         plt.show()
-                                        st.set_option('deprecation.showPyplotGlobalUse', False)
+                                        # # st.set_option('deprecation.showPyplotGlobalUse', False)
                                         st.pyplot()
 
                                     else:
@@ -981,6 +983,7 @@ with st.spinner('Retrieving data...'):
                                                 for i, article in enumerate(articles_list, start=1):
                                                     highlighted_article = highlight_terms(article, search_tokens)
                                                     st.markdown(f"{i}. {highlighted_article}", unsafe_allow_html=True)
+      
                                                     
                                                     if display_abstracts:
                                                         abstract = abstracts_list[i - 1]
@@ -1045,7 +1048,7 @@ with st.spinner('Retrieving data...'):
                                             elif sort_by == 'Citation':
                                                 filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
                                             df_zotero_id = pd.read_csv('zotero_citation_format.csv')
-                                            filtered_df['zotero_item_key'] = filtered_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                            filtered_df['zotero_item_key'] = filtered_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/', '')
                                             filtered_df = pd.merge(filtered_df, df_zotero_id, on='zotero_item_key', how='left')
 
                                             def display_bibliographies(df):
@@ -1296,7 +1299,7 @@ with st.spinner('Retrieving data...'):
                                     plt.imshow(wordcloud)
                                     plt.axis("off")
                                     plt.show()
-                                    st.set_option('deprecation.showPyplotGlobalUse', False)
+                                    # # st.set_option('deprecation.showPyplotGlobalUse', False)
                                     st.pyplot()
                                 else:
                                     if not on:  # If the toggle is off, display the publications
@@ -1366,7 +1369,7 @@ with st.spinner('Retrieving data...'):
                                                 filtered_collection_df_authors = filtered_collection_df_authors.sort_values(by=['Publication type'], ascending=True)
                                             elif sort_by == 'Citation':
                                                 filtered_collection_df_authors = filtered_collection_df_authors.sort_values(by=['Citation'], ascending=False)
-                                            filtered_collection_df_authors['zotero_item_key'] = filtered_collection_df_authors['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                            filtered_collection_df_authors['zotero_item_key'] = filtered_collection_df_authors['Zotero link'].str.replace('https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/', '')
                                             df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                                             filtered_collection_df_authors = pd.merge(filtered_collection_df_authors, df_zotero_id, on='zotero_item_key', how='left')
                                             df_zotero_id = filtered_collection_df_authors[['zotero_item_key']]
@@ -1637,7 +1640,7 @@ with st.spinner('Retrieving data...'):
                                     plt.imshow(wordcloud)
                                     plt.axis("off")
                                     plt.show()
-                                    st.set_option('deprecation.showPyplotGlobalUse', False)
+                                    # # st.set_option('deprecation.showPyplotGlobalUse', False)
                                     st.pyplot()
 
                                 else:
@@ -1693,7 +1696,7 @@ with st.spinner('Retrieving data...'):
                                             df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                                             df_table_view
                                         if view == 'Bibliography':
-                                            filtered_collection_df['zotero_item_key'] = filtered_collection_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                            filtered_collection_df['zotero_item_key'] = filtered_collection_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/', '')
                                             df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                                             filtered_collection_df = pd.merge(filtered_collection_df, df_zotero_id, on='zotero_item_key', how='left')
                                             df_zotero_id = filtered_collection_df[['zotero_item_key']]
@@ -1981,7 +1984,7 @@ with st.spinner('Retrieving data...'):
                                     plt.imshow(wordcloud)
                                     plt.axis("off")
                                     plt.show()
-                                    st.set_option('deprecation.showPyplotGlobalUse', False)
+                                    # # st.set_option('deprecation.showPyplotGlobalUse', False)
                                     st.pyplot()
                                 else:
                                     sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'))
@@ -2039,7 +2042,7 @@ with st.spinner('Retrieving data...'):
                                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                                         df_table_view
                                     if view =='Bibliography':
-                                        filtered_type_df['zotero_item_key'] = filtered_type_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                        filtered_type_df['zotero_item_key'] = filtered_type_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/', '')
                                         df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                                         filtered_type_df = pd.merge(filtered_type_df, df_zotero_id, on='zotero_item_key', how='left')
                                         df_zotero_id = filtered_type_df[['zotero_item_key']]
@@ -2338,7 +2341,7 @@ with st.spinner('Retrieving data...'):
                                     plt.imshow(wordcloud)
                                     plt.axis("off")
                                     plt.show()
-                                    st.set_option('deprecation.showPyplotGlobalUse', False)
+                                    # # st.set_option('deprecation.showPyplotGlobalUse', False)
                                     st.pyplot()
 
                                 else:
@@ -2392,7 +2395,7 @@ with st.spinner('Retrieving data...'):
                                         df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                                         df_table_view
                                     if view =='Bibliography':
-                                        selected_journal_df['zotero_item_key'] = selected_journal_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                        selected_journal_df['zotero_item_key'] = selected_journal_df['Zotero link'].str.replace('https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/', '')
                                         df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                                         selected_journal_df = pd.merge(selected_journal_df, df_zotero_id, on='zotero_item_key', how='left')
                                         df_zotero_id = selected_journal_df[['zotero_item_key']]
@@ -2747,7 +2750,7 @@ with st.spinner('Retrieving data...'):
                                     plt.imshow(wordcloud)
                                     plt.axis("off")
                                     plt.show()
-                                    st.set_option('deprecation.showPyplotGlobalUse', False)
+                                    # st.set_option('deprecation.showPyplotGlobalUse', False)
                                     st.pyplot()
                             else:
                                 sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
@@ -2777,7 +2780,7 @@ with st.spinner('Retrieving data...'):
                                     df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
                                     df_table_view
                                 if view == 'Bibliography':
-                                    df_all['zotero_item_key'] = df_all['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                    df_all['zotero_item_key'] = df_all['Zotero link'].str.replace('https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/', '')
                                     df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                                     df_all = pd.merge(df_all, df_zotero_id, on='zotero_item_key', how='left')
                                     df_zotero_id = df_all[['zotero_item_key']]
@@ -3133,7 +3136,7 @@ with st.spinner('Retrieving data...'):
                                     plt.imshow(wordcloud)
                                     plt.axis("off")
                                     plt.show()
-                                    st.set_option('deprecation.showPyplotGlobalUse', False)
+                                    # # st.set_option('deprecation.showPyplotGlobalUse', False)
                                     st.pyplot()
                             else:
                                 sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'))
@@ -3170,7 +3173,7 @@ with st.spinner('Retrieving data...'):
                                     df_table_view
                                 if view == 'Bibliography':
                                     st.markdown(f'##### {view} view')
-                                    df_cited['zotero_item_key'] = df_cited['Zotero link'].str.replace('https://www.zotero.org/groups/intelligence_bibliography/items/', '')
+                                    df_cited['zotero_item_key'] = df_cited['Zotero link'].str.replace('https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/', '')
                                     df_zotero_id = pd.read_csv('zotero_citation_format.csv')
                                     df_cited = pd.merge(df_cited, df_zotero_id, on='zotero_item_key', how='left')
                                     df_zotero_id = df_cited[['zotero_item_key']]
@@ -3384,22 +3387,27 @@ with st.spinner('Retrieving data...'):
             overview()
             st.header('All items in database', anchor=False)
             with st.expander('Click to expand', expanded=False):
-                df_all_items = df_dedup.copy()
-                df_all_items = df_all_items[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
+                # df_all_items = df_dedup.copy()
+                # df_all_items = df_all_items[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
 
-                download_all = df_all_items[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
-                download_all['Abstract'] = download_all['Abstract'].str.replace('\n', ' ')
-                download_all = download_all.reset_index(drop=True)
-                def convert_df(download_all):
-                    return download_all.to_csv(index=False).encode('utf-8-sig') # not utf-8 because of the weird character,  Â cp1252
-                csv = convert_df(download_all)
-                # csv = df_download
-                # # st.caption(collection_name)
-                today = datetime.date.today().isoformat()
-                a = 'intelligence-bibliography-all-' + today
-                st.download_button('💾 Download all items', csv, (a+'.csv'), mime="text/csv", key='download-csv-2')
-                df_all_items
+                # download_all = df_all_items[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
+                # download_all['Abstract'] = download_all['Abstract'].str.replace('\n', ' ')
+                # download_all = download_all.reset_index(drop=True)
+                # def convert_df(download_all):
+                #     return download_all.to_csv(index=False).encode('utf-8-sig') # not utf-8 because of the weird character,  Â cp1252
+                # csv = convert_df(download_all)
+                # # csv = df_download
+                # # # st.caption(collection_name)
+                # today = datetime.date.today().isoformat()
+                # a = 'intelligence-bibliography-all-' + today
+                # st.download_button('💾 Download all items', csv, (a+'.csv'), mime="text/csv", key='download-csv-2')
+                # df_all_items
+                st.write('''
+                The entire dataset containing the metadata of publications within the IntelArchive database is available on Zenodo. 
+                The dataset will be updated quarterly. You can access the dataset from the following link:
 
+                Ozkan, Yusuf A. ‘Intelligence Studies Network Dataset’. Zenodo, 15 August 2024. https://doi.org/10.5281/zenodo.13325698.
+                ''')
                 df_added = df_dedup.copy()
                 df_added['Date added'] = pd.to_datetime(df_added['Date added'])
                 df_added['YearMonth'] = df_added['Date added'].dt.to_period('M').astype(str)
@@ -3433,99 +3441,78 @@ with st.spinner('Retrieving data...'):
                     
 
         with col2:
+
             st.info('Join the [mailing list](https://groups.google.com/g/intelligence-studies-network)')
-            with st.expander('Collections', expanded=True):
-                st.caption('[Intelligence history](https://intelligence.streamlit.app/Intelligence_history)')
-                st.caption('[Intelligence studies](https://intelligence.streamlit.app/Intelligence_studies)')
-                st.caption('[Intelligence analysis](https://intelligence.streamlit.app/Intelligence_analysis)')
-                st.caption('[Intelligence organisations](https://intelligence.streamlit.app/Intelligence_organisations)')
-                st.caption('[Intelligence failures](https://intelligence.streamlit.app/Intelligence_failures)')
-                st.caption('[Intelligence oversight and ethics](https://intelligence.streamlit.app/Intelligence_oversight_and_ethics)')
-                st.caption('[Intelligence collection](https://intelligence.streamlit.app/Intelligence_collection)')
-                st.caption('[Counterintelligence](https://intelligence.streamlit.app/Counterintelligence)')
-                st.caption('[Covert action](https://intelligence.streamlit.app/Covert_action)')
-                st.caption('[Intelligence and cybersphere](https://intelligence.streamlit.app/Intelligence_and_cybersphere)')
-                st.caption('[Global intelligence](https://intelligence.streamlit.app/Global_intelligence)')
-                st.caption('[AI and intelligence](https://intelligence.streamlit.app/AI_and_intelligence)')
-                st.caption('[Special collections](https://intelligence.streamlit.app/Special_collections)')
+            @st.experimental_fragment
+            def events():
+                with st.expander('Collections', expanded=True):
+                    if st.button(
+                        'Intelligence history',
+                    ):
+                        st.switch_page('pages/1_Intelligence history.py')
+                    if st.button(
+                        'Intelligence studies',
+                    ):
+                        st.switch_page('pages/2_Intelligence studies.py')
+                    if st.button(
+                        'Intelligence analysis',
+                    ):
+                        st.switch_page('pages/3_Intelligence analysis.py')
+                    if st.button(
+                        'Intelligence organisations',
+                    ):
+                        st.switch_page('pages/4_Intelligence organisations.py')
+                    if st.button(
+                        'Intelligence failures',
+                    ):
+                        st.switch_page('pages/5_Intelligence failures.py')
+                    if st.button(
+                        'Intelligence oversight and ethics',
+                    ):
+                        st.switch_page('pages/6_Intelligence oversight and ethics.py')
+                    if st.button(
+                        'Intelligence collection',
+                    ):
+                        st.switch_page('pages/7_Intelligence collection.py')
+                    if st.button(
+                        'Counterintelligence',
+                    ):
+                        st.switch_page('pages/8_Counterintelligence.py')
+                    if st.button(
+                        'Covert action',
+                    ):
+                        st.switch_page('pages/9_Covert action.py')
+                    if st.button(
+                        'Intelligence and cybersphere',
+                    ):
+                        st.switch_page('pages/10_Intelligence and cybersphere.py')
+                    if st.button(
+                        'Global intelligence',
+                    ):
+                        st.switch_page('pages/11_Global intelligence.py')
+                    if st.button(
+                        'Special collections',
+                    ):
+                        st.switch_page('pages/12_Special collections.py')
 
+                    # st.caption('[Intelligence history](https://intelligence.streamlit.app/Intelligence_history)')
+                    # st.caption('[Intelligence studies](https://intelligence.streamlit.app/Intelligence_studies)')
+                    # st.caption('[Intelligence analysis](https://intelligence.streamlit.app/Intelligence_analysis)')
+                    # st.caption('[Intelligence organisations](https://intelligence.streamlit.app/Intelligence_organisations)')
+                    # st.caption('[Intelligence failures](https://intelligence.streamlit.app/Intelligence_failures)')
+                    # st.caption('[Intelligence oversight and ethics](https://intelligence.streamlit.app/Intelligence_oversight_and_ethics)')
+                    # st.caption('[Intelligence collection](https://intelligence.streamlit.app/Intelligence_collection)')
+                    # st.caption('[Counterintelligence](https://intelligence.streamlit.app/Counterintelligence)')
+                    # st.caption('[Covert action](https://intelligence.streamlit.app/Covert_action)')
+                    # st.caption('[Intelligence and cybersphere](https://intelligence.streamlit.app/Intelligence_and_cybersphere)')
+                    # st.caption('[Global intelligence](https://intelligence.streamlit.app/Global_intelligence)')
+                    # st.caption('[AI and intelligence](https://intelligence.streamlit.app/AI_and_intelligence)')
+                    # st.caption('[Special collections](https://intelligence.streamlit.app/Special_collections)')
+            events()
             with st.expander('Events & conferences', expanded=True):
-                st.markdown('##### Next event')
-
-                conn = st.connection("gsheets", type=GSheetsConnection)
-
-                # Read the first spreadsheet
-                df_gs = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=0')
-
-                # Read the second spreadsheet
-                df_forms = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=1941981997')
-                df_forms = df_forms.rename(columns={'Event name':'event_name', 'Event organiser':'organiser','Link to the event':'link','Date of event':'date', 'Event venue':'venue', 'Details':'details'})
-                df_forms = df_forms.drop(columns=['Timestamp'])
-
-                # Convert and format dates in df_gs
-                df_gs['date'] = pd.to_datetime(df_gs['date'])
-                df_gs['date_new'] = df_gs['date'].dt.strftime('%Y-%m-%d')
-
-                # Convert and format dates in df_forms
-                df_forms['date'] = pd.to_datetime(df_forms['date'])
-                df_forms['date_new'] = df_forms['date'].dt.strftime('%Y-%m-%d')
-                df_forms['month'] = df_forms['date'].dt.strftime('%m')
-                df_forms['year'] = df_forms['date'].dt.strftime('%Y')
-                df_forms['month_year'] = df_forms['date'].dt.strftime('%Y-%m')
-                df_forms.sort_values(by='date', ascending=True, inplace=True)
-                df_forms = df_forms.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
-
-                # Fill missing values in df_forms
-                df_forms['details'] = df_forms['details'].fillna('No details')
-                df_forms = df_forms.fillna('')
-
-                # Concatenate df_gs and df_forms
-                df_gs = pd.concat([df_gs, df_forms], axis=0)
-                df_gs = df_gs.reset_index(drop=True)
-                df_gs = df_gs.drop_duplicates(subset=['event_name', 'link', 'date'], keep='first')
-
-                # Sort the concatenated dataframe by date_new
-                df_gs = df_gs.sort_values(by='date_new', ascending=True)
-
-                # Filter events happening today or in the future
-                today = dt.date.today()
-                df_gs['date'] = pd.to_datetime(df_gs['date'], dayfirst=True)  # Ensure 'date' is datetime
-                filter = df_gs['date'] >= pd.to_datetime(today)
-                df_gs = df_gs[filter]
-
-                # Display the filtered dataframe
-                df_gs = df_gs.loc[filter]
-                df_gs = df_gs.fillna('')
-                df_gs = df_gs.head(3)
-                if df_gs['event_name'].any() in ("", [], None, 0, False):
-                    st.write('No upcoming event!')
-                df_gs1 = ('['+ df_gs['event_name'] + ']'+ '('+ df_gs['link'] + ')'', organised by ' + '**' + df_gs['organiser'] + '**' + '. Date: ' + df_gs['date_new'] + ', Venue: ' + df_gs['venue'])
-                row_nu = len(df_gs.index)
-                for i in range(row_nu):
-                    st.write(df_gs1.iloc[i])
-                st.write('Visit the [Events on intelligence](https://intelligence.streamlit.app/Events) page to see more!')
-                
-                st.markdown('##### Next conference')
-                df_con = conn.read(spreadsheet='https://docs.google.com/spreadsheets/d/10ezNUOUpzBayqIMJWuS_zsvwklxP49zlfBWsiJI6aqI/edit#gid=939232836')
-                df_con['date'] = pd.to_datetime(df_con['date'])
-                df_con['date_new'] = df_con['date'].dt.strftime('%Y-%m-%d')
-                df_con['date_new'] = pd.to_datetime(df_con['date'], dayfirst = True).dt.strftime('%d/%m/%Y')
-                df_con['date_new_end'] = pd.to_datetime(df_con['date_end'], dayfirst = True).dt.strftime('%d/%m/%Y')
-                df_con.sort_values(by='date', ascending = True, inplace=True)
-                df_con['details'] = df_con['details'].fillna('No details')
-                df_con['location'] = df_con['location'].fillna('No details')
-                df_con = df_con.fillna('')
-                df_con['date_end'] = pd.to_datetime(df_con['date'], dayfirst=True)     
-                filter = df_con['date_end']>=pd.to_datetime(today)
-                df_con = df_con.loc[filter]
-                df_con = df_con.head(1)
-                if df_con['conference_name'].any() in ("", [], None, 0, False):
-                    st.write('No upcoming conference!')
-                df_con1 = ('['+ df_con['conference_name'] + ']'+ '('+ df_con['link'] + ')'', organised by ' + '**' + df_con['organiser'] + '**' + '. Date(s): ' + df_con['date_new'] + ' - ' + df_con['date_new_end'] + ', Venue: ' + df_con['venue'])
-                row_nu = len(df_con.index)
-                for i in range(row_nu):
-                    st.write( df_con1.iloc[i])
-                st.write('Visit the [Events on intelligence](https://intelligence.streamlit.app/Events) page to see more!')
+                event_info = evens_conferences()
+                for info in event_info:
+                    st.write(info)
 
             with st.expander('Digest', expanded=True):
                 st.write('See our dynamic [digest](https://intelligence.streamlit.app/Digest) for the latest updates on intelligence!')
@@ -4516,7 +4503,7 @@ with st.spinner('Retrieving data...'):
                     plt.imshow(wordcloud)
                     plt.axis("off")
                     plt.show()
-                    st.set_option('deprecation.showPyplotGlobalUse', False)
+                    # # # st.set_option('deprecation.showPyplotGlobalUse', False)
                     st.pyplot() 
                 else:
                     st.warning('Please bear in mind that not all items listed in this bibliography have an abstract. Therefore, this wordcloud should not be considered as authoritative. The number of items that have an abstract is ' + str(len(df_abs_no))+'.')
@@ -4531,7 +4518,7 @@ with st.spinner('Retrieving data...'):
                     plt.imshow(wordcloud)
                     plt.axis("off")
                     plt.show()
-                    st.set_option('deprecation.showPyplotGlobalUse', False)
+                    # # st.set_option('deprecation.showPyplotGlobalUse', False)
                     st.pyplot() 
 
             st.divider()
