@@ -15,6 +15,7 @@ import time
 from datetime import datetime, timedelta
 
 ### RETRIEVING CITATION COUNT AND OA STATUS FROM OPENALEX
+df = pd.read_csv('zotero_items.csv')
 df_doi = pd.read_csv('zotero_items.csv')
 
 df_doi = df_doi[['Zotero link', 'DOI']].dropna()
