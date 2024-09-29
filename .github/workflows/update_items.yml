@@ -4,7 +4,8 @@ name: Update Database
 on:
   workflow_dispatch: 
   schedule:
-    - cron: '0 3 * * *'  # Runs at 3 am UTC every day
+    # - cron: '0 3 * * *'  # Runs at 3 am UTC every day
+    - cron: '0 * * * *'  # Runs at the start of every hour (UTC)
 
 jobs:
   update_csv:
