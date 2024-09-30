@@ -139,6 +139,7 @@ df = pd.merge(df, df_doi, on='Zotero link', how='left')
 duplicated_df = pd.merge(duplicated_df, df_doi, on='Zotero link', how='left')
 df
 
+st.stop()
 
 with st.sidebar:
 
