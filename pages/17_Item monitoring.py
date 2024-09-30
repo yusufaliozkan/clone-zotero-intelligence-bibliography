@@ -36,6 +36,7 @@ image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 ### RETRIEVING CITATION COUNT AND OA STATUS FROM OPENALEX
+df = pd.read_csv('all_items.csv')
 df_doi = pd.read_csv('all_items.csv')
 
 df_doi = df_doi[['Zotero link', 'DOI']].dropna()
