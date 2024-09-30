@@ -111,6 +111,8 @@ df_doi['Year_difference'] = df_doi['First_citation_year'] - df_doi['Publication_
 df_doi = df_doi.drop(columns=['DOI'])
 df = pd.merge(df, df_doi, on='Zotero link', how='left')
 df
+total_citations = df['Citation'].sum()
+total_citations
 
 st.stop()
 
