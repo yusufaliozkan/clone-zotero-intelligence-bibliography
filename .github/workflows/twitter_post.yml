@@ -40,4 +40,4 @@ jobs:
         ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
         ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
       run: |
-        python twitter_posts.py
+        python twitter_posts/twitter_posts.py
