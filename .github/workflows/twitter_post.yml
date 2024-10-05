@@ -22,8 +22,10 @@ jobs:
         python-version: '3.x'
 
     # Step 3: Install system dependencies (distutils)
-    - name: Install system dependencies (distutils)
-      run: sudo apt-get install python3-distutils
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install python3-distutils
 
     # Step 4: Install dependencies from requirements.txt
     - name: Install dependencies
