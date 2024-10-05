@@ -21,13 +21,17 @@ jobs:
       with:
         python-version: '3.x'
 
-    # Step 3: Install dependencies (if you have a requirements.txt file)
+    # Step 3: Install system dependencies (distutils)
+    - name: Install system dependencies (distutils)
+      run: sudo apt-get install python3-distutils
+
+    # Step 4: Install dependencies from requirements.txt
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    # Step 4: Run the Python script
+    # Step 5: Run the Python script
     - name: Run Python Script
       env:
         API_KEY: ${{ secrets.TWITTER_API_KEY }}
