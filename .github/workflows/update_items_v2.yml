@@ -1,4 +1,4 @@
-name: Update Database v2
+name: Update Database
 
 # Schedule the workflow to run once a day
 on:
@@ -25,11 +25,16 @@ jobs:
         with:
           python-version: '3.9'  # Specify the Python version you need
 
-      # Install necessary dependencies, including nbconvert for notebook execution
+      # Install necessary dependencies, including Jupyter and ipykernel
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install nbconvert
+          pip install nbconvert ipykernel  # Install ipykernel for Python3
+
+      # Install the Python 3 kernel
+      - name: Install Jupyter Kernel
+        run: |
+          python -m ipykernel install --user
 
       # Convert and Run the Jupyter Notebook
       - name: Convert and Run Jupyter Notebook
