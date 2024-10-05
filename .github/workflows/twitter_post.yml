@@ -30,7 +30,7 @@ jobs:
     # Step 4: Install dependencies from requirements.txt
     - name: Install dependencies
       run: |
-        pip install pandas numpy pyzotero requests beautifulsoup4 grapheme pytz
+        pip install pandas numpy pyzotero requests beautifulsoup4 grapheme pytz requests_oauthlib
 
     # Step 5: Run the Python script
     - name: Run Python Script
