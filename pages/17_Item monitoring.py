@@ -847,6 +847,9 @@ else:
                     df_dois = df_dois[[column_to_keep]]
                     df_dois = df_dois.reset_index(drop=True) 
 
+                    filtered_final_df['DOI'] = filtered_final_df['DOI'].str.lower()
+                    df_dois['DOI'] = df_dois['DOI'].str.lower()
+
                     merged_df = pd.merge(filtered_final_df, df_dois[['DOI']], on='DOI', how='left', indicator=True)
                     items_not_in_df2 = merged_df[merged_df['_merge'] == 'left_only']
                     items_not_in_df2.drop('_merge', axis=1, inplace=True)
