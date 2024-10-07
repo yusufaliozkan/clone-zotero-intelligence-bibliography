@@ -1,10 +1,11 @@
-name: Update Database
+name: Update Database v2
 
 # Schedule the workflow to run once a day
 on:
   workflow_dispatch: 
   schedule:
     - cron: '0 3 * * *'  # Runs at 3 am UTC every day
+    # - cron: '0 * * * *'  # Runs at the start of every hour (UTC)
 
 jobs:
   update_csv:
@@ -24,15 +25,21 @@ jobs:
         with:
           python-version: '3.9'  # Specify the Python version you need
 
-      # Install necessary dependencies
+      # Install necessary dependencies, including Jupyter and ipykernel
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
+          pip install nbconvert ipykernel  # Install ipykernel for Python3
 
-      # Run the Python Script
-      - name: Run Run Python Script
+      # Install the Python 3 kernel
+      - name: Install Jupyter Kernel
         run: |
-          python database_update/all_items.py  # Execute the Python script
+          python -m ipykernel install --user
+
+      # Convert and Run the Jupyter Notebook
+      - name: Convert and Run Jupyter Notebook
+        run: |
+          jupyter nbconvert --to notebook --execute --inplace all_items.ipynb  # Run the notebook
 
       # Pull, commit, and push changes to CSV files
       - name: Pull, commit, and push changes
