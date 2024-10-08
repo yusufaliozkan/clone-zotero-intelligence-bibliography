@@ -166,6 +166,9 @@ for index, row in df.iterrows():
     publication_date = pd.to_datetime(row['Date published'], errors='coerce').strftime('%d-%m-%Y')
     link = row['Link to publication']
 
+    # Extract the creators (authors) for the current item
+    creators = zot.item(row['Zotero link'])['data']['creators']
+
     # Process author names with 'et al.' if more than two authors
     creators_str = ", ".join([
         creator.get('firstName', '') + ' ' + creator.get('lastName', '')
