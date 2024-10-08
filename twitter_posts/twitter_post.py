@@ -166,8 +166,16 @@ for index, row in df.iterrows():
     publication_date = pd.to_datetime(row['Date published'], errors='coerce').strftime('%d-%m-%Y')
     link = row['Link to publication']
 
-    # Extract the creators (authors) for the current item
-    creators = zot.item(row['Zotero link'])['data']['creators']
+    # Extract the Zotero item key from the Zotero link (last part of the URL)
+    zotero_link = row['Zotero link']
+    item_key = re.search(r'/items/([^/]+)$', zotero_link).group(1)  # Extracts the item key from the Zotero link
+
+    # Fetch the Zotero item using the item key
+    try:
+        creators = zot.item(item_key)['data']['creators']
+    except requests.exceptions.HTTPError as e:
+        print(f"Error fetching item {item_key}: {e}")
+        continue  # Skip this item if there's an error
 
     # Process author names with 'et al.' if more than two authors
     creators_str = ", ".join([
