@@ -35,18 +35,11 @@ jobs:
           python database_update/all_items.py  # Execute the Python script
 
       # Pull, commit, and push changes to CSV files
-      - name: Stash local changes
+      - name: Pull, commit, and push changes
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git add *.csv  # Add all CSV files in the repository
-          git stash  # Stash local changes
-      - name: Pull changes from the remote repository
-        run: |
           git pull origin main  # Pull the latest changes from the remote repository
-      - name: Apply stashed changes
-        run: |
-          git stash pop  # Reapply the stashed changes
           git add *.csv  # Add all CSV files in the repository
           git diff-index --quiet HEAD || git commit -m "Update Zotero data"
           git push
