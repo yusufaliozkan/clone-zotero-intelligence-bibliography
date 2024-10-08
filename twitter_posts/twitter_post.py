@@ -7,6 +7,7 @@ from typing import List, Dict
 from datetime import datetime, timedelta
 import pytz
 from requests_oauthlib import OAuth1
+import re
 
 API_KEY = os.getenv('TWITTER_API_KEY')
 API_SECRET = os.getenv('TWITTER_API_SECRET')
