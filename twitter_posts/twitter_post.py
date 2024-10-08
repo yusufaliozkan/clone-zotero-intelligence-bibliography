@@ -164,6 +164,7 @@ for index, row in df.iterrows():
     publication_type = row['Publication type']
     title = row['Title']
     publication_date = row['Date published']
+    publication_date = pd.to_datetime(row['Date published'], errors='coerce').strftime('%d-%m-%Y')
     link = row['Link to publication']
     author_name = row['Authors']  # Extract the author name
 
