@@ -163,9 +163,25 @@ header = 'New addition\n\n'
 for index, row in df.iterrows():
     publication_type = row['Publication type']
     title = row['Title']
-    publication_date = row['Date published']
+    publication_date = pd.to_datetime(row['Date published'], errors='coerce').strftime('%d-%m-%Y')
     link = row['Link to publication']
-    author_name = row['Authors']  # Extract the author name
+
+    # Extract the creators (authors) for the current item
+    creators = zot.item(row['Zotero link'])['data']['creators']
+
+    # Process author names with 'et al.' if more than two authors
+    creators_str = ", ".join([
+        creator.get('firstName', '') + ' ' + creator.get('lastName', '')
+        if 'firstName' in creator and 'lastName' in creator
+        else creator.get('name', '') 
+        for creator in creators
+    ])
+
+    authors_list = creators_str.split(", ")
+    if len(authors_list) > 2:
+        author_name = f"{authors_list[0]} et al."
+    else:
+        author_name = ", ".join(authors_list)
 
     # The text that will remain unchanged
     remaining_text = f"{header}{publication_type}: by {author_name} (published {publication_date})\n\n"
