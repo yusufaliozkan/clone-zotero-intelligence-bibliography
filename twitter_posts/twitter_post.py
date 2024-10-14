@@ -164,7 +164,13 @@ header = 'New addition\n\n'
 for index, row in df.iterrows():
     publication_type = row['Publication type']
     title = row['Title']
-    publication_date = pd.to_datetime(row['Date published'], errors='coerce').strftime('%d-%m-%Y')
+    publication_date = pd.to_datetime(row['Date published'], errors='coerce')
+    # Only include the publication date text if the date is valid
+    if pd.isna(publication_date):
+        publication_text = ""
+    else:
+        publication_text = f" (published {publication_date.strftime('%d-%m-%Y')})"
+
     link = row['Link to publication']
 
     # Extract the Zotero item key from the Zotero link (last part of the URL)
@@ -193,7 +199,7 @@ for index, row in df.iterrows():
         author_name = ", ".join(authors_list)
 
     # The text that will remain unchanged
-    remaining_text = f"{header}{publication_type}: by {author_name} (published {publication_date})\n\n"
+    remaining_text = f"{header}{publication_type}: by {author_name}{publication_text}\n\n"
 
     # Construct the post ensuring only the title is truncated
     post_text = truncate_title_and_construct_tweet(title, link, remaining_text, 280)
