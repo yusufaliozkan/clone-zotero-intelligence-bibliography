@@ -242,9 +242,6 @@ with st.spinner('Retrieving data...'):
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
 
-    ttt = df_dedup[df_dedup['Title']=="Why the State Department's intelligence agency may be the best in DC"]
-    ttt
-
     col1, col2, col3 = st.columns([3,5,8])
     with col3:
         with st.expander('Introduction'):
