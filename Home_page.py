@@ -670,7 +670,7 @@ with st.spinner('Retrieving data...'):
                                 search_tokens = parse_search_terms(search_term)
                                 print(f"Search Tokens: {search_tokens}")  # Debugging: Print search tokens
                                 df_csv = df_duplicated.copy()
-                                ttt = df_csv[['Title']=="Why the State Department's intelligence agency may be the best in DC"]
+                                ttt = df_csv[df_csv['Title']=="Why the State Department's intelligence agency may be the best in DC"]
                                 ttt
 
                                 filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
