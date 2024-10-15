@@ -3,8 +3,8 @@ name: Update Database
 # Schedule the workflow to run once a day
 on:
   workflow_dispatch: 
-  schedule:
-    - cron: '30 15 * * *'  # Runs at 15:30 UTC every day
+  # schedule:
+  #   - cron: '30 15 * * *'  # Runs at 15:30 UTC every day
 
 jobs:
   update_csv:
@@ -29,25 +29,19 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      # Run the Python Script to update all_items.csv
-      - name: Run Python Script for CSV update
+      # Run the Python Script
+      - name: Run Run Python Script
         run: |
           python database_update/all_items.py  # Execute the Python script
 
-      # Run the Python script to refresh authors_dict.py
-      - name: Run Python Script for df_authors update
-        run: |
-          python authors_dict.py  # Run the script to refresh df_authors from all_items.csv
-
-      # Pull, commit, and push changes to CSV and authors_dict.py
+      # Pull, commit, and push changes to CSV files
       - name: Pull, commit, and push changes
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git pull origin main  # Pull the latest changes from the remote repository
           git add *.csv  # Add all CSV files in the repository
-          git add authors_dict.py  # Add the updated authors_dict.py if changes occurred
-          git diff-index --quiet HEAD || git commit -m "Update Zotero data and authors_dict"
+          git diff-index --quiet HEAD || git commit -m "Update Zotero data"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
