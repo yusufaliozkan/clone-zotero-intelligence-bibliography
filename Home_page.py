@@ -672,9 +672,11 @@ with st.spinner('Retrieving data...'):
                                 df_csv = df_duplicated.copy()
 
                                 filtered_df = apply_boolean_search(df_csv, search_tokens, st.session_state.search_in)
+                                filtered_df
                                 print(f"Filtered DataFrame (before dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame before dropping duplicates
                                 filtered_df_for_collections = filtered_df.copy()
                                 filtered_df = filtered_df.drop_duplicates()
+                                filtered_df
                                 print(f"Filtered DataFrame (after dropping duplicates):\n{filtered_df}")  # Debugging: Print DataFrame after dropping duplicates
                                 
                                 if not filtered_df.empty and 'Date published' in filtered_df.columns:
