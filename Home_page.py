@@ -54,6 +54,8 @@ api_key = '' # api_key is only needed for private groups and libraries
 set_page_config()
 pd.set_option('display.max_colwidth', None)
 
+df_authors
+
 zot = zotero.Zotero(library_id, library_type)
 # aa = zot.top(limit=10)
 # aa
