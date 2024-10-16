@@ -27,9 +27,7 @@ import time
 import PIL
 from PIL import Image, ImageDraw, ImageFilter
 import json
-# from authors_dict import df_authors, name_replacements
-from authors_dict import process_authors
-
+from authors_dict import df_authors, name_replacements
 from copyright import display_custom_license
 from sidebar_content import sidebar_content, set_page_config
 import plotly.graph_objs as go
@@ -241,9 +239,6 @@ with st.spinner('Retrieving data...'):
 
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
-    df_authors = pd.read_csv('all_items.csv')
-    df_authors, name_replacements = process_authors(df_authors)
-
 
     col1, col2, col3 = st.columns([3,5,8])
     with col3:
@@ -549,7 +544,7 @@ with st.spinner('Retrieving data...'):
     
             # @st.experimental_fragment
             def search_options_main_menu():
-                # from authors_dict import name_replacements
+                from authors_dict import name_replacements
                 total_rows = len(df_dedup)
                 nan_count_citation = df_dedup['Citation_list'].isna().sum()
                 non_nan_count_citation = total_rows - nan_count_citation
@@ -1576,13 +1571,7 @@ with st.spinner('Retrieving data...'):
                                     collection_author_df['Author_name'] = collection_author_df['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
                                     collection_author_df = collection_author_df.explode('Author_name')
                                     collection_author_df.reset_index(drop=True, inplace=True)
-                                    # from authors_dict import name_replacements
-
-                                    from authors_dict import process_authors
-                                    process_authors
-                                    df_authors, name_replacements = process_authors(df_authors)
-                                    df_authors
-                                    name_replacements
+                                    from authors_dict import name_replacements
                                     collection_author_df['Author_name'] = collection_author_df['Author_name'].map(name_replacements).fillna(collection_author_df['Author_name'])
                                     collection_author_df = collection_author_df['Author_name'].value_counts().head(10)
                                     fig = px.bar(collection_author_df, x=collection_author_df.index, y=collection_author_df.values)
