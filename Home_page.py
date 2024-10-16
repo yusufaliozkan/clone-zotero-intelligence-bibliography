@@ -1581,6 +1581,7 @@ with st.spinner('Retrieving data...'):
                                     # from authors_dict import name_replacements
 
                                     from authors_dict import process_authors
+                                    process_authors
                                     df_authors, name_replacements = process_authors(df_authors)
                                     df_authors
                                     name_replacements
