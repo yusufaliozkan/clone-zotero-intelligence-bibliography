@@ -242,6 +242,7 @@ with st.spinner('Retrieving data...'):
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
     df_authors = pd.read_csv('all_items.csv')
+    process_authors
     df_authors, name_replacements = process_authors(df_authors)
     df_authors
     name_replacements
