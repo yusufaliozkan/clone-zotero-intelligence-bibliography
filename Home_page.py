@@ -550,7 +550,7 @@ with st.spinner('Retrieving data...'):
     
             # @st.experimental_fragment
             def search_options_main_menu():
-                from authors_dict import name_replacements
+                # from authors_dict import name_replacements
                 total_rows = len(df_dedup)
                 nan_count_citation = df_dedup['Citation_list'].isna().sum()
                 non_nan_count_citation = total_rows - nan_count_citation
