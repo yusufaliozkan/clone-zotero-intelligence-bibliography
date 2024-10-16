@@ -244,6 +244,7 @@ with st.spinner('Retrieving data...'):
     df_authors = pd.read_csv('all_items.csv')
     df_authors, name_replacements = process_authors(df_authors)
     df_authors
+    name_replacements
 
 
     col1, col2, col3 = st.columns([3,5,8])
