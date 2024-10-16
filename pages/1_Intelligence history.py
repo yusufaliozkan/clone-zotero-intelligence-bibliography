@@ -7,28 +7,28 @@ import numpy as np
 import altair as alt
 # from pandas.io.json import json_normalize
 import datetime
-import plotly.express as px
-import numpy as np
-import re
-import matplotlib.pyplot as plt
-import nltk
-nltk.download('all')
-from nltk.corpus import stopwords
-nltk.download('stopwords')
-from wordcloud import WordCloud
-# from gsheetsdb import connect
-from streamlit_gsheets import GSheetsConnection
-import datetime as dt     
-import random
-from authors_dict import process_authors
-from sidebar_content import sidebar_content, set_page_config
-from format_entry import format_entry
-from copyright import display_custom_license
-from events import evens_conferences
-from streamlit_dynamic_filters import DynamicFilters
-import requests
-from st_keyup import st_keyup
-from collection_template import collection_template 
+# import plotly.express as px
+# import numpy as np
+# import re
+# import matplotlib.pyplot as plt
+# import nltk
+# nltk.download('all')
+# from nltk.corpus import stopwords
+# nltk.download('stopwords')
+# from wordcloud import WordCloud
+# # from gsheetsdb import connect
+# from streamlit_gsheets import GSheetsConnection
+# import datetime as dt     
+# import random
+# from authors_dict import process_authors
+# from sidebar_content import sidebar_content, set_page_config
+# from format_entry import format_entry
+# from copyright import display_custom_license
+# from events import evens_conferences
+# from streamlit_dynamic_filters import DynamicFilters
+# import requests
+# from st_keyup import st_keyup
+# from collection_template import collection_template 
 
 
 set_page_config()
