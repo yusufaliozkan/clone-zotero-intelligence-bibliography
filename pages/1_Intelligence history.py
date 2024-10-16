@@ -33,9 +33,6 @@ from st_keyup import st_keyup
 from collection_template import collection_template 
 
 
-df_authors = pd.read_csv('all_items.csv')
-df_authors, name_replacements = process_authors(df_authors)
-
 set_page_config()
 
 st.title("Intelligence history", anchor=False)
