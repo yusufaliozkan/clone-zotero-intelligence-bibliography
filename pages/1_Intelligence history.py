@@ -7,28 +7,28 @@ import numpy as np
 import altair as alt
 # from pandas.io.json import json_normalize
 import datetime
-# import plotly.express as px
-# import numpy as np
-# import re
-# import matplotlib.pyplot as plt
-# import nltk
-# nltk.download('all')
-# from nltk.corpus import stopwords
-# nltk.download('stopwords')
-# from wordcloud import WordCloud
-# # from gsheetsdb import connect
-# from streamlit_gsheets import GSheetsConnection
-# import datetime as dt     
-# import random
-# from authors_dict import process_authors
-# from sidebar_content import sidebar_content, set_page_config
-# from format_entry import format_entry
-# from copyright import display_custom_license
-# from events import evens_conferences
-# from streamlit_dynamic_filters import DynamicFilters
-# import requests
-# from st_keyup import st_keyup
-# from collection_template import collection_template 
+import plotly.express as px
+import numpy as np
+import re
+import matplotlib.pyplot as plt
+import nltk
+nltk.download('all')
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+from wordcloud import WordCloud
+# from gsheetsdb import connect
+from streamlit_gsheets import GSheetsConnection
+import datetime as dt     
+import random
+from authors_dict import process_authors
+from sidebar_content import sidebar_content, set_page_config
+from format_entry import format_entry
+from copyright import display_custom_license
+from events import evens_conferences
+from streamlit_dynamic_filters import DynamicFilters
+import requests
+from st_keyup import st_keyup
+from collection_template import collection_template 
 
 
 set_page_config()
@@ -61,6 +61,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_collections = pd.read_csv('all_items_duplicated.csv')
     # df_collections = df_collections[~df_collections['Collection_Name'].str.contains('01.98')]
     df_collections = df_collections[df_collections['Collection_Name'] != '01 Intelligence history']
+        
+
+    df_authors = pd.read_csv('all_items.csv')
+    df_authors, name_replacements = process_authors(df_authors)
 
 
     df_collections = df_collections.sort_values(by='Collection_Name')
