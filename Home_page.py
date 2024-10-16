@@ -27,7 +27,7 @@ import time
 import PIL
 from PIL import Image, ImageDraw, ImageFilter
 import json
-from authors_dict import df_authors, name_replacements
+from authors_dict import get_df_authors, name_replacements
 from copyright import display_custom_license
 from sidebar_content import sidebar_content, set_page_config
 import plotly.graph_objs as go
@@ -239,6 +239,7 @@ with st.spinner('Retrieving data...'):
 
     df_dedup = pd.read_csv('all_items.csv')
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
+    df_authors = get_df_authors()
 
     col1, col2, col3 = st.columns([3,5,8])
     with col3:
