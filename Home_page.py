@@ -1578,7 +1578,6 @@ with st.spinner('Retrieving data...'):
                                     collection_author_df = collection_author_df.explode('Author_name')
                                     collection_author_df.reset_index(drop=True, inplace=True)
                                     # from authors_dict import name_replacements
-                                    from authors_dict import process_authors
                                     df_authors, name_replacements = process_authors(df_authors)
                                     name_replacements
                                     collection_author_df['Author_name'] = collection_author_df['Author_name'].map(name_replacements).fillna(collection_author_df['Author_name'])
