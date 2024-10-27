@@ -1231,7 +1231,7 @@ with st.spinner('Retrieving data...'):
                     
                                 today = datetime.date.today().isoformat()
                                 a = f'{selected_author}_{today}'
-                                container_download.download_button('💾 Download publications', csv, (a+'.csv'), mime="text/csv", key='download-csv-authors')
+                                container_download.download_button('Download publications', csv, (a+'.csv'), mime="text/csv", key='download-csv-authors', icon=":material/download:")
 
                                 on = st.toggle('Generate dashboard')
                                 if on and len(filtered_collection_df_authors) > 0: 
@@ -1547,7 +1547,7 @@ with st.spinner('Retrieving data...'):
                                     container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
                                 a = f'{selected_collection}_{today}'
-                                container_download.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
+                                container_download.download_button('Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4', icon=":material/download:")
 
                                 on = st.toggle('Generate dashboard')
                                 if on and len(filtered_collection_df) > 0: 
@@ -1875,7 +1875,7 @@ with st.spinner('Retrieving data...'):
                                     )
 
                                 a = f'{selected_type}_{today}'
-                                container_download_types.download_button('💾 Download', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
+                                container_download_types.download_button('Download', csv, (a+'.csv'), mime="text/csv", key='download-csv-4', icon=":material/download:")
 
                                 on = st.toggle('Generate dashboard')
                                 if on and len (filtered_type_df) > 0:
@@ -2225,7 +2225,7 @@ with st.spinner('Retrieving data...'):
                                 )
 
                                 a = f'selected_journal_{today}'
-                                container_download.download_button('💾 Download', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
+                                container_download.download_button('Download', csv, (a+'.csv'), mime="text/csv", key='download-csv-4', icon=":material/download:")
 
                                 on = st.toggle('Generate dashboard')
                                 if on and len (selected_journal_df) > 0:
@@ -2495,7 +2495,7 @@ with st.spinner('Retrieving data...'):
                             # csv = df_download
                             # # st.caption(collection_name)
                             a = 'intelligence-bibliography-items-between-' + str(years[0]) + '-' + str(years[1])
-                            container_download.download_button('💾 Download selected items ', csv_selected, (a+'.csv'), mime="text/csv", key='download-csv-3')
+                            container_download.download_button('Download selected items ', csv_selected, (a+'.csv'), mime="text/csv", key='download-csv-3', icon=":material/download:")
                             number_of_items = len(df_all)
 
                             publications_by_type = df_all['Publication type'].value_counts()
@@ -2891,7 +2891,7 @@ with st.spinner('Retrieving data...'):
                             # csv = df_download
                             # # st.caption(collection_name)
                             a = 'cited-items-'
-                            container_download.download_button('💾 Download selected items ', csv_selected, (a+'.csv'), mime="text/csv", key='download-csv-3')
+                            container_download.download_button('Download selected items ', csv_selected, (a+'.csv'), mime="text/csv", key='download-csv-3', icon=":material/download:")
                             number_of_items = len(df_cited)
                             container_metric.metric(label=f'Number of cited publications', value=number_of_items)
 
@@ -3214,7 +3214,7 @@ with st.spinner('Retrieving data...'):
                     # # # st.caption(collection_name)
                     # today = datetime.date.today().isoformat()
                     # a = 'recently-added-' + today
-                    # st.download_button('💾 Download recently added items', csv, (a+'.csv'), mime="text/csv", key='download-csv-3')
+                    # st.download_button(' Download recently added items', csv, (a+'.csv'), mime="text/csv", key='download-csv-3')
                     
                     display = st.checkbox('Display theme and abstract')
 
@@ -3399,7 +3399,7 @@ with st.spinner('Retrieving data...'):
                 # # # st.caption(collection_name)
                 # today = datetime.date.today().isoformat()
                 # a = 'intelligence-bibliography-all-' + today
-                # st.download_button('💾 Download all items', csv, (a+'.csv'), mime="text/csv", key='download-csv-2')
+                # st.download_button('Download all items', csv, (a+'.csv'), mime="text/csv", key='download-csv-2')
                 # df_all_items
                 st.write('''
                 The entire dataset containing the metadata of publications within the IntelArchive database is available on Zenodo. 
