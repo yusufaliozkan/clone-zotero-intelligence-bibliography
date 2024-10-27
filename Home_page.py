@@ -3547,11 +3547,12 @@ with st.spinner('Retrieving data...'):
             latitude=50, longitude=10, zoom=3, pitch=30
         )
 
-        # Create the Deck with the layer and view state
+        # Create the Deck with the layer, view state, and a lighter map style
         chart = pdk.Deck(
             layers=[scatterplot_layer],
             initial_view_state=view_state,
-            tooltip={"text": "{country}\nValue: {value}"}
+            tooltip={"text": "{country}\nValue: {value}"},
+            map_style="mapbox://styles/mapbox/light-v9"  # Use a light map style
         )
 
         # Display the Pydeck chart in Streamlit
