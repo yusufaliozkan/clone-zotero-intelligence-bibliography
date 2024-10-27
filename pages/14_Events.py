@@ -105,7 +105,7 @@ with tab1:
         display = st.checkbox('Show details')      
     
     with col2:
-        sort_by = st.radio('Sort by', ['Date', 'Most recently added', 'Organiser'])
+        sort_by = st.radio('Sort by', ['Date', 'Most recently added', 'Organiser'], horizontal=True)
         
     st.write('See [📊 Event visuals](#event-visuals)')
 

@@ -272,7 +272,7 @@ else:
     if password_input == st.secrets['item_monitoring_password']:
         st.success('Wellcome to the admin dashboard')
 
-        admin_task = st.radio('Select an option', ['Item monitoring', 'Post publications', 'Post events'])
+        admin_task = st.radio('Select an option', ['Item monitoring', 'Post publications', 'Post events'], horizontal=True)
 
         if admin_task=='Post publications':
             @st.experimental_fragment
@@ -434,7 +434,7 @@ else:
                 df = df.reset_index(drop=True)
                 df
                 
-                item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'])
+                item_header = st.radio('Select a header', ['New addition', 'Recently published', 'Custom'], horizontal=True)
                 if item_header=='New addition':
                     header='New addition\n\n'
                 elif item_header=='Recently published':
