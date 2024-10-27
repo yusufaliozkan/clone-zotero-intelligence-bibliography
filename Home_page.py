@@ -849,7 +849,7 @@ with st.spinner('Retrieving data...'):
                                     container_download_button.download_button('Download search', csv, (a+'.csv'), mime="text/csv", key='download-csv-1', icon=":material/download:",)
 
 
-                                    on = st.toggle(':material/monitoring: Generate dashboard')
+                                    on = st.toggle(':material/monitoring: Generate report')
 
                                     if on and len(filtered_df) > 0:
                                         st.info(f'Dashboard for search terms: {search_term}')
@@ -1233,7 +1233,7 @@ with st.spinner('Retrieving data...'):
                                 a = f'{selected_author}_{today}'
                                 container_download.download_button('Download publications', csv, (a+'.csv'), mime="text/csv", key='download-csv-authors', icon=":material/download:")
 
-                                on = st.toggle('Generate dashboard')
+                                on = st.toggle(':material/monitoring: Generate report')
                                 if on and len(filtered_collection_df_authors) > 0: 
                                     st.info(f'Publications dashboard for {selected_author}')
                                     author_df = filtered_collection_df_authors
@@ -1549,7 +1549,7 @@ with st.spinner('Retrieving data...'):
                                 a = f'{selected_collection}_{today}'
                                 container_download.download_button('Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4', icon=":material/download:")
 
-                                on = st.toggle('Generate dashboard')
+                                on = st.toggle(':material/monitoring: Generate report')
                                 if on and len(filtered_collection_df) > 0: 
                                     st.info(f'Dashboard for {selected_collection}')
                                     collection_df = filtered_collection_df.copy()
@@ -1877,7 +1877,7 @@ with st.spinner('Retrieving data...'):
                                 a = f'{selected_type}_{today}'
                                 container_download_types.download_button('Download', csv, (a+'.csv'), mime="text/csv", key='download-csv-4', icon=":material/download:")
 
-                                on = st.toggle('Generate dashboard')
+                                on = st.toggle(':material/monitoring: Generate report')
                                 if on and len (filtered_type_df) > 0:
                                     st.info(f'Dashboard for {selected_type}')
                                     type_df = filtered_type_df.copy()
@@ -2227,7 +2227,7 @@ with st.spinner('Retrieving data...'):
                                 a = f'selected_journal_{today}'
                                 container_download.download_button('Download', csv, (a+'.csv'), mime="text/csv", key='download-csv-4', icon=":material/download:")
 
-                                on = st.toggle('Generate dashboard')
+                                on = st.toggle(':material/monitoring: Generate report')
                                 if on and len (selected_journal_df) > 0:
                                     st.info(f'Dashboard for {journals}')
                                     
@@ -2633,7 +2633,7 @@ with st.spinner('Retrieving data...'):
                             for row in formatted_rows:
                                 container_themes.caption(row)                
 
-                            dashboard_all = st.toggle('Generate dashboard')
+                            dashboard_all = st.toggle(':material/monitoring: Generate report')
                             if dashboard_all:
                                 if dashboard_all and len(df_all) > 0: 
                                     if abs(years[1]-years[0])>0 and years[0]<current_year:
@@ -3019,7 +3019,7 @@ with st.spinner('Retrieving data...'):
                             if citation_type == 'Citations without outliers':
                                 st.info(f'**{outlier_count}** items are removed here that have more than 1000 citations.')
 
-                            dashboard_all = st.toggle('Generate dashboard')
+                            dashboard_all = st.toggle(':material/monitoring: Generate report')
                             if dashboard_all:
                                 if dashboard_all and len(df_cited) > 0: 
                                     st.markdown(f'#### Dashboard for cited items in the library')
