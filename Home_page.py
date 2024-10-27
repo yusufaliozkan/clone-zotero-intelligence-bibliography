@@ -3517,6 +3517,23 @@ with st.spinner('Retrieving data...'):
                 st.write('See our dynamic [digest](https://intelligence.streamlit.app/Digest) for the latest updates on intelligence!')
 
     with tab2:
+        country_coords = pd.DataFrame({
+            'country': ['United Kingdom', 'France', 'Germany'],
+            'lat': [51.509865, 48.8566, 52.52],
+            'lon': [-0.118092, 2.3522, 13.405],
+        })
+
+        # Your data with country names
+        data = pd.DataFrame({
+            'country': ['United Kingdom', 'France', 'Germany'],
+        })
+
+        # Merge to add latitude and longitude
+        merged_data = pd.merge(data, country_coords, on='country')
+
+        # Display the map
+        st.map(merged_data)
+
         st.header('Dashboard', anchor=False)
         on_main_dashboard = st.toggle(':material/dashboard: Display dashboard')
         
