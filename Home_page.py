@@ -849,7 +849,7 @@ with st.spinner('Retrieving data...'):
                                     container_download_button.download_button('Download search', csv, (a+'.csv'), mime="text/csv", key='download-csv-1', icon=":material/download:",)
 
 
-                                    on = st.toggle(':material/monitoring: Generate report')
+                                    on = st.toggle(':material/monitoring: Generate report', help='See publications with visuals')
 
                                     if on and len(filtered_df) > 0:
                                         st.info(f'Dashboard for search terms: {search_term}')
