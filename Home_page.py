@@ -1235,7 +1235,7 @@ with st.spinner('Retrieving data...'):
 
                                 on = st.toggle(':material/monitoring: Generate report', help='See publications with visuals')
                                 if on and len(filtered_collection_df_authors) > 0: 
-                                    st.info(f'Publications dashboard for {selected_author}')
+                                    st.info(f'Publications report for {selected_author}')
                                     author_df = filtered_collection_df_authors
                                     publications_by_type = author_df['Publication type'].value_counts()
                                     fig = px.bar(publications_by_type, x=publications_by_type.index, y=publications_by_type.values,
@@ -1551,7 +1551,7 @@ with st.spinner('Retrieving data...'):
 
                                 on = st.toggle(':material/monitoring: Generate report', help='See publications with visuals')
                                 if on and len(filtered_collection_df) > 0: 
-                                    st.info(f'Dashboard for {selected_collection}')
+                                    st.info(f'Report for {selected_collection}')
                                     collection_df = filtered_collection_df.copy()
                                     
                                     publications_by_type = collection_df['Publication type'].value_counts()
@@ -1879,7 +1879,7 @@ with st.spinner('Retrieving data...'):
 
                                 on = st.toggle(':material/monitoring: Generate report', help='See publications with visuals')
                                 if on and len (filtered_type_df) > 0:
-                                    st.info(f'Dashboard for {selected_type}')
+                                    st.info(f'Report for {selected_type}')
                                     type_df = filtered_type_df.copy()
                                     collection_df = type_df.copy()
                                     collection_df['Year'] = pd.to_datetime(collection_df['Date published']).dt.year
@@ -2229,7 +2229,7 @@ with st.spinner('Retrieving data...'):
 
                                 on = st.toggle(':material/monitoring: Generate report', help='See publications with visuals')
                                 if on and len (selected_journal_df) > 0:
-                                    st.info(f'Dashboard for {journals}')
+                                    st.info(f'Report for {journals}')
                                     
                                     if non_nan_id !=0:
 
@@ -2637,9 +2637,9 @@ with st.spinner('Retrieving data...'):
                             if dashboard_all:
                                 if dashboard_all and len(df_all) > 0: 
                                     if abs(years[1]-years[0])>0 and years[0]<current_year:
-                                        st.info(f'Dashboard for items published between {int(years[0])} and {int(years[1])}')
+                                        st.info(f'Report for items published between {int(years[0])} and {int(years[1])}')
                                     else:
-                                        st.info(f'Dashboard for items published in {int(years[0])}')
+                                        st.info(f'Report for items published in {int(years[0])}')
                                     collection_df = df_all.copy()
                                     
                                     publications_by_type = collection_df['Publication type'].value_counts()
@@ -3022,7 +3022,7 @@ with st.spinner('Retrieving data...'):
                             dashboard_all = st.toggle(':material/monitoring: Generate report', help='See publications with visuals')
                             if dashboard_all:
                                 if dashboard_all and len(df_cited) > 0: 
-                                    st.markdown(f'#### Dashboard for cited items in the library')
+                                    st.markdown(f'#### Report for cited items in the library')
 
                                     colcite1, colcite2, colcite3 = st.columns(3) 
 
