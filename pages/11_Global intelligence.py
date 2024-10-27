@@ -220,7 +220,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     container_abstract = st.container()
                 with col32:
                     container_cited_items = st.container()
-                view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'), horizontal=True)
                 container_pub_types = st.container()
                 container_download = st.container()
 
@@ -319,7 +319,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         container_publication_ratio.metric(label='Collaboration ratio', value=f'{(collaboration_ratio)}%', help='Ratio of multiple-authored papers')
 
                     # THIS WAS THE PLACE WHERE FORMAT_ENTRY WAS LOCATED
-                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation', 'Date added :arrow_down:',))
+                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation', 'Date added :arrow_down:',), horizontal=True)
                     display2 = container_abstract.checkbox('Display abstracts', key='type_count2')
 
                     if view == 'Basic list':
@@ -458,7 +458,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     num_items_collections = len(df_countries)
                     breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type_country.items()])                    
 
-                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation', 'Date added :arrow_down:',))
+                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Publication type',  'Citation', 'Date added :arrow_down:',), horizontal=True)
                     display2 = container_abstract.checkbox('Display abstracts', key='type_country_2')
 
                     articles_list = []  # Store articles in a list
@@ -1195,7 +1195,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 listdf_abstract = df['lemma_abstract']
 
                 st.markdown('## Wordcloud')
-                wordcloud_opt = st.radio('Wordcloud of:', ('Titles', 'Abstracts'))
+                wordcloud_opt = st.radio('Wordcloud of:', ('Titles', 'Abstracts'), horizontal=True)
                 if wordcloud_opt=='Titles':
                     df_list = [item for sublist in listdf for item in sublist]
                     string = pd.Series(df_list).str.cat(sep=' ')
