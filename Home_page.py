@@ -553,7 +553,7 @@ with st.spinner('Retrieving data...'):
                 non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
                 citation_mean = non_nan_cited_df_dedup['Citation'].mean()
                 citation_median = non_nan_cited_df_dedup['Citation'].median()
-                search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"), horizontal=False)
+                search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"), horizontal=True)
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
                     @st.experimental_fragment
