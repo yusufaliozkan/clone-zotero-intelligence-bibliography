@@ -3519,45 +3519,6 @@ with st.spinner('Retrieving data...'):
     with tab2:
         import pydeck as pdk
 
-        # Example data with country coordinates and a metric (e.g., population)
-        country_data = pd.DataFrame({
-            'country': ['United Kingdom', 'France', 'Germany'],
-            'Latitude': [51.509865, 48.8566, 52.52],
-            'Longitude': [-0.118092, 2.3522, 13.405],
-            'value': [67, 65, 83]  # Example values (e.g., in millions for population)
-        })
-
-        # Scale marker size based on the `value` column
-        country_data['size'] = country_data['value'] * 1000  # Adjust the multiplier as needed
-
-        # Create a ScatterplotLayer
-        scatterplot_layer = pdk.Layer(
-            "ScatterplotLayer",
-            data=country_data,
-            get_position=["Longitude", "Latitude"],
-            get_radius="size",
-            get_fill_color="[255, 140, 0]",
-            pickable=True,
-            auto_highlight=True,
-            id="country-layer",
-        )
-
-        # Define the view state of the map
-        view_state = pdk.ViewState(
-            latitude=50, longitude=10, zoom=3, pitch=30
-        )
-
-        # Create the Deck with the layer, view state, and a lighter map style
-        chart = pdk.Deck(
-            layers=[scatterplot_layer],
-            initial_view_state=view_state,
-            tooltip={"text": "{country}\nValue: {value}"},
-            map_style="mapbox://styles/mapbox/light-v9"  # Use a light map style
-        )
-
-        # Display the Pydeck chart in Streamlit
-        st.pydeck_chart(chart)
-
         st.header('Dashboard', anchor=False)
         on_main_dashboard = st.toggle(':material/dashboard: Display dashboard')
         
@@ -4446,6 +4407,86 @@ with st.spinner('Retrieving data...'):
 
                 st.divider()
                 st.subheader('Country mentions in titles', anchor=False, divider='blue')
+
+
+                # Load your data
+                df_countries = pd.read_csv('countries.csv')
+
+                # Sample data for latitude and longitude of each country (a full mapping will be needed)
+                country_coordinates = {
+                    "United States": [37.0902, -95.7129],
+                    "UK": [55.3781, -3.4360],
+                    "Russia": [61.5240, 105.3188],
+                    "Israel": [31.0461, 34.8516],
+                    "Ukraine": [48.3794, 31.1656],
+                    # Add coordinates for other countries as needed
+                }
+
+                # Map country names to coordinates in your dataset
+                df_countries['Latitude'] = df_countries['Country'].apply(lambda x: country_coordinates.get(x, [0, 0])[0])
+                df_countries['Longitude'] = df_countries['Country'].apply(lambda x: country_coordinates.get(x, [0, 0])[1])
+
+                # Scale marker size based on 'Count' column
+                df_countries['size'] = df_countries['Count'] * 100  # Adjust as needed
+
+                # ScatterplotLayer to show countries and their mentions count
+                scatterplot_layer = pdk.Layer(
+                    "ScatterplotLayer",
+                    data=df_countries,
+                    get_position=["Longitude", "Latitude"],
+                    get_radius="size",
+                    get_fill_color="[255, 140, 0]",
+                    pickable=True,
+                    auto_highlight=True,
+                    id="country-mentions-layer",
+                )
+
+                # Define the view state of the map
+                view_state = pdk.ViewState(
+                    latitude=20, longitude=0, zoom=1, pitch=30
+                )
+
+                # Create the Deck with the layer, view state, and map style
+                chart = pdk.Deck(
+                    layers=[scatterplot_layer],
+                    initial_view_state=view_state,
+                    tooltip={"text": "{Country}\nMentions: {Count}"},
+                    map_style="mapbox://styles/mapbox/light-v9"  # Use a light map style
+                )
+
+                # Display the Pydeck chart in Streamlit
+                st.subheader('Country mentions in titles', anchor=False)
+                col1, col2 = st.columns([7, 2])
+                with col1:
+                    st.pydeck_chart(chart, use_container_width=True)
+
+                # Top 15 countries with highest mentions as a bar chart
+                with col2:
+                    st.markdown('##### Top 15 country names mentioned in titles')
+                    top_15_df = df_countries.nlargest(15, 'Count')
+                    top_15_chart = pdk.Layer(
+                        "BarLayer",
+                        data=top_15_df,
+                        get_position=["Longitude", "Latitude"],
+                        get_elevation="Count * 1000",
+                        get_fill_color="[0, 0, 255, 160]",
+                        pickable=True,
+                        extruded=True,
+                    )
+
+                    # Deck for bar chart
+                    top_15_view_state = pdk.ViewState(
+                        latitude=20, longitude=0, zoom=1, pitch=30
+                    )
+                    top_15_chart_deck = pdk.Deck(
+                        layers=[top_15_chart],
+                        initial_view_state=top_15_view_state,
+                        tooltip={"text": "{Country}\nMentions: {Count}"},
+                        map_style="mapbox://styles/mapbox/light-v9",
+                    )
+                    st.pydeck_chart(top_15_chart_deck, use_container_width=True)
+
+
                 col1, col2 = st.columns([7,2])
                 with col1:
                     df_countries = pd.read_csv('countries.csv')
