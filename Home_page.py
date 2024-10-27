@@ -863,6 +863,10 @@ with st.spinner('Retrieving data...'):
                                     on = st.button(button_label, icon=":material/monitoring:")
 
                                     if on and len(filtered_df) > 0:
+                                        if not st.session_state['dashboard_generated']:
+                                            # Set session state to mark the dashboard as generated
+                                            st.session_state['dashboard_generated'] = True
+                                            
                                         st.info(f'Dashboard for search terms: {search_term}')
                                         search_df = filtered_df.copy()
                                         publications_by_type = search_df['Publication type'].value_counts()
