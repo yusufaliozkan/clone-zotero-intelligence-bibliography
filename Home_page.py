@@ -3517,22 +3517,19 @@ with st.spinner('Retrieving data...'):
                 st.write('See our dynamic [digest](https://intelligence.streamlit.app/Digest) for the latest updates on intelligence!')
 
     with tab2:
-        country_coords = pd.DataFrame({
+        # Example data with country coordinates and a metric (e.g., population)
+        country_data = pd.DataFrame({
             'country': ['United Kingdom', 'France', 'Germany'],
             'lat': [51.509865, 48.8566, 52.52],
             'lon': [-0.118092, 2.3522, 13.405],
+            'value': [67, 65, 83]  # Example values (e.g., in millions for population)
         })
 
-        # Your data with country names
-        data = pd.DataFrame({
-            'country': ['United Kingdom', 'France', 'Germany'],
-        })
+        # Add a column for size, scaling the value to make it visually distinct on the map
+        country_data['size'] = country_data['value'] * 1000  # Adjust multiplier as needed
 
-        # Merge to add latitude and longitude
-        merged_data = pd.merge(data, country_coords, on='country')
-
-        # Display the map
-        st.map(merged_data)
+        # Display the map with variable marker sizes based on 'value'
+        st.map(country_data, size='size')
 
         st.header('Dashboard', anchor=False)
         on_main_dashboard = st.toggle(':material/dashboard: Display dashboard')
