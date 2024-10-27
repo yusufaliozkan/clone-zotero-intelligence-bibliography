@@ -558,7 +558,7 @@ with st.spinner('Retrieving data...'):
                     st.subheader('Search keywords', anchor=False, divider='blue')
                     @st.experimental_fragment
                     def search_keyword(): 
-                        @st.experimental_dialog("Search guide")
+                        @st.dialog("Search guide")
                         def guide(item):
                             st.write('''
                                 The Intelligence Studies Bibliography supports basic-level searches with Boolean operators.
