@@ -3520,16 +3520,40 @@ with st.spinner('Retrieving data...'):
         # Example data with country coordinates and a metric (e.g., population)
         country_data = pd.DataFrame({
             'country': ['United Kingdom', 'France', 'Germany'],
-            'lat': [51.509865, 48.8566, 52.52],
-            'lon': [-0.118092, 2.3522, 13.405],
+            'Latitude': [51.509865, 48.8566, 52.52],
+            'Longitude': [-0.118092, 2.3522, 13.405],
             'value': [67, 65, 83]  # Example values (e.g., in millions for population)
         })
 
-        # Add a column for size, scaling the value to make it visually distinct on the map
-        country_data['size'] = country_data['value'] * 1000  # Adjust multiplier as needed
+        # Scale marker size based on the `value` column
+        country_data['size'] = country_data['value'] * 1000  # Adjust the multiplier as needed
 
-        # Display the map with variable marker sizes based on 'value'
-        st.map(country_data, size='size')
+        # Create a ScatterplotLayer
+        scatterplot_layer = pdk.Layer(
+            "ScatterplotLayer",
+            data=country_data,
+            get_position=["Longitude", "Latitude"],
+            get_radius="size",
+            get_fill_color="[255, 140, 0]",
+            pickable=True,
+            auto_highlight=True,
+            id="country-layer",
+        )
+
+        # Define the view state of the map
+        view_state = pdk.ViewState(
+            latitude=50, longitude=10, zoom=3, pitch=30
+        )
+
+        # Create the Deck with the layer and view state
+        chart = pdk.Deck(
+            layers=[scatterplot_layer],
+            initial_view_state=view_state,
+            tooltip={"text": "{country}\nValue: {value}"}
+        )
+
+        # Display the Pydeck chart in Streamlit
+        st.pydeck_chart(chart)
 
         st.header('Dashboard', anchor=False)
         on_main_dashboard = st.toggle(':material/dashboard: Display dashboard')
