@@ -254,7 +254,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     num_items_collections = len(df_collections)
                     breakdown_string = ', '.join([f"{key}: {value}" for key, value in publications_by_type.items()])
                     a = f'{collection_name}_{today}'
-                    container_download.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
+                    container_download.download_button('Download collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4', icon=":material/download:")
 
                     # st.write(f"**{num_items_collections}** sources found ({breakdown_string})")
                     true_count = df_collections[df_collections['Publication type']=='Journal article']['OA status'].sum()
@@ -452,7 +452,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     csv = convert_df(df_download)
                     today = datetime.date.today().isoformat()
                     a = f'{selected_country}_{today}'
-                    container_download.download_button('💾 Download items', csv, (a+'.csv'), mime="text/csv", key='download-csv-5')
+                    container_download.download_button('Download items', csv, (a+'.csv'), mime="text/csv", key='download-csv-5', icon=":material/download:")
 
                     publications_by_type_country = df_countries['Publication type'].value_counts()
                     num_items_collections = len(df_countries)

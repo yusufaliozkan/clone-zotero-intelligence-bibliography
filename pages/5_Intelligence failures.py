@@ -190,7 +190,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
 
             a = f'{collection_name}_{today}'
-            st.download_button('💾 Download the collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4')
+            st.download_button('Download collection', csv, (a+'.csv'), mime="text/csv", key='download-csv-4', icon=":material/download:")
 
     container_metric.metric(label="Items found", value=num_items_collections, help=breakdown_string)
     container_citation.metric(label="Number of citations", value=int(citation_count))
