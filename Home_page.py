@@ -3517,6 +3517,8 @@ with st.spinner('Retrieving data...'):
                 st.write('See our dynamic [digest](https://intelligence.streamlit.app/Digest) for the latest updates on intelligence!')
 
     with tab2:
+        import pydeck as pdk
+
         # Example data with country coordinates and a metric (e.g., population)
         country_data = pd.DataFrame({
             'country': ['United Kingdom', 'France', 'Germany'],
