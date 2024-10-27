@@ -756,7 +756,7 @@ with st.spinner('Retrieving data...'):
                                         if only_citation:
                                             filtered_df = filtered_df[(filtered_df['Citation'].notna()) & (filtered_df['Citation'] != 0)]
 
-                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'), horizontal=True)
                                         # with col114:
                                         #     table_view = st.checkbox('See results in table')
 
@@ -938,7 +938,7 @@ with st.spinner('Retrieving data...'):
                                         st.pyplot()
 
                                     else:
-                                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'))
+                                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'), horizontal=True)
                                         if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
                                             filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False)
                                             filtered_df = filtered_df.reset_index(drop=True)
@@ -1169,7 +1169,7 @@ with st.spinner('Retrieving data...'):
                                     with st.popover('Filters and more'):
                                         container_types = st.container()
                                         container_download = st.container()
-                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'), horizontal=True)
 
                                 st.write('*Please note that this database **may not show** all research outputs of the author.*')
                                 types = container_types.multiselect('Publication type', filtered_collection_df_authors['Publication type'].unique(), filtered_collection_df_authors['Publication type'].unique(), key='original_authors')
@@ -1302,7 +1302,7 @@ with st.spinner('Retrieving data...'):
                                     st.pyplot()
                                 else:
                                     if not on:  # If the toggle is off, display the publications
-                                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'))
+                                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'), horizontal=True)
                                         if sort_by == 'Publication date :arrow_down:' or filtered_collection_df_authors['Citation'].sum() == 0:
                                             filtered_collection_df_authors = filtered_collection_df_authors.sort_values(by=['Date published'], ascending=False)
                                             filtered_collection_df_authors = filtered_collection_df_authors.reset_index(drop=True)
@@ -1458,7 +1458,7 @@ with st.spinner('Retrieving data...'):
                                         container_info = st.container()
                                         container_filter = st.container()
                                         container_download = st.container()
-                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'), horizontal=True)
                                 container_info.info(f"See the collection in [Zotero]({collection_link})")
                                 types = container_filter.multiselect('Publication type', filtered_collection_df['Publication type'].unique(),filtered_collection_df['Publication type'].unique(), key='original')
                                 filtered_collection_df = filtered_collection_df[filtered_collection_df['Publication type'].isin(types)]
@@ -1644,7 +1644,7 @@ with st.spinner('Retrieving data...'):
 
                                 else:
                                     if not on:
-                                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'))
+                                        sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'), horizontal=True)
                                         if sort_by == 'Publication date :arrow_down:' or filtered_collection_df['Citation'].sum() == 0:
                                             filtered_collection_df = filtered_collection_df.sort_values(by=['Date published'], ascending=False)
                                             filtered_collection_df = filtered_collection_df.reset_index(drop=True)
@@ -1805,7 +1805,7 @@ with st.spinner('Retrieving data...'):
 
                                             if not selected_thesis_uni == '':
                                                 filtered_type_df = filtered_type_df[filtered_type_df['University']==selected_thesis_uni]
-                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'), horizontal=True)
                                             
                                 download_types = filtered_type_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
                                 download_types['Abstract'] = download_types['Abstract'].str.replace('\n', ' ')
@@ -1986,7 +1986,7 @@ with st.spinner('Retrieving data...'):
                                     # # st.set_option('deprecation.showPyplotGlobalUse', False)
                                     st.pyplot()
                                 else:
-                                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'))
+                                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'), horizontal=True)
                                     if sort_by == 'Publication date :arrow_down:' or filtered_type_df['Citation'].sum() == 0:
                                         filtered_type_df = filtered_type_df.sort_values(by=['Date published'], ascending=False)
                                         filtered_type_df = filtered_type_df.reset_index(drop=True)
@@ -2144,7 +2144,7 @@ with st.spinner('Retrieving data...'):
                                 with coljournal4:
                                     with st.popover('Filters and more'):
                                         container_download = st.container()
-                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                        view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'), horizontal=True)
                                 non_nan_id = selected_journal_df['ID'].count()
 
                                 download_journal = selected_journal_df[['Publication type', 'Title', 'Abstract', 'Date published', 'Publisher', 'Journal', 'Link to publication', 'Zotero link', 'Citation']]
@@ -2344,7 +2344,7 @@ with st.spinner('Retrieving data...'):
                                     st.pyplot()
 
                                 else:
-                                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'))
+                                    sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'), horizontal=True)
                                     if sort_by == 'Publication date :arrow_down:' or selected_journal_df['Citation'].sum() == 0:
                                         selected_journal_df = selected_journal_df.sort_values(by=['Date published'], ascending=False)
                                         selected_journal_df = selected_journal_df.reset_index(drop=True)
@@ -2483,7 +2483,7 @@ with st.spinner('Retrieving data...'):
                                         df_all = df_all[df_all['Publication type'].isin(selected_type)]
                                     df_all = df_all.reset_index(drop=True)
                                     container_download = st.container()
-                                    view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                    view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'), horizontal=True)
 
                             df_all_download = df_all.copy()
                             df_all_download = df_all_download[['Publication type', 'Title', 'Abstract', 'FirstName2', 'Link to publication', 'Zotero link', 'Date published', 'Citation']]
@@ -2752,7 +2752,7 @@ with st.spinner('Retrieving data...'):
                                     # st.set_option('deprecation.showPyplotGlobalUse', False)
                                     st.pyplot()
                             else:
-                                sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'))
+                                sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation'), horizontal=True)
                                 if sort_by == 'Publication date :arrow_down:' or df_all['Citation'].sum() == 0:
                                     df_all = df_all.sort_values(by=['Date published'], ascending=False)
                                     df_all = df_all.reset_index(drop=True)
@@ -2827,7 +2827,7 @@ with st.spinner('Retrieving data...'):
                             with colcite3:
                                 with st.popover('Filters and more'):
                                     st.warning('Items without a citation are not listed here! Citation data comes from [OpenAlex](https://openalex.org/).')
-                                    citation_type = st.radio('Select:', ('All citations', 'Trends', 'Citations without outliers'))
+                                    citation_type = st.radio('Select:', ('All citations', 'Trends', 'Citations without outliers'), horizontal=True)
                                     if citation_type=='All citations':
                                         df_cited = df_cited.reset_index(drop=True)
                                     elif citation_type=='Trends':
@@ -3138,7 +3138,7 @@ with st.spinner('Retrieving data...'):
                                     # # st.set_option('deprecation.showPyplotGlobalUse', False)
                                     st.pyplot()
                             else:
-                                sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'))
+                                sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'), horizontal=True)
                                 if sort_by == 'Publication date :arrow_down:' or df_cited['Citation'].sum() == 0:
                                     df_cited = df_cited.sort_values(by=['Date published'], ascending=False)
                                     df_cited = df_cited.reset_index(drop=True)
@@ -3712,7 +3712,7 @@ with st.spinner('Retrieving data...'):
                     df_types.columns = ['Publication type', 'Count']
                     # TEMP SOLUTION ENDS
 
-                    chart_type = st.radio('Choose visual type', ['Bar chart', 'Pie chart'])
+                    chart_type = st.radio('Choose visual type', ['Bar chart', 'Pie chart'], horizontal=True)
 
                     col1, col2 = st.columns(2)
                     with col1:
@@ -3805,7 +3805,7 @@ with st.spinner('Retrieving data...'):
                     with col1:
                             colauthor1, colauthor2 = st.columns(2)
                             with colauthor1:
-                                table_view = st.radio('Choose visual type', ['Bar chart', 'Table view'], key='author')
+                                table_view = st.radio('Choose visual type', ['Bar chart', 'Table view'], key='author', horizontal=True)
                             with colauthor2:
                                 last_5_year = st.checkbox('Limit to last 5 years', key='last5yearsauthorsall')
                             if last_5_year:
@@ -3840,7 +3840,7 @@ with st.spinner('Retrieving data...'):
                     with col2:
                             colauthor11, colauthor12 = st.columns(2)
                             with colauthor11:
-                                selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'])
+                                selected_type = st.radio('Select a publication type', ['Journal article', 'Book', 'Book chapter'], horizontal=True)
                             with colauthor12:
                                 last_5_year = st.checkbox('Limit to last 5 years', key='last5yearsauthorsallspecified')
                             if last_5_year:
@@ -4489,7 +4489,7 @@ with st.spinner('Retrieving data...'):
                 listdf_abstract = df['lemma_abstract']
 
                 st.subheader('Wordcloud', anchor=False, divider='blue')
-                wordcloud_opt = st.radio('Wordcloud of:', ('Titles', 'Abstracts'))
+                wordcloud_opt = st.radio('Wordcloud of:', ('Titles', 'Abstracts'), horizontal=True)
                 if wordcloud_opt=='Titles':
                     df_list = [item for sublist in listdf for item in sublist]
                     string = pd.Series(df_list).str.cat(sep=' ')
