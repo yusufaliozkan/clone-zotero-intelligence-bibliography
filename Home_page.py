@@ -2847,7 +2847,7 @@ with st.spinner('Retrieving data...'):
                                     container_markdown.markdown(f'#### {citation_type}')
                                     container_slider = st.container()
                                     container_download = st.container()
-                                    view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'))
+                                    view = st.radio('View as:', ('Basic list', 'Table',  'Bibliography'), horizontal=True)
 
                             max_value = int(df_cited['Citation'].max())
                             min_value = 1
