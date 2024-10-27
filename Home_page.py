@@ -849,24 +849,9 @@ with st.spinner('Retrieving data...'):
                                     container_download_button.download_button('Download search', csv, (a+'.csv'), mime="text/csv", key='download-csv-1', icon=":material/download:",)
 
 
-                                    # Initialize session state if not already done
-                                    if 'dashboard_generated' not in st.session_state:
-                                        st.session_state['dashboard_generated'] = False
-
-                                    # Button logic
-                                    if not st.session_state['dashboard_generated']:
-                                        button_label = 'Generate dashboard'
-                                    else:
-                                        button_label = 'See publications'
-
-                                    # Generate dashboard button
-                                    on = st.button(button_label, icon=":material/monitoring:")
+                                    on = st.toggle('Generate dashboard', icon=":material/monitoring:")
 
                                     if on and len(filtered_df) > 0:
-                                        if not st.session_state['dashboard_generated']:
-                                            # Set session state to mark the dashboard as generated
-                                            st.session_state['dashboard_generated'] = True
-                                            
                                         st.info(f'Dashboard for search terms: {search_term}')
                                         search_df = filtered_df.copy()
                                         publications_by_type = search_df['Publication type'].value_counts()
