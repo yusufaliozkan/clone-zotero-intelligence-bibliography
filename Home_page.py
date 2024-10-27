@@ -258,7 +258,7 @@ with st.spinner('Retrieving data...'):
     df_dedup_oa = df_dedup[df_dedup['OA status'] == True].reset_index(drop=True)
 
     with col2:
-        with st.popover('More metrics', icon=":material/thumb_up:"):
+        with st.popover('More metrics', icon=":material/info:"):
             citation_count = df_dedup['Citation'].sum()
             
             total_rows = len(df_dedup)
