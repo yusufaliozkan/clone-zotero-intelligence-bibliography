@@ -4426,8 +4426,12 @@ with st.spinner('Retrieving data...'):
                 df_countries['Latitude'] = df_countries['Country'].apply(lambda x: country_coordinates.get(x, [0, 0])[0])
                 df_countries['Longitude'] = df_countries['Country'].apply(lambda x: country_coordinates.get(x, [0, 0])[1])
 
-                # Scale marker size based on 'Count' column
-                df_countries['size'] = df_countries['Count'] * 100  # Adjust as needed
+                # Set a scaling factor and a minimum radius to make circles larger
+                scaling_factor = 500  # Adjust this to control the overall size of the circles
+                minimum_radius = 5000  # Minimum radius for visibility of all points
+
+                # Calculate the circle size based on `Count`
+                df_countries['size'] = df_countries['Count'] * scaling_factor + minimum_radius
 
                 # ScatterplotLayer to show countries and their mentions count
                 scatterplot_layer = pdk.Layer(
@@ -4435,7 +4439,7 @@ with st.spinner('Retrieving data...'):
                     data=df_countries,
                     get_position=["Longitude", "Latitude"],
                     get_radius="size",
-                    get_fill_color="[255, 140, 0]",
+                    get_fill_color="[255, 140, 0, 160]",  # Adjusted color with opacity
                     pickable=True,
                     auto_highlight=True,
                     id="country-mentions-layer",
@@ -4456,35 +4460,7 @@ with st.spinner('Retrieving data...'):
 
                 # Display the Pydeck chart in Streamlit
                 st.subheader('Country mentions in titles', anchor=False)
-                col1, col2 = st.columns([7, 2])
-                with col1:
-                    st.pydeck_chart(chart, use_container_width=True)
-
-                # Top 15 countries with highest mentions as a bar chart
-                with col2:
-                    st.markdown('##### Top 15 country names mentioned in titles')
-                    top_15_df = df_countries.nlargest(15, 'Count')
-                    top_15_chart = pdk.Layer(
-                        "BarLayer",
-                        data=top_15_df,
-                        get_position=["Longitude", "Latitude"],
-                        get_elevation="Count * 1000",
-                        get_fill_color="[0, 0, 255, 160]",
-                        pickable=True,
-                        extruded=True,
-                    )
-
-                    # Deck for bar chart
-                    top_15_view_state = pdk.ViewState(
-                        latitude=20, longitude=0, zoom=1, pitch=30
-                    )
-                    top_15_chart_deck = pdk.Deck(
-                        layers=[top_15_chart],
-                        initial_view_state=top_15_view_state,
-                        tooltip={"text": "{Country}\nMentions: {Count}"},
-                        map_style="mapbox://styles/mapbox/light-v9",
-                    )
-                    st.pydeck_chart(top_15_chart_deck, use_container_width=True)
+                st.pydeck_chart(chart, use_container_width=True)
 
 
                 col1, col2 = st.columns([7,2])
