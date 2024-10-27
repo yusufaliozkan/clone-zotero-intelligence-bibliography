@@ -846,7 +846,7 @@ with st.spinner('Retrieving data...'):
                                     csv = convert_df(download_filtered)
                                     today = datetime.date.today().isoformat()
                                     a = 'search-result-' + today
-                                    container_download_button.download_button('Download search', icon=":material/download:", csv, (a+'.csv'), mime="text/csv", key='download-csv-1')
+                                    container_download_button.download_button('Download search' csv, (a+'.csv'), mime="text/csv", key='download-csv-1', icon=":material/download:",)
 
 
                                     on = st.toggle('Generate dashboard')
