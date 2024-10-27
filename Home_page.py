@@ -3518,7 +3518,7 @@ with st.spinner('Retrieving data...'):
 
     with tab2:
         st.header('Dashboard', anchor=False)
-        on_main_dashboard = st.toggle('Display dashboard')
+        on_main_dashboard = st.toggle(':material/dashboard: Display dashboard')
         
         if on_main_dashboard:
 
