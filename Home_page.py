@@ -4419,7 +4419,23 @@ with st.spinner('Retrieving data...'):
                     "Russia": [61.5240, 105.3188],
                     "Israel": [31.0461, 34.8516],
                     "Ukraine": [48.3794, 31.1656],
-                    # Add coordinates for other countries as needed
+                    "Japan": [36.2048, 138.2529],
+                    "Australia": [-25.2744, 133.7751],
+                    "Germany": [51.1657, 10.4515],
+                    "China": [35.8617, 104.1954],
+                    "Oman": [21.5126, 55.9233],
+                    "Iraq": [33.2232, 43.6793],
+                    "Canada": [56.1304, -106.3468],
+                    "India": [20.5937, 78.9629],
+                    "France": [46.6034, 1.8883],
+                    "Cuba": [21.5218, -77.7812],
+                    "Ireland": [53.4129, -8.2439],
+                    "Romania": [45.9432, 24.9668],
+                    "Brazil": [-14.2350, -51.9253],
+                    "Egypt": [26.8206, 30.8025],
+                    "South Africa": [-30.5595, 22.9375],
+                    "United Kingdom": [55.3781, -3.4360],
+                    # Add more countries with their coordinates as needed
                 }
 
                 # Map country names to coordinates in your dataset
