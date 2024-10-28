@@ -786,8 +786,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
             country_pub_counts = df_countries_chart['Country'].value_counts().sort_values(ascending=False)
             all_countries_df = pd.DataFrame({'Country': country_pub_counts.index, 'Publications': country_pub_counts.values})
 
-            all_countries_df
-
             # Function to get coordinates
             def get_coordinates(country_name):
                 try:
