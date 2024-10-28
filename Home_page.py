@@ -4413,6 +4413,7 @@ with st.spinner('Retrieving data...'):
                 # Load your country data with counts
                 df_countries = pd.read_csv('countries.csv')
                 df_countries['Country'] = df_countries['Country'].replace("UK", "United Kingdom")
+                df_countries
 
                 # Function to get coordinates
                 def get_coordinates(country_name):
