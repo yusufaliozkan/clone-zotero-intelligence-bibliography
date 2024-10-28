@@ -4427,8 +4427,8 @@ with st.spinner('Retrieving data...'):
                 df_countries[['Latitude', 'Longitude']] = df_countries['Country'].apply(lambda x: pd.Series(get_coordinates(x)))
 
                 # Set a scaling factor and minimum radius to make circles larger
-                scaling_factor = 750  # Adjust this to control the overall size of the circles
-                minimum_radius = 50000  # Minimum radius for visibility of all points
+                scaling_factor = 500  # Adjust this to control the overall size of the circles
+                minimum_radius = 100000  # Minimum radius for visibility of all points
 
                 # Calculate the circle size based on `Count`
                 df_countries['size'] = df_countries['Count'] * scaling_factor + minimum_radius
