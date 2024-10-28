@@ -782,6 +782,10 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             st.subheader('Countries overview')
 
+            df_countries_chart = df_countries_chart[df_countries_chart['Country'] != 'Country not known']
+            country_pub_counts = df_countries_chart['Country'].value_counts().sort_values(ascending=False)
+            all_countries_df = pd.DataFrame({'Country': country_pub_counts.index, 'Publications': country_pub_counts.values})
+
             # Function to get coordinates
             def get_coordinates(country_name):
                 try:
@@ -831,9 +835,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             col11, col12 = st.columns([3,2])
             with col11:
-                df_countries_chart = df_countries_chart[df_countries_chart['Country'] != 'Country not known']
-                country_pub_counts = df_countries_chart['Country'].value_counts().sort_values(ascending=False)
-                all_countries_df = pd.DataFrame({'Country': country_pub_counts.index, 'Publications': country_pub_counts.values})
                 num_countries = st.slider("Select the number of countries to display", min_value=1, max_value=len(all_countries_df), value=10)
                 top_countries = all_countries_df.head(num_countries).sort_values(by='Publications', ascending=True)
                 fig = px.bar(top_countries, x='Publications', y='Country', orientation='h')
