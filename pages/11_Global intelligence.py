@@ -809,7 +809,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 minimum_radius = 100000  # Minimum radius for visibility of all points
 
                 # Calculate the circle size based on `Count`
-                all_countries_df['size'] = all_countries_df['Count'] * scaling_factor + minimum_radius
+                all_countries_df['size'] = all_countries_df['# Publications'] * scaling_factor + minimum_radius
 
                 # Filter out rows where coordinates were not found
                 all_countries_df = all_countries_df.dropna(subset=['Latitude', 'Longitude'])
@@ -835,7 +835,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 chart = pdk.Deck(
                     layers=[scatterplot_layer],
                     initial_view_state=view_state,
-                    tooltip={"text": "{Country}\nMentions: {Count}"},
+                    tooltip={"text": "{# Publications}\nMentions: {# Publications}"},
                     map_style="mapbox://styles/mapbox/light-v9"  # Use a light map style
                 )
                 st.pydeck_chart(chart, use_container_width=True)
