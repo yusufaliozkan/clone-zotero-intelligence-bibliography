@@ -4463,6 +4463,26 @@ with st.spinner('Retrieving data...'):
                 st.subheader('Country mentions in titles', anchor=False)
                 st.pydeck_chart(chart, use_container_width=True)
 
+                # Load your data
+                df_countries = pd.read_csv('countries.csv')
+
+                # Use Plotly's choropleth map
+                fig = px.choropleth(
+                    df_countries,
+                    locations="Country",
+                    locationmode="country names",
+                    color="Count",
+                    color_continuous_scale="Viridis",
+                    title="Country Mentions in Titles",
+                    width=900,
+                    height=500
+                )
+
+                # Display the map in Streamlit
+                st.subheader('Country mentions in titles', anchor=False)
+                st.plotly_chart(fig, use_container_width=True)
+
+
 
                 col1, col2 = st.columns([7,2])
                 with col1:
