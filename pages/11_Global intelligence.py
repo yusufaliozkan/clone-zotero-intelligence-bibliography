@@ -855,6 +855,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     col12.plotly_chart(fig, use_container_width = True)
 
                 def compute_cumulative_graph(df, num_countries):
+                    df['Date published'] = df['Date published'].astype(str).str.strip()
+                    df['Date published'] = pd.to_datetime(df['Date published'], utc=True, errors='coerce').dt.tz_convert('Europe/London')
                     df['Date published'] = (
                         df['Date published']
                         .str.strip()
