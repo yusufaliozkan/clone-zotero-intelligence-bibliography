@@ -25,6 +25,8 @@ import time
 from format_entry import format_entry
 from events import evens_conferences
 from st_keyup import st_keyup
+from countryinfo import CountryInfo
+import pydeck as pdk
 
 set_page_config()
 st.title("Global intelligence", anchor=False) 
@@ -792,8 +794,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
 
                 all_countries_df
-                from countryinfo import CountryInfo
-                import pydeck as pdk
                 # Function to get coordinates
                 def get_coordinates(country_name):
                     try:

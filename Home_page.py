@@ -39,6 +39,8 @@ from format_entry import format_entry
 from st_keyup import st_keyup
 from pyparsing import infixNotation, opAssoc, Keyword, Word, alphanums
 from events import evens_conferences
+import pydeck as pdk
+from countryinfo import CountryInfo
 
 
 # Connecting Zotero with API 
@@ -3517,8 +3519,6 @@ with st.spinner('Retrieving data...'):
                 st.write('See our dynamic [digest](https://intelligence.streamlit.app/Digest) for the latest updates on intelligence!')
 
     with tab2:
-        import pydeck as pdk
-
         st.header('Dashboard', anchor=False)
         on_main_dashboard = st.toggle(':material/dashboard: Display dashboard')
         
@@ -4409,7 +4409,6 @@ with st.spinner('Retrieving data...'):
                 st.subheader('Country mentions in titles', anchor=False, divider='blue')
 
 
-                from countryinfo import CountryInfo
                 # Load your country data with counts
                 df_countries = pd.read_csv('countries.csv')
                 df_countries['Country'] = df_countries['Country'].replace("UK", "United Kingdom")
