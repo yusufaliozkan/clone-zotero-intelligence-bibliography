@@ -4427,8 +4427,8 @@ with st.spinner('Retrieving data...'):
                 df_countries[['Latitude', 'Longitude']] = df_countries['Country'].apply(lambda x: pd.Series(get_coordinates(x)))
 
                 # Set a scaling factor and minimum radius to make circles larger
-                scaling_factor = 500  # Adjust this to control the overall size of the circles
-                minimum_radius = 50000  # Minimum radius for visibility of all points
+                scaling_factor = 750  # Adjust this to control the overall size of the circles
+                minimum_radius = 500000  # Minimum radius for visibility of all points
 
                 # Calculate the circle size based on `Count`
                 df_countries['size'] = df_countries['Count'] * scaling_factor + minimum_radius
@@ -4463,20 +4463,20 @@ with st.spinner('Retrieving data...'):
 
                 # Display the Pydeck chart in Streamlit
                 st.subheader('Country mentions in titles', anchor=False)
-                st.pydeck_chart(chart, use_container_width=True)
 
 
                 col1, col2 = st.columns([7,2])
                 with col1:
-                    df_countries = pd.read_csv('countries.csv')
-                    df_countries['Country'] = df_countries['Country'].replace("UK", "United Kingdom")
-                    df_countries = df_countries.groupby('Country', as_index=False).sum()
-                    fig = px.choropleth(df_countries, locations='Country', locationmode='country names', color='Count', 
-                                title='Country mentions in titles', color_continuous_scale='Viridis',
-                                width=900, height=700) # Adjust the size of the map here
-                    # Display the map
-                    fig.show()
-                    st.plotly_chart(fig, use_container_width=True) 
+                    # df_countries = pd.read_csv('countries.csv')
+                    # df_countries['Country'] = df_countries['Country'].replace("UK", "United Kingdom")
+                    # df_countries = df_countries.groupby('Country', as_index=False).sum()
+                    # fig = px.choropleth(df_countries, locations='Country', locationmode='country names', color='Count', 
+                    #             title='Country mentions in titles', color_continuous_scale='Viridis',
+                    #             width=900, height=700) # Adjust the size of the map here
+                    # # Display the map
+                    # fig.show()
+                    # st.plotly_chart(fig, use_container_width=True) 
+                    st.pydeck_chart(chart, use_container_width=True)
                 with col2:
                     st.markdown('##### Top 15 country names mentioned in titles')
                     fig = px.bar(df_countries.head(15), x='Count', y='Country', orientation='h', height=600)
