@@ -793,6 +793,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 all_countries_df
                 from countryinfo import CountryInfo
+                import pydeck as pdk
                 # Function to get coordinates
                 def get_coordinates(country_name):
                     try:
