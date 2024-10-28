@@ -4465,7 +4465,7 @@ with st.spinner('Retrieving data...'):
                 st.subheader('Country mentions in titles', anchor=False)
 
 
-                col1, col2 = st.columns([7,2])
+                col1, col2 = st.columns([8,2])
                 with col1:
                     df_countries = pd.read_csv('countries.csv')
                     df_countries['Country'] = df_countries['Country'].replace("UK", "United Kingdom")
@@ -4482,7 +4482,6 @@ with st.spinner('Retrieving data...'):
                 with col2:
                     fig = px.bar(df_countries.head(15).iloc[::-1], x='# Mentions', y='Country', orientation='h', height=600)
                     st.dataframe(df_countries, height=500, hide_index=True, use_container_width=True)
-                    # col2.plotly_chart(fig, use_container_width=True)
                 
                 st.divider()
                 st.subheader('Locations, People, and Organisations', anchor=False, divider='blue')
