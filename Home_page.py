@@ -4428,6 +4428,7 @@ with st.spinner('Retrieving data...'):
 
                 # Apply the function to each country
                 df_countries[['Latitude', 'Longitude']] = df_countries['Country'].apply(lambda x: pd.Series(get_coordinates(x)))
+                df_countries
 
                 # Map country names to coordinates in your dataset
                 df_countries['Latitude'] = df_countries['Country'].apply(lambda x: country_coordinates.get(x, [0, 0])[0])
