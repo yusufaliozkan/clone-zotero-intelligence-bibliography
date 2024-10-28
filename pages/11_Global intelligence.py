@@ -843,7 +843,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     col11.plotly_chart(fig, use_container_width=True)
 
                 with col12:
-                    from countries_dict import country_names, replacements, df_countries, df_continent
+                    from countries_dict import df_continent
                     df_continent = df_continent.copy()
                     df_continent_chart = df_continent.copy() 
                     df_continent_chart = df_continent_chart[df_continent_chart['Continent'] != 'Unknown']
