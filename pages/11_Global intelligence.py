@@ -781,27 +781,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
             #                     st.caption(row['Abstract']) 
 
             st.subheader('Countries overview')
-            col11, col12 = st.columns([3,2])
-            with col11:
-                df_countries_chart = df_countries_chart[df_countries_chart['Country'] != 'Country not known']
-                country_pub_counts = df_countries_chart['Country'].value_counts().sort_values(ascending=False)
-                all_countries_df = pd.DataFrame({'Country': country_pub_counts.index, 'Publications': country_pub_counts.values})
-                num_countries = st.slider("Select the number of countries to display", min_value=1, max_value=len(all_countries_df), value=10)
-                top_countries = all_countries_df.head(num_countries).sort_values(by='Publications', ascending=True)
-                fig = px.bar(top_countries, x='Publications', y='Country', orientation='h')
-                fig.update_layout(title=f'Top {num_countries} Countries by Number of Publications', xaxis_title='Number of Publications', yaxis_title='Country')
-                col11.plotly_chart(fig, use_container_width=True)
-
-
-            with col12:
-                df_continent_chart = df_continent_chart[df_continent_chart['Continent'] != 'Unknown']
-                country_pub_counts = df_continent_chart['Continent'].value_counts().sort_values(ascending=False)
-                top_10_countries = country_pub_counts.head(10).sort_values(ascending=True)
-                top_10_df = pd.DataFrame({'Continent': top_10_countries.index, 'Publications': top_10_countries.values})
-                fig = px.pie(top_10_df, values='Publications', names='Continent', title='Number of Publications by Continent')
-                fig.update_layout(title='Number of Publications by continent', xaxis_title='Number of Publications', yaxis_title='Continent')
-                col12.plotly_chart(fig, use_container_width = True)
-
 
             # Function to get coordinates
             def get_coordinates(country_name):
@@ -816,7 +795,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
             # Set a scaling factor and minimum radius to make circles larger
             scaling_factor = 500  # Adjust this to control the overall size of the circles
-            minimum_radius = 100000  # Minimum radius for visibility of all points
+            minimum_radius = 500000  # Minimum radius for visibility of all points
 
             # Calculate the circle size based on `Count`
             all_countries_df['size'] = all_countries_df['Publications'] * scaling_factor + minimum_radius
@@ -849,6 +828,27 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 map_style="mapbox://styles/mapbox/light-v9"  # Use a light map style
             )
             st.pydeck_chart(chart, use_container_width=True)
+
+            col11, col12 = st.columns([3,2])
+            with col11:
+                df_countries_chart = df_countries_chart[df_countries_chart['Country'] != 'Country not known']
+                country_pub_counts = df_countries_chart['Country'].value_counts().sort_values(ascending=False)
+                all_countries_df = pd.DataFrame({'Country': country_pub_counts.index, 'Publications': country_pub_counts.values})
+                num_countries = st.slider("Select the number of countries to display", min_value=1, max_value=len(all_countries_df), value=10)
+                top_countries = all_countries_df.head(num_countries).sort_values(by='Publications', ascending=True)
+                fig = px.bar(top_countries, x='Publications', y='Country', orientation='h')
+                fig.update_layout(title=f'Top {num_countries} Countries by Number of Publications', xaxis_title='Number of Publications', yaxis_title='Country')
+                col11.plotly_chart(fig, use_container_width=True)
+
+
+            with col12:
+                df_continent_chart = df_continent_chart[df_continent_chart['Continent'] != 'Unknown']
+                country_pub_counts = df_continent_chart['Continent'].value_counts().sort_values(ascending=False)
+                top_10_countries = country_pub_counts.head(10).sort_values(ascending=True)
+                top_10_df = pd.DataFrame({'Continent': top_10_countries.index, 'Publications': top_10_countries.values})
+                fig = px.pie(top_10_df, values='Publications', names='Continent', title='Number of Publications by Continent')
+                fig.update_layout(title='Number of Publications by continent', xaxis_title='Number of Publications', yaxis_title='Continent')
+                col12.plotly_chart(fig, use_container_width = True)
 
             def compute_cumulative_graph(df, num_countries):
                 df['Date published'] = (
