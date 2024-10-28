@@ -830,7 +830,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             chart = pdk.Deck(
                 layers=[scatterplot_layer],
                 initial_view_state=view_state,
-                tooltip={"text": "{Publications}\nMentions: {Publications}"},
+                tooltip={"text": "{Country}\nMentions: {Publications}"},
                 map_style="mapbox://styles/mapbox/light-v9"  # Use a light map style
             )
             st.pydeck_chart(chart, use_container_width=True)
