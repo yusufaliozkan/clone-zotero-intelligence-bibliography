@@ -4481,7 +4481,7 @@ with st.spinner('Retrieving data...'):
                     st.pydeck_chart(chart, use_container_width=True)
                 with col2:
                     fig = px.bar(df_countries.head(15).iloc[::-1], x='# Mentions', y='Country', orientation='h', height=600)
-                    df_countries
+                    st.dataframe(df_countries)
                     # col2.plotly_chart(fig, use_container_width=True)
                 
                 st.divider()
