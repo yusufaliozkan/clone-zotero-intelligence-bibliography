@@ -856,11 +856,14 @@ with st.spinner('Retrieving data & updating dashboard...'):
 
                 def compute_cumulative_graph(df, num_countries):
                     num_countries
-                    df['Date published'] = (
-                        df['Date published']
-                        .str.strip()
-                        .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
-                    )
+
+                    df['Date published'] = df['Date published'].astype(str).str.strip()
+                    df['Date published'] = pd.to_datetime(df['Date published'], utc=True, errors='coerce').dt.tz_convert('Europe/London')
+                    # df['Date published'] = (
+                    #     df['Date published']
+                    #     .str.strip()
+                    #     .apply(lambda x: pd.to_datetime(x, utc=True, errors='coerce').tz_convert('Europe/London'))
+                    # )
                     df['Date year'] = df['Date published'].dt.strftime('%Y')
                     collection_counts = df.groupby(['Date year', 'Country']).size().unstack().fillna(0)
                     collection_counts = collection_counts.reset_index()
