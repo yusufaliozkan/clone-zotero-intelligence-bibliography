@@ -4462,8 +4462,6 @@ with st.spinner('Retrieving data...'):
                 )
 
                 # Display the Pydeck chart in Streamlit
-                st.subheader('Country mentions in titles', anchor=False)
-
 
                 col1, col2 = st.columns([8,2])
                 with col1:
