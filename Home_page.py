@@ -4409,6 +4409,7 @@ with st.spinner('Retrieving data...'):
                 st.subheader('Country mentions in titles', anchor=False, divider='blue')
 
 
+                from countryinfo import CountryInfo
                 # Load your country data with counts
                 df_countries = pd.read_csv('countries.csv')
 
