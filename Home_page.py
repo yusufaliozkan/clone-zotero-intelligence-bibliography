@@ -4409,13 +4409,7 @@ with st.spinner('Retrieving data...'):
                 st.subheader('Country mentions in titles', anchor=False, divider='blue')
 
 
-                # Load your data
-                df_countries = pd.read_csv('countries.csv')
-
-                # Sample data for latitude and longitude of each country (a full mapping will be needed)
-                from countryinfo import CountryInfo
-
-                # Load your country data
+                # Load your country data with counts
                 df_countries = pd.read_csv('countries.csv')
 
                 # Function to get coordinates
@@ -4426,20 +4420,18 @@ with st.spinner('Retrieving data...'):
                     except KeyError:
                         return None, None
 
-                # Apply the function to each country
+                # Apply the function to each country to get latitude and longitude
                 df_countries[['Latitude', 'Longitude']] = df_countries['Country'].apply(lambda x: pd.Series(get_coordinates(x)))
-                df_countries
 
-                # Map country names to coordinates in your dataset
-                df_countries['Latitude'] = df_countries['Country'].apply(lambda x: country_coordinates.get(x, [0, 0])[0])
-                df_countries['Longitude'] = df_countries['Country'].apply(lambda x: country_coordinates.get(x, [0, 0])[1])
-
-                # Set a scaling factor and a minimum radius to make circles larger
+                # Set a scaling factor and minimum radius to make circles larger
                 scaling_factor = 500  # Adjust this to control the overall size of the circles
                 minimum_radius = 5000  # Minimum radius for visibility of all points
 
                 # Calculate the circle size based on `Count`
                 df_countries['size'] = df_countries['Count'] * scaling_factor + minimum_radius
+
+                # Filter out rows where coordinates were not found
+                df_countries = df_countries.dropna(subset=['Latitude', 'Longitude'])
 
                 # ScatterplotLayer to show countries and their mentions count
                 scatterplot_layer = pdk.Layer(
