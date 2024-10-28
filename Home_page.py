@@ -4470,6 +4470,7 @@ with st.spinner('Retrieving data...'):
                     df_countries = pd.read_csv('countries.csv')
                     df_countries['Country'] = df_countries['Country'].replace("UK", "United Kingdom")
                     df_countries = df_countries.groupby('Country', as_index=False).sum()
+                    df_countries = df_countries.sort_values(by='Count', ascending=False).reset_index(drop=True)
                     fig = px.choropleth(df_countries, locations='Country', locationmode='country names', color='Count', 
                                 title='Country mentions in titles', color_continuous_scale='Viridis',
                                 width=900, height=700) # Adjust the size of the map here
