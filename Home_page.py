@@ -4482,7 +4482,7 @@ with st.spinner('Retrieving data...'):
                 with col2:
                     st.markdown('##### Top 15 country names mentioned in titles')
                     df_countries
-                    fig = px.bar(df_countries.head(15), x='# Mentions', y='Country', orientation='h', height=600)
+                    fig = px.bar(df_countries.head(15).iloc[::-1], x='# Mentions', y='Country', orientation='h', height=600)
                     col2.plotly_chart(fig, use_container_width=True)
                 
                 st.divider()
