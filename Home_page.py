@@ -4471,6 +4471,7 @@ with st.spinner('Retrieving data...'):
                     df_countries['Country'] = df_countries['Country'].replace("UK", "United Kingdom")
                     df_countries = df_countries.groupby('Country', as_index=False).sum()
                     df_countries = df_countries.sort_values(by='Count', ascending=False).reset_index(drop=True)
+                    df_countries = df_countries.rename(columns={'Count': '# Mentions'})
                     fig = px.choropleth(df_countries, locations='Country', locationmode='country names', color='Count', 
                                 title='Country mentions in titles', color_continuous_scale='Viridis',
                                 width=900, height=700) # Adjust the size of the map here
@@ -4481,7 +4482,7 @@ with st.spinner('Retrieving data...'):
                 with col2:
                     st.markdown('##### Top 15 country names mentioned in titles')
                     df_countries
-                    fig = px.bar(df_countries.head(15), x='Count', y='Country', orientation='h', height=600)
+                    fig = px.bar(df_countries.head(15), x='# Mentions', y='Country', orientation='h', height=600)
                     col2.plotly_chart(fig, use_container_width=True)
                 
                 st.divider()
