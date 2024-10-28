@@ -4467,12 +4467,12 @@ with st.spinner('Retrieving data...'):
 
                 col1, col2 = st.columns([7,2])
                 with col1:
-                    # df_countries = pd.read_csv('countries.csv')
-                    # df_countries['Country'] = df_countries['Country'].replace("UK", "United Kingdom")
-                    # df_countries = df_countries.groupby('Country', as_index=False).sum()
-                    # fig = px.choropleth(df_countries, locations='Country', locationmode='country names', color='Count', 
-                    #             title='Country mentions in titles', color_continuous_scale='Viridis',
-                    #             width=900, height=700) # Adjust the size of the map here
+                    df_countries = pd.read_csv('countries.csv')
+                    df_countries['Country'] = df_countries['Country'].replace("UK", "United Kingdom")
+                    df_countries = df_countries.groupby('Country', as_index=False).sum()
+                    fig = px.choropleth(df_countries, locations='Country', locationmode='country names', color='Count', 
+                                title='Country mentions in titles', color_continuous_scale='Viridis',
+                                width=900, height=700) # Adjust the size of the map here
                     # # Display the map
                     # fig.show()
                     # st.plotly_chart(fig, use_container_width=True) 
