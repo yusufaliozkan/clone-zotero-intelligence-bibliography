@@ -786,9 +786,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
             country_pub_counts = df_countries_chart['Country'].value_counts().sort_values(ascending=False)
             all_countries_df = pd.DataFrame({'Country': country_pub_counts.index, 'Publications': country_pub_counts.values})
 
-            df_continent = df_continent.copy()
-            df_continent_chart = df_continent.copy() 
-
             # Function to get coordinates
             def get_coordinates(country_name):
                 try:
@@ -845,8 +842,9 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     fig.update_layout(title=f'Top {num_countries} Countries by Number of Publications', xaxis_title='Number of Publications', yaxis_title='Country')
                     col11.plotly_chart(fig, use_container_width=True)
 
-
                 with col12:
+                    df_continent = df_continent.copy()
+                    df_continent_chart = df_continent.copy() 
                     df_continent_chart = df_continent_chart[df_continent_chart['Continent'] != 'Unknown']
                     country_pub_counts = df_continent_chart['Continent'].value_counts().sort_values(ascending=False)
                     top_10_countries = country_pub_counts.head(10).sort_values(ascending=True)
