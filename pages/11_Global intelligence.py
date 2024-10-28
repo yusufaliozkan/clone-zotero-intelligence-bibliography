@@ -855,7 +855,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     col12.plotly_chart(fig, use_container_width = True)
 
                 def compute_cumulative_graph(df, num_countries):
-                    num_countries
 
                     df['Date published'] = df['Date published'].astype(str).str.strip()
                     df['Date published'] = pd.to_datetime(df['Date published'], utc=True, errors='coerce').dt.tz_convert('Europe/London')
@@ -868,7 +867,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     collection_counts = df.groupby(['Date year', 'Country']).size().unstack().fillna(0)
                     collection_counts = collection_counts.reset_index()
                     collection_counts.iloc[:, 1:] = collection_counts.iloc[:, 1:].cumsum()
-                    collection_counts
 
                     # Select only the top countries based on the slider value
                     selected_countries = top_countries['Country'].tolist()
