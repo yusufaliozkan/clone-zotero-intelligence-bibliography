@@ -864,6 +864,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     collection_counts = df.groupby(['Date year', 'Country']).size().unstack().fillna(0)
                     collection_counts = collection_counts.reset_index()
                     collection_counts.iloc[:, 1:] = collection_counts.iloc[:, 1:].cumsum()
+                    collection_counts
 
                     # Select only the top countries based on the slider value
                     selected_countries = top_countries['Country'].tolist()
