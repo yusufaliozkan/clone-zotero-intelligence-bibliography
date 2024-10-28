@@ -781,8 +781,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
             st.subheader('Countries overview')
             col11, col12 = st.columns([3,2])
             with col11:
-                df_country_names = df_countries_chart[['Country']]
-                df_country_names
                 df_countries_chart = df_countries_chart[df_countries_chart['Country'] != 'Country not known']
                 country_pub_counts = df_countries_chart['Country'].value_counts().sort_values(ascending=False)
                 all_countries_df = pd.DataFrame({'Country': country_pub_counts.index, 'Publications': country_pub_counts.values})
