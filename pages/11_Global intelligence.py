@@ -784,12 +784,60 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 df_countries_chart = df_countries_chart[df_countries_chart['Country'] != 'Country not known']
                 country_pub_counts = df_countries_chart['Country'].value_counts().sort_values(ascending=False)
                 all_countries_df = pd.DataFrame({'Country': country_pub_counts.index, 'Publications': country_pub_counts.values})
-                all_countries_df
                 num_countries = st.slider("Select the number of countries to display", min_value=1, max_value=len(all_countries_df), value=10)
                 top_countries = all_countries_df.head(num_countries).sort_values(by='Publications', ascending=True)
                 fig = px.bar(top_countries, x='Publications', y='Country', orientation='h')
                 fig.update_layout(title=f'Top {num_countries} Countries by Number of Publications', xaxis_title='Number of Publications', yaxis_title='Country')
                 col11.plotly_chart(fig, use_container_width=True)
+
+
+                all_countries_df
+                # Function to get coordinates
+                def get_coordinates(country_name):
+                    try:
+                        country = CountryInfo(country_name)
+                        return country.info().get('latlng', (None, None))
+                    except KeyError:
+                        return None, None
+
+                # Apply the function to each country to get latitude and longitude
+                all_countries_df[['Latitude', 'Longitude']] = all_countries_df['Country'].apply(lambda x: pd.Series(get_coordinates(x)))
+
+                # Set a scaling factor and minimum radius to make circles larger
+                scaling_factor = 500  # Adjust this to control the overall size of the circles
+                minimum_radius = 100000  # Minimum radius for visibility of all points
+
+                # Calculate the circle size based on `Count`
+                all_countries_df['size'] = all_countries_df['Count'] * scaling_factor + minimum_radius
+
+                # Filter out rows where coordinates were not found
+                all_countries_df = all_countries_df.dropna(subset=['Latitude', 'Longitude'])
+
+                # ScatterplotLayer to show countries and their mentions count
+                scatterplot_layer = pdk.Layer(
+                    "ScatterplotLayer",
+                    data=all_countries_df,
+                    get_position=["Longitude", "Latitude"],
+                    get_radius="size",
+                    get_fill_color="[255, 140, 0, 160]",  # Adjusted color with opacity
+                    pickable=True,
+                    auto_highlight=True,
+                    id="country-mentions-layer",
+                )
+
+                # Define the view state of the map
+                view_state = pdk.ViewState(
+                    latitude=20, longitude=0, zoom=1, pitch=30
+                )
+
+                # Create the Deck with the layer, view state, and map style
+                chart = pdk.Deck(
+                    layers=[scatterplot_layer],
+                    initial_view_state=view_state,
+                    tooltip={"text": "{Country}\nMentions: {Count}"},
+                    map_style="mapbox://styles/mapbox/light-v9"  # Use a light map style
+                )
+                st.pydeck_chart(chart, use_container_width=True)
 
             with col12:
                 df_continent_chart = df_continent_chart[df_continent_chart['Continent'] != 'Unknown']
