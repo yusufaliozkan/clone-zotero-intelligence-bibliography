@@ -4413,20 +4413,17 @@ with st.spinner('Retrieving data...'):
                 df_countries = pd.read_csv('countries.csv')
 
                 # Sample data for latitude and longitude of each country (a full mapping will be needed)
-                from geopy.geocoders import Nominatim
-
-                # Initialize Nominatim API
-                geolocator = Nominatim(user_agent="geoapi")
+                from countryinfo import CountryInfo
 
                 # Load your country data
                 df_countries = pd.read_csv('countries.csv')
 
                 # Function to get coordinates
                 def get_coordinates(country_name):
-                    location = geolocator.geocode(country_name)
-                    if location:
-                        return location.latitude, location.longitude
-                    else:
+                    try:
+                        country = CountryInfo(country_name)
+                        return country.info().get('latlng', (None, None))
+                    except KeyError:
                         return None, None
 
                 # Apply the function to each country
