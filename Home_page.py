@@ -4413,21 +4413,24 @@ with st.spinner('Retrieving data...'):
                 df_countries = pd.read_csv('countries.csv')
 
                 # Sample data for latitude and longitude of each country (a full mapping will be needed)
-                country_coords = pd.read_csv("country_coordinates.csv")  # This file should contain Country, Latitude, Longitude
+                from geopy.geocoders import Nominatim
 
-                # Normalize country names using pycountry
-                def get_country_name(country_name):
-                    try:
-                        return pycountry.countries.lookup(country_name).name
-                    except LookupError:
-                        return None
+                # Initialize Nominatim API
+                geolocator = Nominatim(user_agent="geoapi")
 
-                # Apply normalization
-                df_countries['Country'] = df_countries['Country'].apply(get_country_name)
+                # Load your country data
+                df_countries = pd.read_csv('countries.csv')
 
-                # Merge with coordinates data
-                df_countries = df_countries.merge(country_coords, on='Country', how='left')
-                df_countries
+                # Function to get coordinates
+                def get_coordinates(country_name):
+                    location = geolocator.geocode(country_name)
+                    if location:
+                        return location.latitude, location.longitude
+                    else:
+                        return None, None
+
+                # Apply the function to each country
+                df_countries[['Latitude', 'Longitude']] = df_countries['Country'].apply(lambda x: pd.Series(get_coordinates(x)))
 
                 # Map country names to coordinates in your dataset
                 df_countries['Latitude'] = df_countries['Country'].apply(lambda x: country_coordinates.get(x, [0, 0])[0])
