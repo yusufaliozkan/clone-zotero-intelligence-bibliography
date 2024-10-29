@@ -212,7 +212,6 @@ with tab1:
     selector = st.checkbox('Select a year')
     year = st.checkbox('Show years only')
     if selector:
-        df_gs_plot
         max_year = df_gs_plot['date'].dt.year.max()
         min_year = df_gs_plot['date'].dt.year.min()
         current_year = pd.Timestamp.now().year
