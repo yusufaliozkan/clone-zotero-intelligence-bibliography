@@ -220,7 +220,7 @@ with tab1:
         min_year
         current_year
 
-        slider = st.slider('Select a year', max_year, current_year)
+        slider = st.slider('Select a year', min_year, current_year)
         slider = str(slider)
         df_gs_plot =df_gs_plot[df_gs_plot['year']==slider]
         ap = ' (in ' + slider+')'
