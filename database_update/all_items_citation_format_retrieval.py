@@ -74,8 +74,3 @@ df_zotero_id = df_zotero_id.drop(columns={'Unnamed: 0'})
 df_zotero_id = pd.concat([df_zotero_id, df_not_zotero_id]).reset_index(drop=True)
 
 df_zotero_id.to_csv('zotero_citation_format.csv')
-
-df_citations = df[['Citation']]
-citation_count = df_citations.sum()
-print(citation_count)
-citation_count
