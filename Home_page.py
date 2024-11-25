@@ -571,6 +571,7 @@ with st.spinner('Retrieving data...'):
                     format_func=lambda option: option_map[option],  # Map the keys to their labels
                     selection_mode="single"  # Ensure single selection mode
                 )
+                search_option
                 
                 # search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"), horizontal=True)
                 if search_option == "Search keywords":
