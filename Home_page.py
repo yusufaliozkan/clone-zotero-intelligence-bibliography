@@ -567,9 +567,9 @@ with st.spinner('Retrieving data...'):
                 }
                 search_option = st.pills(
                     "Select search option",
-                    options=list(option_map.keys()),
-                    format_func=lambda option: option_map[option],
-                    selection_mode="single",
+                    options=list(option_map.keys()),  # Pass the keys as options
+                    format_func=lambda option: option_map[option],  # Map the keys to their labels
+                    selection_mode="single"  # Ensure single selection mode
                 )
                 
                 # search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"), horizontal=True)
