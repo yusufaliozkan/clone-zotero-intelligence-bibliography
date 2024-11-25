@@ -555,6 +555,19 @@ with st.spinner('Retrieving data...'):
                 non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
                 citation_mean = non_nan_cited_df_dedup['Citation'].mean()
                 citation_median = non_nan_cited_df_dedup['Citation'].median()
+                option_map = {
+                    0: ":material/add:",
+                    1: ":material/zoom_in:",
+                    2: ":material/zoom_out:",
+                    3: ":material/zoom_out_map:",
+                }
+                selection = st.pills(
+                    "Tool",
+                    options=option_map.keys(),
+                    format_func=lambda option: option_map[option],
+                    selection_mode="single",
+                )
+
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"), horizontal=True)
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
