@@ -555,14 +555,18 @@ with st.spinner('Retrieving data...'):
                 non_nan_cited_df_dedup = non_nan_cited_df_dedup.reset_index(drop=True)
                 citation_mean = non_nan_cited_df_dedup['Citation'].mean()
                 citation_median = non_nan_cited_df_dedup['Citation'].median()
+
                 option_map = {
-                    0: ":material/add:",
-                    1: ":material/zoom_in:",
-                    2: ":material/zoom_out:",
-                    3: ":material/zoom_out_map:",
+                    0: "Search keywords",
+                    1: "Search author",
+                    2: "Search collection",
+                    3: "Publication types",
+                    4: "Search journal",
+                    5: "Publication year",
+                    6: "Cited papers"
                 }
                 selection = st.pills(
-                    "Tool",
+                    "Select search option",
                     options=option_map.keys(),
                     format_func=lambda option: option_map[option],
                     selection_mode="single",
