@@ -573,8 +573,8 @@ with st.spinner('Retrieving data...'):
                 )
                 search_option
                 
-                search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"), horizontal=True)
-                if search_option == "Search keywords":
+                # search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"), horizontal=True)
+                if search_option == 0:
                     st.subheader('Search keywords', anchor=False, divider='blue')
                     @st.experimental_fragment
                     def search_keyword(): 
@@ -1114,7 +1114,7 @@ with st.spinner('Retrieving data...'):
                     search_keyword()
 
                 # SEARCH AUTHORS
-                elif search_option == "Search author":
+                elif search_option == 1:
                     st.query_params.clear()
                     st.subheader('Search author', anchor=False, divider='blue') 
 
@@ -1412,7 +1412,7 @@ with st.spinner('Retrieving data...'):
                     search_author()
 
                 # SEARCH IN COLLECTIONS
-                elif search_option == "Search collection":
+                elif search_option == 2:
                     st.query_params.clear()
                     st.subheader('Search collection', anchor=False, divider='blue')
 
@@ -1737,7 +1737,7 @@ with st.spinner('Retrieving data...'):
                 
                     search_collection()
 
-                elif search_option == "Publication types": 
+                elif search_option == 3: 
                     st.query_params.clear()
                     st.subheader('Publication types', anchor=False, divider='blue') 
                     @st.experimental_fragment
@@ -2081,7 +2081,7 @@ with st.spinner('Retrieving data...'):
                     
                     type_selection()
                 
-                elif search_option == "Search journal":
+                elif search_option == 4:
                     st.query_params.clear()
                     st.subheader('Search journal', anchor=False, divider='blue')
 
@@ -2433,7 +2433,7 @@ with st.spinner('Retrieving data...'):
                                         display_bibliographies2(selected_journal_df)
                     search_journal()
                 
-                elif search_option == "Publication year": 
+                elif search_option == 5: 
                     st.query_params.clear()
                     st.subheader('Items by publication year', anchor=False, divider='blue')
 
@@ -2819,7 +2819,7 @@ with st.spinner('Retrieving data...'):
                     
                     search_pub_year()
                 
-                elif search_option == "Cited papers":
+                elif search_option == 6:
                     st.query_params.clear()
                     st.subheader('Cited items in the library', anchor=False, divider='blue')
                     
