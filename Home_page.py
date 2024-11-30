@@ -3078,6 +3078,8 @@ with st.spinner('Retrieving data...'):
                                     # Display the Plotly chart using Streamlit
                                     st.plotly_chart(fig)
 
+                                    from authors_dict import get_df_authors, name_replacements
+
                                     collection_df = df_cited.copy()
                                     collection_df['Year'] = pd.to_datetime(collection_df['Date published']).dt.year
                                     publications_by_year = collection_df['Year'].value_counts().sort_index()
