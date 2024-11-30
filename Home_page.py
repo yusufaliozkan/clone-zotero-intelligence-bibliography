@@ -565,6 +565,7 @@ with st.spinner('Retrieving data...'):
                     5: "Publication year",
                     6: "Cited papers"
                 }
+                default_option = 0
                 search_option = st.pills(
                     "Select search option",
                     options=list(option_map.keys()),  # Pass the keys as options
