@@ -565,15 +565,15 @@ with st.spinner('Retrieving data...'):
                     5: "Publication year",
                     6: "Cited papers"
                 }
-                search_option = st.pills(
-                    "Select search option",
-                    options=list(option_map.keys()),  # Pass the keys as options
-                    format_func=lambda option: option_map[option],  # Map the keys to their labels
-                    selection_mode="single"  # Ensure single selection mode
-                )
-                search_option
+                # search_option = st.pills(
+                #     "Select search option",
+                #     options=list(option_map.keys()),  # Pass the keys as options
+                #     format_func=lambda option: option_map[option],  # Map the keys to their labels
+                #     selection_mode="single"  # Ensure single selection mode
+                # )
+                # search_option
                 
-                # search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"), horizontal=True)
+                search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"), horizontal=True)
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
                     @st.experimental_fragment
