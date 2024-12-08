@@ -3797,28 +3797,29 @@ with st.spinner('Retrieving data...'):
                                 max_y = int(df_year['Publication year'].max())
 
                         with coly2:
-                            min_y
-                            max_y
+                            # Handle cases where min_y == max_y
                             if min_y == max_y:
                                 st.warning(f"All publications are from the year {min_y}. The slider is unavailable.")
                                 years = (min_y, max_y)  # Use a static range
                             else:
                                 years = st.slider('Publication years between:', min_y, max_y, (min_y, max_y), key='years3')
 
-                                
-                                years = st.slider('Publication years between:', min_y, max_y, (min_y, max_y), key='years3')
-                                df_year_updated = df_year[(df_year['Publication year'] >= years[0]) & (df_year['Publication year'] <= years[1])]
-                                df_year_updated = min_y
+                            # Filter dataframe based on selected years
+                            df_year_updated = df_year[(df_year['Publication year'] >= years[0]) & (df_year['Publication year'] <= years[1])]
 
+                        # Plot the data
+                        if not df_year_updated.empty:
                             fig = px.bar(df_year_updated, x='Publication year', y='Count')
                             fig.update_xaxes(tickangle=-70)
                             fig.update_layout(
                                 autosize=False,
                                 width=1200,
                                 height=600,
-                            ) 
-                            fig.update_layout(title={'text': f'All items in the library by publication year {years[0]} - {years[1]}', 'yanchor': 'top'})
+                                title={'text': f'All items in the library by publication year {years[0]} - {years[1]}', 'yanchor': 'top'}
+                            )
                             st.plotly_chart(fig, use_container_width=True)
+                        else:
+                            st.info("No data available for the selected range.")
                 types_pubyears()
 
                 st.divider()
