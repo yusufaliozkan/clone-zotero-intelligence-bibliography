@@ -3797,6 +3797,8 @@ with st.spinner('Retrieving data...'):
                                 max_y = int(df_year['Publication year'].max())
 
                         with coly2:
+                            min_y
+                            max_y
                             years = st.slider('Publication years between:', min_y, max_y, (min_y, max_y), key='years3')
                             df_year_updated = df_year[(df_year['Publication year'] >= years[0]) & (df_year['Publication year'] <= years[1])]
 
