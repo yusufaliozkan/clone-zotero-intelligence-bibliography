@@ -3464,7 +3464,7 @@ with st.spinner('Retrieving data...'):
 
         with col2:
 
-            st.info('Join the [mailing list](https://groups.google.com/g/intelligence-studies-network)')
+            st.info('Join the [mailing list](https://groups.google.com/g/intelarchive)')
             @st.experimental_fragment
             def events():
                 with st.expander('Collections', expanded=True):
