@@ -32,32 +32,6 @@ st.set_page_config(layout = "wide",
 st.title("IntelArchive", anchor=False)
 st.header('Item monitoring', anchor=False)
 
-# Sample data frame with Komoot links
-data = {
-    "Route Name": ["Route 1", "Route 2", "Route 3"],
-    "Komoot Link": [
-        "https://www.komoot.com/tour/1511894689",
-        "https://www.komoot.com/tour/1511894690",
-        "https://www.komoot.com/tour/1511894691"
-    ]
-}
-df = pd.DataFrame(data)
-
-st.title("Cycling Routes with Komoot Embeds")
-
-# Dropdown for selecting a route
-selected_route = st.selectbox("Select a Route:", df["Route Name"])
-
-# Find the corresponding Komoot link
-selected_link = df[df["Route Name"] == selected_route]["Komoot Link"].values[0]
-
-# Display the selected route and embed the Komoot iframe
-st.subheader(f"Route: {selected_route}")
-iframe_html = f"""
-<iframe src="{selected_link}/embed?profile=1" width="100%" height="700" frameborder="0" scrolling="no"></iframe>
-"""
-st.markdown(iframe_html, unsafe_allow_html=True)
-
 image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
