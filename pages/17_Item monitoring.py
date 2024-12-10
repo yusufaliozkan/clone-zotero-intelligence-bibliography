@@ -38,7 +38,7 @@ data = {
     "Komoot Link": [
         "https://www.komoot.com/tour/1511894689",
         "https://www.komoot.com/tour/1511894690",
-        "https://www.komoot.com/tour/1511894691"
+        "https://www.komoot.com/tour/1978892961"
     ]
 }
 df = pd.DataFrame(data)
