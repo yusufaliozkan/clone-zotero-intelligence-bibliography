@@ -4702,7 +4702,7 @@ with st.spinner('Retrieving data...'):
         st.subheader('Acknowledgements', anchor=False)
         st.write('''
         The following sources are used to collate some of the items and events in this website:
-        1. [King's Centre for the Study of Intelligence (KCSI) digest](https://kcsi.uk/kcsi-digests) compiled by David Schaefer
+        1. [King's Centre for the Study of Intelligence (KCSI) digest](https://kcsi.uk/kcsi-digests) compiled by Kayla Berg
         2. [International Association for Intelligence Education (IAIE) digest](https://www.iafie.org/Login.aspx) compiled by Filip Kovacevic
         ''')
         st.write('''
