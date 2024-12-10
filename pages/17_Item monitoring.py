@@ -38,20 +38,25 @@ data = {
     "Komoot Link": [
         "https://www.komoot.com/tour/1511894689",
         "https://www.komoot.com/tour/1511894690",
-        "https://www.komoot.com/tour/1978892961"
+        "https://www.komoot.com/tour/1511894691"
     ]
 }
 df = pd.DataFrame(data)
 
 st.title("Cycling Routes with Komoot Embeds")
 
-for index, row in df.iterrows():
-    st.subheader(row["Route Name"])
-    # Embed the Komoot iframe
-    iframe_html = f"""
-    <iframe src="{row['Komoot Link']}/embed?profile=1" width="100%" height="700" frameborder="0" scrolling="no"></iframe>
-    """
-    st.markdown(iframe_html, unsafe_allow_html=True)
+# Dropdown for selecting a route
+selected_route = st.selectbox("Select a Route:", df["Route Name"])
+
+# Find the corresponding Komoot link
+selected_link = df[df["Route Name"] == selected_route]["Komoot Link"].values[0]
+
+# Display the selected route and embed the Komoot iframe
+st.subheader(f"Route: {selected_route}")
+iframe_html = f"""
+<iframe src="{selected_link}/embed?profile=1" width="100%" height="700" frameborder="0" scrolling="no"></iframe>
+"""
+st.markdown(iframe_html, unsafe_allow_html=True)
 
 image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
