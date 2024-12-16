@@ -74,7 +74,7 @@ else:
     if password_input == st.secrets['item_monitoring_password']:
         st.success('Wellcome to the admin dashboard')
 
-        @st.experimental_fragment
+        @st.fragment
         def admin_dashboard():
 
             client = Client(base_url='https://bsky.social')

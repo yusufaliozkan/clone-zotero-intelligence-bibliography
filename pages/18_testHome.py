@@ -439,7 +439,7 @@ with st.spinner('Retrieving data...'):
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-            # @st.experimental_fragment
+            # @st.fragment
             # def text_search():
             #     st.subheader('Quick search', anchor=False, divider='blue')
 
@@ -544,7 +544,7 @@ with st.spinner('Retrieving data...'):
             #         st.write(f'{zot.num_items()} items in the database')
             # text_search()
     
-            # @st.experimental_fragment
+            # @st.fragment
             def search_options_main_menu():
                 from authors_dict import name_replacements
                 total_rows = len(df_dedup)
@@ -557,7 +557,7 @@ with st.spinner('Retrieving data...'):
                 search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"))
                 if search_option == "Search keywords":
                     st.subheader('Search keywords', anchor=False, divider='blue')
-                    @st.experimental_fragment
+                    @st.fragment
                     def search_keyword(): 
                         @st.experimental_dialog("Search guide")
                         def guide(item):
@@ -1099,7 +1099,7 @@ with st.spinner('Retrieving data...'):
                     st.query_params.clear()
                     st.subheader('Search author', anchor=False, divider='blue') 
 
-                    @st.experimental_fragment
+                    @st.fragment
                     def search_author():
                         unique_authors = [''] + list(df_authors['Author_name'].unique())
 
@@ -1397,7 +1397,7 @@ with st.spinner('Retrieving data...'):
                     st.query_params.clear()
                     st.subheader('Search collection', anchor=False, divider='blue')
 
-                    @st.experimental_fragment
+                    @st.fragment
                     def search_collection():
                         df_csv_collections = df_duplicated.copy()
 
@@ -1721,7 +1721,7 @@ with st.spinner('Retrieving data...'):
                 elif search_option == "Publication types": 
                     st.query_params.clear()
                     st.subheader('Publication types', anchor=False, divider='blue') 
-                    @st.experimental_fragment
+                    @st.fragment
                     def type_selection():
                         df_csv_types = df_dedup.copy()
                         unique_types = [''] + list(df_authors['Publication type'].unique())
@@ -2066,7 +2066,7 @@ with st.spinner('Retrieving data...'):
                     st.query_params.clear()
                     st.subheader('Search journal', anchor=False, divider='blue')
 
-                    @st.experimental_fragment
+                    @st.fragment
                     def search_journal():
                         df_csv = df_dedup.copy()
                         df_csv = df_csv[df_csv['Publication type']=='Journal article']
@@ -2418,7 +2418,7 @@ with st.spinner('Retrieving data...'):
                     st.query_params.clear()
                     st.subheader('Items by publication year', anchor=False, divider='blue')
 
-                    @st.experimental_fragment
+                    @st.fragment
                     def search_pub_year():
                         with st.expander('Click to expand', expanded=True):                    
                             df_all = df_dedup.copy()
@@ -2804,7 +2804,7 @@ with st.spinner('Retrieving data...'):
                     st.query_params.clear()
                     st.subheader('Cited items in the library', anchor=False, divider='blue')
                     
-                    @st.experimental_fragment
+                    @st.fragment
                     def search_cited_papers():
                         with st.expander('Click to expand', expanded=True):
                             container_markdown = st.container()              
@@ -3198,7 +3198,7 @@ with st.spinner('Retrieving data...'):
 
             # OVERVIEW
             st.header('Overview', anchor=False)
-            @st.experimental_fragment
+            @st.fragment
             def overview():
                 tab11, tab12, tab13 = st.tabs(['Recently added items', 'Recently published items', 'Top cited items'])
                 with tab11:
@@ -3443,7 +3443,7 @@ with st.spinner('Retrieving data...'):
         with col2:
 
             st.info('Join the [mailing list](https://groups.google.com/g/intelligence-studies-network)')
-            @st.experimental_fragment
+            @st.fragment
             def events():
                 with st.expander('Collections', expanded=True):
                     if st.button(
@@ -3622,7 +3622,7 @@ with st.spinner('Retrieving data...'):
             else:                
                 ## COLLECTIONS IN THE LIBRARY
                 st.subheader('Publications by collection', anchor=False, divider='blue')                
-                @st.experimental_fragment
+                @st.fragment
                 def collection_chart():
                     df_collections_21 = df_collections_2.copy()
 
@@ -3702,7 +3702,7 @@ with st.spinner('Retrieving data...'):
 
                 st.divider()
                 st.subheader('Publications by type and year', anchor=False, divider='blue')
-                @st.experimental_fragment
+                @st.fragment
                 def types_pubyears():
                     # PUBLICATION TYPES
                     df_types = pd.DataFrame(df_csv['Publication type'].value_counts())
@@ -3791,7 +3791,7 @@ with st.spinner('Retrieving data...'):
 
                 st.divider()
                 st.subheader('Publications by author', anchor=False, divider='blue')
-                @st.experimental_fragment
+                @st.fragment
                 def author_chart():
                     df_authors = df_csv.copy()
                     df_authors2 = df_csv.copy()
@@ -3998,7 +3998,7 @@ with st.spinner('Retrieving data...'):
                 st.subheader('Publishers and Journals', anchor=False, divider='blue')                
                 col1, col2 = st.columns(2)
                 with col1:
-                    @st.experimental_fragment
+                    @st.fragment
                     def publisher_chart():
                         number = st.slider('Select a number of publishers', 0, 30, 10)
                         df_publisher = pd.DataFrame(df_csv['Publisher'].value_counts())
@@ -4071,7 +4071,7 @@ with st.spinner('Retrieving data...'):
                     publisher_chart()
 
                 with col2:
-                    @st.experimental_fragment
+                    @st.fragment
                     def journal_chart():
                         number2 = st.slider('Select a number of journals', 0,30,10)
                         df_journal = df_csv.loc[df_csv['Publication type']=='Journal article']
@@ -4164,7 +4164,7 @@ with st.spinner('Retrieving data...'):
                 df_cited_oa_papers.columns = ['Date year', 'Cited OA papers']
                 filtered_df2 = df_dedup_v2[(df_dedup_v2['Citation status'] == True)]
 
-                @st.experimental_fragment
+                @st.fragment
                 def fragment2():
 
                     # Group by 'Date year' and count the number of rows in each group
@@ -4249,7 +4249,7 @@ with st.spinner('Retrieving data...'):
 
                 st.divider()
                 st.subheader('Publications by citation status', anchor=False, divider='blue')
-                @st.experimental_fragment
+                @st.fragment
                 def fragment_cited_papers():
                     df_cited_papers =  df_dedup_v2.groupby('Date year')['Citation'].sum().reset_index()
                     grouped = df_dedup_v2.groupby('Date year')
@@ -4523,7 +4523,7 @@ with st.spinner('Retrieving data...'):
 
             st.divider()
             st.subheader('Item inclusion history', anchor=False, divider='blue')
-            @st.experimental_fragment
+            @st.fragment
             def fragment_item_inclusion():
                 st.write('This part shows the number of items added to the bibliography over time.')
                 df_added = df_dedup.copy()
