@@ -3787,6 +3787,7 @@ with st.spinner('Retrieving data...'):
                         coly1, coly2 = st.columns(2)
 
                         with coly1:
+                            df_year
                             df_year = df_year.dropna(subset=['Publication year'])
                             df_year['Publication year'] = df_year['Publication year'].astype(int)
                             st.write("Unique years in data:", df_year['Publication year'].unique())
