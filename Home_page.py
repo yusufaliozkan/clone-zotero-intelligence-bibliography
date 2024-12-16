@@ -1282,6 +1282,7 @@ with st.spinner('Retrieving data...'):
                                                         labels={'x': 'Publication Year', 'y': 'Number of Publications'},
                                                         title=f'Publications by Year ({selected_author})')
                                     fig_year_bar.update_xaxes(type='category') 
+                                    fig_year_bar.update_layout(xaxis_tickangle=-45)
                                     st.plotly_chart(fig_year_bar)
 
                                     author_df = filtered_collection_df_authors
