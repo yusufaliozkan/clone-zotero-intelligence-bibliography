@@ -3601,7 +3601,7 @@ with st.spinner('Retrieving data...'):
             # df_collections_2['Date published'] = pd.to_datetime(df_collections_2['Date published'],utc=True, errors='coerce').dt.tz_convert('Europe/London')
             df_collections_2['Date year'] = df_collections_2['Date published'].dt.strftime('%Y')
             df_collections_2['Date year'] = df_collections_2['Date year'].fillna('No date')
-            df_collections_2['Date year'] = df_collections_2['Date year'].astype(int)
+
 
             with st.expander('**Select filters**', expanded=False):
                 types = st.multiselect('Publication type', df_csv['Publication type'].unique(), df_csv['Publication type'].unique())
