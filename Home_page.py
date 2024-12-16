@@ -893,6 +893,7 @@ with st.spinner('Retrieving data...'):
                                         fig_year_bar = px.bar(publications_by_year, x=publications_by_year.index, y=publications_by_year.values,
                                                             labels={'x': 'Publication Year', 'y': 'Number of Publications'},
                                                             title=f'Publications by Year ({search_term})')
+                                        fig_year_bar.update_xaxes(type='category') 
                                         st.plotly_chart(fig_year_bar)
                                     
                                         search_df = filtered_df.copy()
@@ -908,6 +909,7 @@ with st.spinner('Retrieving data...'):
                                             yaxis_title='Number of Publications',
                                             xaxis_tickangle=-45,
                                         )
+                                        fig.update_xaxes(type='category') 
                                         st.plotly_chart(fig)
 
                                         search_df = filtered_df.copy()
