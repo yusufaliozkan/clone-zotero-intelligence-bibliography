@@ -3815,6 +3815,7 @@ with st.spinner('Retrieving data...'):
                         if not df_year_updated.empty:
                             fig = px.bar(df_year_updated, x='Publication year', y='Count')
                             fig.update_xaxes(tickangle=-70)
+                            fig.update_xaxes(type='category') 
                             fig.update_layout(
                                 autosize=False,
                                 width=1200,
