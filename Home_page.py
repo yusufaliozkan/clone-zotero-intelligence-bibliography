@@ -3787,6 +3787,8 @@ with st.spinner('Retrieving data...'):
                         coly1, coly2 = st.columns(2)
 
                         with coly1:
+                            df_year['Publication year'] = pd.to_numeric(df_year['Publication year'], errors='coerce')
+                            df_year = df_year.dropna(subset=['Publication year'])
                             df_year['Publication year'] = df_year['Publication year'].astype(int)
                             last_10_years = st.checkbox('Limit to last 10 years', value=False)
                             if last_10_years:
