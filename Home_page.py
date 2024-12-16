@@ -3787,7 +3787,10 @@ with st.spinner('Retrieving data...'):
                         coly1, coly2 = st.columns(2)
 
                         with coly1:
+                            df_year = df_year.dropna(subset=['Publication year'])
                             df_year['Publication year'] = df_year['Publication year'].astype(int)
+                            st.write("Unique years in data:", df_year['Publication year'].unique())
+
                             last_10_years = st.checkbox('Limit to last 10 years', value=False)
                             if last_10_years:
                                 current_year = datetime.datetime.now().year
