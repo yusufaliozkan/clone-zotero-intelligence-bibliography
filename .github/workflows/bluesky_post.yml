@@ -17,14 +17,14 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: '3.9'
 
       - name: Install dependencies
         run: |
-          pip install pandas numpy pyzotero requests beautifulsoup4 grapheme pytz atproto
+          pip install pandas numpy pyzotero requests beautifulsoup4 grapheme pytz atproto==0.0.56
 
       - name: Run Python Script
         env:
           BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
         run: |
-          python bluesky_posts/bluesky_bot.py
+          python bluesky_posts/bluesky_publications_bot.py
