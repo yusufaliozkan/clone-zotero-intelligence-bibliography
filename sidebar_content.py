@@ -75,7 +75,7 @@ def sidebar_content():
         st.toast('Join our [mailing list](https://groups.google.com/g/intelarchive) to receive updates.')
 
 def set_page_config():
-    
+    theme = st_theme(key='sidebar_1')
     st.set_page_config(
         layout="wide",
         page_title="IntelArchive",
