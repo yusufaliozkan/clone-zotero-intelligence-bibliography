@@ -212,7 +212,11 @@ df = df.fillna('')
 # st.image('images/IntelArchive_Digital_Logo_Colour-Positive.svg')
 with open('images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg', 'r') as file:
     svg_content = file.read()
+
+with open('images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg', 'r') as file:
+    svg_content_dark = file.read()
 st.image(svg_content, width=200)
+st.image(svg_content_dark, width=200)
 # st.title("IntelArchive", anchor=False)
 st.subheader('Intelligence Studies Database', anchor=False)
 # st.header("[Zotero group library](https://www.zotero.org/groups/2514686/intelligence_bibliography/library)")
