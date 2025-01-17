@@ -210,7 +210,7 @@ df = df.fillna('')
 # dark_mode_image = 'https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Negative.png?raw=true'
 # st.image('https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/94513743becee1b83c1c368113363fe4f0ef4eba/images/IntelArchive_Digital_Logo_Colour-Positive.svg', width=200)
 # st.image('images/IntelArchive_Digital_Logo_Colour-Positive.svg')
-with open('images/IntelArchive_Digital_Logo_Colour-Positive.svg', 'r') as file:
+with open('images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg', 'r') as file:
     svg_content = file.read()
 st.image(svg_content, width=200)
 # st.title("IntelArchive", anchor=False)
