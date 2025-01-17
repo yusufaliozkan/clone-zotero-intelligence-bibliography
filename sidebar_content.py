@@ -76,7 +76,6 @@ def sidebar_content():
 
 
 def set_page_config():
-    theme = st_theme(key='sidebar_1')
     st.set_page_config(
         layout="wide",
         page_title="IntelArchive",
