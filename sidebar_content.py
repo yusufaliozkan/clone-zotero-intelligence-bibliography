@@ -79,7 +79,7 @@ def set_page_config():
     st.set_page_config(
         layout="wide",
         page_title="IntelArchive",
-        page_icon=svg_content_icon#"https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/181b55d8cbe066fee0074cbbd9e0e6bfdfbed570/images/02_icon/IntelArchive_Digital_Icon_Colour-Positive.svg",
+        page_icon=svg_content_icon,#"https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/181b55d8cbe066fee0074cbbd9e0e6bfdfbed570/images/02_icon/IntelArchive_Digital_Icon_Colour-Positive.svg",
         initial_sidebar_state="auto"
     )
 
@@ -87,6 +87,6 @@ def set_page_config_centered():
     st.set_page_config(
         layout="centered",
         page_title="IntelArchive",
-        page_icon=svg_content_icon#"https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/181b55d8cbe066fee0074cbbd9e0e6bfdfbed570/images/02_icon/IntelArchive_Digital_Icon_Colour-Positive.svg",
+        page_icon=svg_content_icon,#"https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/181b55d8cbe066fee0074cbbd9e0e6bfdfbed570/images/02_icon/IntelArchive_Digital_Icon_Colour-Positive.svg",
         initial_sidebar_state="auto"
     )
