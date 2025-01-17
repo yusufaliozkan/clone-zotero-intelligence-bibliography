@@ -222,9 +222,9 @@ from streamlit_theme import st_theme
 theme = st_theme()
 # Set the image path based on the theme
 if theme and theme.get('base') == 'dark':
-    image_path = 'images/IntelArchive_Digital_Logo_Colour-Negative.svg'
+    image_path = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg'
 else:
-    image_path = 'images/IntelArchive_Digital_Logo_Colour-Positive.svg'
+    image_path = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg'
 
 # Read and display the SVG image
 with open(image_path, 'r') as file:
