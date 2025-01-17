@@ -206,15 +206,9 @@ df = merged_df.copy()
 df = df.fillna('')
 
 # Streamlit app
-light_mode_image = 'https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Positive.png?raw=true'
-dark_mode_image = 'https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Negative.png?raw=true'
-# st.image('https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Positive.png?raw=true', width=200)
-background_color = st.get_option('theme.backgroundColor')
-# Determine which image to display based on the background color
-if background_color == '#FFFFFF':  # Assuming white background for light theme
-    st.image(light_mode_image)
-else:
-    st.image(dark_mode_image)
+# light_mode_image = 'https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Positive.png?raw=true'
+# dark_mode_image = 'https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Negative.png?raw=true'
+st.image('https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/94513743becee1b83c1c368113363fe4f0ef4eba/images/IntelArchive_Digital_Logo_Colour-Positive.svg', width=200)
 
 # st.title("IntelArchive", anchor=False)
 st.subheader('Intelligence Studies Database', anchor=False)
