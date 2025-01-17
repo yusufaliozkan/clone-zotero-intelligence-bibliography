@@ -7,9 +7,11 @@ def sidebar_content():
     
     with st.sidebar:
         st.image(image, width=150)
+        with open('images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg', 'r') as file:
+            svg_content = file.read()
         st.logo(
-            image=image,
-            icon_image=image,
+            image=svg_content,
+            icon_image=svg_content,
             link='https://intelligence.streamlit.app/'
             )
         st.sidebar.markdown("# IntelArchive")
