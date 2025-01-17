@@ -10,7 +10,7 @@ def sidebar_content():
             svg_content_icon = file.read()
         with open('images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg', 'r') as file:
             svg_content_logo = file.read()
-        st.image(svg_content_logo, width=150)
+        st.image(svg_content_logo, width=150, use_container_width=True)
         st.logo(
             image=svg_content_icon,
             icon_image=svg_content_icon,
