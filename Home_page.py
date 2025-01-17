@@ -209,9 +209,12 @@ df = df.fillna('')
 light_mode_image = 'https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Positive.png?raw=true'
 dark_mode_image = 'https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Negative.png?raw=true'
 # st.image('https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Positive.png?raw=true', width=200)
-theme = st.session_state.get("theme", {}).get("base", "light")  # Default to 'light' if not set
-selected_image = dark_mode_image if theme == "dark" else light_mode_image
-st.image(selected_image, caption="Intel Archive",  width=200)
+background_color = st.get_option('theme.backgroundColor')
+# Determine which image to display based on the background color
+if background_color == '#FFFFFF':  # Assuming white background for light theme
+    st.image(light_mode_image)
+else:
+    st.image(dark_mode_image)
 
 # st.title("IntelArchive", anchor=False)
 st.subheader('Intelligence Studies Database', anchor=False)
