@@ -12,7 +12,7 @@ def sidebar_content():
             svg_content_logo = file.read()
         st.image(svg_content_logo, width=150)
         st.logo(
-            image=svg_content,
+            image=svg_content_icon,
             icon_image=svg_content_icon,
             link='https://intelligence.streamlit.app/'
             )
