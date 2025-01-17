@@ -206,7 +206,13 @@ df = merged_df.copy()
 df = df.fillna('')
 
 # Streamlit app
-st.image('https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Positive.png?raw=true', width=200)
+light_mode_image = 'https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Positive.png?raw=true'
+dark_mode_image = 'https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Negative.png?raw=true'
+# st.image('https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Positive.png?raw=true', width=200)
+theme = st.session_state.get("theme", {}).get("base", "light")  # Default to 'light' if not set
+selected_image = dark_mode_image if theme == "dark" else light_mode_image
+st.image(selected_image, caption="Intel Archive",  width=200)
+
 # st.title("IntelArchive", anchor=False)
 st.subheader('Intelligence Studies Database', anchor=False)
 # st.header("[Zotero group library](https://www.zotero.org/groups/2514686/intelligence_bibliography/library)")
