@@ -77,7 +77,7 @@ def sidebar_content():
 
 def get_page_config():
     # Determine the current theme
-    theme = st_theme()
+    theme = st_theme(key='sidebar_1')
 
     # Set the icon URL based on the theme
     if theme and theme.get('base') == 'dark':
@@ -94,7 +94,7 @@ def get_page_config():
 
 def get_page_config_centered():
     # Determine the current theme
-    theme = st_theme()
+    theme = st_theme(key='sidebar_2')
 
     # Set the icon URL based on the theme
     if theme and theme.get('base') == 'dark':
