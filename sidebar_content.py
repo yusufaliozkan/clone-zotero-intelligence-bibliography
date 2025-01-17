@@ -18,19 +18,22 @@ def sidebar_content():
         # Set the image path based on the theme
         if theme and theme.get('base') == 'dark':
             image_path_logo = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg'
+            image_path_icon = 'images/02_icon/IntelArchive_Digital_Icon_Colour-Negative.svg'
         else:
             image_path_logo = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg'
+            image_path_icon = 'images/02_icon/IntelArchive_Digital_Icon_Colour-Positive.svg'
 
         # Read and display the SVG image
         with open(image_path_logo, 'r') as file:
-            svg_content = file.read()
-            st.image(svg_content, width=150)  # Adjust the width as needed
-
+            svg_content_logo = file.read()
+            st.image(svg_content_logo, width=150)  # Adjust the width as needed
+        with open(image_path_icon, 'r') as file:
+            svg_content_icon = file.read()
 
         # st.image(svg_content_logo, width=150)
         st.logo(
-            image=svg_content,
-            icon_image=svg_content,
+            image=svg_content_icon,
+            icon_image=svg_content_icon,
             link='https://intelligence.streamlit.app/'
             )
         st.sidebar.markdown("# IntelArchive")
