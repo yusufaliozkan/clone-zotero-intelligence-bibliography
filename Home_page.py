@@ -218,7 +218,18 @@ with open('images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg', 'r') a
 st.image(svg_content, width=200)
 st.image(svg_content_dark, width=200)
 
+from streamlit_theme import st_theme
+theme = st_theme()
+# Set the image path based on the theme
+if theme and theme.get('base') == 'dark':
+    image_path = 'images/IntelArchive_Digital_Logo_Colour-Negative.svg'
+else:
+    image_path = 'images/IntelArchive_Digital_Logo_Colour-Positive.svg'
 
+# Read and display the SVG image
+with open(image_path, 'r') as file:
+    svg_content = file.read()
+    st.image(svg_content, width=500)  # Adjust the width as needed
 
 # st.title("IntelArchive", anchor=False)
 st.subheader('Intelligence Studies Database', anchor=False)
