@@ -41,6 +41,7 @@ from pyparsing import infixNotation, opAssoc, Keyword, Word, alphanums
 from events import evens_conferences
 import pydeck as pdk
 from countryinfo import CountryInfo
+from streamlit_theme import st_theme
 
 
 # Connecting Zotero with API 
@@ -210,15 +211,7 @@ df = df.fillna('')
 # dark_mode_image = 'https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Negative.png?raw=true'
 # st.image('https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/94513743becee1b83c1c368113363fe4f0ef4eba/images/IntelArchive_Digital_Logo_Colour-Positive.svg', width=200)
 # st.image('images/IntelArchive_Digital_Logo_Colour-Positive.svg')
-with open('images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg', 'r') as file:
-    svg_content = file.read()
 
-with open('images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg', 'r') as file:
-    svg_content_dark = file.read()
-st.image(svg_content, width=200)
-st.image(svg_content_dark, width=200)
-
-from streamlit_theme import st_theme
 theme = st_theme()
 # Set the image path based on the theme
 if theme and theme.get('base') == 'dark':
@@ -229,7 +222,7 @@ else:
 # Read and display the SVG image
 with open(image_path, 'r') as file:
     svg_content = file.read()
-    st.image(svg_content, width=500)  # Adjust the width as needed
+    st.image(svg_content, width=200)  # Adjust the width as needed
 
 # st.title("IntelArchive", anchor=False)
 st.subheader('Intelligence Studies Database', anchor=False)
