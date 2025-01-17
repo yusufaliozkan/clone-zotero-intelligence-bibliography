@@ -209,7 +209,7 @@ df = df.fillna('')
 # light_mode_image = 'https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Positive.png?raw=true'
 # dark_mode_image = 'https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Negative.png?raw=true'
 # st.image('https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/94513743becee1b83c1c368113363fe4f0ef4eba/images/IntelArchive_Digital_Logo_Colour-Positive.svg', width=200)
-st.image(images/IntelArchive_Digital_Logo_Colour-Positive.svg)
+st.image('images/IntelArchive_Digital_Logo_Colour-Positive.svg')
 # st.title("IntelArchive", anchor=False)
 st.subheader('Intelligence Studies Database', anchor=False)
 # st.header("[Zotero group library](https://www.zotero.org/groups/2514686/intelligence_bibliography/library)")
