@@ -29,7 +29,7 @@ from PIL import Image, ImageDraw, ImageFilter
 import json
 from authors_dict import get_df_authors, name_replacements
 from copyright import display_custom_license
-from sidebar_content import sidebar_content, set_page_config
+from sidebar_content import sidebar_content, set_page_config, get_page_config  
 import plotly.graph_objs as go
 import feedparser
 import requests
