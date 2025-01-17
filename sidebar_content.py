@@ -17,12 +17,12 @@ def sidebar_content():
         theme = st_theme(key='sidebar')
         # Set the image path based on the theme
         if theme and theme.get('base') == 'dark':
-            image_path = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg'
+            image_path_logo = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg'
         else:
-            image_path = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg'
+            image_path_logo = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg'
 
         # Read and display the SVG image
-        with open(image_path, 'r') as file:
+        with open(image_path_logo, 'r') as file:
             svg_content = file.read()
             st.image(svg_content, width=150)  # Adjust the width as needed
 
