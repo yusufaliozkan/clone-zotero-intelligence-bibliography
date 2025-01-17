@@ -1,6 +1,8 @@
 import streamlit as st
 import streamlit.components.v1 as components
 from copyright import display_custom_license, cc_by_licence_image
+from streamlit_theme import st_theme
+
 
 def sidebar_content():
     image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
@@ -10,6 +12,22 @@ def sidebar_content():
             svg_content_icon = file.read()
         with open('images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg', 'r') as file:
             svg_content_logo = file.read()
+
+
+            theme = st_theme()
+            # Set the image path based on the theme
+            if theme and theme.get('base') == 'dark':
+                image_path = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg'
+            else:
+                image_path = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg'
+
+            # Read and display the SVG image
+            with open(image_path, 'r') as file:
+                svg_content = file.read()
+                st.image(svg_content, width=150)  # Adjust the width as needed
+
+
+
         st.image(svg_content_logo, width=150)
         st.logo(
             image=svg_content_icon,
