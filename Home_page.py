@@ -207,7 +207,7 @@ df = df.fillna('')
 
 # Streamlit app
 st.image('https://github.com/yusufaliozkan/clone-zotero-intelligence-bibliography/blob/main/images/IntelArchive_Digital_Logo_Colour-Negative.png')
-st.title("IntelArchive", anchor=False)
+st.title("IntelArchives", anchor=False)
 st.subheader('Intelligence Studies Database', anchor=False)
 # st.header("[Zotero group library](https://www.zotero.org/groups/2514686/intelligence_bibliography/library)")
 
