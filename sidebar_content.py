@@ -10,7 +10,7 @@ def sidebar_content():
             svg_content_icon = file.read()
         with open('images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg', 'r') as file:
             svg_content_logo = file.read()
-        st.image(svg_content_logo, width=150, use_container_width=True)
+        st.image(svg_content_logo, width=150)
         st.logo(
             image=svg_content_icon,
             icon_image=svg_content_icon,
@@ -58,7 +58,7 @@ def set_page_config():
     st.set_page_config(
         layout="wide",
         page_title="IntelArchive",
-        page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
+        page_icon=svg_content_icon,
         initial_sidebar_state="auto"
     )
 
@@ -66,6 +66,6 @@ def set_page_config_centered():
     st.set_page_config(
         layout="centered",
         page_title="IntelArchive",
-        page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
+        page_icon=svg_content_icon,
         initial_sidebar_state="auto"
     )
