@@ -28,7 +28,7 @@ def sidebar_content():
 
 
 
-        st.image(svg_content_logo, width=150)
+        # st.image(svg_content_logo, width=150)
         st.logo(
             image=svg_content_icon,
             icon_image=svg_content_icon,
