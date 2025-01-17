@@ -14,7 +14,7 @@ def sidebar_content():
             svg_content_logo = file.read()
 
 
-            theme = st_theme()
+            theme = st_theme(key='sidebar')
             # Set the image path based on the theme
             if theme and theme.get('base') == 'dark':
                 image_path = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg'
