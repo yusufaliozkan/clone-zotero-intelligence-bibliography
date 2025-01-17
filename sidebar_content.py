@@ -27,11 +27,10 @@ def sidebar_content():
                 st.image(svg_content, width=150)  # Adjust the width as needed
 
 
-
         # st.image(svg_content_logo, width=150)
         st.logo(
-            image=svg_content_icon,
-            icon_image=svg_content_icon,
+            image=svg_content,
+            icon_image=svg_content,
             link='https://intelligence.streamlit.app/'
             )
         st.sidebar.markdown("# IntelArchive")
