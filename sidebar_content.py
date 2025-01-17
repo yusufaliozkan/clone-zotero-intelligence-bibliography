@@ -75,35 +75,18 @@ def sidebar_content():
         st.toast('Join our [mailing list](https://groups.google.com/g/intelarchive) to receive updates.')
 
 def set_page_config():
-    # Determine the current theme
-    theme = st_theme(key='sidebar_1')
-
-    # Set the icon URL based on the theme
-    if theme and theme.get('base') == 'dark':
-        icon_url = 'https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/181b55d8cbe066fee0074cbbd9e0e6bfdfbed570/images/02_icon/IntelArchive_Digital_Icon_Colour-Negative.svg'
-    else:
-        icon_url = 'https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/181b55d8cbe066fee0074cbbd9e0e6bfdfbed570/images/02_icon/IntelArchive_Digital_Icon_Colour-Positive.svg'
-
+    
     st.set_page_config(
         layout="wide",
         page_title="IntelArchive",
-        page_icon=icon_url,
+        page_icon="https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/181b55d8cbe066fee0074cbbd9e0e6bfdfbed570/images/02_icon/IntelArchive_Digital_Icon_Colour-Positive.svg",
         initial_sidebar_state="auto"
     )
 
 def set_page_config_centered():
-    # Determine the current theme
-    theme = st_theme(key='sidebar_2')
-
-    # Set the icon URL based on the theme
-    if theme and theme.get('base') == 'dark':
-        icon_url = 'https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/181b55d8cbe066fee0074cbbd9e0e6bfdfbed570/images/02_icon/IntelArchive_Digital_Icon_Colour-Negative.svg'
-    else:
-        icon_url = 'https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/181b55d8cbe066fee0074cbbd9e0e6bfdfbed570/images/02_icon/IntelArchive_Digital_Icon_Colour-Positive.svg'
-
     st.set_page_config(
         layout="centered",
         page_title="IntelArchive",
-        page_icon=icon_url,
+        page_icon="https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/181b55d8cbe066fee0074cbbd9e0e6bfdfbed570/images/02_icon/IntelArchive_Digital_Icon_Colour-Positive.svg",
         initial_sidebar_state="auto"
     )
