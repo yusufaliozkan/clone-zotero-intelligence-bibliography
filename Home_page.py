@@ -29,7 +29,7 @@ from PIL import Image, ImageDraw, ImageFilter
 import json
 from authors_dict import get_df_authors, name_replacements
 from copyright import display_custom_license
-from sidebar_content import sidebar_content, get_page_config  
+from sidebar_content import sidebar_content, set_page_config
 import plotly.graph_objs as go
 import feedparser
 import requests
@@ -44,6 +44,7 @@ from countryinfo import CountryInfo
 from streamlit_theme import st_theme
 
 
+
 # Connecting Zotero with API 
 library_id = '2514686'
 library_type = 'group'
@@ -51,9 +52,8 @@ api_key = '' # api_key is only needed for private groups and libraries
 
 # Bringing recently changed items
 
-page_config = get_page_config()
-st.set_page_config(**page_config)
-# set_page_config()
+
+set_page_config()
 pd.set_option('display.max_colwidth', None)
 
 zot = zotero.Zotero(library_id, library_type)
