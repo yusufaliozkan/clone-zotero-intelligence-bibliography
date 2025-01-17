@@ -8,10 +8,10 @@ def sidebar_content():
     image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
     
     with st.sidebar:
-        with open('images/02_icon/IntelArchive_Digital_Icon_Colour-Positive.svg', 'r') as file:
-            svg_content_icon = file.read()
-        with open('images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg', 'r') as file:
-            svg_content_logo = file.read()
+        # with open('images/02_icon/IntelArchive_Digital_Icon_Colour-Positive.svg', 'r') as file:
+        #     svg_content_icon = file.read()
+        # with open('images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg', 'r') as file:
+        #     svg_content_logo = file.read()
 
 
             theme = st_theme(key='sidebar')
