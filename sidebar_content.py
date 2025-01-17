@@ -6,9 +6,9 @@ def sidebar_content():
     image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
     
     with st.sidebar:
-        st.image(image, width=150)
         with open('images/02_icon/IntelArchive_Digital_Icon_Colour-Positive.svg', 'r') as file:
             svg_content = file.read()
+        st.image(svg_content, width=150)
         st.logo(
             image=svg_content,
             icon_image=svg_content,
