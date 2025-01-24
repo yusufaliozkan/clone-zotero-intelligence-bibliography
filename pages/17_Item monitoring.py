@@ -24,10 +24,11 @@ import gspread
 from copyright import display_custom_license
 from urllib.parse import quote
 
-st.set_page_config(layout = "wide", 
-                    page_title='IntelArchive',
-                    page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
-                    initial_sidebar_state="auto") 
+# st.set_page_config(layout = "wide", 
+#                     page_title='IntelArchive',
+#                     page_icon="https://images.pexels.com/photos/315918/pexels-photo-315918.png",
+#                     initial_sidebar_state="auto") 
+set_page_config()
 
 st.title("IntelArchive", anchor=False)
 st.header('Item monitoring', anchor=False)
