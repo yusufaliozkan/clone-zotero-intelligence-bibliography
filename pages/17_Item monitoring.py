@@ -28,7 +28,18 @@ from sidebar_content import sidebar_content, set_page_config
 
 set_page_config()
 
-st.title("IntelArchive", anchor=False)
+theme = st_theme()
+# Set the image path based on the theme
+if theme and theme.get('base') == 'dark':
+    image_path = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg'
+else:
+    image_path = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg'
+
+# Read and display the SVG image
+with open(image_path, 'r') as file:
+    svg_content = file.read()
+    st.image(svg_content, width=200)  # Adjust the width as needed
+    
 st.header('Item monitoring', anchor=False)
 
 image = 'https://images.pexels.com/photos/315918/pexels-photo-315918.png'
