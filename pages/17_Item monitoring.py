@@ -24,6 +24,7 @@ import gspread
 from copyright import display_custom_license
 from urllib.parse import quote
 from sidebar_content import sidebar_content, set_page_config
+from streamlit_theme import st_theme
 
 
 set_page_config()
