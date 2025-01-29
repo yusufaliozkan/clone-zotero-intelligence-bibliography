@@ -59,7 +59,7 @@ def sidebar_content():
             This website and the Intelligence bibliography Zotero group library do not list all the sources on intelligence studies. 
             The list is created based on the creator's subjective views.
             ''')
-        with st.expander('Sponsors'):
+        with st.expander('Sponsors'): 
             st.markdown('''
             Proudly sponsored by the [King's Centre for the Study of Intelligence](https://kcsi.uk/)
             ''')
