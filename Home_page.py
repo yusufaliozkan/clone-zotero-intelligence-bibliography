@@ -3254,7 +3254,7 @@ with st.spinner('Retrieving data...'):
                 with tab11:
                     st.markdown('#### Recently added or updated items')
                     df_intro = df_dedup.copy()
-                    df_intro = df_intro.sort_values(by='Date added', ascending=True).reset_index(drop=True)
+                    df_intro = df_intro.sort_values(by='Date added', ascending=False).reset_index(drop=True)
                     df_intro
                     df_intro = df_intro.head(10)
                     df_intro['Abstract'] = df_intro['Abstract'].str.strip()
