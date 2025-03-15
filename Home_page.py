@@ -97,6 +97,7 @@ df['Abstract'] = df['Abstract'].replace(r'^\s*$', np.nan, regex=True) # To repla
 df['Abstract'] = df['Abstract'].fillna('No abstract')
 
 split_df= pd.DataFrame(df['Col key'].tolist())
+split_df
 df = pd.concat([df, split_df], axis=1)
 df['Authors'] = df['Authors'].fillna('null')  
 
