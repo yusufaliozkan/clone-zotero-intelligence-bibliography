@@ -3320,7 +3320,7 @@ with st.spinner('Retrieving data...'):
                                 f"{df_intro['Title'].iloc[i]}"
                                 f" (by *{df_intro['FirstName2'].iloc[i]}*)"
                                 f" (Published on: {df_intro['Date published'].iloc[i]})"
-                                f" (Published in: *{df_intro['Pub_venue'].iloc[i]}*)"
+                                f" (Published in: *{df_intro['Journal'].iloc[i]}*)"
                                 f" [[Publication link]]({df_intro['Link to publication'].iloc[i]})"
                                 f" [[Zotero link]]({df_intro['Zotero link'].iloc[i]})"
                             )
