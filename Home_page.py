@@ -3255,8 +3255,8 @@ with st.spinner('Retrieving data...'):
                     st.markdown('#### Recently added or updated items')
                     df_intro = df_dedup.copy()
                     df_intro
-                    df['Abstract'] = df['Abstract'].str.strip()
-                    df['Abstract'] = df['Abstract'].fillna('No abstract')
+                    df_intro['Abstract'] = df_intro['Abstract'].str.strip()
+                    df_intro['Abstract'] = df_intro['Abstract'].fillna('No abstract')
                     
                     # df_download = df.iloc[:, [0,1,2,3,4,5,6,9]] 
                     # df_download = df_download[['Title', 'Publication type', 'Authors', 'Abstract', 'Link to publication', 'Zotero link', 'Date published', 'Date added']]
@@ -3302,7 +3302,7 @@ with st.spinner('Retrieving data...'):
                                 f"[[Publication link]]({row['Link to publication']})"
                                 f"[[Zotero link]]({row['Zotero link']})"
                             )
-                    df_last = df.apply(format_row, axis=1)
+                    df_last = df_intro.apply(format_row, axis=1)
 
                     # df_last = ('**'+ df['Publication type']+ '**'+ ': ' + df['Title'] +', ' +                        
                     #             ' (by ' + '*' + df['Authors'] + '*' + ') ' +
