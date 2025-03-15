@@ -3253,6 +3253,7 @@ with st.spinner('Retrieving data...'):
                 tab11, tab12, tab13 = st.tabs(['Recently added items', 'Recently published items', 'Top cited items'])
                 with tab11:
                     st.markdown('#### Recently added or updated items')
+                    df_intro
                     df['Abstract'] = df['Abstract'].str.strip()
                     df['Abstract'] = df['Abstract'].fillna('No abstract')
                     
