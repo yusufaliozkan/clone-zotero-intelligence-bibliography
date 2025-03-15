@@ -158,26 +158,6 @@ zot = zotero.Zotero(library_id, library_type)
 # df['Date modified'] = pd.to_datetime(df['Date modified'], errors='coerce')
 # df['Date modified'] = df['Date modified'].dt.strftime('%d/%m/%Y, %H:%M')
 
-# Bringing collections
-
-@st.cache_data(ttl=600)
-def zotero_collections2(library_id, library_type):
-    collections = zot.collections()
-    data = [(item['data']['key'], item['data']['name'], item['meta']['numItems'], item['links']['alternate']['href']) for item in collections]
-    df_collections = pd.DataFrame(data, columns=['Key', 'Name', 'Number', 'Link'])
-    return df_collections
-df_collections_2 = zotero_collections2(library_id, library_type)
-
-@st.cache_data
-def zotero_collections(library_id, library_type):
-    collections = zot.collections()
-    data2 = [(item['data']['key'], item['data']['name'], item['links']['alternate']['href']) for item in collections]
-    df_collections = pd.DataFrame(data2, columns=['Key', 'Name', 'Link'])
-    pd.set_option('display.max_colwidth', None)
-    return df_collections.sort_values(by='Name')
-df_collections = zotero_collections(library_id, library_type)
-df_collections
-
 # #To be deleted
 # if 0 in df:
 #     merged_df = pd.merge(
@@ -3265,6 +3245,27 @@ with st.spinner('Retrieving data...'):
                     df_intro['Date published'] = df_intro['Date published'].fillna('No date')
                     df_intro['Abstract'] = df_intro['Abstract'].str.strip()
                     df_intro['Abstract'] = df_intro['Abstract'].fillna('No abstract')
+
+                    # Bringing collections
+
+                    @st.cache_data(ttl=600)
+                    def zotero_collections2(library_id, library_type):
+                        collections = zot.collections()
+                        data = [(item['data']['key'], item['data']['name'], item['meta']['numItems'], item['links']['alternate']['href']) for item in collections]
+                        df_collections = pd.DataFrame(data, columns=['Key', 'Name', 'Number', 'Link'])
+                        return df_collections
+                    df_collections_2 = zotero_collections2(library_id, library_type)
+
+                    @st.cache_data
+                    def zotero_collections(library_id, library_type):
+                        collections = zot.collections()
+                        data2 = [(item['data']['key'], item['data']['name'], item['links']['alternate']['href']) for item in collections]
+                        df_collections = pd.DataFrame(data2, columns=['Key', 'Name', 'Link'])
+                        pd.set_option('display.max_colwidth', None)
+                        return df_collections.sort_values(by='Name')
+                    df_collections = zotero_collections(library_id, library_type)
+                    df_collections
+                    df_intro
                     
                     # df_download = df.iloc[:, [0,1,2,3,4,5,6,9]] 
                     # df_download = df_download[['Title', 'Publication type', 'Authors', 'Abstract', 'Link to publication', 'Zotero link', 'Date published', 'Date added']]
@@ -3373,7 +3374,6 @@ with st.spinner('Retrieving data...'):
 
                             st.write(f"{i+1}) " + formatted_row)
                         if display:
-                            df_intro
                             a = ''
                             b = ''
                             c = ''
