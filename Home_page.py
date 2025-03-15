@@ -3244,7 +3244,7 @@ with st.spinner('Retrieving data...'):
                     df_intro['Date published'] = df_intro['Date published'].dt.strftime('%d-%m-%Y')
                     df_intro['Date published'] = df_intro['Date published'].fillna('No date')
                     df_intro['Abstract'] = df_intro['Abstract'].str.strip()
-                    df_intro['Abstract'] = df_intro['Abstract'].fillna('No abstract')
+                    df_intro['Abstract'] = df_intro['Abstract'].fillna('No abstract')                
 
                     # Bringing collections
 
@@ -3267,6 +3267,10 @@ with st.spinner('Retrieving data...'):
                     df_collections
                     df_intro
                     
+                    split_df= pd.DataFrame(df_intro['Col key'].tolist())
+                    df_intro = pd.concat([df_intro, split_df], axis=1)
+                    df_intro
+
                     # df_download = df.iloc[:, [0,1,2,3,4,5,6,9]] 
                     # df_download = df_download[['Title', 'Publication type', 'Authors', 'Abstract', 'Link to publication', 'Zotero link', 'Date published', 'Date added']]
                     # def convert_df(df):
