@@ -3312,55 +3312,55 @@ with st.spinner('Retrieving data...'):
                     #             )
                     row_nu_1 = len(df_last)
                     for i in range(row_nu_1):
-                        publication_type = df['Publication type'].iloc[i]
+                        publication_type = df_intro['Publication type'].iloc[i]
                         
                         if publication_type in ["Journal article", "Magazine article", 'Newspaper article']:
                             formatted_row = (
-                                f"**{df['Publication type'].iloc[i]}**: "
-                                f"{df['Title'].iloc[i]}"
-                                f" (by *{df['FirstName2'].iloc[i]}*)"
-                                f" (Published on: {df['Date published'].iloc[i]})"
-                                f" (Published in: *{df['Pub_venue'].iloc[i]}*)"
-                                f" [[Publication link]]({df['Link to publication'].iloc[i]})"
-                                f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
+                                f"**{df_intro['Publication type'].iloc[i]}**: "
+                                f"{df_intro['Title'].iloc[i]}"
+                                f" (by *{df_intro['FirstName2'].iloc[i]}*)"
+                                f" (Published on: {df_intro['Date published'].iloc[i]})"
+                                f" (Published in: *{df_intro['Pub_venue'].iloc[i]}*)"
+                                f" [[Publication link]]({df_intro['Link to publication'].iloc[i]})"
+                                f" [[Zotero link]]({df_intro['Zotero link'].iloc[i]})"
                             )
 
                             st.write(f"{i+1}) " + formatted_row)
                         
                         elif publication_type == 'Book chapter':
                             formatted_row = (
-                                f"**{df['Publication type'].iloc[i]}**: "
-                                f"{df['Title'].iloc[i]}"
-                                f" (in: *{df['Book_title'].iloc[i]}*)"
-                                f" (by *{df['FirstName2'].iloc[i]}*)"
-                                f" (Published on: {df['Date published'].iloc[i]})"
-                                f" [[Publication link]]({df['Link to publication'].iloc[i]})"
-                                f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
+                                f"**{df_intro['Publication type'].iloc[i]}**: "
+                                f"{df_intro['Title'].iloc[i]}"
+                                f" (in: *{df_intro['Book_title'].iloc[i]}*)"
+                                f" (by *{df_intro['FirstName2'].iloc[i]}*)"
+                                f" (Published on: {df_intro['Date published'].iloc[i]})"
+                                f" [[Publication link]]({df_intro['Link to publication'].iloc[i]})"
+                                f" [[Zotero link]]({df_intro['Zotero link'].iloc[i]})"
                             )
 
                             st.write(f"{i+1}) " + formatted_row)
 
                         elif publication_type == 'Thesis':
-                            thesis_type = f"{df['Thesis_type'].iloc[i]}: "
+                            thesis_type = f"{df_intro['Thesis_type'].iloc[i]}: "
                             formatted_row = (
-                                f"**{df['Publication type'].iloc[i]}**: "
-                                f"{df['Title'].iloc[i]}"
-                                f" ({thesis_type if df['Thesis_type'].iloc[i] != '' else ''}*{df['University'].iloc[i]}*)"
-                                f" (by *{df['FirstName2'].iloc[i]}*)"
-                                f" (Published on: {df['Date published'].iloc[i]})"
-                                f" [[Publication link]]({df['Link to publication'].iloc[i]})"
-                                f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
+                                f"**{df_intro['Publication type'].iloc[i]}**: "
+                                f"{df_intro['Title'].iloc[i]}"
+                                f" ({thesis_type if df_intro['Thesis_type'].iloc[i] != '' else ''}*{df_intro['University'].iloc[i]}*)"
+                                f" (by *{df_intro['FirstName2'].iloc[i]}*)"
+                                f" (Published on: {df_intro['Date published'].iloc[i]})"
+                                f" [[Publication link]]({df_intro['Link to publication'].iloc[i]})"
+                                f" [[Zotero link]]({df_intro['Zotero link'].iloc[i]})"
                             )
 
                             st.write(f"{i+1}) " + formatted_row) 
                         else:
                             formatted_row = (
-                                f"**{df['Publication type'].iloc[i]}**: "
-                                f"{df['Title'].iloc[i]}"
-                                f" (by *{df['FirstName2'].iloc[i]}*)"
-                                f" (Published on: {df['Date published'].iloc[i]})"
-                                f" [[Publication link]]({df['Link to publication'].iloc[i]})"
-                                f" [[Zotero link]]({df['Zotero link'].iloc[i]})"   
+                                f"**{df_intro['Publication type'].iloc[i]}**: "
+                                f"{df_intro['Title'].iloc[i]}"
+                                f" (by *{df_intro['FirstName2'].iloc[i]}*)"
+                                f" (Published on: {df_intro['Date published'].iloc[i]})"
+                                f" [[Publication link]]({df_intro['Link to publication'].iloc[i]})"
+                                f" [[Zotero link]]({df_intro['Zotero link'].iloc[i]})"   
                             )
 
                             st.write(f"{i+1}) " + formatted_row)
