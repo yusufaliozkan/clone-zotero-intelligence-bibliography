@@ -3277,7 +3277,7 @@ with st.spinner('Retrieving data...'):
                     # a = 'recently-added-' + today
                     # st.download_button(' Download recently added items', csv, (a+'.csv'), mime="text/csv", key='download-csv-3')
                     
-                    display = st.checkbox('Display theme and abstract')
+                    display = st.checkbox('Display abstract')
 
                     def format_row(row):
                         if row['Publication type'] == 'Book chapter' and row['Book_title']:
@@ -3372,28 +3372,7 @@ with st.spinner('Retrieving data...'):
                             )
 
                             st.write(f"{i+1}) " + formatted_row)
-                        if display:
-                            a = ''
-                            b = ''
-                            c = ''
-                            if 'Name_x' in df_intro:
-                                a = '[' + '[' + df_intro['Name_x'].iloc[i] + ']' + '(' + df_intro['Link_x'].iloc[i] + ')' + ']'
-                                # f"[{[df['Name_x'].iloc[i]](df['Link_x'].iloc[i])}]"
-                                if df_intro['Name_x'].iloc[i] == '':
-                                    a = ''
-                            if 'Name_y' in df_intro:
-                                b = '[' + '[' + df_intro['Name_y'].iloc[i] + ']' + '(' + df_intro['Link_y'].iloc[i] + ')' + ']'
-                                # f"[{[df['Name_y'].iloc[i]](df['Link_y'].iloc[i])}]"
-                                if df_intro['Name_y'].iloc[i] == '':
-                                    b = ''
-                            if 'Name' in df_intro:
-                                c ='[' + '[' + df_intro['Name'].iloc[i] + ']' + '(' + df_intro['Link'].iloc[i] + ')' + ']'
-                                if df_intro['Name'].iloc[i] == '':
-                                    c = ''
-                            st.caption('Theme(s):  \n ' + a + ' ' + b + ' ' + c)
-                            if not any([a, b, c]):
-                                st.caption('No theme to display!')
-                            
+                        if display:                          
                             st.caption('Abstract: ' + df_intro['Abstract'].iloc[i])
 
                 with tab12:
