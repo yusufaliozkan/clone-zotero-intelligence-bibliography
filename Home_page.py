@@ -3368,19 +3368,19 @@ with st.spinner('Retrieving data...'):
                             a = ''
                             b = ''
                             c = ''
-                            if 'Name_x' in df:
-                                a = '[' + '[' + df['Name_x'].iloc[i] + ']' + '(' + df['Link_x'].iloc[i] + ')' + ']'
+                            if 'Name_x' in df_intro:
+                                a = '[' + '[' + df_intro['Name_x'].iloc[i] + ']' + '(' + df_intro['Link_x'].iloc[i] + ')' + ']'
                                 # f"[{[df['Name_x'].iloc[i]](df['Link_x'].iloc[i])}]"
-                                if df['Name_x'].iloc[i] == '':
+                                if df_intro['Name_x'].iloc[i] == '':
                                     a = ''
-                            if 'Name_y' in df:
-                                b = '[' + '[' + df['Name_y'].iloc[i] + ']' + '(' + df['Link_y'].iloc[i] + ')' + ']'
+                            if 'Name_y' in df_intro:
+                                b = '[' + '[' + df_intro['Name_y'].iloc[i] + ']' + '(' + df_intro['Link_y'].iloc[i] + ')' + ']'
                                 # f"[{[df['Name_y'].iloc[i]](df['Link_y'].iloc[i])}]"
-                                if df['Name_y'].iloc[i] == '':
+                                if df_intro['Name_y'].iloc[i] == '':
                                     b = ''
-                            if 'Name' in df:
-                                c ='[' + '[' + df['Name'].iloc[i] + ']' + '(' + df['Link'].iloc[i] + ')' + ']'
-                                if df['Name'].iloc[i] == '':
+                            if 'Name' in df_intro:
+                                c ='[' + '[' + df_intro['Name'].iloc[i] + ']' + '(' + df_intro['Link'].iloc[i] + ')' + ']'
+                                if df_intro['Name'].iloc[i] == '':
                                     c = ''
                             st.caption('Theme(s):  \n ' + a + ' ' + b + ' ' + c)
                             if not any([a, b, c]):
