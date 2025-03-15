@@ -3276,7 +3276,7 @@ with st.spinner('Retrieving data...'):
                             return (
                                 f"**{row['Publication type']}**: "
                                 f"{row['Title']} "
-                                f"(by *{row['Authors']}*)"
+                                f"(by *{row['FirstName2']}*)"
                                 f"(Published on: {row['Date published']}"
                                 f"[[Publication link]]({row['Link to publication']})"
                                 f"[[Zotero link]]({row['Zotero link']})"
@@ -3286,7 +3286,7 @@ with st.spinner('Retrieving data...'):
                             return (
                                 f"**{row['Publication type']}**: "
                                 f"{row['Title']}, "
-                                f"(by {row['Authors']})"
+                                f"(by {row['FirstName2']})"
                                 f"({row['Thesis_type']}: *{row['University']}*) "
                                 f"(Published on: {row['Date published']})"
                                 f"[[Publication link]]({row['Link to publication']})"
@@ -3297,7 +3297,7 @@ with st.spinner('Retrieving data...'):
                             return (
                                 f"**{row['Publication type']}**: "
                                 f"{row['Title']}, "
-                                f"(by {row['Authors']})"
+                                f"(by {row['FirstName2']})"
                                 f"(Published on: {row['Date published']})"
                                 f"[[Publication link]]({row['Link to publication']})"
                                 f"[[Zotero link]]({row['Zotero link']})"
@@ -3318,7 +3318,7 @@ with st.spinner('Retrieving data...'):
                             formatted_row = (
                                 f"**{df['Publication type'].iloc[i]}**: "
                                 f"{df['Title'].iloc[i]}"
-                                f" (by *{df['Authors'].iloc[i]}*)"
+                                f" (by *{df['FirstName2'].iloc[i]}*)"
                                 f" (Published on: {df['Date published'].iloc[i]})"
                                 f" (Published in: *{df['Pub_venue'].iloc[i]}*)"
                                 f" [[Publication link]]({df['Link to publication'].iloc[i]})"
@@ -3332,7 +3332,7 @@ with st.spinner('Retrieving data...'):
                                 f"**{df['Publication type'].iloc[i]}**: "
                                 f"{df['Title'].iloc[i]}"
                                 f" (in: *{df['Book_title'].iloc[i]}*)"
-                                f" (by *{df['Authors'].iloc[i]}*)"
+                                f" (by *{df['FirstName2'].iloc[i]}*)"
                                 f" (Published on: {df['Date published'].iloc[i]})"
                                 f" [[Publication link]]({df['Link to publication'].iloc[i]})"
                                 f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
@@ -3346,7 +3346,7 @@ with st.spinner('Retrieving data...'):
                                 f"**{df['Publication type'].iloc[i]}**: "
                                 f"{df['Title'].iloc[i]}"
                                 f" ({thesis_type if df['Thesis_type'].iloc[i] != '' else ''}*{df['University'].iloc[i]}*)"
-                                f" (by *{df['Authors'].iloc[i]}*)"
+                                f" (by *{df['FirstName2'].iloc[i]}*)"
                                 f" (Published on: {df['Date published'].iloc[i]})"
                                 f" [[Publication link]]({df['Link to publication'].iloc[i]})"
                                 f" [[Zotero link]]({df['Zotero link'].iloc[i]})"
@@ -3357,7 +3357,7 @@ with st.spinner('Retrieving data...'):
                             formatted_row = (
                                 f"**{df['Publication type'].iloc[i]}**: "
                                 f"{df['Title'].iloc[i]}"
-                                f" (by *{df['Authors'].iloc[i]}*)"
+                                f" (by *{df['FirstName2'].iloc[i]}*)"
                                 f" (Published on: {df['Date published'].iloc[i]})"
                                 f" [[Publication link]]({df['Link to publication'].iloc[i]})"
                                 f" [[Zotero link]]({df['Zotero link'].iloc[i]})"   
