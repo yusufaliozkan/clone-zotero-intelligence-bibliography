@@ -3386,7 +3386,7 @@ with st.spinner('Retrieving data...'):
                             if not any([a, b, c]):
                                 st.caption('No theme to display!')
                             
-                            st.caption('Abstract: ' + df['Abstract'].iloc[i])
+                            st.caption('Abstract: ' + df_intro['Abstract'].iloc[i])
 
                 with tab12:
                     st.markdown('#### Recently published items')
