@@ -3365,6 +3365,7 @@ with st.spinner('Retrieving data...'):
 
                             st.write(f"{i+1}) " + formatted_row)
                         if display:
+                            df_intro
                             a = ''
                             b = ''
                             c = ''
