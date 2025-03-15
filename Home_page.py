@@ -274,10 +274,11 @@ with st.spinner('Retrieving data...'):
             (df_intro['Date added'].dt.year == current_date.year) & 
             (df_intro['Date added'].dt.month == current_date.month)
         ]        # st.write(f'**{item_count}** items available in this library. **{len(items_added_this_month)}** items added in {current_date.strftime("%B %Y")}.')
+        st.metric(label='Number of items in the library', value=len(df_intro), delta=len(items_added_this_month),label_visibility='visible', help=f' **{len(items_added_this_month)}** items added in {current_date.strftime("%B %Y")}')
         st.metric(label='Number of items in the library', value=item_count, delta=len(items_added_this_month),label_visibility='visible', help=f' **{len(items_added_this_month)}** items added in {current_date.strftime("%B %Y")}')
     df_intro
     st.write('The library last updated on ' + '**' + df_intro.loc[0]['Date added'].strftime('%d/%m/%Y, %H:%M') + '**')
-    st.write('The library last updated on ' + '**'+ df.loc[0]['Date modified']+'**')
+    # st.write('The library last updated on ' + '**'+ df.loc[0]['Date modified']+'**')
     df_dedup_oa = df_dedup[df_dedup['OA status'] == True].reset_index(drop=True)
 
     with col2:
