@@ -3271,6 +3271,32 @@ with st.spinner('Retrieving data...'):
                     df_intro = pd.concat([df_intro, split_df], axis=1)
                     df_intro
 
+                    if 0 in df:
+                        merged_df = pd.merge(
+                            left=df_intro,
+                            right=df_collections,
+                            left_on=0,
+                            right_on='Key',
+                            how='left'
+                        )
+                        if 1 in merged_df:
+                            merged_df = pd.merge(
+                                left=merged_df,
+                                right=df_collections,
+                                left_on=1,
+                                right_on='Key',
+                                how='left'
+                            )
+                            if 2 in merged_df:
+                                merged_df = pd.merge(
+                                    left=merged_df,
+                                    right=df_collections,
+                                    left_on=2,
+                                    right_on='Key',
+                                    how='left'
+                                ) 
+                    df_intro = merged_df.copy()
+
                     # df_download = df.iloc[:, [0,1,2,3,4,5,6,9]] 
                     # df_download = df_download[['Title', 'Publication type', 'Authors', 'Abstract', 'Link to publication', 'Zotero link', 'Date published', 'Date added']]
                     # def convert_df(df):
