@@ -3258,8 +3258,8 @@ with st.spinner('Retrieving data...'):
                     df_intro = df_intro.head(10)
                     df_intro['Date added'] = pd.to_datetime(df_intro['Date added'], errors='coerce')
                     df_intro['Date added'] = df_intro['Date added'].dt.strftime('%d/%m/%Y')
-                    df_intro['Date modified'] = pd.to_datetime(df_intro['Date modified'], errors='coerce')
-                    df_intro['Date modified'] = df_intro['Date modified'].dt.strftime('%d/%m/%Y, %H:%M')
+                    df_intro['Date added'] = pd.to_datetime(df_intro['Date added'], errors='coerce')
+                    df_intro['Date added'] = df_intro['Date added'].dt.strftime('%d/%m/%Y, %H:%M')
                     df_intro['Abstract'] = df_intro['Abstract'].str.strip()
                     df_intro['Abstract'] = df_intro['Abstract'].fillna('No abstract')
                     
