@@ -3271,7 +3271,7 @@ with st.spinner('Retrieving data...'):
                     df_intro = pd.concat([df_intro, split_df], axis=1)
                     df_intro
 
-                    if 0 in df:
+                    if 0 in df_intro:
                         merged_df = pd.merge(
                             left=df_intro,
                             right=df_collections,
