@@ -3264,12 +3264,6 @@ with st.spinner('Retrieving data...'):
                         pd.set_option('display.max_colwidth', None)
                         return df_collections.sort_values(by='Name')
                     df_collections = zotero_collections(library_id, library_type)
-                    df_collections
-                    df_intro
-                    
-                    split_df= pd.DataFrame(df_intro['Col key'].tolist())
-                    df_intro = pd.concat([df_intro, split_df], axis=1)
-                    df_intro
 
                     if 0 in df_intro:
                         merged_df = pd.merge(
