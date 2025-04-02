@@ -3225,6 +3225,7 @@ with st.spinner('Retrieving data...'):
                 with tab13:
                     @st.cache_resource(ttl=5000)  # Cache the resource for 5000 seconds
                     def load_data():
+                        df_dedup
                         df_top = df_dedup.copy()
                         df_top['Date published'] = (
                             df_top['Date published']
