@@ -3150,7 +3150,7 @@ with st.spinner('Retrieving data...'):
                     display = st.checkbox('Display abstract')
 
                     def format_row(row):
-                        pub_link = f"[:orange-badge[Publication link]]({row['Link to publication']})"
+                        pub_link = f"[:green-badge[Publication link]]({row['Link to publication']})"
                         zotero_link = f"[:red-badge[Zotero link]]({row['Zotero link']})"
 
                         if row['Publication type'] == 'Book chapter' and row['Book_title']:
