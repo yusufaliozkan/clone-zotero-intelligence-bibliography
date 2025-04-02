@@ -3156,6 +3156,7 @@ with st.spinner('Retrieving data...'):
                         date = row['Date published']
                         pub_link = f"[:green-badge[Publication link]]({row['Link to publication']})"
                         zotero_link = f"[:red-badge[Zotero link]]({row['Zotero link']})"
+                        abstract = f'{row['Abstract']}'
 
                         if pub_type in ["Journal article", "Magazine article", "Newspaper article"]:
                             journal = row['Journal']
@@ -3165,6 +3166,7 @@ with st.spinner('Retrieving data...'):
                                 f"(Published on: {date}) "
                                 f"(Published in: *{journal}*) "
                                 f"{pub_link} {zotero_link}"
+                                f'{abstract}'
                             )
                         elif pub_type == "Book chapter":
                             book_title = row['Book_title']
