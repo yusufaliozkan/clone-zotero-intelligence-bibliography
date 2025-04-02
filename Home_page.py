@@ -3150,7 +3150,7 @@ with st.spinner('Retrieving data...'):
                     display = st.checkbox('Display abstract')
 
                     def format_row(row):
-                        badge = "New "
+                        badge = ":blue[New] "
 
                         if row['Publication type'] == 'Book chapter' and row['Book_title']:
                             return (
@@ -3187,6 +3187,7 @@ with st.spinner('Retrieving data...'):
 
                     # Apply the formatting and display with Streamlit
                     df_last = df_intro.apply(format_row, axis=1)
+                    st.badge("New")
 
                     for entry in df_last:
                         st.markdown(entry)
