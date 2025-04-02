@@ -3187,7 +3187,6 @@ with st.spinner('Retrieving data...'):
 
                     # Apply the formatting and display with Streamlit
                     df_last = df_intro.apply(format_row, axis=1)
-                    st.badge("New")
 
                     for entry in df_last:
                         st.markdown(entry)
