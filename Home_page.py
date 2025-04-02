@@ -3148,6 +3148,7 @@ with st.spinner('Retrieving data...'):
                     # st.download_button(' Download recently added items', csv, (a+'.csv'), mime="text/csv", key='download-csv-3')
                     
                     display = st.checkbox("Display abstract")
+                    df_intro
 
                     for i, row in df_intro.iterrows():
                         pub_type = row['Publication type']
