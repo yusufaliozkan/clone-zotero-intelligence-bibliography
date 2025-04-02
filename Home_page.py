@@ -3152,7 +3152,7 @@ with st.spinner('Retrieving data...'):
                     def format_row(row):
                         if row['Publication type'] == 'Book chapter' and row['Book_title']:
                             return (
-                                f':violent-badge[New]'
+                                f':violet-badge[New]'
                                 f"**{row['Publication type']}**: "
                                 f"{row['Title']} "
                                 f"(by *{row['FirstName2']}*)"
@@ -3163,7 +3163,7 @@ with st.spinner('Retrieving data...'):
                             )
                         elif row['Publication type'] == 'Thesis':
                             return (
-                                f':violent-badge[New]'
+                                f':violet-badge[New]'
                                 f"**{row['Publication type']}**: "
                                 f"{row['Title']}, "
                                 f"(by {row['FirstName2']})"
@@ -3175,7 +3175,7 @@ with st.spinner('Retrieving data...'):
         
                         else:
                             return (
-                                f':violent-badge[New]'
+                                f':violet-badge[New]'
                                 f"**{row['Publication type']}**: "
                                 f"{row['Title']}, "
                                 f"(by {row['FirstName2']})"
