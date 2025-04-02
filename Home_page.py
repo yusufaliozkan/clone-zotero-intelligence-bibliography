@@ -3197,7 +3197,8 @@ with st.spinner('Retrieving data...'):
                         st.markdown(f"{i+1}) {formatted}")
 
                         if display and row['Abstract']:
-                            st.write(f"Abstract:  + {row['Abstract']}")
+                            st.markdown(f"**Abstract:** {row['Abstract']}")
+
 
                 with tab12:
                     st.markdown('#### Recently published items')
