@@ -3150,7 +3150,7 @@ with st.spinner('Retrieving data...'):
                     display = st.checkbox('Display abstract')
 
                     def format_row(row):
-                        badge = ":blue[New] "
+                        badge = "New "
 
                         if row['Publication type'] == 'Book chapter' and row['Book_title']:
                             return (
