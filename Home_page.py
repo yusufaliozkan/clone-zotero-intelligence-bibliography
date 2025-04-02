@@ -3150,13 +3150,11 @@ with st.spinner('Retrieving data...'):
                     display = st.checkbox('Display abstract')
 
                     def format_row(row):
-                        badge = ":blue-badge[New] "
                         pub_link = f"[:green-badge[Publication link]]({row['Link to publication']})"
                         zotero_link = f"[:red-badge[Zotero link]]({row['Zotero link']})"
 
                         if row['Publication type'] == 'Book chapter' and row['Book_title']:
                             return (
-                                f"{badge}"
                                 f"**{row['Publication type']}**: {row['Title']} "
                                 f"(by *{row['FirstName2']}*) "
                                 f"(Published on: {row['Date published']}) "
@@ -3165,7 +3163,6 @@ with st.spinner('Retrieving data...'):
                             )
                         elif row['Publication type'] == 'Thesis':
                             return (
-                                f"{badge}"
                                 f"**{row['Publication type']}**: {row['Title']}, "
                                 f"(by {row['FirstName2']}) "
                                 f"({row['Thesis_type']}: *{row['University']}*) "
@@ -3174,7 +3171,6 @@ with st.spinner('Retrieving data...'):
                             )
                         else:
                             return (
-                                f"{badge}"
                                 f"**{row['Publication type']}**: {row['Title']}, "
                                 f"(by {row['FirstName2']}) "
                                 f"(Published on: {row['Date published']}) "
