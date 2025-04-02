@@ -3150,8 +3150,10 @@ with st.spinner('Retrieving data...'):
                     display = st.checkbox('Display abstract')
 
                     def format_row(row):
+                        badge = "New" 
                         if row['Publication type'] == 'Book chapter' and row['Book_title']:
                             return (
+                                f"{badge}"
                                 f"**{row['Publication type']}**: "
                                 f"{row['Title']} "
                                 f"(by *{row['FirstName2']}*) "
@@ -3162,6 +3164,7 @@ with st.spinner('Retrieving data...'):
                             )
                         elif row['Publication type'] == 'Thesis':
                             return (
+                                f"{badge}"
                                 f"**{row['Publication type']}**: "
                                 f"{row['Title']}, "
                                 f"(by {row['FirstName2']}) "
@@ -3172,6 +3175,7 @@ with st.spinner('Retrieving data...'):
                             )
                         else:
                             return (
+                                f"{badge}"
                                 f"**{row['Publication type']}**: "
                                 f"{row['Title']}, "
                                 f"(by {row['FirstName2']}) "
@@ -3182,7 +3186,6 @@ with st.spinner('Retrieving data...'):
 
                     # Use Streamlit to display each formatted row with a badge
                     for _, row in df_intro.iterrows():
-                        st.badge("New")
                         st.markdown(format_row(row))
 
                     # df_last = ('**'+ df['Publication type']+ '**'+ ': ' + df['Title'] +', ' +                        
