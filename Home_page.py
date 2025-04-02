@@ -3150,40 +3150,37 @@ with st.spinner('Retrieving data...'):
                     display = st.checkbox('Display abstract')
 
                     def format_row(row):
-                        badge_html = '<span style="background-color:#21ba45; color:white; padding:2px 6px; border-radius:6px; font-size:0.75rem; margin-right:8px;">New</span>'
-
-                        content = ""
                         if row['Publication type'] == 'Book chapter' and row['Book_title']:
-                            content = (
-                                f"**{row['Publication type']}**: {row['Title']} "
-                                f"(by *{row['FirstName2']}*) "
-                                f"(Published on: {row['Date published']}) "
-                                f"<a href='{row['Link to publication']}'>[Publication link]</a> "
-                                f"<a href='{row['Zotero link']}'>[Zotero link]</a> "
+                            return (
+                                f"**{row['Publication type']}**: "
+                                f"{row['Title']} "
+                                f"(by *{row['FirstName2']}*)"
+                                f"(Published on: {row['Date published']}"
+                                f"[[Publication link]]({row['Link to publication']})"
+                                f"[[Zotero link]]({row['Zotero link']})"
                                 f"(In: {row['Book_title']})"
                             )
                         elif row['Publication type'] == 'Thesis':
-                            content = (
-                                f"**{row['Publication type']}**: {row['Title']}, "
-                                f"(by {row['FirstName2']}) "
+                            return (
+                                f"**{row['Publication type']}**: "
+                                f"{row['Title']}, "
+                                f"(by {row['FirstName2']})"
                                 f"({row['Thesis_type']}: *{row['University']}*) "
-                                f"(Published on: {row['Date published']}) "
-                                f"<a href='{row['Link to publication']}'>[Publication link]</a> "
-                                f"<a href='{row['Zotero link']}'>[Zotero link]</a>"
+                                f"(Published on: {row['Date published']})"
+                                f"[[Publication link]]({row['Link to publication']})"
+                                f"[[Zotero link]]({row['Zotero link']})"
                             )
+        
                         else:
-                            content = (
-                                f"**{row['Publication type']}**: {row['Title']}, "
-                                f"(by {row['FirstName2']}) "
-                                f"(Published on: {row['Date published']}) "
-                                f"<a href='{row['Link to publication']}'>[Publication link]</a> "
-                                f"<a href='{row['Zotero link']}'>[Zotero link]</a>"
+                            return (
+                                f"**{row['Publication type']}**: "
+                                f"{row['Title']}, "
+                                f"(by {row['FirstName2']})"
+                                f"(Published on: {row['Date published']})"
+                                f"[[Publication link]]({row['Link to publication']})"
+                                f"[[Zotero link]]({row['Zotero link']})"
                             )
-
-                        return badge_html + content
-
-                    for _, row in df_intro.iterrows():
-                        st.markdown(format_row(row), unsafe_allow_html=True)
+                    df_last = df_intro.apply(format_row, axis=1)
 
                     # df_last = ('**'+ df['Publication type']+ '**'+ ': ' + df['Title'] +', ' +                        
                     #             ' (by ' + '*' + df['Authors'] + '*' + ') ' +
