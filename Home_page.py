@@ -3159,7 +3159,7 @@ with st.spinner('Retrieving data...'):
                                 f"{row['Title']} "
                                 f"(by *{row['FirstName2']}*) "
                                 f"(Published on: {row['Date published']}) "
-                                f"[[Publication link]]({row['Link to publication']}) "
+                                f"[`:green-badge[Publication link]`]({row['Link to publication']})"
                                 f"[[Zotero link]]({row['Zotero link']}) "
                                 f"(In: {row['Book_title']})"
                             )
@@ -3171,7 +3171,8 @@ with st.spinner('Retrieving data...'):
                                 f"(by {row['FirstName2']}) "
                                 f"({row['Thesis_type']}: *{row['University']}*) "
                                 f"(Published on: {row['Date published']}) "
-                                f"[[Publication link]]({row['Link to publication']}) "
+                                f"[`:green-badge[Publication link]`]({row['Link to publication']})"
+
                                 f"[[Zotero link]]({row['Zotero link']})"
                             )
                         else:
@@ -3181,7 +3182,8 @@ with st.spinner('Retrieving data...'):
                                 f"{row['Title']}, "
                                 f"(by {row['FirstName2']}) "
                                 f"(Published on: {row['Date published']}) "
-                                f"[[Publication link]]({row['Link to publication']}) "
+                                f"[`:green-badge[Publication link]`]({row['Link to publication']})"
+
                                 f"[[Zotero link]]({row['Zotero link']})"
                             )
 
