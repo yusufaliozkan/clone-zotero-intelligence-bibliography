@@ -3103,6 +3103,7 @@ with st.spinner('Retrieving data...'):
                 tab11, tab12, tab13 = st.tabs(['Recently added items', 'Recently published items', 'Top cited items'])
                 with tab11:
                     st.markdown('#### Recently added or updated items')
+                    df_dedup
                     df_intro = df_dedup.copy()
                     df_intro
                     df_intro = df_intro.sort_values(by='Date added', ascending=False).reset_index(drop=True)
