@@ -3180,10 +3180,9 @@ with st.spinner('Retrieving data...'):
                                 f"[[Zotero link]]({row['Zotero link']})"
                             )
 
-                    # Use this to display formatted rows with badge
-                    for idx, row in df_intro.iterrows():
-                        if row.get('is_new', False):  # You can define or calculate 'is_new'
-                            st.badge("New")
+                    # Use Streamlit to display each formatted row with a badge
+                    for _, row in df_intro.iterrows():
+                        st.badge("New")
                         st.markdown(format_row(row))
 
                     # df_last = ('**'+ df['Publication type']+ '**'+ ': ' + df['Title'] +', ' +                        
