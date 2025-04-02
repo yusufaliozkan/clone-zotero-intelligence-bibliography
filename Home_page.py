@@ -3167,7 +3167,6 @@ with st.spinner('Retrieving data...'):
                                 f"(Published in: *{journal}*) "
                                 f"{pub_link} {zotero_link}"
                             )
-                            df_intro
                         elif pub_type == "Book chapter":
                             book_title = row['Book_title']
                             formatted = (
