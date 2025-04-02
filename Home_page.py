@@ -3154,33 +3154,37 @@ with st.spinner('Retrieving data...'):
                             return (
                                 f"**{row['Publication type']}**: "
                                 f"{row['Title']} "
-                                f"(by *{row['FirstName2']}*)"
-                                f"(Published on: {row['Date published']}"
-                                f"[[Publication link]]({row['Link to publication']})"
-                                f"[[Zotero link]]({row['Zotero link']})"
+                                f"(by *{row['FirstName2']}*) "
+                                f"(Published on: {row['Date published']}) "
+                                f"[[Publication link]]({row['Link to publication']}) "
+                                f"[[Zotero link]]({row['Zotero link']}) "
                                 f"(In: {row['Book_title']})"
                             )
                         elif row['Publication type'] == 'Thesis':
                             return (
                                 f"**{row['Publication type']}**: "
                                 f"{row['Title']}, "
-                                f"(by {row['FirstName2']})"
+                                f"(by {row['FirstName2']}) "
                                 f"({row['Thesis_type']}: *{row['University']}*) "
-                                f"(Published on: {row['Date published']})"
-                                f"[[Publication link]]({row['Link to publication']})"
+                                f"(Published on: {row['Date published']}) "
+                                f"[[Publication link]]({row['Link to publication']}) "
                                 f"[[Zotero link]]({row['Zotero link']})"
                             )
-        
                         else:
                             return (
                                 f"**{row['Publication type']}**: "
                                 f"{row['Title']}, "
-                                f"(by {row['FirstName2']})"
-                                f"(Published on: {row['Date published']})"
-                                f"[[Publication link]]({row['Link to publication']})"
+                                f"(by {row['FirstName2']}) "
+                                f"(Published on: {row['Date published']}) "
+                                f"[[Publication link]]({row['Link to publication']}) "
                                 f"[[Zotero link]]({row['Zotero link']})"
                             )
-                    df_last = df_intro.apply(format_row, axis=1)
+
+                    # Use this to display formatted rows with badge
+                    for idx, row in df_intro.iterrows():
+                        if row.get('is_new', False):  # You can define or calculate 'is_new'
+                            st.badge("New")
+                        st.markdown(format_row(row))
 
                     # df_last = ('**'+ df['Publication type']+ '**'+ ': ' + df['Title'] +', ' +                        
                     #             ' (by ' + '*' + df['Authors'] + '*' + ') ' +
