@@ -3155,7 +3155,7 @@ with st.spinner('Retrieving data...'):
                         author = row['FirstName2']
                         date = row['Date published']
                         pub_link = f"[:blue-badge[Publication link]]({row['Link to publication']})"
-                        zotero_link = f"[:blue-badge[Zotero link]]({row['Zotero link']})"
+                        zotero_link = f"[:blue-badge[Zotero link]]({row['Zotero link']})" 
 
                         if pub_type in ["Journal article", "Magazine article", "Newspaper article"]:
                             journal = row['Journal']
