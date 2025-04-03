@@ -1225,8 +1225,6 @@ with st.spinner('Retrieving data...'):
                                                 title = row['Title']
                                                 authors = row['FirstName2']
                                                 date_published = row['Date published']
-                                                link_to_publication = row['Link to publication']
-                                                zotero_link = row['Zotero link']
                                                 citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
                                                 citation = int(float(citation))
                                                 citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
@@ -1239,12 +1237,13 @@ with st.spinner('Retrieving data...'):
                                                     'Book': 'Published by',
                                                 }
 
-                                                publication_type = row['Publication type']
-
                                                 published_by_or_in = published_by_or_in_dict.get(publication_type, '')
                                                 published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
                                                 if publication_type == 'Book':
                                                     published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
+
+                                                pub_link = f"[`:green-badge[Publication link]`]({row['Link to publication']})"
+                                                zotero_link = f"[`:gray-badge[Zotero link]`]({row['Zotero link']})"
 
                                                 formatted_entry = (
                                                     '**' + str(publication_type) + '**' + ': ' +
@@ -1252,10 +1251,10 @@ with st.spinner('Retrieving data...'):
                                                     '(by ' + '*' + str(authors) + '*' + ') ' +
                                                     '(Publication date: ' + str(date_published) + ') ' +
                                                     ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
-                                                    '[[Publication link]](' + str(link_to_publication) + ') ' +
-                                                    '[[Zotero link]](' + str(zotero_link) + ') ' +
+                                                    pub_link + ' ' + zotero_link + ' ' +
                                                     ('Cited by [' + str(citation) + '](' + citation_link + ')' if citation > 0 else '')
                                                 )
+
                                                 formatted_entry = format_entry(row)
                                                 st.write(f"{index + 1}) {formatted_entry}")
                                         if view == 'Table':
