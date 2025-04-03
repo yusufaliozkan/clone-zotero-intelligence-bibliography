@@ -1242,8 +1242,8 @@ with st.spinner('Retrieving data...'):
                                                 if publication_type == 'Book':
                                                     published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
 
-                                                pub_link = f"[`:green-badge[Publication link]`]({row['Link to publication']})"
-                                                zotero_link = f"[`:gray-badge[Zotero link]`]({row['Zotero link']})"
+                                                pub_link = f"[:green-badge[Publication link]]({row['Link to publication']})"
+                                                zotero_link = f"[:gray-badge[Zotero link]]({row['Zotero link']})"
 
                                                 formatted_entry = (
                                                     '**' + str(publication_type) + '**' + ': ' +
