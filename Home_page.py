@@ -3515,13 +3515,14 @@ with st.spinner('Retrieving data...'):
                             number0 = st.slider('Select a number collections', 3,len(df_collections_21),10, key='slider01')
                         plot= df_collections_21.head(number0+1)
                         plot = plot[plot['Collection_Name']!='01 Intelligence history']
-                        fig = px.bar(plot, x='Collection_Name', y='Number_of_Items', color='Collection_Name', orientation='h')
+                        fig = px.bar(plot, x='Collection_Name', y='Number_of_Items', color='Collection_Name')
                         fig.update_layout(
                             autosize=False,
                             width=600,
                             height=600,
                             showlegend=collection_bar_legend)
                         fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
+                        fig.update_traces(width=1)
                         st.plotly_chart(fig, use_container_width = True)
                     with col2:
                         colcum1, colcum2, colcum3 = st.columns(3)
