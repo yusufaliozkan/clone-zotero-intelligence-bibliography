@@ -3522,7 +3522,6 @@ with st.spinner('Retrieving data...'):
                             height=600,
                             showlegend=collection_bar_legend)
                         fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
-                        fig.update_traces(width=1)
                         st.plotly_chart(fig, use_container_width = True)
                     with col2:
                         colcum1, colcum2, colcum3 = st.columns(3)
@@ -3611,7 +3610,6 @@ with st.spinner('Retrieving data...'):
                                     height=600,)
                                 fig.update_xaxes(tickangle=-70)
                                 fig.update_layout(title={'text':'Item types in log scale', 'y':0.95, 'x':0.4, 'yanchor':'top'})
-                                fig.update_traces(width=1)
                                 st.plotly_chart(fig, use_container_width = True)
                             else:
                                 fig = px.bar(df_types, x='Publication type', y='Count', color='Publication type')
@@ -3621,7 +3619,6 @@ with st.spinner('Retrieving data...'):
                                     height=600,)
                                 fig.update_xaxes(tickangle=-70)
                                 fig.update_layout(title={'text':'Item types', 'y':0.95, 'x':0.4, 'yanchor':'top'})
-                                fig.update_traces(width=1)
                                 col1.plotly_chart(fig, use_container_width = True)
                         else:
                             fig = px.pie(df_types, values='Count', names='Publication type')
@@ -3664,7 +3661,6 @@ with st.spinner('Retrieving data...'):
                                 height=600,
                                 title={'text': f'All items in the library by publication year {years[0]} - {years[1]}', 'yanchor': 'top'}
                             )
-                            fig.update_traces(width=1)
                             st.plotly_chart(fig, use_container_width=True)
                         else:
                             st.info("No data available for the selected range.")
@@ -3714,7 +3710,6 @@ with st.spinner('Retrieving data...'):
                                     yaxis_title='Number of Publications',
                                     xaxis_tickangle=-45,
                                 )
-                                fig.update_traces(width=1)
                                 st.plotly_chart(fig)
                             else:
                                 st.markdown(f'###### Top {num_authors} Authors by Publication Count (all items)')
@@ -3754,7 +3749,6 @@ with st.spinner('Retrieving data...'):
                                         yaxis_title='Number of Publications',
                                         xaxis_tickangle=-45,
                                     )
-                                    fig.update_traces(width=1)
                                     st.plotly_chart(fig)
                                 else:
                                     st.markdown(f'###### Top {num_authors} Authors by Publication Count (academic publications - {selected_type})')
@@ -3914,7 +3908,6 @@ with st.spinner('Retrieving data...'):
                                             showlegend=False)
                                         fig.update_xaxes(tickangle=-70)
                                         fig.update_layout(title={'text':'Top ' + str(number) + ' publishers (in log scale)', 'yanchor':'top'})
-                                        fig.update_traces(width=1)
                                         st.plotly_chart(fig, use_container_width = True)
                                     else:
                                         fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=True)
@@ -3925,7 +3918,6 @@ with st.spinner('Retrieving data...'):
                                             showlegend=True)
                                         fig.update_xaxes(tickangle=-70)
                                         fig.update_layout(title={'text':'Top ' + str(number) + ' publishers (in log scale)', 'yanchor':'top'})
-                                        fig.update_traces(width=1)
                                         st.plotly_chart(fig, use_container_width = True)
                                 else:
                                     if leg1:
@@ -3937,7 +3929,6 @@ with st.spinner('Retrieving data...'):
                                             showlegend=False)
                                         fig.update_xaxes(tickangle=-70)
                                         fig.update_layout(title={'text':'Top ' + str(number) + ' publishers', 'yanchor':'top'})
-                                        fig.update_traces(width=1)
                                         st.plotly_chart(fig, use_container_width = True)
                                     else:
                                         fig = px.bar(df_publisher, x='Publisher', y='Count', color='Publisher', log_y=False)
@@ -3948,7 +3939,6 @@ with st.spinner('Retrieving data...'):
                                             showlegend=True)
                                         fig.update_xaxes(tickangle=-70)
                                         fig.update_layout(title={'text':'Top ' + str(number) + ' publishers','yanchor':'top'})
-                                        fig.update_traces(width=1)
                                         st.plotly_chart(fig, use_container_width = True)
                             # with st.expander('See publishers'):
                             #     row_nu_collections = len(df_publisher.index)        
@@ -3992,7 +3982,6 @@ with st.spinner('Retrieving data...'):
                                             showlegend=False)
                                         fig.update_xaxes(tickangle=-70)
                                         fig.update_layout(title={'text':'Top ' + str(number2) + ' journals that publish intelligence articles (in log scale)','yanchor':'top'})
-                                        fig.update_traces(width=1)
                                         st.plotly_chart(fig, use_container_width = True)
                                     else:
                                         fig = px.bar(df_journal, x='Journal', y='Count', color='Journal', log_y=True)
@@ -4003,7 +3992,6 @@ with st.spinner('Retrieving data...'):
                                             showlegend=True)
                                         fig.update_xaxes(tickangle=-70)
                                         fig.update_layout(title={'text':'Top ' + str(number2) + ' journals that publish intelligence articles (in log scale)', 'yanchor':'top'})
-                                        fig.update_traces(width=1)
                                         st.plotly_chart(fig, use_container_width = True)
                                 else:
                                     if leg2:
@@ -4015,7 +4003,6 @@ with st.spinner('Retrieving data...'):
                                             showlegend=False)
                                         fig.update_xaxes(tickangle=-70)
                                         fig.update_layout(title={'text':'Top ' + str(number2) + ' journals that publish intelligence articles', 'yanchor':'top'})
-                                        fig.update_traces(width=1)
                                         st.plotly_chart(fig, use_container_width = True)
                                     else:
                                         fig = px.bar(df_journal, x='Journal', y='Count', color='Journal', log_y=False)
@@ -4026,7 +4013,6 @@ with st.spinner('Retrieving data...'):
                                             showlegend=True)
                                         fig.update_xaxes(tickangle=-70)
                                         fig.update_layout(title={'text':'Top ' + str(number2) + ' journals that publish intelligence articles', 'yanchor':'top'})
-                                        fig.update_traces(width=1)
                                         st.plotly_chart(fig, use_container_width = True)
                             # with st.expander('See journals'):
                             #     row_nu_collections = len(df_journal.index)        
