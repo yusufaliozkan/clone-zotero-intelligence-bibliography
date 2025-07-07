@@ -53,7 +53,7 @@ api_key = '' # api_key is only needed for private groups and libraries
 # Bringing recently changed items
 
 
-set_page_config()
+set_page_config(initial_sidebar_state='expanded')
 pd.set_option('display.max_colwidth', None)
 
 zot = zotero.Zotero(library_id, library_type)
