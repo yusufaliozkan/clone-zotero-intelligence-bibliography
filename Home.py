@@ -48,8 +48,9 @@ pg = st.navigation(
             digest,
             institutions,
             item_monitoring
-        ]
-    }
+            ]
+        
+    }#, position='top'
 )
     
 pg.run()
