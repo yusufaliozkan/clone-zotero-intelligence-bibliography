@@ -3605,6 +3605,7 @@ with st.spinner('Retrieving data...'):
                         if chart_type == 'Bar chart':
                             if log0:
                                 fig = px.bar(df_types, x='Publication type', y='Count', color='Publication type', log_y=True)
+                                fig.update_traces(width=0.6) 
                                 fig.update_layout(
                                     autosize=False,
                                     width=1200,
@@ -3614,6 +3615,7 @@ with st.spinner('Retrieving data...'):
                                 st.plotly_chart(fig, use_container_width = True)
                             else:
                                 fig = px.bar(df_types, x='Publication type', y='Count', color='Publication type')
+                                fig.update_traces(width=0.6) 
                                 fig.update_layout(
                                     autosize=False,
                                     width=1200,
