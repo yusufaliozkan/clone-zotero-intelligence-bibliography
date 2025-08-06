@@ -50,7 +50,7 @@ pg = st.navigation(
             item_monitoring
             ]
         
-    }, position='top',  expanded=True
+    }, position='sidebar',  expanded=True
 )
     
 pg.run()
