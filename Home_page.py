@@ -3518,11 +3518,10 @@ with st.spinner('Retrieving data...'):
                         fig = px.bar(plot, x='Collection_Name', y='Number_of_Items', color='Collection_Name')
                         fig.update_layout(
                             autosize=False,
-                            width=600,
                             height=600,
                             showlegend=collection_bar_legend)
                         fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
-                        st.plotly_chart(fig, use_container_width = True)
+                        st.plotly_chart(fig, use_container_width=True)
                     with col2:
                         colcum1, colcum2, colcum3 = st.columns(3)
                         with colcum1:
