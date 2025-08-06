@@ -3516,8 +3516,10 @@ with st.spinner('Retrieving data...'):
                         plot= df_collections_21.head(number0+1)
                         plot = plot[plot['Collection_Name']!='01 Intelligence history']
                         fig = px.bar(plot, x='Collection_Name', y='Number_of_Items', color='Collection_Name')
+                        fig.update_traces(width=0.6) 
                         fig.update_layout(
                             autosize=False,
+                            width=600,
                             height=600,
                             showlegend=collection_bar_legend)
                         fig.update_layout(title={'text':'Top ' + str(number0) + ' collections in the library', 'y':0.95, 'x':0.4, 'yanchor':'top'})
