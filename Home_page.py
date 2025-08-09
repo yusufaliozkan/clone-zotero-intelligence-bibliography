@@ -1,7 +1,7 @@
 from pyzotero import zotero
 import pandas as pd
 import streamlit as st
-# from IPython.display import HTML
+from IPython.display import HTML
 import streamlit.components.v1 as components
 import numpy as np
 import altair as alt
@@ -11,21 +11,13 @@ from datetime import datetime
 import datetime
 from streamlit_extras.switch_page_button import switch_page
 import plotly.express as px
+import numpy as np
 import re
 import matplotlib.pyplot as plt
 import nltk
-try:
-    nltk.data.find('corpora/stopwords')
-except LookupError:
-try:
-    nltk.data.find('corpora/wordnet')
-except LookupError:
-    nltk.download('wordnet')
-try:
-    nltk.data.find('corpora/omw-1.4')
-except LookupError:
-    nltk.download('omw-1.4')
+nltk.download('all') 
 from nltk.corpus import stopwords
+nltk.download('stopwords') 
 from wordcloud import WordCloud
 # from gsheetsdb import connect
 # import gsheetsdb as gdb
@@ -62,14 +54,6 @@ api_key = '' # api_key is only needed for private groups and libraries
 
 
 set_page_config()
-@st.cache_data(show_spinner=False)
-def load_csv(path: str):
-    return pd.read_csv(path)
-
-@st.cache_data(show_spinner=False)
-def load_authors():
-    return load_authors()
-
 pd.set_option('display.max_colwidth', None)
 
 zot = zotero.Zotero(library_id, library_type)
@@ -88,7 +72,9 @@ else:
     image_path = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg'
 
 # Read and display the SVG image
-st.image(image_path, width=200)  # Adjust the width as needed
+with open(image_path, 'r') as file:
+    svg_content = file.read()
+    st.image(svg_content, width=200)  # Adjust the width as needed
 
 # st.title("IntelArchive", anchor=False)
 st.subheader('Intelligence Studies Database', anchor=False)
@@ -123,9 +109,9 @@ with st.spinner('Retrieving data...'):
 
     # item_count = zot.num_items() 
 
-    df_dedup = load_csv('all_items.csv')
-    df_duplicated = load_csv('all_items_duplicated.csv')
-    df_authors = load_authors()
+    df_dedup = pd.read_csv('all_items.csv')
+    df_duplicated = pd.read_csv('all_items_duplicated.csv')
+    df_authors = get_df_authors()
 
     col1, col2, col3 = st.columns([3,5,8])
     with col3:
@@ -296,11 +282,12 @@ with st.spinner('Retrieving data...'):
                         query += condition
 
                 # Debugging output
-# print(f"Query: {query}")
+                print(f"Query: {query}")
+
                 try:
                     filtered_df = df.query(query, engine='python')
                 except Exception as e:
-# print(f"Error in query: {query}\n{e}")
+                    print(f"Error in query: {query}\n{e}")
                     return pd.DataFrame()
 
                 return filtered_df
