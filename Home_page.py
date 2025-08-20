@@ -3116,7 +3116,6 @@ with st.spinner('Retrieving data...'):
                     df_intro['Date published'] = df_intro['Date published'].fillna('No date')
                     # df_intro['Abstract'] = df_intro['Abstract'].str.strip()
                     df_intro['Abstract'] = df_intro['Abstract'].fillna('No abstract')
-                    df_intro
 
                     # Bringing collections
 
