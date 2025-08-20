@@ -3124,6 +3124,7 @@ with st.spinner('Retrieving data...'):
                         df_collections = pd.DataFrame(data, columns=['Key', 'Name', 'Number', 'Link'])
                         return df_collections
                     df_collections_2 = zotero_collections2(library_id, library_type)
+                    df_collections_2
 
                     @st.cache_data
                     def zotero_collections(library_id, library_type):
