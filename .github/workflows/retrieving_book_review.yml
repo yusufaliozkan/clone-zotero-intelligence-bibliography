@@ -1,11 +1,9 @@
 name: Retrieving Book Reviews
 
 on:
-  # Run this workflow whenever "Update Database v2" finishes
   workflow_run:
     workflows: ["Update Database v2"]
     types: [completed]
-  # Allow manual runs
   workflow_dispatch: {}
 
 permissions:
@@ -14,6 +12,8 @@ permissions:
 jobs:
   export_book_reviews:
     runs-on: ubuntu-latest
+    # Only run after Update Database v2 succeeds, or when manually dispatched
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Check out repository
@@ -32,15 +32,16 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
-      # Run your Python script that creates book_reviews.csv
+      # (Optional) list files if you're unsure about the script path
+      # - name: List files
+      #   run: ls -R
+
       - name: Run exporter
-        run: |
-          book_reviews.py
+        # If the script is in a subfolder, e.g. scripts/book_reviews.py, adjust the path
+        run: python book_reviews.py
 
-      # Commit only the CSV produced by the script
       - name: Commit CSV
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
