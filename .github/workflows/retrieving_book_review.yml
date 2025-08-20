@@ -9,38 +9,52 @@ on:
 permissions:
   contents: write
 
+env:
+  SCRIPT_PATH: book_reviews.py
+  PY_VERSION: "3.11"
+
 jobs:
   export_book_reviews:
     runs-on: ubuntu-latest
-    # Only run after Update Database v2 succeeds, or when manually dispatched
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - name: Check out repository
+      - name: Check out the exact commit that triggered this run
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
           persist-credentials: true
 
-      # Wait 2 hours after "Update Database v2" completed
       - name: Wait 2 hours after upstream workflow
         if: ${{ github.event_name == 'workflow_run' }}
         run: sleep 7200
 
+      - name: Show files (debug)
+        run: |
+          echo "Branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "SHA:    ${{ github.event.workflow_run.head_sha }}"
+          ls -R
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ env.PY_VERSION }}
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            pip install pyzotero pandas
+          fi
 
-      # (Optional) list files if you're unsure about the script path
-      # - name: List files
-      #   run: ls -R
+      - name: Verify script exists
+        run: |
+          test -f "$SCRIPT_PATH" || (echo "❌ Not found: $SCRIPT_PATH" && exit 1)
 
       - name: Run exporter
-        # If the script is in a subfolder, e.g. scripts/book_reviews.py, adjust the path
-        run: python book_reviews.py
+        run: python "$SCRIPT_PATH"
 
       - name: Commit CSV
         uses: stefanzweifel/git-auto-commit-action@v5
