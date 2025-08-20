@@ -113,6 +113,8 @@ with st.spinner('Retrieving data...'):
     df_dedup['parentKey'] = df_dedup['Zotero link'].str.split("/").str[-1]
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
     df_authors = get_df_authors()
+    df_book_reviews = pd.read_csv('book_reviews.csv')
+    df_book_reviews
 
     col1, col2, col3 = st.columns([3,5,8])
     with col3:
