@@ -3117,12 +3117,11 @@ with st.spinner('Retrieving data...'):
                     # df_intro['Abstract'] = df_intro['Abstract'].str.strip()
                     df_intro['Abstract'] = df_intro['Abstract'].fillna('No abstract')
 
-                    @st.dialog("Quick preview")
-                    def preview(url: str):
-                        components.iframe(url, height=500)
+                    url = "https://www.zotero.org/"
 
-                    if st.button("Open modal preview"):
-                        preview("https://www.zotero.org/")
+                    st.write("Open a small in-app preview:")
+                    with st.popover("Open preview"):  # small overlay anchored to a button
+                        components.iframe(url, height=400)
 
                     # Bringing collections
 
