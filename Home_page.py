@@ -110,6 +110,7 @@ with st.spinner('Retrieving data...'):
     # item_count = zot.num_items() 
 
     df_dedup = pd.read_csv('all_items.csv')
+    df_dedup['parentKey'] = df_dedup['Zotero link'].str.split("/").str[-1]
     df_dedup
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
     df_authors = get_df_authors()
