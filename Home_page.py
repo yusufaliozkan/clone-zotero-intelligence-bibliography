@@ -3117,11 +3117,16 @@ with st.spinner('Retrieving data...'):
                     # df_intro['Abstract'] = df_intro['Abstract'].str.strip()
                     df_intro['Abstract'] = df_intro['Abstract'].fillna('No abstract')
 
-                    url = "https://www.zotero.org/"
+                    import streamlit.components.v1 as components
 
-                    st.write("Open a small in-app preview:")
-                    with st.popover("Open preview"):  # small overlay anchored to a button
-                        components.iframe(url, height=400)
+                    popup = """
+                    <a href="#" onclick="window.open(
+                    'https://www.zotero.org/',
+                    'popup',
+                    'width=600,height=480,noopener,noreferrer'
+                    ); return false;">Open small window</a>
+                    """
+                    components.html(popup, height=40)
 
                     # Bringing collections
 
