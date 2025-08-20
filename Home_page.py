@@ -110,6 +110,7 @@ with st.spinner('Retrieving data...'):
     # item_count = zot.num_items() 
 
     df_dedup = pd.read_csv('all_items.csv')
+    df_dedup
     df_duplicated = pd.read_csv('all_items_duplicated.csv')
     df_authors = get_df_authors()
 
@@ -3113,8 +3114,7 @@ with st.spinner('Retrieving data...'):
                     df_intro['Date published'] = df_intro['Date published'].dt.strftime('%d-%m-%Y')
                     df_intro['Date published'] = df_intro['Date published'].fillna('No date')
                     # df_intro['Abstract'] = df_intro['Abstract'].str.strip()
-                    df_intro['Abstract'] = df_intro['Abstract'].fillna('No abstract')
-                    df_intro    
+                    df_intro['Abstract'] = df_intro['Abstract'].fillna('No abstract')    
 
                     # Bringing collections
 
