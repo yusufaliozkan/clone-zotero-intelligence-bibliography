@@ -3150,18 +3150,14 @@ with st.spinner('Retrieving data...'):
                     # a = 'recently-added-' + today
                     # st.download_button(' Download recently added items', csv, (a+'.csv'), mime="text/csv", key='download-csv-3')
                     
-                    # Build a dict: parentKey -> list of markdown links to reviews
-                    def _to_link_md(r):
-                        title = r.get("linkTitle") or r.get("title") or "Review"
-                        return f"[{title}]({r['url']})"
-
+                    # --- Build quick lookups for reviews by parentKey ---
                     df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
-                    df_br["link_md"] = df_br.apply(_to_link_md, axis=1)
-                    reviews_map = (
-                        df_br.groupby("parentKey")["link_md"]
-                        .apply(list)
-                        .to_dict()
-                    )
+
+                    # how many reviews each parent has
+                    review_count_map = df_br.groupby("parentKey").size().to_dict()
+
+                    # a representative URL for each parent (the first one; change to .last() if you prefer)
+                    first_review_url_map = df_br.groupby("parentKey")["url"].first().to_dict()
 
 
                     display = st.checkbox("Display abstract")
@@ -3171,8 +3167,28 @@ with st.spinner('Retrieving data...'):
                         title = row['Title']
                         author = row['FirstName2']
                         date = row['Date published']
-                        pub_link = f"[:blue-badge[Publication link]]({row['Link to publication']})"
-                        zotero_link = f"[:blue-badge[Zotero link]]({row['Zotero link']})" 
+
+                        # Safe publication link (skip if NaN)
+                        pub_link = (
+                            f"[:blue-badge[Publication link]]({row['Link to publication']})"
+                            if pd.notna(row.get('Link to publication'))
+                            else ""
+                        )
+                        zotero_link = f"[:blue-badge[Zotero link]]({row['Zotero link']})"
+
+                        # Figure out the parent key (use column if present; otherwise parse from Zotero URL)
+                        parent_key = row.get("parentKey")
+                        if not parent_key and pd.notna(row.get("Zotero link")):
+                            parent_key = row["Zotero link"].rstrip("/").split("/")[-1]
+
+                        # Build a violet badge for Book reviews if we have any
+                        book_reviews_link = ""
+                        rc = review_count_map.get(parent_key, 0)
+                        if rc:
+                            first_url = first_review_url_map.get(parent_key)
+                            label = "Book review" if rc == 1 else f"Book reviews ({rc})"
+                            # change "violet-badge" to "green-badge" / "orange-badge" / "red-badge" if you prefer
+                            book_reviews_link = f" [:violet-badge[{label}]]({first_url})"
 
                         if pub_type in ["Journal article", "Magazine article", "Newspaper article"]:
                             journal = row['Journal']
@@ -3181,7 +3197,7 @@ with st.spinner('Retrieving data...'):
                                 f"(by *{author}*) "
                                 f"(Published on: {date}) "
                                 f"(Published in: *{journal}*) "
-                                f"{pub_link} {zotero_link}"
+                                f"{pub_link} {zotero_link}{book_reviews_link}"
                             )
                         elif pub_type == "Book chapter":
                             book_title = row['Book_title']
@@ -3190,7 +3206,7 @@ with st.spinner('Retrieving data...'):
                                 f"(in: *{book_title}*) "
                                 f"(by *{author}*) "
                                 f"(Published on: {date}) "
-                                f"{pub_link} {zotero_link}"
+                                f"{pub_link} {zotero_link}{book_reviews_link}"
                             )
                         elif pub_type == "Thesis":
                             thesis_type = row.get("Thesis_type", "")
@@ -3201,28 +3217,21 @@ with st.spinner('Retrieving data...'):
                                 f"({thesis_info}) "
                                 f"(by *{author}*) "
                                 f"(Published on: {date}) "
-                                f"{pub_link} {zotero_link}"
+                                f"{pub_link} {zotero_link}{book_reviews_link}"
                             )
                         else:
                             formatted = (
                                 f"**{pub_type}**: {title} "
                                 f"(by *{author}*) "
                                 f"(Published on: {date}) "
-                                f"{pub_link} {zotero_link}"
+                                f"{pub_link} {zotero_link}{book_reviews_link}"
                             )
 
-                        # parent_key is in df_intro (you said it's available)
-                        parent_key = row.get("parentKey")
-
-                        # Inline “Book reviews: ...” (first 3 links + “+N more”)
-                        links = reviews_map.get(parent_key, [])
-                        if links:
-                            show = 3
-                            inline = ", ".join(links[:show])
-                            more = f" … (+{len(links)-show} more)" if len(links) > show else ""
-                            formatted = f"{formatted} • Book reviews: {inline}{more}"
-
                         st.markdown(f"{i+1}) {formatted}")
+
+                        if display and row['Abstract']:
+                            st.markdown(f"**Abstract:** {row['Abstract']}")
+
 
                 with tab12:
                     st.markdown('#### Recently published items')
