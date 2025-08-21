@@ -62,17 +62,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
     # df_collections = df_collections[~df_collections['Collection_Name'].str.contains('01.98')]
     df_collections = df_collections[df_collections['Collection_Name'] != '01 Intelligence history']
 
-    # Build a parentKey -> list of review URLs
-    df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
-    reviews_map = (
-        df_br.groupby("parentKey")["url"]
-        .agg(list)         # e.g. ["https://review1", "https://review2", ...]
-        .to_dict()
-    )
-
-    # ... inside your loop over rows
-    formatted = format_entry(row, include_citation=True, reviews_map=reviews_map)
-
 
     df_collections = df_collections.sort_values(by='Collection_Name')
     df_collections=df_collections[df_collections['Collection_Name'].str.contains("01.")]
