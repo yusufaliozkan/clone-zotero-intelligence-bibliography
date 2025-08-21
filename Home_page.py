@@ -309,7 +309,7 @@ with st.spinner('Retrieving data...'):
                 return highlighted_text
 
             # Example Streamlit code for context
-            st.header('Search in databasesdds', anchor=False)
+            st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
 
