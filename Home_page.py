@@ -3150,6 +3150,20 @@ with st.spinner('Retrieving data...'):
                     # a = 'recently-added-' + today
                     # st.download_button(' Download recently added items', csv, (a+'.csv'), mime="text/csv", key='download-csv-3')
                     
+                    # Build a dict: parentKey -> list of markdown links to reviews
+                    def _to_link_md(r):
+                        title = r.get("linkTitle") or r.get("title") or "Review"
+                        return f"[{title}]({r['url']})"
+
+                    df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
+                    df_br["link_md"] = df_br.apply(_to_link_md, axis=1)
+                    reviews_map = (
+                        df_br.groupby("parentKey")["link_md"]
+                        .apply(list)
+                        .to_dict()
+                    )
+
+
                     display = st.checkbox("Display abstract")
 
                     for i, row in df_intro.iterrows():
@@ -3157,9 +3171,15 @@ with st.spinner('Retrieving data...'):
                         title = row['Title']
                         author = row['FirstName2']
                         date = row['Date published']
-                        pub_link = f"[:blue-badge[Publication link]]({row['Link to publication']})"
-                        zotero_link = f"[:blue-badge[Zotero link]]({row['Zotero link']})" 
+                        pub_link = f"[:blue-badge[Publication link]]({row['Link to publication']})" if pd.notna(row['Link to publication']) else ""
+                        zotero_link = f"[:blue-badge[Zotero link]]({row['Zotero link']})"
 
+                        # Get the parent key (either direct column or parsed from Zotero URL)
+                        parent_key = row.get("parentKey")
+                        if not parent_key and pd.notna(row.get("Zotero link")):
+                            parent_key = row["Zotero link"].rstrip("/").split("/")[-1]
+
+                        # Build your main line (unchanged)
                         if pub_type in ["Journal article", "Magazine article", "Newspaper article"]:
                             journal = row['Journal']
                             formatted = (
@@ -3197,10 +3217,22 @@ with st.spinner('Retrieving data...'):
                                 f"{pub_link} {zotero_link}"
                             )
 
-                        st.markdown(f"{i+1}) {formatted}")
+                        # Lay out the text and a small “Book reviews” popover side-by-side
+                        c_text, c_btn = st.columns([1, 0.25])
+                        with c_text:
+                            st.markdown(f"{i+1}) {formatted}")
 
-                        if display and row['Abstract']:
-                            st.markdown(f"**Abstract:** {row['Abstract']}")
+                            if display and row['Abstract']:
+                                st.markdown(f"**Abstract:** {row['Abstract']}")
+
+                        with c_btn:
+                            links = reviews_map.get(parent_key)
+                            if links:
+                                # small popover listing all review links
+                                with st.popover(f"Book reviews ({len(links)})"):
+                                    for md in links:
+                                        st.markdown(f"- {md}")
+
 
 
                 with tab12:
