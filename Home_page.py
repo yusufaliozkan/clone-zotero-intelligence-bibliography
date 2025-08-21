@@ -1571,6 +1571,19 @@ with st.spinner('Retrieving data...'):
                     st.subheader('Publication types', anchor=False, divider='blue') 
                     @st.fragment
                     def type_selection():
+
+                        @st.cache_data(ttl=300)
+                        def load_reviews_map():
+                            try:
+                                df_book_reviews = pd.read_csv("book_reviews.csv", dtype=str)
+                                df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
+                                # normalize keys to avoid mismatches
+                                df_br["parentKey"] = df_br["parentKey"].astype(str).str.strip().str.upper()
+                                return df_br.groupby("parentKey")["url"].apply(list).to_dict()
+                            except Exception:
+                                return {}
+                        reviews_map = load_reviews_map()
+
                         df_csv_types = df_dedup.copy()
                         unique_types = [''] + list(df_authors['Publication type'].unique())
                         # unique_types =  list(df_csv_types['Publication type'].unique())  # Adding an empty string as the first option The following bit was at the front [''] +
@@ -1854,7 +1867,7 @@ with st.spinner('Retrieving data...'):
                                     if view =='Basic list':
                                         articles_list = []  # Store articles in a list
                                         for index, row in filtered_type_df.iterrows():
-                                            formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
+                                            formatted_entry = format_entry(row, reviews_map=reviews_map)  # Assuming format_entry() is a function formatting each row
                                             articles_list.append(formatted_entry)                     
                                         
                                         for index, row in filtered_type_df.iterrows():
@@ -1883,7 +1896,7 @@ with st.spinner('Retrieving data...'):
                                             if publication_type == 'Book':
                                                 published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
 
-                                            formatted_entry = format_entry(row)
+                                            formatted_entry = format_entry(row, reviews_map=reviews_map)
                                             st.write(f"{index + 1}) {formatted_entry}")
                                     if view =='Table':
                                         df_table_view = filtered_type_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Link to publication','Zotero link']]
@@ -1910,6 +1923,7 @@ with st.spinner('Retrieving data...'):
                     
                     type_selection()
                 
+                # SEARCH JOURNAL
                 elif search_option == 4:
                     st.query_params.clear()
                     st.subheader('Search journal', anchor=False, divider='blue')
