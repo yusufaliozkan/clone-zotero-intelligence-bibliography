@@ -1132,7 +1132,7 @@ with st.spinner('Retrieving data...'):
                                                     'Magazine article': 'Published in',
                                                     'Newspaper article': 'Published in',
                                                     'Book': 'Published by',
-                                                } 
+                                                }
 
                                                 published_by_or_in = published_by_or_in_dict.get(publication_type, '')
                                                 published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
