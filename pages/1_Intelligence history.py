@@ -63,7 +63,6 @@ with st.spinner('Retrieving data & updating dashboard...'):
     reviews_map = (
         df_br.groupby("parentKey")["url"].agg(list).to_dict()
     )
-    df_br
     # df_collections = df_collections[~df_collections['Collection_Name'].str.contains('01.98')]
     df_collections = df_collections[df_collections['Collection_Name'] != '01 Intelligence history']
 
