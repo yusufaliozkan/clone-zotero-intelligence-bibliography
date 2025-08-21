@@ -3216,15 +3216,6 @@ with st.spinner('Retrieving data...'):
                         if display and row['Abstract']:
                             st.markdown(f"**Abstract:** {row['Abstract']}")
 
-                        links = reviews_map.get(parent_key, [])
-                        if links:
-                            show = 3
-                            inline = ", ".join(links[:show])
-                            more = f" … (+{len(links)-show} more)" if len(links) > show else ""
-                            formatted += f" • Book reviews: {inline}{more}"
-                            st.markdown(f"{i+1}) {formatted}")
-                        else:
-                            st.markdown(f"{i+1}) {formatted}")
 
                 with tab12:
                     st.markdown('#### Recently published items')
