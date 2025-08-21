@@ -2276,6 +2276,7 @@ with st.spinner('Retrieving data...'):
                                         display_bibliographies2(selected_journal_df)
                     search_journal()
                 
+                # SEARCH JOURNAL
                 elif search_option == 5: 
                     st.query_params.clear()
                     st.subheader('Items by publication year', anchor=False, divider='blue')
@@ -2662,12 +2663,26 @@ with st.spinner('Retrieving data...'):
                     
                     search_pub_year()
                 
+                # SEARCH PUBLICATION YEAR
                 elif search_option == 6:
                     st.query_params.clear()
                     st.subheader('Cited items in the library', anchor=False, divider='blue')
                     
                     @st.fragment
                     def search_cited_papers():
+
+                        @st.cache_data(ttl=300)
+                        def load_reviews_map():
+                            try:
+                                df_book_reviews = pd.read_csv("book_reviews.csv", dtype=str)
+                                df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
+                                # normalize keys to avoid mismatches
+                                df_br["parentKey"] = df_br["parentKey"].astype(str).str.strip().str.upper()
+                                return df_br.groupby("parentKey")["url"].apply(list).to_dict()
+                            except Exception:
+                                return {}
+                        reviews_map = load_reviews_map()
+
                         with st.expander('Click to expand', expanded=True):
                             container_markdown = st.container()              
                             df_cited = df_dedup.copy()
@@ -3023,7 +3038,7 @@ with st.spinner('Retrieving data...'):
                                     articles_list = []  # Store articles in a list
                                     abstracts_list = [] #Store abstracts in a list
                                     for index, row in df_cited.iterrows():
-                                        formatted_entry = format_entry(row)
+                                        formatted_entry = format_entry(row, reviews_map=reviews_map)
                                         articles_list.append(formatted_entry)  # Append formatted entry to the list
                                         abstract = row['Abstract']
                                         abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
