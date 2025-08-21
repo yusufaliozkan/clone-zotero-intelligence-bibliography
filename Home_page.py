@@ -1146,8 +1146,16 @@ with st.spinner('Retrieving data...'):
                                                 parent_key = row.get("parentKey") or (zotero_link_url.rstrip("/").split("/")[-1] if zotero_link_url else None)
 
                                                 df_book_reviews = pd.read_csv("book_reviews.csv")
+
+                                                # keep only rows that have both fields
                                                 df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
-                                                reviews_map = df_br.groupby("parentKey")["url"].agg(list).to_dict()
+
+                                                # normalize keys: strip + uppercase so lookups are robust
+                                                df_br["parentKey"] = df_br["parentKey"].astype(str).str.strip().str.upper()
+
+                                                reviews_map = (
+                                                    df_br.groupby("parentKey")["url"].apply(list).to_dict()
+                                                )
 
                                                 book_reviews_badges = ""
                                                 links = (reviews_map or {}).get(parent_key, [])
