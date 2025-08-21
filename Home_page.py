@@ -1145,6 +1145,10 @@ with st.spinner('Retrieving data...'):
                                                 zotero_link_url = row["Zotero link"] if pd.notnull(row["Zotero link"]) else ""
                                                 parent_key = row.get("parentKey") or (zotero_link_url.rstrip("/").split("/")[-1] if zotero_link_url else None)
 
+                                                df_book_reviews = pd.read_csv("book_reviews.csv")
+                                                df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
+                                                reviews_map = df_br.groupby("parentKey")["url"].agg(list).to_dict()
+
                                                 book_reviews_badges = ""
                                                 links = (reviews_map or {}).get(parent_key, [])
                                                 if len(links) == 1:
