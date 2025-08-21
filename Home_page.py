@@ -3211,11 +3211,18 @@ with st.spinner('Retrieving data...'):
                                 f"{pub_link} {zotero_link}"
                             )
 
+                        # parent_key is in df_intro (you said it's available)
+                        parent_key = row.get("parentKey")
+
+                        # Inline “Book reviews: ...” (first 3 links + “+N more”)
+                        links = reviews_map.get(parent_key, [])
+                        if links:
+                            show = 3
+                            inline = ", ".join(links[:show])
+                            more = f" … (+{len(links)-show} more)" if len(links) > show else ""
+                            formatted = f"{formatted} • Book reviews: {inline}{more}"
+
                         st.markdown(f"{i+1}) {formatted}")
-
-                        if display and row['Abstract']:
-                            st.markdown(f"**Abstract:** {row['Abstract']}")
-
 
                 with tab12:
                     st.markdown('#### Recently published items')
