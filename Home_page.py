@@ -1143,22 +1143,16 @@ with st.spinner('Retrieving data...'):
                                                 zotero_link = f"[:gray-badge[Zotero link]]({row['Zotero link']})"
                                             
                                                 zotero_link_url = row["Zotero link"] if pd.notnull(row["Zotero link"]) else ""
-                                                parent_key = row.get("parentKey") or (zotero_link_url.rstrip("/").split("/")[-1] if zotero_link_url else None)
+                                                item_key = row.get("zotero_item_key")  # if you already computed it elsewhere
+                                                if not item_key and zotero_link_url:
+                                                    item_key = zotero_link_url.rstrip("/").split("/")[-1]
 
-                                                df_book_reviews = pd.read_csv("book_reviews.csv")
+                                                # normalize to match reviews_map keys
+                                                item_key = (str(item_key).strip().upper() if item_key else "")
 
-                                                # keep only rows that have both fields
-                                                df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
-
-                                                # normalize keys: strip + uppercase so lookups are robust
-                                                df_br["parentKey"] = df_br["parentKey"].astype(str).str.strip().str.upper()
-
-                                                reviews_map = (
-                                                    df_br.groupby("parentKey")["url"].apply(list).to_dict()
-                                                )
-
+                                                # build review badges
                                                 book_reviews_badges = ""
-                                                links = (reviews_map or {}).get(parent_key, [])
+                                                links = reviews_map.get(item_key, [])
                                                 if len(links) == 1:
                                                     book_reviews_badges = f"[:violet-badge[Book review]]({links[0]})"
                                                 elif len(links) > 1:
