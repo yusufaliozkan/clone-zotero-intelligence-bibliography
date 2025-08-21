@@ -342,6 +342,7 @@ with st.spinner('Retrieving data...'):
                 )
                 
                 # search_option = st.radio("Select search option", ("Search keywords", "Search author", "Search collection", "Publication types", "Search journal", "Publication year", "Cited papers"), horizontal=True)
+                #SEARCH KEYWORDs
                 if search_option == 0:
                     st.subheader('Search keywords', anchor=False, divider='blue')
                     @st.fragment
@@ -1564,7 +1565,6 @@ with st.spinner('Retrieving data...'):
                 
                     search_collection()
 
-
                 # SEARCH PUBLICATION TYPES
                 elif search_option == 3: 
                     st.query_params.clear()
@@ -2276,13 +2276,26 @@ with st.spinner('Retrieving data...'):
                                         display_bibliographies2(selected_journal_df)
                     search_journal()
                 
-                # SEARCH JOURNAL
+                # SEARCH PUBLICATION YEAR
                 elif search_option == 5: 
                     st.query_params.clear()
                     st.subheader('Items by publication year', anchor=False, divider='blue')
 
                     @st.fragment
                     def search_pub_year():
+
+                        @st.cache_data(ttl=300)
+                        def load_reviews_map():
+                            try:
+                                df_book_reviews = pd.read_csv("book_reviews.csv", dtype=str)
+                                df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
+                                # normalize keys to avoid mismatches
+                                df_br["parentKey"] = df_br["parentKey"].astype(str).str.strip().str.upper()
+                                return df_br.groupby("parentKey")["url"].apply(list).to_dict()
+                            except Exception:
+                                return {}
+                        reviews_map = load_reviews_map()
+
                         with st.expander('Click to expand', expanded=True):                    
                             df_all = df_dedup.copy()
                             df_all['Date published2'] = (
@@ -2631,7 +2644,7 @@ with st.spinner('Retrieving data...'):
                                     articles_list = []  # Store articles in a list
                                     abstracts_list = [] #Store abstracts in a list
                                     for index, row in df_all.iterrows():
-                                        formatted_entry = format_entry(row)
+                                        formatted_entry = format_entry(row, reviews_map=reviews_map)
                                         articles_list.append(formatted_entry)  # Append formatted entry to the list
                                         abstract = row['Abstract']
                                         abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
