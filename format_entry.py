@@ -36,13 +36,19 @@ def format_entry(row, include_citation=False, reviews_map=None, max_reviews_inli
     if reviews_map:
         links = reviews_map.get(parent_key) or []
         if links:
-            n = len(links) if max_reviews_inline is None else min(len(links), max_reviews_inline)
-            book_review_badges = " ".join(
-                f"[:violet-badge[Book review {i+1}]]({links[i]})" for i in range(n)
-            )
-            # Optional: show "+N more" linking to latest (assumes links[0] is newest if you sorted upstream)
-            if max_reviews_inline is not None and len(links) > n:
-                book_review_badges += f" [:violet-badge[+{len(links)-n} more]]({links[0]})"
+            if len(links) == 1:
+                # exactly one review: no number
+                book_review_badges = f"[:violet-badge[Book review]]({links[0]})"
+            else:
+                # multiple reviews: number them
+                n = len(links) if max_reviews_inline is None else min(len(links), max_reviews_inline)
+                book_review_badges = " ".join(
+                    f"[:violet-badge[Book review {i+1}]]({links[i]})" for i in range(n)
+                )
+                # optional "+N more" cap
+                if max_reviews_inline is not None and len(links) > n:
+                    # assumes links[0] is newest if you sorted upstream
+                    book_review_badges += f" [:violet-badge[+{len(links)-n} more]]({links[0]})"
 
     # Build the common badges string ONCE
     badges = " ".join(filter(None, [
