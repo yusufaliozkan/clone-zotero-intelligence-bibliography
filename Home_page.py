@@ -1163,7 +1163,7 @@ with st.spinner('Retrieving data...'):
                                                     pub_link + ' ' + zotero_link + ' ' + book_reviews_badges + ' ' +
                                                     ('[:orange-badge[Cited by ' + str(citation) + ']](' + citation_link + ')' if citation > 0 else '')
                                                 )
-                                                st.write(f"{index + 1}) {formatted_entry}")
+                                                st.write(f"{index + 1}) {formatted_entry}") 
                                         if view == 'Table':
                                             df_table_view = filtered_collection_df_authors[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Citation', 'Link to publication','Zotero link']]
                                             df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
