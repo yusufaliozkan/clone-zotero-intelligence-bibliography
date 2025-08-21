@@ -59,30 +59,11 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_authors = get_df_authors()
     df_collections = pd.read_csv('all_items_duplicated.csv')
     df_book_reviews = pd.read_csv('book_reviews.csv')
-    # df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
-    # reviews_map = (
-    #     df_br.groupby("parentKey")["url"].agg(list).to_dict()
-    # )
-    
-    # All reviews per parentKey, newest first (if dateAdded exists)
     df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
-    df_br["title_"] = (
-        df_br.get("linkTitle", pd.Series(index=df_br.index))
-            .fillna(df_br.get("title"))
-            .fillna("Review")
+    reviews_map = (
+        df_br.groupby("parentKey")["url"].agg(list).to_dict()
     )
-    # Optional: sort by newest first if you have dateAdded
-    df_br["dateAdded"] = pd.to_datetime(df_br.get("dateAdded"), errors="coerce", utc=True)
-    df_br = df_br.sort_values(["parentKey", "dateAdded"], ascending=[True, False])
-
-    # parentKey -> list of {title_, url}
-    reviews_full_map = (
-        df_br.groupby("parentKey")[["title_", "url"]]
-            .apply(lambda g: g.to_dict("records"))
-            .to_dict()
-    )
-
-
+    
     # df_collections = df_collections[~df_collections['Collection_Name'].str.contains('01.98')]
     df_collections = df_collections[df_collections['Collection_Name'] != '01 Intelligence history']
 
