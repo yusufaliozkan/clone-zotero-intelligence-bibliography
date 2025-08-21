@@ -23,7 +23,7 @@ def format_entry(row, include_citation=False, reviews_map=None):
     # --- book reviews badge ---
     parent_key = row.get("parentKey")
     if not parent_key and zotero_link:
-        parent_key = zotero_link.rstrip("/").split("/")[-1]
+        parent_key = zotero_link.rstrip("/").split("/")[-1] 
 
     # --- NEW: multiple inline review badges ---
     book_review_badges = ""
