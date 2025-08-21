@@ -312,112 +312,7 @@ with st.spinner('Retrieving data...'):
             st.header('Search in database', anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
 
-            # @st.fragment
-            # def text_search():
-            #     st.subheader('Quick search', anchor=False, divider='blue')
 
-            #     name = st_keyup("Search keyword in title", debounce=500, placeholder='Type your keyword(s)')
-            #     @st.cache_data
-            #     def get_titles():
-            #         df_csv1 = df_dedup.copy()
-            #         return df_csv1
-            #     df_quick_search_titles = get_titles()
-            #     if name:
-            #         with st.status(f'Searching **{name}** in the database...') as status:
-            #             search_pattern = fr'\b{name.lower()}\b'
-            #             df_quick_search_titles = df_quick_search_titles[df_quick_search_titles.Title.str.lower().str.contains(search_pattern.lower(), na=False)]
-            #             df_quick_search_titles = df_quick_search_titles.reset_index(drop=True)
-            #             df_table_view = df_quick_search_titles[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Link to publication','Zotero link']]
-            #             df_table_view = df_table_view.rename(columns={'FirstName2':'Author(s)','Collection_Name':'Collection','Link to publication':'Publication link'})
-                        
-            #             display = st.radio('Display as', ['Basic list', 'Table', 'Bibliographic list'])
-            #             if display == 'Basic list':
-            #                 st.write(f'{len(df_quick_search_titles)} result(s) found')
-            #                 for index, row in df_quick_search_titles.iterrows():
-            #                     publication_type = row['Publication type']
-            #                     title = row['Title']
-            #                     authors = row['FirstName2']
-            #                     date_published = row['Date published']
-            #                     link_to_publication = row['Link to publication']
-            #                     zotero_link = row['Zotero link']
-            #                     citation = str(row['Citation']) if pd.notnull(row['Citation']) else '0'  
-            #                     citation = int(float(citation))
-            #                     citation_link = str(row['Citation_list']) if pd.notnull(row['Citation_list']) else ''
-            #                     citation_link = citation_link.replace('api.', '')
-
-            #                     published_by_or_in_dict = {
-            #                         'Journal article': 'Published in',
-            #                         'Magazine article': 'Published in',
-            #                         'Newspaper article': 'Published in',
-            #                         'Book': 'Published by',
-            #                     }
-
-            #                     publication_type = row['Publication type']
-
-            #                     published_by_or_in = published_by_or_in_dict.get(publication_type, '')
-            #                     published_source = str(row['Journal']) if pd.notnull(row['Journal']) else ''
-            #                     if publication_type == 'Book':
-            #                         published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
-
-            #                     formatted_entry = (
-            #                         '**' + str(publication_type) + '**' + ': ' +
-            #                         str(title) + ' ' +
-            #                         '(by ' + '*' + str(authors) + '*' + ') ' +
-            #                         '(Publication date: ' + str(date_published) + ') ' +
-            #                         ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
-            #                         '[[Publication link]](' + str(link_to_publication) + ') ' +
-            #                         '[[Zotero link]](' + str(zotero_link) + ') ' +
-            #                         ('Cited by [' + str(citation) + '](' + citation_link + ')' if citation > 0 else '')
-            #                     )
-            #                     formatted_entry = format_entry(row)
-            #                     st.write(f"{index + 1}) {formatted_entry}")
-            #             if display == 'Table':
-            #                 st.write(f'{len(df_quick_search_titles)} result(s) found')
-            #                 st.dataframe(df_table_view,hide_index=True, use_container_width=True)
-            #             if display == 'Bibliographic list':
-
-            #                 df_zotero_id = pd.read_csv('zotero_citation_format.csv')
-            #                 df_quick_search_titles['zotero_item_key'] = df_quick_search_titles['Zotero link'].str.replace('https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/', '')
-            #                 df_quick_search_titles = pd.merge(df_quick_search_titles, df_zotero_id, on='zotero_item_key', how='left')
-
-            #                 def display_bibliographies(df):
-            #                     df['bibliography'] = df['bibliography'].fillna('').astype(str)
-            #                     all_bibliographies = ""
-            #                     for index, row in df.iterrows():
-            #                         # Add a horizontal line between bibliographies
-            #                         if index > 0:
-            #                             all_bibliographies += '<p><p>'
-                                    
-            #                         # Display bibliography
-            #                         all_bibliographies += row['bibliography']
-            #                     st.markdown(all_bibliographies, unsafe_allow_html=True)
-
-            #                 num_items = len(df_quick_search_titles)
-
-            #                 if num_items < 20:
-            #                     display_bibliographies(df_quick_search_titles)
-            #                 else:
-            #                     show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True)
-
-            #                     if show_first_20:
-            #                         df_quick_search_titles = df_quick_search_titles.head(20)
-            #                         display_bibliographies(df_quick_search_titles)
-            #                     else:
-            #                         num_tabs = (num_items // 20) + 1
-            #                         tab_titles = [f"Results {i*20+1}-{min((i+1)*20, num_items)}" for i in range(num_tabs)]
-
-            #                         tabs = st.tabs(tab_titles)
-            #                         for tab_index, tab in enumerate(tabs):
-            #                             with tab:
-            #                                 start_idx = tab_index * 20
-            #                                 end_idx = min(start_idx + 20, num_items)
-            #                                 display_bibliographies(df_quick_search_titles.iloc[start_idx:end_idx])
-            #             status.update(label=f'Search complete for **{name}** with **{len(df_quick_search_titles)}** results', state="complete", expanded=True)
-            #     else:
-            #         st.write(f'{zot.num_items()} items in the database')
-            # text_search()
-    
-            # @st.fragment
             def search_options_main_menu():
                 from authors_dict import name_replacements
                 total_rows = len(df_dedup)
@@ -1257,7 +1152,7 @@ with st.spinner('Retrieving data...'):
                                                     ('Cited by [' + str(citation) + '](' + citation_link + ')' if citation > 0 else '')
                                                 )
 
-                                                formatted_entry = format_entry(row)
+                                                formatted_entry = format_entry(row, reviews_map=reviews_map) 
                                                 st.write(f"{index + 1}) {formatted_entry}")
                                         if view == 'Table':
                                             df_table_view = filtered_collection_df_authors[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Citation', 'Link to publication','Zotero link']]
