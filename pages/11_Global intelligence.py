@@ -48,7 +48,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             reviews_map = df_br.groupby("parentKey")["url"].agg(list).to_dict()
             return df_collections, reviews_map
 
-        df_collections, reviews_map  = load_data()
+        df_collections, reviews_map = load_data()
         df_collections = df_collections[df_collections['Collection_Name'].str.contains("14.")]
 
         st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
