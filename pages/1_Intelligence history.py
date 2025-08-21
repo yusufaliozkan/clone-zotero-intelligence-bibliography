@@ -60,9 +60,8 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_collections = pd.read_csv('all_items_duplicated.csv')
     df_book_reviews = pd.read_csv('book_reviews.csv')
     df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
-    reviews_map = (
-        df_br.groupby("parentKey")["url"].agg(list).to_dict()
-    )
+    reviews_map = df_br.groupby("parentKey")["url"].agg(list).to_dict()
+
     
     # df_collections = df_collections[~df_collections['Collection_Name'].str.contains('01.98')]
     df_collections = df_collections[df_collections['Collection_Name'] != '01 Intelligence history']
