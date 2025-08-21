@@ -1535,7 +1535,7 @@ with st.spinner('Retrieving data...'):
                                                     published_by_or_in = ''
                                                     published_source = ''
 
-                                                formatted_entry = format_entry(row)
+                                                formatted_entry = format_entry(row, reviews_map=reviews_map)
                                                 st.write(f"{index + 1}) {formatted_entry}")
                                         if view == 'Table':
                                             df_table_view = filtered_collection_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Link to publication','Zotero link']]
@@ -1564,6 +1564,8 @@ with st.spinner('Retrieving data...'):
                 
                     search_collection()
 
+
+                # SEARCH PUBLICATION TYPES
                 elif search_option == 3: 
                     st.query_params.clear()
                     st.subheader('Publication types', anchor=False, divider='blue') 
