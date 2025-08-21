@@ -1142,7 +1142,7 @@ with st.spinner('Retrieving data...'):
                                                 pub_link = f"[:green-badge[Publication link]]({row['Link to publication']})"
                                                 zotero_link = f"[:gray-badge[Zotero link]]({row['Zotero link']})"
                                             
-                                                zotero_link_url = row["Zotero link"] if pd.notnull(row["Zotero link"]) else ""
+                                                zotero_link_url = row["Zotero links"] if pd.notnull(row["Zotero link"]) else ""
                                                 item_key = row.get("zotero_item_key")  # if you already computed it elsewhere
                                                 if not item_key and zotero_link_url:
                                                     item_key = zotero_link_url.rstrip("/").split("/")[-1]
