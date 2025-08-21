@@ -15,17 +15,16 @@ def format_entry(row, include_citation=False, reviews_map=None):
     # --- NEW: book reviews badge (uses injected reviews_map) ---
     # Find parentKey either from the row, or parse it from the Zotero URL
     parent_key = row.get("parentKey")
-    if not parent_key and zotero_link:
-        parent_key = zotero_link.rstrip("/").split("/")[-1]
+    if not parent_key and pd.notna(row.get("Zotero link")):
+        parent_key = row["Zotero link"].rstrip("/").split("/")[-1]
 
-    book_reviews_badge = ""
-    if reviews_map:
-        links = reviews_map.get(parent_key) or []
-        if links:
-            label = "Book review" if len(links) == 1 else f"Book reviews ({len(links)})"
-            first_url = links[0]
-            # Pick your colour: violet/green/orange/red
-            book_reviews_badge = f"[:violet-badge[{label}]]({first_url})"
+    links = reviews_full_map.get(parent_key, [])
+
+    # show a popover listing ALL reviews
+    if links:
+        with st.popover(f"All reviews ({len(links)})", use_container_width=True):
+            for j, r in enumerate(links, 1):
+                st.markdown(f"{j}. [{r['title_']}]({r['url']})")
 
     # --- Your existing formatting branches ---
     publication_type = row.get("Publication type", "")
