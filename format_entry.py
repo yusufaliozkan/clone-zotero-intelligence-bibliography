@@ -25,12 +25,27 @@ def format_entry(row, include_citation=False, reviews_map=None):
     if not parent_key and zotero_link:
         parent_key = zotero_link.rstrip("/").split("/")[-1]
 
-    book_reviews_badge = ""
+    # --- NEW: multiple inline review badges ---
+    book_review_badges = ""
     if reviews_map:
         links = reviews_map.get(parent_key) or []
         if links:
-            label = "Book review" if len(links) == 1 else f"Book reviews ({len(links)})"
-            book_reviews_badge = f"[:violet-badge[{label}]]({links[0]})"
+            n = len(links) if max_reviews_inline is None else min(len(links), max_reviews_inline)
+            book_review_badges = " ".join(
+                f"[:violet-badge[Book review {i+1}]]({links[i]})" for i in range(n)
+            )
+            # Optional: if you cap, show a "+N more" linking to the latest (or a popover elsewhere)
+            if max_reviews_inline is not None and len(links) > n:
+                book_review_badges += f" [:violet-badge[+{len(links)-n} more]]({links[0]})"
+
+    # Build the common badges string
+    badges = " ".join(filter(None, [
+        pub_link_badge,
+        zotero_link_badge,
+        book_review_badges,   # <-- use the multi-badge string here
+        oa_link_text,
+        citation_text if include_citation else ""
+    ]))
 
     # --- display fields ---
     publication_type   = _clean(row.get("Publication type"))
