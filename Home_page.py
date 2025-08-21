@@ -3033,7 +3033,7 @@ with st.spinner('Retrieving data...'):
                                     show_first_20 = st.checkbox("Show only first 20 items (untick to see all)", value=True, key='all_items')
                                     if show_first_20:
                                         df_cited = df_cited.head(20)
-                                if view == 'Basic lists':
+                                if view == 'Basic list':
                                     st.markdown(f'##### {view} view')
                                     articles_list = []  # Store articles in a list
                                     abstracts_list = [] #Store abstracts in a list
