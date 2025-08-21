@@ -1232,6 +1232,19 @@ with st.spinner('Retrieving data...'):
 
                     @st.fragment
                     def search_collection():
+
+                        @st.cache_data(ttl=300)
+                        def load_reviews_map():
+                            try:
+                                df_book_reviews = pd.read_csv("book_reviews.csv", dtype=str)
+                                df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
+                                # normalize keys to avoid mismatches
+                                df_br["parentKey"] = df_br["parentKey"].astype(str).str.strip().str.upper()
+                                return df_br.groupby("parentKey")["url"].apply(list).to_dict()
+                            except Exception:
+                                return {}
+                        reviews_map = load_reviews_map()
+
                         df_csv_collections = df_duplicated.copy()
 
                         def remove_numbers(name):
