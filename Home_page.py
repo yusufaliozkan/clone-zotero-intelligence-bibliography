@@ -346,6 +346,19 @@ with st.spinner('Retrieving data...'):
                     st.subheader('Search keywords', anchor=False, divider='blue')
                     @st.fragment
                     def search_keyword(): 
+
+                        @st.cache_data(ttl=300)
+                        def load_reviews_map():
+                            try:
+                                df_book_reviews = pd.read_csv("book_reviews.csv")
+                                df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
+                                # keep keys clean to avoid mismatches
+                                df_br["parentKey"] = df_br["parentKey"].astype(str).str.strip()
+                                return df_br.groupby("parentKey")["url"].apply(list).to_dict()
+                            except Exception:
+                                return {}
+                        reviews_map = load_reviews_map()
+
                         @st.dialog("Search guide")
                         def guide(item):
                             st.write('''
@@ -732,22 +745,19 @@ with st.spinner('Retrieving data...'):
                                     else:
                                         sort_by = st.radio('Sort by:', ('Publication date :arrow_down:', 'Citation', 'Date added :arrow_down:'), horizontal=True)
                                         if sort_by == 'Publication date :arrow_down:' or filtered_df['Citation'].sum() == 0:
-                                            filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False)
-                                            filtered_df = filtered_df.reset_index(drop=True)
-                                        if sort_by=='Citation':
-                                            filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False)
-                                            filtered_df = filtered_df.reset_index(drop=True)
+                                            filtered_df = filtered_df.sort_values(by=['Date published'], ascending=False).reset_index(drop=True)
+                                        if sort_by == 'Citation':
+                                            filtered_df = filtered_df.sort_values(by=['Citation'], ascending=False).reset_index(drop=True)
                                         if sort_by == 'Date added :arrow_down:':
-                                            filtered_df = filtered_df.sort_values(by=['Date added'], ascending=False)
-                                            filtered_df = filtered_df.reset_index(drop=True)
+                                            filtered_df = filtered_df.sort_values(by=['Date added'], ascending=False).reset_index(drop=True)
 
                                         articles_list = []  # Store articles in a list
                                         abstracts_list = [] # Store abstracts in a list
-                                        for index, row in filtered_df.iterrows():
-                                            formatted_entry = format_entry(row)
-                                            articles_list.append(formatted_entry)  # Append formatted entry to the list
-                                            abstract = row['Abstract']
-                                            abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
+                                        for _, row in filtered_df.iterrows():
+                                            # CHANGED: pass the reviews_map to format_entry
+                                            formatted_entry = format_entry(row, reviews_map=reviews_map)
+                                            articles_list.append(formatted_entry)
+                                            abstracts_list.append(row['Abstract'] if pd.notnull(row['Abstract']) else 'N/A')
 
                                         def highlight_terms(text, terms):
                                             boolean_operators = {"AND", "OR", "NOT"}
