@@ -46,7 +46,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             df_book_reviews = pd.read_csv('book_reviews.csv')
             df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
             reviews_map = df_br.groupby("parentKey")["url"].agg(list).to_dict()
-            return df_collections
+            return df_collections, reviews_map
 
         df_collections = load_data()
         df_collections = df_collections[df_collections['Collection_Name'].str.contains("14.")]
