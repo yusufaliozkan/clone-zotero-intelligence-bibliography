@@ -59,11 +59,44 @@ with st.spinner('Retrieving data & updating dashboard...'):
     df_authors = get_df_authors()
     df_collections = pd.read_csv('all_items_duplicated.csv')
     df_book_reviews = pd.read_csv('book_reviews.csv')
-    df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
-    reviews_map = (
-        df_br.groupby("parentKey")["url"].agg(list).to_dict()
-    )
-    
+
+    @st.cache_data
+    def build_reviews_maps(df_book_reviews: pd.DataFrame):
+        # keep only rows that have both a parentKey and a url
+        df_br = (
+            df_book_reviews
+            .dropna(subset=["parentKey", "url"])
+            .drop_duplicates(subset=["parentKey", "url"])  # avoid dup links
+            .copy()
+        )
+
+        # best-effort title
+        if "linkTitle" not in df_br.columns:
+            df_br["linkTitle"] = None
+        if "title" not in df_br.columns:
+            df_br["title"] = None
+        df_br["title_"] = (
+            df_br["linkTitle"].fillna(df_br["title"]).fillna("Review")
+        )
+
+        # sort newest-first if dateAdded exists
+        if "dateAdded" in df_br.columns:
+            df_br["dateAdded"] = pd.to_datetime(df_br["dateAdded"], errors="coerce", utc=True)
+            df_br = df_br.sort_values(["parentKey", "dateAdded"], ascending=[True, False])
+
+        # Map A: parentKey -> list of URLs (for the badge in format_entry)
+        reviews_map = df_br.groupby("parentKey")["url"].agg(list).to_dict()
+
+        # Map B: parentKey -> list of {title_, url} dicts (for listing all links)
+        reviews_full_map = (
+            df_br.groupby("parentKey")[["title_", "url"]]
+                .apply(lambda g: g.to_dict("records"))
+                .to_dict()
+        )
+        return reviews_map, reviews_full_map
+
+    reviews_map, reviews_full_map = build_reviews_maps(df_book_reviews)
+
     # df_collections = df_collections[~df_collections['Collection_Name'].str.contains('01.98')]
     df_collections = df_collections[df_collections['Collection_Name'] != '01 Intelligence history']
 
