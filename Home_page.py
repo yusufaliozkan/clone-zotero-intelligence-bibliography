@@ -1141,6 +1141,18 @@ with st.spinner('Retrieving data...'):
 
                                                 pub_link = f"[:green-badge[Publication link]]({row['Link to publication']})"
                                                 zotero_link = f"[:gray-badge[Zotero link]]({row['Zotero link']})"
+                                            
+                                                zotero_link_url = row["Zotero link"] if pd.notnull(row["Zotero link"]) else ""
+                                                parent_key = row.get("parentKey") or (zotero_link_url.rstrip("/").split("/")[-1] if zotero_link_url else None)
+
+                                                book_reviews_badges = ""
+                                                links = (reviews_map or {}).get(parent_key, [])
+                                                if len(links) == 1:
+                                                    book_reviews_badges = f"[:violet-badge[Book review]]({links[0]})"
+                                                elif len(links) > 1:
+                                                    book_reviews_badges = " ".join(
+                                                        f"[:violet-badge[Book review {i+1}]]({u})" for i, u in enumerate(links)
+                                                    )
 
                                                 formatted_entry = (
                                                     '**' + str(publication_type) + '**' + ': ' +
@@ -1148,11 +1160,9 @@ with st.spinner('Retrieving data...'):
                                                     '(by ' + '*' + str(authors) + '*' + ') ' +
                                                     '(Publication date: ' + str(date_published) + ') ' +
                                                     ('(' + published_by_or_in + ': ' + '*' + str(published_source) + '*' + ') ' if published_by_or_in else '') +
-                                                    pub_link + ' ' + zotero_link + ' ' +
-                                                    ('Cited by [' + str(citation) + '](' + citation_link + ')' if citation > 0 else '')
+                                                    pub_link + ' ' + zotero_link + ' ' + book_reviews_badges + ' ' +
+                                                    ('[:orange-badge[Cited by ' + str(citation) + ']](' + citation_link + ')' if citation > 0 else '')
                                                 )
-
-                                                formatted_entry = format_entry(row, reviews_map=reviews_map) 
                                                 st.write(f"{index + 1}) {formatted_entry}")
                                         if view == 'Table':
                                             df_table_view = filtered_collection_df_authors[['Publication type','Title','Date published','FirstName2', 'Abstract','Publisher','Journal','Citation', 'Link to publication','Zotero link']]
