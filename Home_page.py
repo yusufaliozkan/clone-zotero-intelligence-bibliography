@@ -1497,7 +1497,7 @@ with st.spinner('Retrieving data...'):
                                         if view == 'Basic list':
                                             articles_list = []  # Store articles in a list
                                             for index, row in filtered_collection_df.iterrows():
-                                                formatted_entry = format_entry(row)  # Assuming format_entry() is a function formatting each row
+                                                formatted_entry = format_entry(row, reviews_map=reviews_map) # Assuming format_entry() is a function formatting each row
                                                 articles_list.append(formatted_entry)    
                                             
                                             for index, row in filtered_collection_df.iterrows():
