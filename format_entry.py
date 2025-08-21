@@ -1,19 +1,26 @@
 def format_entry(row, include_citation=False, reviews_map=None):
-    # --- existing fields you already compute ---
-    citation       = row.get("citation_count", 0)  # adjust to your actual field
-    citation_link  = row.get("citation_link", "")
-    link_to_publication = row.get("Link to publication") or ""
-    zotero_link    = row.get("Zotero link") or ""
-    oa_url         = str(row.get("OA_link") or "")
-    oa_url_fixed   = oa_url.replace(" ", "%20")
+    # accept Series or dict
+    if hasattr(row, "to_dict"):
+        row = row.to_dict()
 
-    pub_link_badge    = f"[:blue-badge[Publication link]]({link_to_publication})" if link_to_publication else ""
-    zotero_link_badge = f"[:blue-badge[Zotero link]]({zotero_link})" if zotero_link else ""
-    oa_link_text      = f"[:green-badge[OA version]]({oa_url_fixed})" if oa_url_fixed else ""
-    citation_text     = f"[:orange-badge[Cited by {citation}]]({citation_link})" if citation and citation_link else ""
+    import pandas as pd
 
-    # --- NEW: book reviews badge (uses injected reviews_map) ---
-    # Find parentKey either from the row, or parse it from the Zotero URL
+    def _clean(x):
+        return str(x).strip() if (x is not None and not (isinstance(x, float) and pd.isna(x)) and not (hasattr(pd, "isna") and pd.isna(x))) and str(x).strip() else ""
+
+    # --- fields ---
+    citation            = row.get("Citation", 0) or row.get("citation_count", 0)
+    citation_link       = _clean(row.get("citation_link"))
+    link_to_publication = _clean(row.get("Link to publication"))
+    zotero_link         = _clean(row.get("Zotero link"))
+    oa_url_fixed        = _clean(row.get("OA_link")).replace(" ", "%20")
+
+    pub_link_badge     = f"[:blue-badge[Publication link]]({link_to_publication})" if link_to_publication else ""
+    zotero_link_badge  = f"[:blue-badge[Zotero link]]({zotero_link})" if zotero_link else ""
+    oa_link_text       = f"[:green-badge[OA version]]({oa_url_fixed})" if oa_url_fixed else ""
+    citation_text      = f"[:orange-badge[Cited by {citation}]]({citation_link})" if citation and citation_link else ""
+
+    # --- book reviews badge ---
     parent_key = row.get("parentKey")
     if not parent_key and zotero_link:
         parent_key = zotero_link.rstrip("/").split("/")[-1]
@@ -23,26 +30,34 @@ def format_entry(row, include_citation=False, reviews_map=None):
         links = reviews_map.get(parent_key) or []
         if links:
             label = "Book review" if len(links) == 1 else f"Book reviews ({len(links)})"
-            first_url = links[0]
-            # Pick your colour: violet/green/orange/red
-            book_reviews_badge = f"[:violet-badge[{label}]]({first_url})"
+            book_reviews_badge = f"[:violet-badge[{label}]]({links[0]})"
 
-    # --- Your existing formatting branches ---
-    publication_type = row.get("Publication type", "")
-    title            = row.get("Title", "")
-    authors          = row.get("FirstName2", "")
-    date_published   = row.get("Date published", "")
-    book_title       = row.get("Book_title", "")
-    thesis_type      = row.get("Thesis_type", "")
-    thesis_type2     = f"{thesis_type}: " if thesis_type else ""
-    university       = row.get("University", "")
-    published_source = row.get("Journal") or row.get("Publisher") or ""
-    published_by_or_in = "Published in" if row.get("Journal") else ("Published by" if row.get("Publisher") else "")
+    # --- display fields ---
+    publication_type   = _clean(row.get("Publication type"))
+    title              = _clean(row.get("Title"))
+    authors            = _clean(row.get("FirstName2"))
+    date_published     = _clean(row.get("Date published"))
+    book_title         = _clean(row.get("Book_title"))
+    thesis_type        = _clean(row.get("Thesis_type"))
+    thesis_type2       = f"{thesis_type}: " if thesis_type else ""
+    university         = _clean(row.get("University"))
+
+    # ✅ NaN-safe journal/publisher logic
+    j = _clean(row.get("Journal"))
+    p = _clean(row.get("Publisher"))
+    if j:
+        published_by_or_in, published_source = "Published in", j
+    elif p:
+        published_by_or_in, published_source = "Published by", p
+    else:
+        published_by_or_in, published_source = "", ""
+
+    pub_src_segment = f"({published_by_or_in}: *{published_source}*) " if published_source else ""
 
     badges = " ".join(filter(None, [
         pub_link_badge,
         zotero_link_badge,
-        book_reviews_badge,   # <-- added here
+        book_reviews_badge,
         oa_link_text,
         citation_text if include_citation else ""
     ]))
@@ -64,10 +79,11 @@ def format_entry(row, include_citation=False, reviews_map=None):
             f"{badges}"
         )
     else:
+        # Books (and everything else) come here
         return (
             f"**{publication_type}**: {title} "
             f"(by *{authors}*) "
             f"(Publication date: {date_published}) "
-            f"{f'({published_by_or_in}: *{published_source}*) ' if published_by_or_in else ''}"
+            f"{pub_src_segment}"
             f"{badges}"
         )
