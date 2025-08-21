@@ -35,33 +35,22 @@ def format_entry(row, include_citation=True):
     elif publication_type == 'Book chapter':
         book_title = str(row['Book_title']) if pd.notnull(row['Book_title']) else ''
 
+
     # Build quick lookups for reviews by parentKey
     df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
     review_count_map = df_br.groupby("parentKey").size().to_dict()
     first_review_url_map = df_br.groupby("parentKey")["url"].first().to_dict()
 
-    citation_text = f"Cited by [{citation}]({citation_link})" if citation > 0 else ""
+    citation_text = f'Cited by [{citation}]({citation_link})' if citation > 0 else ''
     oa_url = str(row['OA_link']) if pd.notnull(row['OA_link']) else ''
     oa_url_fixed = oa_url.replace(' ', '%20')
+    oa_link_text = f'[Open access version]({oa_url_fixed})' if oa_url_fixed else ''
 
-    pub_link_badge   = f"[:blue-badge[Publication link]]({link_to_publication})" if link_to_publication else ''
-    zotero_link_badge= f"[:blue-badge[Zotero link]]({zotero_link})" if zotero_link else ''
-    oa_link_text     = f"[:green-badge[OA version]]({oa_url_fixed})" if oa_url_fixed else ''
-    citation_text    = f"[:orange-badge[Cited by {citation}]]({citation_link})" if citation > 0 else ''
+    pub_link_badge = f"[:blue-badge[Publication link]]({link_to_publication})" if link_to_publication else ''
+    zotero_link_badge = f"[:blue-badge[Zotero link]]({zotero_link})" if zotero_link else ''
+    oa_link_text = f"[:green-badge[OA version]]({oa_url_fixed})" if oa_url_fixed else ''
+    citation_text = f"[:orange-badge[Cited by {citation}]]({citation_link})" if citation > 0 else ''
 
-    # --- NEW: Book reviews badge ---
-    # Get parentKey either from the row or parse from the Zotero URL
-    parent_key = row.get("parentKey")
-    if not parent_key and zotero_link:
-        parent_key = zotero_link.rstrip("/").split("/")[-1]
-
-    book_reviews_badge = ""
-    rc = review_count_map.get(parent_key, 0)
-    if rc:
-        first_url = first_review_url_map.get(parent_key)
-        label = "Book review" if rc == 1 else f"Book reviews ({rc})"
-        # Change 'violet-badge' to another colour if you prefer
-        book_reviews_badge = f"[:violet-badge[{label}]]({first_url})"
 
     if publication_type == 'Book chapter':
         return (
@@ -70,8 +59,7 @@ def format_entry(row, include_citation=True):
             f"(by *{authors}*) "
             f"(Publication date: {date_published}) "
             f"{pub_link_badge} {zotero_link_badge} "
-            f"{(book_reviews_badge + ' ') if book_reviews_badge else ''}"
-            f"{(oa_link_text + ' ') if oa_link_text else ''}"
+            f"{oa_link_text + ' ' if oa_link_text else ''}"
             f"{citation_text if include_citation else ''}"
         )
     elif publication_type == 'Thesis':
@@ -81,8 +69,7 @@ def format_entry(row, include_citation=True):
             f"(by *{authors}*) "
             f"(Publication date: {date_published}) "
             f"{pub_link_badge} {zotero_link_badge} "
-            f"{(book_reviews_badge + ' ') if book_reviews_badge else ''}"
-            f"{(oa_link_text + ' ') if oa_link_text else ''}"
+            f"{oa_link_text + ' ' if oa_link_text else ''}"
             f"{citation_text if include_citation else ''}"
         )
     else:
@@ -92,8 +79,6 @@ def format_entry(row, include_citation=True):
             f"(Publication date: {date_published}) "
             f"{f'({published_by_or_in}: *{published_source}*) ' if published_by_or_in else ''}"
             f"{pub_link_badge} {zotero_link_badge} "
-            f"{(book_reviews_badge + ' ') if book_reviews_badge else ''}"
-            f"{(oa_link_text + ' ') if oa_link_text else ''}"
+            f"{oa_link_text + ' ' if oa_link_text else ''}"
             f"{citation_text if include_citation else ''}"
         )
-
