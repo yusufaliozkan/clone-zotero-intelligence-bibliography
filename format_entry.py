@@ -35,12 +35,6 @@ def format_entry(row, include_citation=True):
     elif publication_type == 'Book chapter':
         book_title = str(row['Book_title']) if pd.notnull(row['Book_title']) else ''
 
-
-    # Build quick lookups for reviews by parentKey
-    df_br = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
-    review_count_map = df_br.groupby("parentKey").size().to_dict()
-    first_review_url_map = df_br.groupby("parentKey")["url"].first().to_dict()
-
     citation_text = f'Cited by [{citation}]({citation_link})' if citation > 0 else ''
     oa_url = str(row['OA_link']) if pd.notnull(row['OA_link']) else ''
     oa_url_fixed = oa_url.replace(' ', '%20')
