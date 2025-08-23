@@ -3205,7 +3205,7 @@ with st.spinner('Retrieving data...'):
                                 f"(by *{author}*) "
                                 f"(Published on: {date}) "
                                 f"(Published in: *{journal}*) "
-                                f"{pub_link} {zotero_link}{book_reviews_link}"
+                                f"{pub_link} {zotero_link}{book_reviews_block}"
                             )
                         elif pub_type == "Book chapter":
                             book_title = row['Book_title']
@@ -3214,7 +3214,7 @@ with st.spinner('Retrieving data...'):
                                 f"(in: *{book_title}*) "
                                 f"(by *{author}*) "
                                 f"(Published on: {date}) "
-                                f"{pub_link} {zotero_link}{book_reviews_link}"
+                                f"{pub_link} {zotero_link}{book_reviews_block}"
                             )
                         elif pub_type == "Thesis":
                             thesis_type = row.get("Thesis_type", "")
@@ -3225,14 +3225,14 @@ with st.spinner('Retrieving data...'):
                                 f"({thesis_info}) "
                                 f"(by *{author}*) "
                                 f"(Published on: {date}) "
-                                f"{pub_link} {zotero_link}{book_reviews_link}"
+                                f"{pub_link} {zotero_link}{book_reviews_block}"
                             )
                         else:
                             formatted = (
                                 f"**{pub_type}**: {title} "
                                 f"(by *{author}*) "
                                 f"(Published on: {date}) "
-                                f"{pub_link} {zotero_link}{book_reviews_link}"
+                                f"{pub_link} {zotero_link}{book_reviews_block}"
                             )
 
                         st.markdown(f"{i+1}) {formatted}")
