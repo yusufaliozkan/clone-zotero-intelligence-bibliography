@@ -3108,7 +3108,21 @@ with st.spinner('Retrieving data...'):
                     # df_intro['Abstract'] = df_intro['Abstract'].str.strip()
                     df_intro['Abstract'] = df_intro['Abstract'].fillna('No abstract')
 
-                    
+                    @st.cache_data(ttl=600)
+                    def build_reviews_map():
+                        df = df_book_reviews.dropna(subset=["parentKey", "url"]).copy()
+                        # normalize keys to avoid case/whitespace mismatches
+                        df["parentKey"] = df["parentKey"].astype(str).str.strip().str.upper()
+                        df["url"] = df["url"].astype(str).str.strip()
+                        # group to a list of urls
+                        mp = df.groupby("parentKey")["url"].apply(list).to_dict()
+                        # optional: de-duplicate while preserving order
+                        for k, v in mp.items():
+                            mp[k] = list(dict.fromkeys(v))
+                        return mp
+
+                    reviews_map = build_reviews_map()
+                                        
 
                     # Bringing collections
 
@@ -3169,17 +3183,20 @@ with st.spinner('Retrieving data...'):
 
                         # Figure out the parent key (use column if present; otherwise parse from Zotero URL)
                         parent_key = row.get("parentKey")
-                        if not parent_key and pd.notna(row.get("Zotero link")):
-                            parent_key = row["Zotero link"].rstrip("/").split("/")[-1]
+                        if (not parent_key) and pd.notna(row.get("Zotero link")):
+                            parent_key = str(row["Zotero link"]).rstrip("/").split("/")[-1]
+                        parent_key = str(parent_key).strip().upper() if parent_key else ""
 
-                        # Build a violet badge for Book reviews if we have any
-                        book_reviews_link = ""
-                        rc = review_count_map.get(parent_key, 0)
-                        if rc:
-                            first_url = first_review_url_map.get(parent_key)
-                            label = "Book review" if rc == 1 else f"Book reviews ({rc})"
-                            # change "violet-badge" to "green-badge" / "orange-badge" / "red-badge" if you prefer
-                            book_reviews_link = f" [:violet-badge[{label}]]({first_url})"
+                        # Build ALL book review badges
+                        book_reviews_block = ""
+                        links = reviews_map.get(parent_key, [])
+                        if links:
+                            if len(links) == 1:
+                                book_reviews_block = f" [:violet-badge[Book review]]({links[0]})"
+                            else:
+                                book_reviews_block = " " + " ".join(
+                                    f"[:violet-badge[Book review {i+1}]]({u})" for i, u in enumerate(links)
+                                )
 
                         if pub_type in ["Journal article", "Magazine article", "Newspaper article"]:
                             journal = row['Journal']
