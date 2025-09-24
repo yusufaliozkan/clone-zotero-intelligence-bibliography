@@ -25,7 +25,13 @@ def format_entry(row, include_citation=True, reviews_map=None, max_reviews_inlin
     pub_link_badge    = f"[:blue-badge[Publication link]]({link_to_publication})" if link_to_publication else ""
     zotero_link_badge = f"[:blue-badge[Zotero link]]({zotero_link})" if zotero_link else ""
     oa_link_text      = f"[:green-badge[OA version]]({oa_url_fixed})" if oa_url_fixed else ""
-    citation_text     = f"[:orange-badge[Cited by {int(citation)}]]({citation_link})" if citation and citation_link else ""
+    if citation:
+        if citation_link:
+            citation_text = f"[:orange-badge[Cited by {int(citation)}]]({citation_link})"
+        else:
+            citation_text = f":orange-badge[Cited by {int(citation)}]"
+    else:
+        citation_text = ""
 
     # --- multiple inline review badges ---
     parent_key = row.get("parentKey")
