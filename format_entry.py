@@ -1,4 +1,4 @@
-def format_entry(row, include_citation=True, reviews_map=None, max_reviews_inline=None):
+def format_entry(row, include_citation=False, reviews_map=None, max_reviews_inline=None):
     # Accept Series or dict
     if hasattr(row, "to_dict"):
         row = row.to_dict()
