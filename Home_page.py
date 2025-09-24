@@ -756,7 +756,7 @@ with st.spinner('Retrieving data...'):
                                         abstracts_list = [] # Store abstracts in a list
                                         for _, row in filtered_df.iterrows():
                                             # CHANGED: pass the reviews_map to format_entry
-                                            formatted_entry = format_entry(row, reviews_map=reviews_map)
+                                            formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map)
                                             articles_list.append(formatted_entry)
                                             abstracts_list.append(row['Abstract'] if pd.notnull(row['Abstract']) else 'N/A')
 
@@ -1511,7 +1511,7 @@ with st.spinner('Retrieving data...'):
                                         if view == 'Basic list':
                                             articles_list = []  # Store articles in a list
                                             for index, row in filtered_collection_df.iterrows():
-                                                formatted_entry = format_entry(row, reviews_map=reviews_map) # Assuming format_entry() is a function formatting each row
+                                                formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map) # Assuming format_entry() is a function formatting each row
                                                 articles_list.append(formatted_entry)    
                                             
                                             for index, row in filtered_collection_df.iterrows():
@@ -1536,7 +1536,7 @@ with st.spinner('Retrieving data...'):
                                                     published_by_or_in = ''
                                                     published_source = ''
 
-                                                formatted_entry = format_entry(row, reviews_map=reviews_map)
+                                                formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map)
                                                 st.write(f"{index + 1}) {formatted_entry}")
                                         if view == 'Table':
                                             df_table_view = filtered_collection_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Link to publication','Zotero link']]
@@ -1867,7 +1867,7 @@ with st.spinner('Retrieving data...'):
                                     if view =='Basic list':
                                         articles_list = []  # Store articles in a list
                                         for index, row in filtered_type_df.iterrows():
-                                            formatted_entry = format_entry(row, reviews_map=reviews_map)  # Assuming format_entry() is a function formatting each row
+                                            formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map)  # Assuming format_entry() is a function formatting each row
                                             articles_list.append(formatted_entry)                     
                                         
                                         for index, row in filtered_type_df.iterrows():
@@ -1896,7 +1896,7 @@ with st.spinner('Retrieving data...'):
                                             if publication_type == 'Book':
                                                 published_source = str(row['Publisher']) if pd.notnull(row['Publisher']) else ''
 
-                                            formatted_entry = format_entry(row, reviews_map=reviews_map)
+                                            formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map)
                                             st.write(f"{index + 1}) {formatted_entry}")
                                     if view =='Table':
                                         df_table_view = filtered_type_df[['Publication type','Title','Date published','FirstName2', 'Abstract','Link to publication','Zotero link']]
@@ -2644,7 +2644,7 @@ with st.spinner('Retrieving data...'):
                                     articles_list = []  # Store articles in a list
                                     abstracts_list = [] #Store abstracts in a list
                                     for index, row in df_all.iterrows():
-                                        formatted_entry = format_entry(row, reviews_map=reviews_map)
+                                        formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map)
                                         articles_list.append(formatted_entry)  # Append formatted entry to the list
                                         abstract = row['Abstract']
                                         abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
@@ -3051,7 +3051,7 @@ with st.spinner('Retrieving data...'):
                                     articles_list = []  # Store articles in a list
                                     abstracts_list = [] #Store abstracts in a list
                                     for index, row in df_cited.iterrows():
-                                        formatted_entry = format_entry(row, reviews_map=reviews_map)
+                                        formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map)
                                         articles_list.append(formatted_entry)  # Append formatted entry to the list
                                         abstract = row['Abstract']
                                         abstracts_list.append(abstract if pd.notnull(abstract) else 'N/A')
