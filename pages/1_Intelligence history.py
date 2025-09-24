@@ -264,7 +264,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
             if view == 'Basic list':
                 articles_list = []  # Store articles in a list
                 for index, row in df_collections.iterrows():
-                    formatted_entry = format_entry(row, reviews_map=reviews_map)  # Assuming format_entry() is a function formatting each row
+                    formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map)  # Assuming format_entry() is a function formatting each row
                     articles_list.append(formatted_entry)        
                 
                 for index, row in df_collections.iterrows():
@@ -300,7 +300,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                     if sort_by == 'Publication date :arrow_down:': # or df_collections['Citation'].sum() == 0:
                         count = 1
                         for index, row in df_collections.iterrows():
-                            formatted_entry = format_entry(row, reviews_map=reviews_map)
+                            formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map)
                             st.write(f"{count}) {formatted_entry}")
                             count += 1
                             if display2:
@@ -314,7 +314,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                                 current_type = row['Publication type']
                                 st.subheader(current_type)
                                 count_by_type[current_type] = 1
-                            formatted_entry = format_entry(row, reviews_map=reviews_map)
+                            formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map)
                             st.write(f"{count_by_type[current_type]}) {formatted_entry}")
                             count_by_type[current_type] += 1
                             if display2:
@@ -323,7 +323,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         if df_collections['Citation'].sum() == 0:
                             count = 1
                             for index, row in df_collections.iterrows():
-                                formatted_entry = format_entry(row, reviews_map=reviews_map)
+                                formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map)
                                 st.write(f"{count}) {formatted_entry}")
                                 count += 1
                                 if display2:
@@ -332,7 +332,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                             df_collections = df_collections.sort_values(by=['Citation'], ascending=False)
                             count = 1
                             for index, row in df_collections.iterrows():
-                                formatted_entry = format_entry(row, reviews_map=reviews_map)
+                                formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map)
                                 st.write(f"{count}) {formatted_entry}")
                                 count += 1
                                 if display2:
@@ -341,7 +341,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                         df_collections = df_collections.sort_values(by=['Date added'], ascending=False)
                         count = 1
                         for index, row in df_collections.iterrows():
-                            formatted_entry = format_entry(row, reviews_map=reviews_map)
+                            formatted_entry = format_entry(row, include_citation=True, reviews_map=reviews_map)
                             st.write(f"{count}) {formatted_entry}")
                             count += 1
                             if display2:
