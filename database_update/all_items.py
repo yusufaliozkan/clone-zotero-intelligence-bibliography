@@ -393,13 +393,13 @@ def fetch_article_metadata(doi):
             if counts_by_year else None
         )
 
-        # Construct the cited-by URL only if ID exists AND cited_by_count > 0
-        openalex_id = data.get('id', '').replace('https://openalex.org/', '')
-        cited_by_url = (
-            f'https://api.openalex.org/works?filter=cites:{openalex_id}'
-            if openalex_id and data.get('cited_by_count', 0) > 0
-            else None
-        )
+        # # Construct the cited-by URL only if ID exists AND cited_by_count > 0
+        # openalex_id = data.get('id', '').replace('https://openalex.org/', '')
+        # cited_by_url = (
+        #     f'https://api.openalex.org/works?filter=cites:{openalex_id}'
+        #     if openalex_id and data.get('cited_by_count', 0) > 0
+        #     else None
+        # )
 
         article_metadata = {
             'ID': data.get('id'),
