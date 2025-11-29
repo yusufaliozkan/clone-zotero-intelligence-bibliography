@@ -381,26 +381,37 @@ def fetch_article_metadata(doi):
     response = requests.get(base_url + doi)
     if response.status_code == 200:
         data = response.json()
+
         counts_by_year = data.get('counts_by_year', [])
-        if counts_by_year:
-            first_citation_year = min(entry.get('year') for entry in data['counts_by_year'])
-        else:
-            first_citation_year = None
-        if data.get('counts_by_year'):
-            last_citation_year = max(entry.get('year') for entry in data['counts_by_year'])
-        else:
-            last_citation_year = None
+
+        first_citation_year = (
+            min(entry.get('year') for entry in counts_by_year)
+            if counts_by_year else None
+        )
+        last_citation_year = (
+            max(entry.get('year') for entry in counts_by_year)
+            if counts_by_year else None
+        )
+
+        # Construct the cited-by URL only if ID exists AND cited_by_count > 0
+        openalex_id = data.get('id', '').replace('https://openalex.org/', '')
+        cited_by_url = (
+            f'https://api.openalex.org/works?filter=cites:{openalex_id}'
+            if openalex_id and data.get('cited_by_count', 0) > 0
+            else None
+        )
 
         article_metadata = {
             'ID': data.get('id'),
             'Citation': data.get('cited_by_count'),
             'OA status': data.get('open_access', {}).get('is_oa'),
-            'Citation_list': data.get('cited_by_api_url'),
+            'Citation_list': cited_by_url,
             'First_citation_year': first_citation_year,
             'Last_citation_year': last_citation_year,
             'Publication_year': data.get('publication_year'),
             'OA_link': data.get('open_access', {}).get('oa_url')
         }
+
         return article_metadata
     else:
         return {
