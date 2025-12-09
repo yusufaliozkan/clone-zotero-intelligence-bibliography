@@ -4531,17 +4531,7 @@ with st.spinner('Retrieving data...'):
                     df_added['YearMonth'] = df_added['Date added'].dt.to_period('M').astype(str)
                     monthly_counts = df_added.groupby('YearMonth').size()
                     monthly_counts.name = 'Number of items added'
-                    if time_interval == 'Monthly':
-                        bar_chart = alt.Chart(monthly_counts.reset_index()).mark_bar().encode(
-                            x='YearMonth',
-                            y='Number of items added',
-                            tooltip=['YearMonth', 'Number of items added']
-                        ).properties(
-                            width=600,
-                            title='Number of Items Added per Month'
-                        )
-                        st.altair_chart(bar_chart, use_container_width=True)
-                    else:
+                    if time_interval == 'Yearly':
                         df_added['Year'] = df_added['Date added'].dt.to_period('Y').astype(str)
                         yearly_counts = df_added.groupby('Year').size()
                         yearly_counts.name = 'Number of items added'
@@ -4552,6 +4542,16 @@ with st.spinner('Retrieving data...'):
                         ).properties(
                             width=600,
                             title='Number of Items Added per Year'
+                        )
+                        st.altair_chart(bar_chart, use_container_width=True)
+                    else:
+                        bar_chart = alt.Chart(monthly_counts.reset_index()).mark_bar().encode(
+                            x='YearMonth',
+                            y='Number of items added',
+                            tooltip=['YearMonth', 'Number of items added']
+                        ).properties(
+                            width=600,
+                            title='Number of Items Added per Month'
                         )
                         st.altair_chart(bar_chart, use_container_width=True)
                 with col12:
