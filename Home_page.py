@@ -3558,6 +3558,7 @@ with st.spinner('Retrieving data...'):
                         plot= df_collections_21.head(number0+1)
                         plot = plot[plot['Collection_Name']!='01 Intelligence history']
                         fig = px.bar(plot, x='Collection_Name', y='Number_of_Items', color='Collection_Name')
+                        fig.update_xaxes(tickangle=-65)
                         fig.update_traces(width=0.6) 
                         fig.update_layout(
                             autosize=False,
