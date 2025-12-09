@@ -4524,7 +4524,7 @@ with st.spinner('Retrieving data...'):
             def fragment_item_inclusion():
                 st.write('This part shows the number of items added to the bibliography over time.')
                 df_added = df_dedup.copy()
-                time_interval = st.selectbox('Select time interval:', ['Monthly', 'Yearly'])
+                time_interval = st.selectbox('Select time interval:', ['Yearly', 'Monthly'])
                 col11, col12 = st.columns(2)
                 with col11:
                     df_added['Date added'] = pd.to_datetime(df_added['Date added'])
