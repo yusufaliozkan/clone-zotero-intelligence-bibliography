@@ -403,14 +403,15 @@ with st.spinner("Retrieving data..."):
                             default_report = st.query_params.get("report", "0") == "1"
                             st.toggle(":material/monitoring: Generate report",
                                     value=default_report, key="report_keyword")
-
-                            # Read state directly from session_state instead of return value
                             on = st.session_state.get("report_keyword", default_report)
 
-                            params = {"search_in": st.session_state.search_in, "query": st.session_state.search_term}
-                            if on:
-                                params["report"] = "1"
-                            st.query_params.from_dict(params)
+                            # Only update URL if report state has changed
+                            if on != default_report:
+                                params = {"search_in": st.session_state.search_in, "query": st.session_state.search_term}
+                                if on:
+                                    params["report"] = "1"
+                                st.query_params.from_dict(params)
+
                             link = (
                                 f"https://intelligence.streamlit.app/"
                                 f"?search_in={st.session_state.search_in}"
