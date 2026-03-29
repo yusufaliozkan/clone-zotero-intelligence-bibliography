@@ -1720,7 +1720,7 @@ with st.spinner("Retrieving data..."):
                     layers=[scatterplot_layer],
                     initial_view_state=view_state,
                     tooltip={"text": "{Country}\nMentions: {Count}"},
-                    map_style="mapbox://styles/mapbox/light-v9"  # Use a light map style
+                    map_style="light",  # ← change this line
                 )
 
                 # Display the Pydeck chart in Streamlit
