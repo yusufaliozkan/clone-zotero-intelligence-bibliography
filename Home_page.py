@@ -1669,79 +1669,51 @@ with st.spinner("Retrieving data..."):
                 cited_status_charts()
 
                 st.divider()
-                st.subheader('Country mentions in titles', anchor=False, divider='blue') 
+                st.subheader("Country mentions in titles", anchor=False, divider="blue")
 
+                # Load and prepare data once
+                df_countries = pd.read_csv("countries.csv")
+                df_countries["Country"] = df_countries["Country"].replace("UK", "United Kingdom")
+                df_countries = df_countries.groupby("Country", as_index=False).sum()
 
-                # Load your country data with counts
-                df_countries = pd.read_csv('countries.csv')
-                df_countries['Country'] = df_countries['Country'].replace("UK", "United Kingdom")
-                df_countries = df_countries.groupby('Country', as_index=False).sum()
-
-                # Function to get coordinates
+                # Get coordinates
                 def get_coordinates(country_name):
                     try:
-                        country = CountryInfo(country_name)
-                        return country.info().get('latlng', (None, None))
+                        return CountryInfo(country_name).info().get("latlng", (None, None))
                     except KeyError:
                         return None, None
 
-                # Apply the function to each country to get latitude and longitude
-                df_countries[['Latitude', 'Longitude']] = df_countries['Country'].apply(lambda x: pd.Series(get_coordinates(x)))
-
-                # Set a scaling factor and minimum radius to make circles larger
-                scaling_factor = 500  # Adjust this to control the overall size of the circles
-                minimum_radius = 100000  # Minimum radius for visibility of all points
-
-                # Calculate the circle size based on `Count`
-                df_countries['size'] = df_countries['Count'] * scaling_factor + minimum_radius
-
-                # Filter out rows where coordinates were not found
-                df_countries = df_countries.dropna(subset=['Latitude', 'Longitude'])
-
-                # ScatterplotLayer to show countries and their mentions count
-                scatterplot_layer = pdk.Layer(
-                    "ScatterplotLayer",
-                    data=df_countries,
-                    get_position=["Longitude", "Latitude"],
-                    get_radius="size",
-                    get_fill_color="[255, 140, 0, 160]",  # Adjusted color with opacity
-                    pickable=True,
-                    auto_highlight=True,
-                    id="country-mentions-layer",
+                df_countries[["Latitude", "Longitude"]] = df_countries["Country"].apply(
+                    lambda x: pd.Series(get_coordinates(x))
                 )
+                df_countries["size"] = df_countries["Count"] * 500 + 100000
+                df_countries = df_countries.dropna(subset=["Latitude", "Longitude"])
+                df_countries = df_countries.sort_values("Count", ascending=False).reset_index(drop=True)
+                df_countries = df_countries.rename(columns={"Count": "# Mentions"})
 
-                # Define the view state of the map
-                view_state = pdk.ViewState(
-                    latitude=20, longitude=0, zoom=1, pitch=30
-                )
-
-                # Create the Deck with the layer, view state, and map style
+                # Build map
                 chart = pdk.Deck(
-                    layers=[scatterplot_layer],
-                    initial_view_state=view_state,
-                    tooltip={"text": "{Country}\nMentions: {Count}"},
-                    map_style="light",  # ← change this line
+                    layers=[pdk.Layer(
+                        "ScatterplotLayer",
+                        data=df_countries,
+                        get_position=["Longitude", "Latitude"],
+                        get_radius="size",
+                        get_fill_color="[255, 140, 0, 160]",
+                        pickable=True,
+                        auto_highlight=True,
+                        id="country-mentions-layer",
+                    )],
+                    initial_view_state=pdk.ViewState(latitude=20, longitude=0, zoom=1, pitch=30),
+                    tooltip={"text": "{Country}\nMentions: {# Mentions}"},
+                    map_style="light",
+                    height=600,  # ← increase this to make the map taller
                 )
 
-                # Display the Pydeck chart in Streamlit
-
-                col1, col2 = st.columns([8,3])
+                col1, col2 = st.columns([8, 3])
                 with col1:
-                    df_countries = pd.read_csv('countries.csv')
-                    df_countries['Country'] = df_countries['Country'].replace("UK", "United Kingdom")
-                    df_countries = df_countries.groupby('Country', as_index=False).sum()
-                    df_countries = df_countries.sort_values(by='Count', ascending=False).reset_index(drop=True)
-                    df_countries = df_countries.rename(columns={'Count': '# Mentions'})
-                    fig = px.choropleth(df_countries, locations='Country', locationmode='country names', color='# Mentions', 
-                                title='Country mentions in titles', color_continuous_scale='Viridis',
-                                width=900, height=700) # Adjust the size of the map here
-                    # # Display the map
-                    # fig.show()
-                    # st.plotly_chart(fig, use_container_width=True) 
                     st.pydeck_chart(chart, use_container_width=True)
                 with col2:
-                    fig = px.bar(df_countries.head(15).iloc[::-1], x='# Mentions', y='Country', orientation='h', height=600)
-                    st.dataframe(df_countries, height=500, hide_index=True, use_container_width=True)
+                    st.dataframe(df_countries[["Country", "# Mentions"]], height=600, hide_index=True, use_container_width=True)
                 
 
                 st.divider()
