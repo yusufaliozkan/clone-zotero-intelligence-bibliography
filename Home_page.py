@@ -561,8 +561,12 @@ with st.spinner("Retrieving data..."):
                         # Update URL to include/exclude report param
                         if selected_author:
                             encoded = selected_author.replace(" ", "+")
-                            params  = {"author": selected_author, "report": "1" if on else "0"}
+                            params = {"author": selected_author}
+                            if on:
+                                params["report"] = "1"
                             st.query_params.from_dict(params)
+
+                            encoded = selected_author.replace(" ", "+")
                             link = f"https://intelligence.streamlit.app/?author={encoded}{'&report=1' if on else ''}"
                             st.caption(f"🔗 Shareable link: [{link}]({link})")
                         if on and len(adf):
