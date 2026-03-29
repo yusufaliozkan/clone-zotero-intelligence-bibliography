@@ -554,7 +554,7 @@ with st.spinner("Retrieving data..."):
             # 2 – COLLECTION SEARCH
             # ================================================================
             elif search_option == 2:
-                st.query_params.clear()
+                # ← no st.query_params.clear() here
                 st.subheader("Search collection", anchor=False, divider="blue")
 
                 @st.fragment
@@ -566,11 +566,9 @@ with st.spinner("Retrieving data..."):
                     col_counts   = df_csv_col["Collection_Name"].value_counts()
                     sorted_cols  = [c for c in col_counts.index if c not in excluded]
                     options      = [""] + [f"{c} [{col_counts[c]} items]" for c in sorted_cols]
-                    sel_display  = st.selectbox("Select a collection", options)
-                    selected_col = sel_display.rsplit(" [", 1)[0] if sel_display else None
 
-                    # Pre-select from URL
-                    default_col = qp.get("collection", "").replace("+", " ")
+                    # Pre-select from URL if ?collection= is present
+                    default_col       = st.query_params.get("collection", "").replace("+", " ")
                     default_col_index = 0
                     if default_col:
                         default_col_index = next(
