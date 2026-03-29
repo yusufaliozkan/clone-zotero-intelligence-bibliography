@@ -678,8 +678,6 @@ with st.spinner("Retrieving data..."):
                 @st.fragment
                 def type_selection():
                     reviews_map   = load_reviews_map()
-                    unique_types  = [""] + list(df_authors["Publication type"].unique())
-                    selected_type = st.selectbox("Select a publication type", unique_types)
                     if not selected_type:
                         st.write("Pick a publication type to see items")
                         return
@@ -694,7 +692,7 @@ with st.spinner("Retrieving data..."):
                     if default_type and default_type in unique_types:
                         default_type_index = unique_types.index(default_type)
 
-                    selected_type = st.selectbox("Select a publication type", unique_types, index=default_type_index, key='selected_type_2')
+                    selected_type = st.selectbox("Select a publication type", unique_types, index=default_type_index,)
 
                     if selected_type:
                         st.query_params.from_dict({"type": selected_type})
