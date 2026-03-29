@@ -672,7 +672,7 @@ with st.spinner("Retrieving data..."):
             # 3 – PUBLICATION TYPES
             # ================================================================
             elif search_option == 3:
-                st.query_params.clear()
+                # st.query_params.clear()
                 st.subheader("Publication types", anchor=False, divider="blue")
 
                 @st.fragment
