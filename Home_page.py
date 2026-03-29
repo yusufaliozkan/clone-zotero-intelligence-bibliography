@@ -813,9 +813,11 @@ with st.spinner("Retrieving data..."):
                     default_guid     = st.query_params.get("journal", "")
                     default_journals = []
                     if default_guid:
-                        matched = guid_to_journal(default_guid, all_journals)
-                        if matched:
-                            default_journals = [matched]
+                        guids_list   = default_guid.split(",")
+                        default_journals = [
+                            matched for guid in guids_list
+                            if (matched := guid_to_journal(guid, all_journals))
+                        ]
 
                     journals = st.multiselect(
                         "Select a journal", all_journals,
@@ -823,10 +825,10 @@ with st.spinner("Retrieving data..."):
                     )
 
                     if journals:
-                        # Use GUID of first selected journal in URL (or all if you prefer)
-                        guid = journal_to_guid(journals[0])
-                        st.query_params.from_dict({"journal": guid})
-                        link = f"https://intelligence.streamlit.app/?journal={guid}"
+                        # Encode all selected journals as comma-separated GUIDs
+                        guids = ",".join(journal_to_guid(j) for j in journals)
+                        st.query_params.from_dict({"journal": guids})
+                        link = f"https://intelligence.streamlit.app/?journal={guids}"
                         st.caption(f"🔗 Shareable link: [{link}]({link})")
                     else:
                         st.query_params.clear()
