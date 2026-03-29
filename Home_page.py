@@ -82,11 +82,17 @@ Ozkan, Yusuf A. 'Intelligence Studies Network Dataset'. Zenodo, 15 August 2024. 
 
 # ── Load data ───────────────────────────────────────────────────────────────
 with st.spinner("Retrieving data..."):
-    df_dedup        = pd.read_csv("all_items.csv")
-    df_dedup["parentKey"] = df_dedup["Zotero link"].str.split("/").str[-1]
-    df_duplicated   = pd.read_csv("all_items_duplicated.csv")
-    df_authors      = get_df_authors()
-    df_book_reviews = pd.read_csv("book_reviews.csv")
+    @st.cache_data(ttl=3600)
+    def load_data():
+        df_dedup        = pd.read_csv("all_items.csv")
+        df_dedup["parentKey"] = df_dedup["Zotero link"].str.split("/").str[-1]
+        df_duplicated   = pd.read_csv("all_items_duplicated.csv")
+        df_authors      = get_df_authors()
+        df_book_reviews = pd.read_csv("book_reviews.csv")
+        return df_dedup, df_duplicated, df_authors, df_book_reviews
+
+    # Then at the top of your app body:
+    df_dedup, df_duplicated, df_authors, df_book_reviews = load_data()
 
     col1, col2, col3 = st.columns([3, 5, 8])
     with col3:
