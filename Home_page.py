@@ -612,6 +612,7 @@ with st.spinner("Retrieving data..."):
                 def search_collection():
                     reviews_map  = load_reviews_map()
                     df_csv_col   = df_duplicated.copy()
+                    df_csv_col
                     df_csv_col["Collection_Name"] = df_csv_col["Collection_Name"].apply(remove_numbers)
                     excluded     = {"KCL intelligence","Events","Journals",""}
                     col_counts   = df_csv_col["Collection_Name"].value_counts()
