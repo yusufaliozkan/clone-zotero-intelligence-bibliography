@@ -68,7 +68,7 @@ _STOPWORDS_EXTRA = [
     "journal", "london", "review",
 ]
 
-def build_stopwords(extra: list | None = None) -> list:
+def build_stopwords(extra: Optional[list] = None) -> list:
     stopword = nltk.corpus.stopwords.words("english")
     stopword.extend(_STOPWORDS_EXTRA)
     if extra:
@@ -229,7 +229,7 @@ def render_report_charts(
     label: str,
     name_replacements: dict,
     show_themes: bool = False,
-    themes_df: pd.DataFrame | None = None,
+    themes_df: Optional[pd.DataFrame] = None,
 ):
     """Render the standard suite of report charts for any filtered dataframe."""
     # Publications by type
@@ -326,9 +326,9 @@ def sort_radio(df: pd.DataFrame, key: str = "sort_radio") -> pd.DataFrame:
 def render_paginated_list(
     df: pd.DataFrame,
     articles_list: list,
-    abstracts_list: list | None = None,
+    abstracts_list: Optional[list] = None,
     display_abstracts: bool = False,
-    search_tokens: list | None = None,
+    search_tokens: Optional[list] = None,
     search_in: str = "Title",
 ):
     """Display articles_list with optional pagination and abstract toggle."""
