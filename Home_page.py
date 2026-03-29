@@ -417,8 +417,27 @@ with st.spinner("Retrieving data..."):
                     sorted_authors = sorted(df_authors["Author_name"].unique(),
                                             key=lambda a: pub_counts.get(a, 0), reverse=True)
                     options          = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
-                    selected_display = st.selectbox("Select author", options)
+
+                    # ── Pre-select from URL query param ────────────────────────────────────
+                    qp             = st.query_params
+                    default_author = qp.get("author", "").replace("+", " ")
+                    default_index  = 0
+                    if default_author:
+                        match = next((i for i, o in enumerate(options) if o.startswith(default_author + " (")), 0)
+                        default_index = match
+
+                    selected_display = st.selectbox("Select author", options, index=default_index)
                     selected_author  = selected_display.split(" (")[0] if selected_display else None
+
+                    # ── Shareable link ──────────────────────────────────────────────────────
+                    if selected_author:
+                        st.query_params.from_dict({"author": selected_author})
+                        base_url = "https://intelligence.streamlit.app"
+                        encoded  = selected_author.replace(" ", "+")
+                        link     = f"{base_url}/?author={encoded}"
+                        st.caption(f"🔗 Shareable link: [{link}]({link})")
+                    else:
+                        st.query_params.clear()
 
                     if not selected_author:
                         st.write("Select an author to see items")
