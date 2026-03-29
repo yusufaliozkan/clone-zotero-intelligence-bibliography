@@ -407,15 +407,17 @@ with st.spinner("Retrieving data..."):
                             # Read state directly from session_state instead of return value
                             on = st.session_state.get("report_keyword", default_report)
 
-                            params = {"search_in": st.session_state.search_in, "query": st.session_state.search_term}
-                            if on:
-                                params["report"] = "1"
+                            params = {
+                                "search_in": st.session_state.search_in,
+                                "query":     st.session_state.search_term,
+                                "report":    "1" if on else "0",
+                            }
                             st.query_params.from_dict(params)
                             link = (
                                 f"https://intelligence.streamlit.app/"
                                 f"?search_in={st.session_state.search_in}"
                                 f"&query={st.session_state.search_term.replace(' ', '+')}"
-                                f"{'&report=1' if on else ''}"
+                                f"&report={'1' if on else '0'}"
                             )
                             st.caption(f"🔗 Shareable link: [{link}]({link})")
 
