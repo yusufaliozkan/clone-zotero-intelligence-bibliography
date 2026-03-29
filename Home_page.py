@@ -473,6 +473,13 @@ with st.spinner("Retrieving data..."):
             # ================================================================
             elif search_option == 1:
                 st.subheader("Search author", anchor=False, divider="blue")
+                # Encode: name → slug
+                def author_to_slug(name: str) -> str:
+                    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+                # Decode: slug → match against author list
+                def slug_to_author(slug: str, author_list: list) -> str:
+                    return next((a for a in author_list if author_to_slug(a) == slug), "")
 
                 @st.fragment
                 def search_author():
@@ -496,20 +503,24 @@ with st.spinner("Retrieving data..."):
                     selected_display = st.selectbox("Select author", options, index=default_index)
                     selected_author  = selected_display.split(" (")[0] if selected_display else None
 
-                    if selected_author:
-                        encoded        = selected_author.replace(" ", "+")
-                        default_report = st.query_params.get("report", "0") == "1"
-                        on = st.toggle(":material/monitoring: Generate report", value=default_report, key="report_author")
-                        params = {"author": selected_author}
-                        if on:
-                            params["report"] = "1"
-                        st.query_params.from_dict(params)
+                    default_slug   = st.query_params.get("author", "")
+                    default_index  = 0
+                    if default_slug:
+                        matched = slug_to_author(default_slug, [o.split(" (")[0] for o in options if o])
+                        if matched:
+                            default_index = next(
+                                (i for i, o in enumerate(options) if o.startswith(matched + " (")), 0
+                            )
 
-                        encoded = selected_author.replace(" ", "+")
-                        link = f"https://intelligence.streamlit.app/?author={encoded}{'&report=1' if on else ''}"
+                    selected_display = st.selectbox("Select author", options, index=default_index)
+                    selected_author  = selected_display.split(" (")[0] if selected_display else None
+
+                    if selected_author:
+                        slug = author_to_slug(selected_author)
+                        st.query_params.from_dict({"author": slug})
+                        link = f"https://intelligence.streamlit.app/?author={slug}"
                         st.caption(f"🔗 Shareable link: [{link}]({link})")
                     else:
-                        on = st.toggle(":material/monitoring: Generate report")
                         st.query_params.clear()
 
                     if not selected_author:
