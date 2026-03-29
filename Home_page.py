@@ -800,8 +800,7 @@ with st.spinner("Retrieving data..."):
                 def search_journal():
                     df_ja    = df_dedup[df_dedup["Publication type"] == "Journal article"].copy()
                     jcounts  = df_ja["Journal"].value_counts()
-                    journals = st.multiselect("Select a journal", jcounts.index.tolist())
-                    
+
                     default_journals = [j.replace("+", " ") for j in qp.get("journal", "").split(",") if j]
                     journals = st.multiselect(
                         "Select a journal", jcounts.index.tolist(),
