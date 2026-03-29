@@ -406,12 +406,23 @@ with st.spinner("Retrieving data..."):
                             on = st.toggle(":material/monitoring: Generate report", value=default_report, key="report_keyword")
 
                             # Update URL to include report param
-                            params = {
-                                "search_in": st.session_state.search_in,
-                                "query":     st.session_state.search_term,
-                            }
-                            if on:
-                                params["report"] = "1"
+                            if search_term:
+                                params = {
+                                    "search_in": st.session_state.search_in,
+                                    "query":     st.session_state.search_term,
+                                }
+                                if on:
+                                    params["report"] = "1"
+                                st.query_params.from_dict(params)
+                                link = (
+                                    f"https://intelligence.streamlit.app/"
+                                    f"?search_in={st.session_state.search_in}"
+                                    f"&query={st.session_state.search_term.replace(' ', '+')}"
+                                    f"{'&report=1' if on else ''}"
+                                )
+                                st.caption(f"🔗 Shareable link: [{link}]({link})")
+                            else:
+                                st.query_params.clear()
 
                             st.query_params.from_dict(params)
                             link = (
