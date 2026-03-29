@@ -20,7 +20,7 @@ from countryinfo import CountryInfo
 from streamlit_theme import st_theme
 from st_keyup import st_keyup
 import json
-
+import uuid
 from authors_dict import get_df_authors, name_replacements
 from copyright import display_custom_license
 from sidebar_content import sidebar_content, set_page_config
@@ -798,19 +798,28 @@ with st.spinner("Retrieving data..."):
 
                 @st.fragment
                 def search_journal():
-                    df_ja    = df_dedup[df_dedup["Publication type"] == "Journal article"].copy()
-                    jcounts  = df_ja["Journal"].value_counts()
+                    df_ja   = df_dedup[df_dedup["Publication type"] == "Journal article"].copy()
+                    jcounts = df_ja["Journal"].value_counts()
+                    all_journals = jcounts.index.tolist()
 
-                    default_journals = [j.replace("+", " ") for j in qp.get("journal", "").split(",") if j]
+                    # Pre-select from URL if ?journal= GUID is present
+                    default_guid     = st.query_params.get("journal", "")
+                    default_journals = []
+                    if default_guid:
+                        matched = guid_to_journal(default_guid, all_journals)
+                        if matched:
+                            default_journals = [matched]
+
                     journals = st.multiselect(
-                        "Select a journal", jcounts.index.tolist(),
-                        default=[j for j in default_journals if j in jcounts.index]
+                        "Select a journal", all_journals,
+                        default=default_journals,
                     )
 
                     if journals:
-                        st.query_params.from_dict({"journal": ",".join(j.replace(" ", "+") for j in journals)})
-                        encoded = ",".join(j.replace(" ", "+") for j in journals)
-                        link    = f"https://intelligence.streamlit.app/?journal={encoded}"
+                        # Use GUID of first selected journal in URL (or all if you prefer)
+                        guid = journal_to_guid(journals[0])
+                        st.query_params.from_dict({"journal": guid})
+                        link = f"https://intelligence.streamlit.app/?journal={guid}"
                         st.caption(f"🔗 Shareable link: [{link}]({link})")
                     else:
                         st.query_params.clear()
