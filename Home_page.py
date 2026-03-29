@@ -949,7 +949,6 @@ with st.spinner("Retrieving data..."):
             # 5 – PUBLICATION YEAR
             # ================================================================
             elif search_option == 5:
-                st.query_params.clear()
                 st.subheader("Items by publication year", anchor=False, divider="blue")
 
                 @st.fragment
@@ -965,8 +964,17 @@ with st.spinner("Retrieving data..."):
                         df_all = sort_by_date(df_all).sort_values("Date published", ascending=False)
 
                         current_year = date.today().year
+                        default_from = int(st.query_params.get("year_from", current_year))
+                        default_to   = int(st.query_params.get("year_to",   current_year + 1))
+                        default_from = max(min_y, min(default_from, max_y))
+                        default_to   = max(min_y, min(default_to,   max_y))
+
                         years = st.slider("Publication years between:", min_y, max_y,
-                                          (current_year, current_year + 1), key="years")
+                                        (default_from, default_to), key="years")
+
+                        st.query_params.from_dict({"year_from": str(years[0]), "year_to": str(years[1])})
+                        link = f"https://intelligence.streamlit.app/?year_from={years[0]}&year_to={years[1]}"
+                        st.caption(f"🔗 Shareable link: [{link}]({link})")
                         df_all = df_all[(df_all["Date year"] >= years[0]) & (df_all["Date year"] <= years[1])]
 
                         cy1, cy2, cy3, cy4 = st.columns(4)
