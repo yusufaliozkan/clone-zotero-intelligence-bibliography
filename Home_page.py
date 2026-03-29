@@ -314,11 +314,6 @@ with st.spinner("Retrieving data..."):
                             on_change=update_search_params,
                         )
 
-                    search_term = st.session_state.search_term.strip()
-                    if not search_term:
-                        st.info("Please enter a keyword to search in title or abstract.")
-                        return
-
                     with st.status(f"Searching publications for '**{search_term}**'...", expanded=True) as status:
                         tokens      = parse_search_terms(search_term)
                         df_csv      = df_duplicated.copy()
