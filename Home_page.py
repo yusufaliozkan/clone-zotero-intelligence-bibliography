@@ -553,22 +553,6 @@ with st.spinner("Retrieving data..."):
                             mime="text/csv", key="dl-auth", icon=":material/download:",
                         )
 
-                        # Read report param from URL
-                        default_report = st.query_params.get("report", "0") == "1"
-
-                        on = st.toggle(":material/monitoring: Generate report", value=default_report)
-
-                        # Update URL to include/exclude report param
-                        if selected_author:
-                            encoded = selected_author.replace(" ", "+")
-                            params = {"author": selected_author}
-                            if on:
-                                params["report"] = "1"
-                            st.query_params.from_dict(params)
-
-                            encoded = selected_author.replace(" ", "+")
-                            link = f"https://intelligence.streamlit.app/?author={encoded}{'&report=1' if on else ''}"
-                            st.caption(f"🔗 Shareable link: [{link}]({link})")
                         if on and len(adf):
                             st.info(f"Publications report for {selected_author}")
                             render_report_charts(adf, selected_author, name_replacements,
