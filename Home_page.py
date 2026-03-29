@@ -217,12 +217,19 @@ with st.spinner("Retrieving data..."):
 
             if qp.get("author"):
                 default_pill = 1
+            elif qp.get("collection"):
+                default_pill = 2
+            elif qp.get("type"):
+                default_pill = 3
+            elif qp.get("journal"):
+                default_pill = 4
+            elif qp.get("year_from") or qp.get("year_to"):
+                default_pill = 5
             elif qp.get("query"):
                 default_pill = 0
             else:
                 default_pill = 0
 
-            # Force session state on first load from URL
             if "search_pills" not in st.session_state:
                 st.session_state["search_pills"] = default_pill
 
@@ -561,6 +568,25 @@ with st.spinner("Retrieving data..."):
                     options      = [""] + [f"{c} [{col_counts[c]} items]" for c in sorted_cols]
                     sel_display  = st.selectbox("Select a collection", options)
                     selected_col = sel_display.rsplit(" [", 1)[0] if sel_display else None
+
+                    # Pre-select from URL
+                    default_col = qp.get("collection", "").replace("+", " ")
+                    default_col_index = 0
+                    if default_col:
+                        default_col_index = next(
+                            (i for i, o in enumerate(options) if o.startswith(default_col + " [")), 0
+                        )
+
+                    sel_display  = st.selectbox("Select a collection", options, index=default_col_index)
+                    selected_col = sel_display.rsplit(" [", 1)[0] if sel_display else None
+
+                    if selected_col:
+                        st.query_params.from_dict({"collection": selected_col})
+                        encoded = selected_col.replace(" ", "+")
+                        link    = f"https://intelligence.streamlit.app/?collection={encoded}"
+                        st.caption(f"🔗 Shareable link: [{link}]({link})")
+                    else:
+                        st.query_params.clear()
 
                     if not selected_col:
                         st.write("Pick a collection to see items")
