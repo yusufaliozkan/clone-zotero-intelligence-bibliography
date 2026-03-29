@@ -185,7 +185,8 @@ with st.spinner("Retrieving data..."):
                         if token.startswith('"') and token.endswith('"'):
                             stripped = token.strip('"')
                         else:
-                            stripped = re.sub(r'[^a-zA-Z0-9\s\'\-–']', "", token).replace("(", "").replace(")", "")
+                            stripped = re.sub(r"[^a-zA-Z0-9\s'\-\u2013]", "", token)
+                            stripped = stripped.replace("(", "").replace(")", "")
                         boolean_tokens.append(stripped.strip('"'))
                 while boolean_tokens and boolean_tokens[-1] in ("AND", "OR", "NOT"):
                     boolean_tokens.pop()
