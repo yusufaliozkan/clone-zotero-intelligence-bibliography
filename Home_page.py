@@ -407,10 +407,12 @@ with st.spinner("Retrieving data..."):
                                 f"search-result-{datetime.date.today().isoformat()}.csv",
                                 mime="text/csv", key="dl-kw", icon=":material/download:",
                             )
-
                             default_report = st.query_params.get("report", "0") == "1"
-                            on = st.toggle(":material/monitoring: Generate report",
-                                        value=default_report, key="report_keyword")
+                            st.toggle(":material/monitoring: Generate report",
+                                    value=default_report, key="report_keyword")
+
+                            # Read state directly from session_state instead of return value
+                            on = st.session_state.get("report_keyword", default_report)
 
                             params = {"search_in": st.session_state.search_in, "query": st.session_state.search_term}
                             if on:
