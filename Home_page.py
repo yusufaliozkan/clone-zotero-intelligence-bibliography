@@ -473,13 +473,6 @@ with st.spinner("Retrieving data..."):
             # ================================================================
             elif search_option == 1:
                 st.subheader("Search author", anchor=False, divider="blue")
-                # Encode: name → slug
-                def author_to_slug(name: str) -> str:
-                    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
-
-                # Decode: slug → match against author list
-                def slug_to_author(slug: str, author_list: list) -> str:
-                    return next((a for a in author_list if author_to_slug(a) == slug), "")
 
                 @st.fragment
                 def search_author():
@@ -489,10 +482,9 @@ with st.spinner("Retrieving data..."):
                                             key=lambda a: pub_counts.get(a, 0), reverse=True)
                     options = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
 
-                    # Pre-select from URL if ?author= is present
-                    qp             = st.query_params
-                    default_slug   = st.query_params.get("author", "")
-                    default_index  = 0
+                    # Pre-select from URL if ?author= slug is present
+                    default_slug  = st.query_params.get("author", "")
+                    default_index = 0
                     if default_slug:
                         matched = slug_to_author(default_slug, [o.split(" (")[0] for o in options if o])
                         if matched:
@@ -504,11 +496,30 @@ with st.spinner("Retrieving data..."):
                     selected_author  = selected_display.split(" (")[0] if selected_display else None
 
                     if selected_author:
-                        slug = author_to_slug(selected_author)
-                        st.query_params.from_dict({"author": slug})
-                        link = f"https://intelligence.streamlit.app/?author={slug}"
+                        slug           = author_to_slug(selected_author)
+                        default_report = st.query_params.get("report", "0") == "1"
+
+                        if "report_author_state" not in st.session_state:
+                            st.session_state["report_author_state"] = default_report
+
+                        st.toggle(":material/monitoring: Generate report",
+                                key="report_author",
+                                value=st.session_state["report_author_state"])
+                        on = st.session_state["report_author"]
+                        st.session_state["report_author_state"] = on
+
+                        params = {"author": slug}
+                        if on:
+                            params["report"] = "1"
+                        current_url_report = st.query_params.get("report", "0") == "1"
+                        if on != current_url_report or st.query_params.get("author", "") != slug:
+                            st.query_params.from_dict(params)
+
+                        link = f"https://intelligence.streamlit.app/?author={slug}{'&report=1' if on else ''}"
                         st.caption(f"🔗 Shareable link: [{link}]({link})")
                     else:
+                        st.session_state.pop("report_author_state", None)
+                        on = st.toggle(":material/monitoring: Generate report", key="report_author_empty")
                         st.query_params.clear()
 
                     if not selected_author:
