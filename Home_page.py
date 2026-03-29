@@ -491,18 +491,6 @@ with st.spinner("Retrieving data..."):
 
                     # Pre-select from URL if ?author= is present
                     qp             = st.query_params
-                    default_author = qp.get("author", "").replace("+", " ")
-                    default_index  = 0
-                    if default_author:
-                        match = next(
-                            (i for i, o in enumerate(options) if o.startswith(default_author + " (")),
-                            0
-                        )
-                        default_index = match
-
-                    selected_display = st.selectbox("Select author", options, index=default_index)
-                    selected_author  = selected_display.split(" (")[0] if selected_display else None
-
                     default_slug   = st.query_params.get("author", "")
                     default_index  = 0
                     if default_slug:
