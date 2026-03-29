@@ -225,6 +225,9 @@ with st.spinner("Retrieving data..."):
             # 0 – KEYWORD SEARCH
             # ================================================================
             if search_option == 0:
+                # Clear author param if switching to keyword search
+                if "author" in st.query_params:
+                    st.query_params.clear()
                 st.subheader("Search keywords", anchor=False, divider="blue")
 
                 @st.fragment
@@ -252,6 +255,22 @@ with st.spinner("Retrieving data..."):
                         })
 
                     qp = st.query_params
+
+                    # Determine default pill from URL
+                    if qp.get("author"):
+                        default_pill = 1  # Search author
+                    elif qp.get("query"):
+                        default_pill = 0  # Search keywords
+                    else:
+                        default_pill = 0
+
+                    search_option = st.pills(
+                        "Select search option",
+                        options=list(OPTION_MAP.keys()),
+                        format_func=lambda o: OPTION_MAP[o],
+                        selection_mode="single",
+                        default=default_pill,
+                    )
                     for k, default in [("search_term",       qp.get("query",     "")),
                                        ("search_in",         qp.get("search_in", "Title")),
                                        ("search_term_input", qp.get("query",     ""))]:
@@ -416,25 +435,27 @@ with st.spinner("Retrieving data..."):
                     pub_counts     = df_authors["Author_name"].value_counts().to_dict()
                     sorted_authors = sorted(df_authors["Author_name"].unique(),
                                             key=lambda a: pub_counts.get(a, 0), reverse=True)
-                    options          = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
+                    options = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
 
-                    # ── Pre-select from URL query param ────────────────────────────────────
+                    # Pre-select from URL if ?author= is present
                     qp             = st.query_params
                     default_author = qp.get("author", "").replace("+", " ")
                     default_index  = 0
                     if default_author:
-                        match = next((i for i, o in enumerate(options) if o.startswith(default_author + " (")), 0)
+                        match = next(
+                            (i for i, o in enumerate(options) if o.startswith(default_author + " (")),
+                            0
+                        )
                         default_index = match
 
                     selected_display = st.selectbox("Select author", options, index=default_index)
                     selected_author  = selected_display.split(" (")[0] if selected_display else None
 
-                    # ── Shareable link ──────────────────────────────────────────────────────
+                    # Update URL and show shareable link
                     if selected_author:
                         st.query_params.from_dict({"author": selected_author})
-                        base_url = "https://intelligence.streamlit.app"
-                        encoded  = selected_author.replace(" ", "+")
-                        link     = f"{base_url}/?author={encoded}"
+                        encoded = selected_author.replace(" ", "+")
+                        link    = f"https://intelligence.streamlit.app/?author={encoded}"
                         st.caption(f"🔗 Shareable link: [{link}]({link})")
                     else:
                         st.query_params.clear()
