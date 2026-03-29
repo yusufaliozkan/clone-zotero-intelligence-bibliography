@@ -694,7 +694,7 @@ with st.spinner("Retrieving data..."):
                     if default_type and default_type in unique_types:
                         default_type_index = unique_types.index(default_type)
 
-                    selected_type = st.selectbox("Select a publication type", unique_types, index=default_type_index)
+                    selected_type = st.selectbox("Select a publication type", unique_types, index=default_type_index_1)
 
                     if selected_type:
                         st.query_params.from_dict({"type": selected_type})
