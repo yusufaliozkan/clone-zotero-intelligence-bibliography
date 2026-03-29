@@ -11,7 +11,9 @@ import plotly.graph_objs as go
 import re
 import matplotlib.pyplot as plt
 import nltk
-nltk.download("all", quiet=True)
+@st.cache_resource
+def download_nltk():
+    nltk.download("all", quiet=True)
 import pydeck as pdk
 from countryinfo import CountryInfo
 from streamlit_theme import st_theme
