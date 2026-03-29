@@ -280,8 +280,8 @@ with st.spinner("Retrieving data..."):
                         st.query_params.from_dict({
                             "search_in": st.session_state.search_in,
                             "query": st.session_state.search_term,
+                            "report": st.query_params.get("report", "0"),  # ← preserve report state
                         })
-
 
                     for k, default in [("search_term",       qp.get("query",     "")),
                                        ("search_in",         qp.get("search_in", "Title")),
@@ -396,7 +396,19 @@ with st.spinner("Retrieving data..."):
                                 f"search-result-{datetime.date.today().isoformat()}.csv",
                                 mime="text/csv", key="dl-kw", icon=":material/download:",
                             )
-                            on = st.toggle(":material/monitoring: Generate report")
+                            # Read report param from URL
+                            default_report = st.query_params.get("report", "0") == "1"
+
+                            on = st.toggle(":material/monitoring: Generate report", value=default_report, key="report_keyword")
+
+                            # Update URL to include report param
+                            st.query_params.from_dict({
+                                "search_in": st.session_state.search_in,
+                                "query": st.session_state.search_term,
+                                "report": "1" if on else "0",
+                            })
+                            link = f"https://intelligence.streamlit.app/?search_in={st.session_state.search_in}&query={st.session_state.search_term.replace(' ', '+')}{'&report=1' if on else ''}"
+                            st.caption(f"🔗 Shareable link: [{link}]({link})")
                             if on:
                                 st.info(f"Dashboard for: {search_term}")
                                 render_report_charts(filtered_df, search_term, name_replacements,
