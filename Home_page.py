@@ -473,6 +473,10 @@ with st.spinner("Retrieving data..."):
                         on = st.toggle(":material/monitoring: Generate report")
                         st.query_params.clear()
 
+                    if not selected_author:
+                        st.write("Select an author to see items")
+                        return
+
                     adf = df_authors[df_authors["Author_name"] == selected_author].copy()
                     adf["Date published"] = parse_date_column(adf["Date published"])
                     adf["Date published"] = adf["Date published"].fillna("")
