@@ -612,28 +612,35 @@ with st.spinner("Retrieving data..."):
                 def search_collection():
                     reviews_map  = load_reviews_map()
                     df_csv_col   = df_duplicated.copy()
-                    df_csv_col
                     df_csv_col["Collection_Name"] = df_csv_col["Collection_Name"].apply(remove_numbers)
                     excluded     = {"KCL intelligence","Events","Journals",""}
                     col_counts   = df_csv_col["Collection_Name"].value_counts()
                     sorted_cols  = [c for c in col_counts.index if c not in excluded]
                     options      = [""] + [f"{c} [{col_counts[c]} items]" for c in sorted_cols]
 
-                    # Pre-select from URL if ?collection= is present
-                    default_col       = st.query_params.get("collection", "").replace("+", " ")
+                    key_to_option = {}
+                    for c in sorted_cols:
+                        # Find the collection key for this collection name
+                        match = df_csv_col[df_csv_col["Collection_Name"] == c]["Collection_Key"].iloc[0] if len(df_csv_col[df_csv_col["Collection_Name"] == c]) > 0 else None
+                        if match:
+                            key_to_option[match] = f"{c} [{col_counts[c]} items]"
+
+                    default_key       = st.query_params.get("collection", "")
                     default_col_index = 0
-                    if default_col:
+                    if default_key and default_key in key_to_option:
+                        target_option = key_to_option[default_key]
                         default_col_index = next(
-                            (i for i, o in enumerate(options) if o.startswith(default_col + " [")), 0
+                            (i for i, o in enumerate(options) if o == target_option), 0
                         )
 
                     sel_display  = st.selectbox("Select a collection", options, index=default_col_index)
                     selected_col = sel_display.rsplit(" [", 1)[0] if sel_display else None
 
                     if selected_col:
-                        st.query_params.from_dict({"collection": selected_col})
-                        encoded = selected_col.replace(" ", "+")
-                        link    = f"https://intelligence.streamlit.app/?collection={encoded}"
+                        # Look up the Collection_Key for the selected collection name
+                        col_key = df_csv_col[df_csv_col["Collection_Name"] == selected_col]["Collection_Key"].iloc[0]
+                        st.query_params.from_dict({"collection": col_key})
+                        link = f"https://intelligence.streamlit.app/?collection={col_key}"
                         st.caption(f"🔗 Shareable link: [{link}]({link})")
                     else:
                         st.query_params.clear()
