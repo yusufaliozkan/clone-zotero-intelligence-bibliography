@@ -602,8 +602,7 @@ with st.spinner("Retrieving data..."):
             # 2 – COLLECTION SEARCH
             # ================================================================
             elif search_option == 2:
-                st.query_params.clear()
-                # Clear keyword search state when switching away
+
                 for key in ["search_term", "search_term_input", "search_in"]:
                     if key in st.session_state:
                         del st.session_state[key]
