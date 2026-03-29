@@ -798,7 +798,10 @@ with st.spinner("Retrieving data..."):
 
                 @st.fragment
                 def search_journal():
-
+                    df_ja    = df_dedup[df_dedup["Publication type"] == "Journal article"].copy()
+                    jcounts  = df_ja["Journal"].value_counts()
+                    journals = st.multiselect("Select a journal", jcounts.index.tolist())
+                    
                     default_journals = [j.replace("+", " ") for j in qp.get("journal", "").split(",") if j]
                     journals = st.multiselect(
                         "Select a journal", jcounts.index.tolist(),
@@ -812,9 +815,7 @@ with st.spinner("Retrieving data..."):
                         st.caption(f"🔗 Shareable link: [{link}]({link})")
                     else:
                         st.query_params.clear()
-                    df_ja    = df_dedup[df_dedup["Publication type"] == "Journal article"].copy()
-                    jcounts  = df_ja["Journal"].value_counts()
-                    journals = st.multiselect("Select a journal", jcounts.index.tolist())
+
                     if not journals:
                         st.write("Pick a journal name to see items")
                         return
