@@ -462,18 +462,16 @@ with st.spinner("Retrieving data..."):
                     selected_display = st.selectbox("Select author", options, index=default_index)
                     selected_author  = selected_display.split(" (")[0] if selected_display else None
 
-                    # Update URL and show shareable link
                     if selected_author:
-                        st.query_params.from_dict({"author": selected_author})
-                        encoded = selected_author.replace(" ", "+")
-                        link    = f"https://intelligence.streamlit.app/?author={encoded}"
+                        encoded        = selected_author.replace(" ", "+")
+                        default_report = st.query_params.get("report", "0") == "1"
+                        on             = st.toggle(":material/monitoring: Generate report", value=default_report)
+                        st.query_params.from_dict({"author": selected_author, "report": "1" if on else "0"})
+                        link = f"https://intelligence.streamlit.app/?author={encoded}{'&report=1' if on else ''}"
                         st.caption(f"🔗 Shareable link: [{link}]({link})")
                     else:
+                        on = st.toggle(":material/monitoring: Generate report")
                         st.query_params.clear()
-
-                    if not selected_author:
-                        st.write("Select an author to see items")
-                        return
 
                     adf = df_authors[df_authors["Author_name"] == selected_author].copy()
                     adf["Date published"] = parse_date_column(adf["Date published"])
