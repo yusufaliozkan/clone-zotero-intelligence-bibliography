@@ -4,6 +4,7 @@ Import everything from here instead of repeating inline.
 """
 from typing import Optional
 import re
+
 import datetime
 from datetime import date
 
@@ -15,10 +16,16 @@ import plotly.express as px
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
+def author_to_slug(name: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
+def slug_to_author(slug: str, author_list: list) -> str:
+    return next((a for a in author_list if author_to_slug(a) == slug), "")
+    
 # ---------------------------------------------------------------------------
 # Date helpers
 # ---------------------------------------------------------------------------
+
 
 def parse_date_column(series: pd.Series, fmt: str = "%Y-%m-%d") -> pd.Series:
     """Convert a raw date string Series to London-localised dates, formatted as `fmt`."""
