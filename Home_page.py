@@ -798,6 +798,20 @@ with st.spinner("Retrieving data..."):
 
                 @st.fragment
                 def search_journal():
+
+                    default_journals = [j.replace("+", " ") for j in qp.get("journal", "").split(",") if j]
+                    journals = st.multiselect(
+                        "Select a journal", jcounts.index.tolist(),
+                        default=[j for j in default_journals if j in jcounts.index]
+                    )
+
+                    if journals:
+                        st.query_params.from_dict({"journal": ",".join(j.replace(" ", "+") for j in journals)})
+                        encoded = ",".join(j.replace(" ", "+") for j in journals)
+                        link    = f"https://intelligence.streamlit.app/?journal={encoded}"
+                        st.caption(f"🔗 Shareable link: [{link}]({link})")
+                    else:
+                        st.query_params.clear()
                     df_ja    = df_dedup[df_dedup["Publication type"] == "Journal article"].copy()
                     jcounts  = df_ja["Journal"].value_counts()
                     journals = st.multiselect("Select a journal", jcounts.index.tolist())
