@@ -2,7 +2,7 @@
 shared_utils.py  –  extracted helpers for the IntelArchive Streamlit app.
 Import everything from here instead of repeating inline.
 """
-
+from typing import Optional
 import re
 import datetime
 from datetime import date
