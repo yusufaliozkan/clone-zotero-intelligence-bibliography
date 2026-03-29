@@ -40,9 +40,9 @@ from shared_utils import (
     display_bibliographies,
     sort_radio,
     render_paginated_list,
+    author_to_slug,      # ← add
+    slug_to_author,      # ← add
 )
-
-
 
 def journal_to_guid(name: str) -> str:
     return str(uuid.uuid5(uuid.NAMESPACE_DNS, name))
