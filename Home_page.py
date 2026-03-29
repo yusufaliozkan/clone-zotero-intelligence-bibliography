@@ -1725,7 +1725,7 @@ with st.spinner("Retrieving data..."):
 
                 # Display the Pydeck chart in Streamlit
 
-                col1, col2 = st.columns([8,2])
+                col1, col2 = st.columns([8,3])
                 with col1:
                     df_countries = pd.read_csv('countries.csv')
                     df_countries['Country'] = df_countries['Country'].replace("UK", "United Kingdom")
