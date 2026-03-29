@@ -793,6 +793,21 @@ with st.spinner("Retrieving data..."):
                     jdf["Date published"] = jdf["Date published"].fillna("")
                     jdf = sort_by_date(jdf).sort_values(["No date flag","Date published"], ascending=[True,True])
 
+                    default_type = qp.get("type", "").replace("+", " ")
+                    default_type_index = 0
+                    if default_type and default_type in unique_types:
+                        default_type_index = unique_types.index(default_type)
+
+                    selected_type = st.selectbox("Select a publication type", unique_types, index=default_type_index)
+
+                    if selected_type:
+                        st.query_params.from_dict({"type": selected_type})
+                        encoded = selected_type.replace(" ", "+")
+                        link    = f"https://intelligence.streamlit.app/?type={encoded}"
+                        st.caption(f"🔗 Shareable link: [{link}]({link})")
+                    else:
+                        st.query_params.clear()
+
                     with st.expander("Click to expand", expanded=True):
                         if len(journals) == 1:
                             st.markdown(f"#### Selected Journal: {journals[0]}")
