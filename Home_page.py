@@ -398,7 +398,7 @@ with st.spinner("Retrieving data..."):
                             )
                             csv = convert_df_to_csv(
                                 filtered_df[["Publication type","Title","Abstract","Date published",
-                                             "Publisher","Journal","Link to publication","Zotero link","Citation"]]
+                                            "Publisher","Journal","Link to publication","Zotero link","Citation"]]
                                 .assign(Abstract=lambda d: d["Abstract"].str.replace("\n"," "))
                                 .reset_index(drop=True)
                             )
@@ -407,30 +407,14 @@ with st.spinner("Retrieving data..."):
                                 f"search-result-{datetime.date.today().isoformat()}.csv",
                                 mime="text/csv", key="dl-kw", icon=":material/download:",
                             )
-                            # Read report param from URL
+
                             default_report = st.query_params.get("report", "0") == "1"
+                            on = st.toggle(":material/monitoring: Generate report",
+                                        value=default_report, key="report_keyword")
 
-                            on = st.toggle(":material/monitoring: Generate report", value=default_report, key="report_keyword")
                             params = {"search_in": st.session_state.search_in, "query": st.session_state.search_term}
-                            # Update URL to include report param
-                            if search_term:
-                                params = {
-                                    "search_in": st.session_state.search_in,
-                                    "query":     st.session_state.search_term,
-                                }
-                                if on:
-                                    params["report"] = "1"
-                                st.query_params.from_dict(params)
-                                link = (
-                                    f"https://intelligence.streamlit.app/"
-                                    f"?search_in={st.session_state.search_in}"
-                                    f"&query={st.session_state.search_term.replace(' ', '+')}"
-                                    f"{'&report=1' if on else ''}"
-                                )
-                                st.caption(f"🔗 Shareable link: [{link}]({link})")
-                            else:
-                                st.query_params.clear()
-
+                            if on:
+                                params["report"] = "1"
                             st.query_params.from_dict(params)
                             link = (
                                 f"https://intelligence.streamlit.app/"
@@ -439,26 +423,27 @@ with st.spinner("Retrieving data..."):
                                 f"{'&report=1' if on else ''}"
                             )
                             st.caption(f"🔗 Shareable link: [{link}]({link})")
+
                             if on:
                                 st.info(f"Dashboard for: {search_term}")
                                 render_report_charts(filtered_df, search_term, name_replacements,
-                                                     show_themes=True, themes_df=fdc)
+                                                    show_themes=True, themes_df=fdc)
                             else:
                                 filtered_df = sort_radio(filtered_df, key="kw_sort")
                                 if view == "Basic list":
                                     articles  = [format_entry(row, include_citation=True, reviews_map=reviews_map) for _, row in filtered_df.iterrows()]
                                     abstracts = [row["Abstract"] if pd.notnull(row["Abstract"]) else "N/A" for _, row in filtered_df.iterrows()]
                                     render_paginated_list(filtered_df, articles, abstracts,
-                                                          display_abstracts=display_abstracts,
-                                                          search_tokens=tokens,
-                                                          search_in=st.session_state.search_in)
+                                                        display_abstracts=display_abstracts,
+                                                        search_tokens=tokens,
+                                                        search_in=st.session_state.search_in)
                                 elif view == "Table":
                                     st.dataframe(
                                         filtered_df[["Publication type","Title","Date published","FirstName2",
-                                                     "Abstract","Publisher","Journal","Collection_Name",
-                                                     "Link to publication","Zotero link"]]
+                                                    "Abstract","Publisher","Journal","Collection_Name",
+                                                    "Link to publication","Zotero link"]]
                                         .rename(columns={"FirstName2":"Author(s)","Collection_Name":"Collection",
-                                                         "Link to publication":"Publication link"})
+                                                        "Link to publication":"Publication link"})
                                     )
                                 elif view == "Bibliography":
                                     filtered_df["zotero_item_key"] = filtered_df["Zotero link"].str.replace(
