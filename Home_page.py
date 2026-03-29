@@ -678,11 +678,6 @@ with st.spinner("Retrieving data..."):
                 @st.fragment
                 def type_selection():
                     reviews_map   = load_reviews_map()
-                    unique_types  = [""] + list(df_authors["Publication type"].unique())
-                    selected_type = st.selectbox("Select a publication type", unique_types)
-                    if not selected_type:
-                        st.write("Pick a publication type to see items")
-                        return
 
                     tdf = df_dedup[df_dedup["Publication type"] == selected_type].copy()
                     tdf["Date published"] = parse_date_column(tdf["Date published"])
