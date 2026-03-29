@@ -281,11 +281,13 @@ with st.spinner("Retrieving data..."):
 
                     def update_search_params():
                         st.session_state.search_term = st.session_state.search_term_input
-                        st.query_params.from_dict({
+                        params = {
                             "search_in": st.session_state.search_in,
-                            "query": st.session_state.search_term,
-                            "report": st.query_params.get("report", "0"),  # ← preserve report state
-                        })
+                            "query":     st.session_state.search_term,
+                        }
+                        if st.session_state.get("report_keyword_state", False):
+                            params["report"] = "1"
+                        st.query_params.from_dict(params)
 
                     for k, default in [("search_term",       qp.get("query",     "")),
                                        ("search_in",         qp.get("search_in", "Title")),
@@ -316,6 +318,7 @@ with st.spinner("Retrieving data..."):
 
                     search_term = st.session_state.search_term.strip()
                     if not search_term:
+                        st.session_state.pop("report_keyword_state", None)  # ← reset on clear
                         st.info("Please enter a keyword to search in title or abstract.")
                         return
 
