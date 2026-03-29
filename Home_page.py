@@ -796,6 +796,12 @@ with st.spinner("Retrieving data..."):
                 st.query_params.clear()
                 st.subheader("Search journal", anchor=False, divider="blue")
 
+                def journal_to_guid(name: str) -> str:
+                    return str(uuid.uuid5(uuid.NAMESPACE_DNS, name))
+
+                def guid_to_journal(guid: str, journal_list: list) -> str:
+                    return next((j for j in journal_list if journal_to_guid(j) == guid), "")
+    
                 @st.fragment
                 def search_journal():
                     df_ja   = df_dedup[df_dedup["Publication type"] == "Journal article"].copy()
