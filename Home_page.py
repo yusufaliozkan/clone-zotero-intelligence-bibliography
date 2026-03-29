@@ -314,6 +314,11 @@ with st.spinner("Retrieving data..."):
                             on_change=update_search_params,
                         )
 
+                    search_term = st.session_state.search_term.strip()
+                    if not search_term:
+                        st.info("Please enter a keyword to search in title or abstract.")
+                        return
+
                     with st.status(f"Searching publications for '**{search_term}**'...", expanded=True) as status:
                         tokens      = parse_search_terms(search_term)
                         df_csv      = df_duplicated.copy()
@@ -371,13 +376,6 @@ with st.spinner("Retrieving data..."):
                             filtered_df = filtered_df[(filtered_df["Citation"].notna()) & (filtered_df["Citation"] != 0)]
                         filtered_df = filtered_df.drop_duplicates(subset=["Zotero link"], keep="first")
                         num_items   = len(filtered_df)
-
-                        search_term = st.session_state.search_term.strip()
-
-                        if not search_term:
-                            st.query_params.clear()   # ← clear URL when box is empty
-                            st.info("Please enter a keyword to search in title or abstract.")
-                            return
 
                         if num_items:
                             render_metrics(
