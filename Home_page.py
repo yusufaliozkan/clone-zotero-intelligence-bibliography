@@ -213,12 +213,21 @@ with st.spinner("Retrieving data..."):
                 5: "Publication year",
                 6: "Cited papers",
             }
+            qp = st.query_params
+            if qp.get("author"):
+                default_pill = 1
+            elif qp.get("query"):
+                default_pill = 0
+            else:
+                default_pill = 0
+
             search_option = st.pills(
                 "Select search option",
                 options=list(OPTION_MAP.keys()),
                 format_func=lambda o: OPTION_MAP[o],
                 selection_mode="single",
-                default=0,
+                default=default_pill,  # ← now responds to ?author=
+                key="search_pills",
             )
 
             # ================================================================
@@ -254,36 +263,7 @@ with st.spinner("Retrieving data..."):
                             "query": st.session_state.search_term,
                         })
 
-                    qp = st.query_params
 
-                    if qp.get("author"):
-                        default_pill = 1
-                    elif qp.get("query"):
-                        default_pill = 0
-                    else:
-                        default_pill = 0
-
-                    st.header("Search in database", anchor=False)
-                    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-
-                    OPTION_MAP = {
-                        0: "Search keywords",
-                        1: "Search author",
-                        2: "Search collection",
-                        3: "Publication types",
-                        4: "Search journal",
-                        5: "Publication year",
-                        6: "Cited papers",
-                    }
-
-                    search_option = st.pills(
-                        "Select search option",
-                        options=list(OPTION_MAP.keys()),
-                        format_func=lambda o: OPTION_MAP[o],
-                        selection_mode="single",
-                        default=default_pill,
-                        key="search_pills",   # ← explicit key to avoid duplicate ID
-                    )
                     for k, default in [("search_term",       qp.get("query",     "")),
                                        ("search_in",         qp.get("search_in", "Title")),
                                        ("search_term_input", qp.get("query",     ""))]:
