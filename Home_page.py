@@ -214,6 +214,7 @@ with st.spinner("Retrieving data..."):
                 6: "Cited papers",
             }
             qp = st.query_params
+
             if qp.get("author"):
                 default_pill = 1
             elif qp.get("query"):
@@ -221,15 +222,18 @@ with st.spinner("Retrieving data..."):
             else:
                 default_pill = 0
 
+            # Force session state on first load from URL
+            if "search_pills" not in st.session_state:
+                st.session_state["search_pills"] = default_pill
+
             search_option = st.pills(
                 "Select search option",
                 options=list(OPTION_MAP.keys()),
                 format_func=lambda o: OPTION_MAP[o],
                 selection_mode="single",
-                default=default_pill,  # ← now responds to ?author=
+                default=default_pill,
                 key="search_pills",
             )
-
             # ================================================================
             # 0 – KEYWORD SEARCH
             # ================================================================
