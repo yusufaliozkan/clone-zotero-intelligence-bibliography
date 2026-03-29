@@ -256,13 +256,25 @@ with st.spinner("Retrieving data..."):
 
                     qp = st.query_params
 
-                    # Determine default pill from URL
                     if qp.get("author"):
-                        default_pill = 1  # Search author
+                        default_pill = 1
                     elif qp.get("query"):
-                        default_pill = 0  # Search keywords
+                        default_pill = 0
                     else:
                         default_pill = 0
+
+                    st.header("Search in database", anchor=False)
+                    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+
+                    OPTION_MAP = {
+                        0: "Search keywords",
+                        1: "Search author",
+                        2: "Search collection",
+                        3: "Publication types",
+                        4: "Search journal",
+                        5: "Publication year",
+                        6: "Cited papers",
+                    }
 
                     search_option = st.pills(
                         "Select search option",
@@ -270,6 +282,7 @@ with st.spinner("Retrieving data..."):
                         format_func=lambda o: OPTION_MAP[o],
                         selection_mode="single",
                         default=default_pill,
+                        key="search_pills",   # ← explicit key to avoid duplicate ID
                     )
                     for k, default in [("search_term",       qp.get("query",     "")),
                                        ("search_in",         qp.get("search_in", "Title")),
