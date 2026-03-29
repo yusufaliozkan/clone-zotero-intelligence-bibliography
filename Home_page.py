@@ -14,6 +14,7 @@ import nltk
 @st.cache_resource
 def download_nltk():
     nltk.download("all", quiet=True)
+download_nltk()  # only runs once across all sessions
 import pydeck as pdk
 from countryinfo import CountryInfo
 from streamlit_theme import st_theme
