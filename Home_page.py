@@ -377,6 +377,13 @@ with st.spinner("Retrieving data..."):
                         filtered_df = filtered_df.drop_duplicates(subset=["Zotero link"], keep="first")
                         num_items   = len(filtered_df)
 
+                        search_term = st.session_state.search_term.strip()
+
+                        if not search_term:
+                            st.query_params.clear()   # ← clear URL when box is empty
+                            st.info("Please enter a keyword to search in title or abstract.")
+                            return
+
                         if num_items:
                             render_metrics(
                                 filtered_df,
@@ -404,7 +411,7 @@ with st.spinner("Retrieving data..."):
                             default_report = st.query_params.get("report", "0") == "1"
 
                             on = st.toggle(":material/monitoring: Generate report", value=default_report, key="report_keyword")
-
+                            params = {"search_in": st.session_state.search_in, "query": st.session_state.search_term}
                             # Update URL to include report param
                             if search_term:
                                 params = {
