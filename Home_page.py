@@ -439,7 +439,6 @@ with st.spinner("Retrieving data..."):
             # 1 – AUTHOR SEARCH
             # ================================================================
             elif search_option == 1:
-                st.query_params.clear()
                 st.subheader("Search author", anchor=False, divider="blue")
 
                 @st.fragment
