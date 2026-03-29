@@ -256,6 +256,10 @@ with st.spinner("Retrieving data..."):
                 # Clear author param if switching to keyword search
                 if "author" in st.query_params:
                     st.query_params.clear()
+                # Clear author state when switching back to keyword
+                for key in ["auth_types", "auth_sort"]:
+                    if key in st.session_state:
+                        del st.session_state[key]
                 st.subheader("Search keywords", anchor=False, divider="blue")
 
                 @st.fragment
