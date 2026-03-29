@@ -400,13 +400,21 @@ with st.spinner("Retrieving data..."):
                                 f"search-result-{datetime.date.today().isoformat()}.csv",
                                 mime="text/csv", key="dl-kw", icon=":material/download:",
                             )
-                            default_report = st.query_params.get("report", "0") == "1"
-                            st.toggle(":material/monitoring: Generate report",
-                                    value=default_report, key="report_keyword")
-                            on = st.session_state.get("report_keyword", default_report)
+                            if "report_keyword_state" not in st.session_state:
+                                st.session_state["report_keyword_state"] = st.query_params.get("report", "0") == "1"
 
-                            # Only update URL if report state has changed
-                            if on != default_report:
+                            st.toggle(":material/monitoring: Generate report",
+                                    key="report_keyword",
+                                    value=st.session_state["report_keyword_state"])
+
+                            on = st.session_state["report_keyword"]
+
+                            # Sync session state tracker
+                            st.session_state["report_keyword_state"] = on
+
+                            # Update URL without triggering extra rerun by checking against URL directly
+                            current_url_report = st.query_params.get("report", "0") == "1"
+                            if on != current_url_report:
                                 params = {"search_in": st.session_state.search_in, "query": st.session_state.search_term}
                                 if on:
                                     params["report"] = "1"
