@@ -1706,7 +1706,7 @@ with st.spinner("Retrieving data..."):
                     initial_view_state=pdk.ViewState(latitude=20, longitude=0, zoom=1, pitch=30),
                     tooltip={"text": "{Country}\nMentions: {# Mentions}"},
                     map_style="light",
-                    height=600,  # ← increase this to make the map taller
+                    height=800,  # ← increase this to make the map taller
                 )
 
                 col1, col2 = st.columns([8, 3])
