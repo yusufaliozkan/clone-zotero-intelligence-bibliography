@@ -801,7 +801,6 @@ with st.spinner("Retrieving data..."):
             # 4 – JOURNAL SEARCH
             # ================================================================
             elif search_option == 4:
-                st.query_params.clear()
                 st.subheader("Search journal", anchor=False, divider="blue")
     
                 @st.fragment
