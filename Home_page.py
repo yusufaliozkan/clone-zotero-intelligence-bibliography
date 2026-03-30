@@ -283,7 +283,7 @@ with st.spinner("Retrieving data..."):
 
     sidebar_content()
 
-    tab1, tab2 = st.tabs(["📑 Publications", "📊 Dashboard"])
+    tab1, tab2, tab3 = st.tabs(["📑 Publications", "📊 Dashboard", "💬 Chat"])
 
     # ════════════════════════════════════════════════════════════════════════
     # TAB 1
@@ -2185,6 +2185,81 @@ with st.spinner("Retrieving data..."):
             fragment_item_inclusion()
         else:
             st.info("Toggle to see the dashboard!")
+
+
+    with tab3:
+        st.header("Chat with IntelArchive", anchor=False)
+        st.info("Ask questions about the intelligence studies database. Powered by Claude AI.")
+
+        # Initialise chat history
+        if "chat_messages" not in st.session_state:
+            st.session_state.chat_messages = []
+
+        # Display chat history
+        for message in st.session_state.chat_messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+
+        # Chat input
+        if prompt := st.chat_input("Ask a question about the database..."):
+            # Add user message to history
+            st.session_state.chat_messages.append({"role": "user", "content": prompt})
+            with st.chat_message("user"):
+                st.markdown(prompt)
+
+            # Build context from database
+            with st.spinner("Searching database..."):
+                # Simple keyword filter to find relevant rows
+                keywords = prompt.lower().split()
+                mask = df_dedup["Title"].str.lower().apply(
+                    lambda t: any(k in str(t).lower() for k in keywords)
+                )
+                relevant = df_dedup[mask].head(20)
+
+                if relevant.empty:
+                    context = "No specific publications found matching the query. Use general database knowledge."
+                else:
+                    context = relevant[["Title", "FirstName2", "Date published",
+                                        "Publication type", "Journal", "Publisher",
+                                        "Abstract", "Citation"]].to_string(index=False)
+
+            # Call Claude API
+            with st.chat_message("assistant"):
+                with st.spinner("Thinking..."):
+                    try:
+                        import anthropic
+                        client = anthropic.Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
+
+                        response = client.messages.create(
+                            model="claude-haiku-4-5-20251001",
+                            max_tokens=1024,
+                            system="""You are an assistant for IntelArchive, an intelligence studies bibliography database containing over 8,000 publications. 
+                            Answer questions only based on the database context provided. 
+                            Be specific and cite titles and authors where relevant.
+                            If the context doesn't contain enough information, say so honestly.
+                            Do not make up publications or authors.""",
+                            messages=[
+                                {
+                                    "role": "user",
+                                    "content": f"""Database context (relevant publications):
+    {context}
+
+    User question: {prompt}"""
+                                }
+                            ]
+                        )
+                        answer = response.content[0].text
+                        st.markdown(answer)
+                        st.session_state.chat_messages.append({"role": "assistant", "content": answer})
+
+                    except Exception as e:
+                        st.error(f"Error calling Claude API: {e}")
+
+        # Clear chat button
+        if st.session_state.chat_messages:
+            if st.button("Clear chat"):
+                st.session_state.chat_messages = []
+                st.rerun()
 
 st.write("---")
 with st.expander("Acknowledgements"):
