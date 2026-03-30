@@ -186,14 +186,6 @@ if item_key:
         st.markdown("**Abstract:**")
         st.info(row.get("Abstract", "No abstract available"))
 
-        st.divider()
-        col1, col2 = st.columns(2)
-        with col1:
-            if row.get("Zotero link"):
-                st.link_button("View in Zotero", row["Zotero link"])
-        with col2:
-            if row.get("Link to publication"):
-                st.link_button("View publication", row["Link to publication"])
     else:
         st.warning("Publication not found.")
 
