@@ -119,18 +119,56 @@ with st.spinner("Retrieving data..."):
             st.subheader(row["Title"], anchor=False)
             st.divider()
 
+            def _safe(val):
+                return "" if pd.isna(val) or str(val).strip() in ("", "nan", "NaN") else str(val).strip()
+
             col1, col2 = st.columns(2)
             with col1:
-                st.markdown(f"**Authors:** {row.get('FirstName2', 'N/A')}")
-                st.markdown(f"**Publication type:** {row.get('Publication type', 'N/A')}")
-                st.markdown(f"**Date published:** {row.get('Date published', 'N/A')}")
-                st.markdown(f"**Publisher:** {row.get('Publisher', 'N/A')}")
-                st.markdown(f"**Journal:** {row.get('Journal', 'N/A')}")
+                st.markdown(f"**Authors:** {_safe(row.get('FirstName2')) or 'N/A'}")
+                st.markdown(f"**Publication type:** {_safe(row.get('Publication type')) or 'N/A'}")
+                st.markdown(f"**Date published:** {_safe(row.get('Date published')) or 'N/A'}")
+
+                pub_type = _safe(row.get('Publication type'))
+
+                if pub_type == "Book chapter":
+                    book_title = _safe(row.get('Book_title'))
+                    if book_title:
+                        st.markdown(f"**Book title:** {book_title}")
+
+                if pub_type == "Thesis":
+                    thesis_type = _safe(row.get('Thesis_type'))
+                    university  = _safe(row.get('University'))
+                    if thesis_type:
+                        st.markdown(f"**Thesis type:** {thesis_type}")
+                    if university:
+                        st.markdown(f"**University:** {university}")
+
+                publisher = _safe(row.get('Publisher'))
+                journal   = _safe(row.get('Journal'))
+                if journal:
+                    st.markdown(f"**Journal:** {journal}")
+                elif publisher:
+                    st.markdown(f"**Publisher:** {publisher}")
+
             with col2:
                 citation_val = row.get('Citation', 0)
                 citation_int = 0 if pd.isna(citation_val) else int(float(citation_val))
                 st.markdown(f"**Citations:** {citation_int}")
                 st.markdown(f"**OA status:** {'Open Access' if row.get('OA status') else 'Not OA'}")
+
+                # ── Book reviews ────────────────────────────────────────────────────────
+                reviews_map = load_reviews_map()
+                parent_key  = _safe(row.get('parentKey'))
+                if not parent_key:
+                    zotero_link = _safe(row.get('Zotero link'))
+                    parent_key  = zotero_link.rstrip("/").split("/")[-1] if zotero_link else ""
+
+                if reviews_map and parent_key:
+                    review_links = reviews_map.get(parent_key, [])
+                    if review_links:
+                        st.markdown("**Book reviews:**")
+                        for i, link in enumerate(review_links, 1):
+                            st.markdown(f"- [Book review {i}]({link})")
 
             st.divider()
             st.markdown("**Abstract:**")
