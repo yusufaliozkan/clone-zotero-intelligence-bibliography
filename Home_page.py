@@ -328,25 +328,45 @@ with st.spinner("Retrieving data..."):
             item_key = st.query_params.get("item", "")
 
             if item_key:
-                # Show single publication record view
+                # Back button at the top
+                if st.button("← Back to home"):
+                    st.query_params.clear()
+                    st.rerun()
+
                 item = df_dedup[df_dedup["parentKey"] == item_key]
                 if not item.empty:
                     row = item.iloc[0]
+
                     st.subheader(row["Title"], anchor=False)
-                    st.markdown(f"**Authors:** {row['FirstName2']}")
-                    st.markdown(f"**Publication type:** {row['Publication type']}")
-                    st.markdown(f"**Date published:** {row['Date published']}")
-                    st.markdown(f"**Publisher:** {row['Publisher']}")
-                    st.markdown(f"**Journal:** {row['Journal']}")
-                    st.markdown(f"**Abstract:** {row['Abstract']}")
-                    st.markdown(f"**Citations:** {row['Citation']}")
-                    st.link_button("View in Zotero", row["Zotero link"])
-                    if row.get("Link to publication"):
-                        st.link_button("View publication", row["Link to publication"])
-                    st.stop()  # don't render rest of page
+                    st.divider()
+
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.markdown(f"**Authors:** {row.get('FirstName2', 'N/A')}")
+                        st.markdown(f"**Publication type:** {row.get('Publication type', 'N/A')}")
+                        st.markdown(f"**Date published:** {row.get('Date published', 'N/A')}")
+                        st.markdown(f"**Publisher:** {row.get('Publisher', 'N/A')}")
+                        st.markdown(f"**Journal:** {row.get('Journal', 'N/A')}")
+                    with col2:
+                        st.markdown(f"**Citations:** {int(row.get('Citation', 0) or 0)}")
+                        st.markdown(f"**OA status:** {'Open Access' if row.get('OA status') else 'Not OA'}")
+
+                    st.divider()
+                    st.markdown("**Abstract:**")
+                    st.info(row.get("Abstract", "No abstract available"))
+
+                    st.divider()
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        if row.get("Zotero link"):
+                            st.link_button("View in Zotero", row["Zotero link"])
+                    with col2:
+                        if row.get("Link to publication"):
+                            st.link_button("View publication", row["Link to publication"])
                 else:
                     st.warning("Publication not found.")
-                    st.stop()
+
+                st.stop()  # ← prevents rest of page from rendering
 
             # ================================================================
             # 0 – KEYWORD SEARCH
