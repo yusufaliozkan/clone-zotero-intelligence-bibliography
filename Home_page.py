@@ -2210,19 +2210,40 @@ with st.spinner("Retrieving data..."):
 
             # Build context from database
             with st.spinner("Searching database..."):
-                # Simple keyword filter to find relevant rows
-                keywords = prompt.lower().split()
-                mask = df_dedup["Title"].str.lower().apply(
-                    lambda t: any(k in str(t).lower() for k in keywords)
-                )
-                relevant = df_dedup[mask].head(20)
+                # Search entire database for any word in the prompt
+                # that appears in titles (more thorough approach)
+                prompt_lower = prompt.lower()
+                
+                # Try to find rows where any meaningful word from prompt matches title
+                # Filter out common stop words first
+                stop_words = {"can", "you", "find", "any", "publications", "containing", 
+                            "in", "the", "title", "about", "with", "a", "an", "and", 
+                            "or", "is", "are", "what", "who", "how", "many", "show",
+                            "me", "please", "list", "give", "tell", "do", "have",
+                            "has", "been", "that", "this", "for", "of", "to"}
+                
+                keywords = [
+                    w.strip("'\"?,.")
+                    for w in prompt.split()
+                    if w.lower().strip("'\"?.,"  ) not in stop_words
+                    and len(w.strip("'\"?,." )) > 2
+                ]
+
+                if keywords:
+                    mask = df_dedup["Title"].str.lower().apply(
+                        lambda t: any(k.lower() in str(t).lower() for k in keywords)
+                    )
+                    relevant = df_dedup[mask].head(30)
+                else:
+                    relevant = pd.DataFrame()
 
                 if relevant.empty:
-                    context = "No specific publications found matching the query. Use general database knowledge."
+                    context = f"No specific publications found matching keywords: {keywords}. The database has {len(df_dedup)} total publications."
                 else:
-                    context = relevant[["Title", "FirstName2", "Date published",
+                    context = f"Found {len(relevant)} relevant publications:\n\n"
+                    context += relevant[["Title", "FirstName2", "Date published",
                                         "Publication type", "Journal", "Publisher",
-                                        "Abstract", "Citation"]].to_string(index=False)
+                                        "Citation"]].to_string(index=False)
 
             # Call Claude API
             with st.chat_message("assistant"):
