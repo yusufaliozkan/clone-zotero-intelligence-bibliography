@@ -153,7 +153,7 @@ if item_key:
 
             zotero_link = _safe(row.get('Zotero recod'))
             if zotero_link:
-                links_md.append(f"[:orange-badge[Zotero link]]({zotero_link})")
+                links_md.append(f"[:red-badge[Zotero link]]({zotero_link})")
 
             pub_link = _safe(row.get('Link to publication'))
             if pub_link:
