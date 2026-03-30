@@ -13,7 +13,11 @@ import matplotlib.pyplot as plt
 import nltk
 @st.cache_resource
 def download_nltk():
-    nltk.download("all", quiet=True)
+    nltk.download("stopwords", quiet=True)
+    nltk.download("wordnet", quiet=True)
+    nltk.download("punkt", quiet=True)
+    nltk.download("averaged_perceptron_tagger", quiet=True)
+    nltk.download("omw-1.4", quiet=True)
 download_nltk()  # only runs once across all sessions
 import pydeck as pdk
 from countryinfo import CountryInfo
@@ -216,16 +220,18 @@ if item_key:
 
     st.stop()
 
+@st.cache_data(ttl=3600)
+def load_data():
+    df_dedup        = pd.read_csv("all_items.csv")
+    df_dedup["parentKey"] = df_dedup["Zotero link"].str.split("/").str[-1]
+    df_duplicated   = pd.read_csv("all_items_duplicated.csv")
+    df_authors      = get_df_authors()
+    df_book_reviews = pd.read_csv("book_reviews.csv")
+    return df_dedup, df_duplicated, df_authors, df_book_reviews
+
 # ── Load data ───────────────────────────────────────────────────────────────
 with st.spinner("Retrieving data..."):
-    @st.cache_data(ttl=3600)
-    def load_data():
-        df_dedup        = pd.read_csv("all_items.csv")
-        df_dedup["parentKey"] = df_dedup["Zotero link"].str.split("/").str[-1]
-        df_duplicated   = pd.read_csv("all_items_duplicated.csv")
-        df_authors      = get_df_authors()
-        df_book_reviews = pd.read_csv("book_reviews.csv")
-        return df_dedup, df_duplicated, df_authors, df_book_reviews
+
 
     df_dedup, df_duplicated, df_authors, df_book_reviews = load_data()
 
