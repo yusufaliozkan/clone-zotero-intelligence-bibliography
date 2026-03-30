@@ -198,6 +198,7 @@ if item_key:
         st.divider()
         st.markdown("**Cite this publication:**")
 
+        # Get the zotero item key and look up citation format
         zotero_item_key = _safe(row.get('Zotero link')).replace(
             "https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/", ""
         )
@@ -206,14 +207,7 @@ if item_key:
         citation_row = df_zot[df_zot["zotero_item_key"] == zotero_item_key]
 
         if not citation_row.empty:
-            # Display formatted citation
             display_bibliographies(citation_row)
-            
-            # Copy to clipboard via st.code
-            citation_text = citation_row.iloc[0].get("bibliography", "")
-            if citation_text:
-                st.markdown("Copy citation:")
-                st.code(citation_text, language=None)
         else:
             st.info("Citation format not available for this item.")
 
