@@ -2305,14 +2305,26 @@ with st.spinner("Retrieving data..."):
                 with st.spinner("Thinking..."):
                     try:
                         import anthropic
-                        # ← Use user's key instead of st.secrets
                         client = anthropic.Anthropic(api_key=st.session_state["user_api_key"])
 
                         response = client.messages.create(
                             model="claude-haiku-4-5-20251001",
                             max_tokens=1024,
-                            system="""...""",
-                            messages=[...]
+                            system="""You are an assistant for IntelArchive, an intelligence studies bibliography database containing over 8,000 publications. 
+                            You will be given database context containing relevant publications found by searching the database.
+                            If publications are provided in the context, list them specifically with their titles and authors.
+                            If the context says publications were found, report them — do not say you cannot find them.
+                            Be specific and always cite exact titles and authors from the context provided.
+                            Do not make up publications or authors not in the context.""",
+                            messages=[
+                                {
+                                    "role": "user",
+                                    "content": f"""Database context (relevant publications):
+            {context}
+
+            User question: {prompt}"""
+                                }
+                            ]
                         )
                         answer = response.content[0].text
                         st.markdown(answer)
