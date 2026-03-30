@@ -90,6 +90,90 @@ Ozkan, Yusuf A. 'Intelligence Studies Network Dataset'. Zenodo, 15 August 2024. 
 **Cite this page:** IntelArchive. '*Intelligence Studies Network*', Created 1 June 2020, Accessed {cite_today}. https://intelligence.streamlit.app/.
 """
 
+
+item_key = st.query_params.get("item", "")
+
+if item_key:
+    # Back button at the top
+    if st.button("← Back to home"):
+        st.query_params.clear()
+        st.rerun()
+
+    item = df_dedup[df_dedup["parentKey"] == item_key]
+    if not item.empty:
+        row = item.iloc[0]
+
+        st.subheader(row["Title"], anchor=False)
+        st.divider()
+
+        def _safe(val):
+            return "" if pd.isna(val) or str(val).strip() in ("", "nan", "NaN") else str(val).strip()
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown(f"**Authors:** {_safe(row.get('FirstName2')) or 'N/A'}")
+            st.markdown(f"**Publication type:** {_safe(row.get('Publication type')) or 'N/A'}")
+            st.markdown(f"**Date published:** {_safe(row.get('Date published')) or 'N/A'}")
+
+            pub_type = _safe(row.get('Publication type'))
+
+            if pub_type == "Book chapter":
+                book_title = _safe(row.get('Book_title'))
+                if book_title:
+                    st.markdown(f"**Book title:** {book_title}")
+
+            if pub_type == "Thesis":
+                thesis_type = _safe(row.get('Thesis_type'))
+                university  = _safe(row.get('University'))
+                if thesis_type:
+                    st.markdown(f"**Thesis type:** {thesis_type}")
+                if university:
+                    st.markdown(f"**University:** {university}")
+
+            publisher = _safe(row.get('Publisher'))
+            journal   = _safe(row.get('Journal'))
+            if journal:
+                st.markdown(f"**Journal:** {journal}")
+            elif publisher:
+                st.markdown(f"**Publisher:** {publisher}")
+
+        with col2:
+            citation_val = row.get('Citation', 0)
+            citation_int = 0 if pd.isna(citation_val) else int(float(citation_val))
+            st.markdown(f"**Citations:** {citation_int}")
+            st.markdown(f"**OA status:** {'Open Access' if row.get('OA status') else 'Not OA'}")
+
+            # ── Book reviews ────────────────────────────────────────────────────────
+            reviews_map = load_reviews_map()
+            parent_key  = _safe(row.get('parentKey'))
+            if not parent_key:
+                zotero_link = _safe(row.get('Zotero link'))
+                parent_key  = zotero_link.rstrip("/").split("/")[-1] if zotero_link else ""
+
+            if reviews_map and parent_key:
+                review_links = reviews_map.get(parent_key, [])
+                if review_links:
+                    st.markdown("**Book reviews:**")
+                    for i, link in enumerate(review_links, 1):
+                        st.markdown(f"- [Book review {i}]({link})")
+
+        st.divider()
+        st.markdown("**Abstract:**")
+        st.info(row.get("Abstract", "No abstract available"))
+
+        st.divider()
+        col1, col2 = st.columns(2)
+        with col1:
+            if row.get("Zotero link"):
+                st.link_button("View in Zotero", row["Zotero link"])
+        with col2:
+            if row.get("Link to publication"):
+                st.link_button("View publication", row["Link to publication"])
+    else:
+        st.warning("Publication not found.")
+
+    st.stop()  # ← prevents rest of page from rendering
+
 # ── Load data ───────────────────────────────────────────────────────────────
 with st.spinner("Retrieving data..."):
     @st.cache_data(ttl=3600)
@@ -104,88 +188,6 @@ with st.spinner("Retrieving data..."):
     # Then at the top of your app body:
     df_dedup, df_duplicated, df_authors, df_book_reviews = load_data()
 
-    item_key = st.query_params.get("item", "")
-
-    if item_key:
-        # Back button at the top
-        if st.button("← Back to home"):
-            st.query_params.clear()
-            st.rerun()
-
-        item = df_dedup[df_dedup["parentKey"] == item_key]
-        if not item.empty:
-            row = item.iloc[0]
-
-            st.subheader(row["Title"], anchor=False)
-            st.divider()
-
-            def _safe(val):
-                return "" if pd.isna(val) or str(val).strip() in ("", "nan", "NaN") else str(val).strip()
-
-            col1, col2 = st.columns(2)
-            with col1:
-                st.markdown(f"**Authors:** {_safe(row.get('FirstName2')) or 'N/A'}")
-                st.markdown(f"**Publication type:** {_safe(row.get('Publication type')) or 'N/A'}")
-                st.markdown(f"**Date published:** {_safe(row.get('Date published')) or 'N/A'}")
-
-                pub_type = _safe(row.get('Publication type'))
-
-                if pub_type == "Book chapter":
-                    book_title = _safe(row.get('Book_title'))
-                    if book_title:
-                        st.markdown(f"**Book title:** {book_title}")
-
-                if pub_type == "Thesis":
-                    thesis_type = _safe(row.get('Thesis_type'))
-                    university  = _safe(row.get('University'))
-                    if thesis_type:
-                        st.markdown(f"**Thesis type:** {thesis_type}")
-                    if university:
-                        st.markdown(f"**University:** {university}")
-
-                publisher = _safe(row.get('Publisher'))
-                journal   = _safe(row.get('Journal'))
-                if journal:
-                    st.markdown(f"**Journal:** {journal}")
-                elif publisher:
-                    st.markdown(f"**Publisher:** {publisher}")
-
-            with col2:
-                citation_val = row.get('Citation', 0)
-                citation_int = 0 if pd.isna(citation_val) else int(float(citation_val))
-                st.markdown(f"**Citations:** {citation_int}")
-                st.markdown(f"**OA status:** {'Open Access' if row.get('OA status') else 'Not OA'}")
-
-                # ── Book reviews ────────────────────────────────────────────────────────
-                reviews_map = load_reviews_map()
-                parent_key  = _safe(row.get('parentKey'))
-                if not parent_key:
-                    zotero_link = _safe(row.get('Zotero link'))
-                    parent_key  = zotero_link.rstrip("/").split("/")[-1] if zotero_link else ""
-
-                if reviews_map and parent_key:
-                    review_links = reviews_map.get(parent_key, [])
-                    if review_links:
-                        st.markdown("**Book reviews:**")
-                        for i, link in enumerate(review_links, 1):
-                            st.markdown(f"- [Book review {i}]({link})")
-
-            st.divider()
-            st.markdown("**Abstract:**")
-            st.info(row.get("Abstract", "No abstract available"))
-
-            st.divider()
-            col1, col2 = st.columns(2)
-            with col1:
-                if row.get("Zotero link"):
-                    st.link_button("View in Zotero", row["Zotero link"])
-            with col2:
-                if row.get("Link to publication"):
-                    st.link_button("View publication", row["Link to publication"])
-        else:
-            st.warning("Publication not found.")
-
-        st.stop()  # ← prevents rest of page from rendering
 
     col1, col2, col3 = st.columns([3, 5, 8])
     with col3:
