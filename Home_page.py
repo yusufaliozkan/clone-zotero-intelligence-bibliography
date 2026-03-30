@@ -127,7 +127,9 @@ with st.spinner("Retrieving data..."):
                 st.markdown(f"**Publisher:** {row.get('Publisher', 'N/A')}")
                 st.markdown(f"**Journal:** {row.get('Journal', 'N/A')}")
             with col2:
-                st.markdown(f"**Citations:** {int(float(row.get('Citation', 0) or 0))}")
+                citation_val = row.get('Citation', 0)
+                citation_int = 0 if pd.isna(citation_val) else int(float(citation_val))
+                st.markdown(f"**Citations:** {citation_int}")
                 st.markdown(f"**OA status:** {'Open Access' if row.get('OA status') else 'Not OA'}")
 
             st.divider()
