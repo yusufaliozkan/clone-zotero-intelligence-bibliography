@@ -2349,18 +2349,18 @@ with tab3:
 
 st.write("---")
 with st.expander("Acknowledgements"):
-st.subheader("Acknowledgements", anchor=False)
-st.write("""
-The following sources are used to collate some of the items and events in this website:
-1. [King's Centre for the Study of Intelligence (KCSI) digest](https://kcsi.uk/kcsi-digests) compiled by Kayla Berg
-2. [International Association for Intelligence Education (IAIE) digest](https://www.iafie.org/Login.aspx) compiled by Filip Kovacevic
+    st.subheader("Acknowledgements", anchor=False)
+    st.write("""
+    The following sources are used to collate some of the items and events in this website:
+    1. [King's Centre for the Study of Intelligence (KCSI) digest](https://kcsi.uk/kcsi-digests) compiled by Kayla Berg
+    2. [International Association for Intelligence Education (IAIE) digest](https://www.iafie.org/Login.aspx) compiled by Filip Kovacevic
 
-Contributors with comments and sources:
-1. Daniela Richterove
-2. Steven Wagner
-3. Sophie Duroy
+    Contributors with comments and sources:
+    1. Daniela Richterove
+    2. Steven Wagner
+    3. Sophie Duroy
 
-Proudly sponsored by the [King's Centre for the Study of Intelligence](https://kcsi.uk/)
-""")
+    Proudly sponsored by the [King's Centre for the Study of Intelligence](https://kcsi.uk/)
+    """)
 
 display_custom_license()
