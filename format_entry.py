@@ -38,36 +38,25 @@ def format_entry(row, include_citation=True, reviews_map=None, max_reviews_inlin
 
     # --- multiple inline review badges ---
     parent_key = row.get("parentKey")
-    BASE_URL = "https://intelligence.streamlit.app"
-    pub_page_badge = f"[:gray-badge[📄 Publication page]]({BASE_URL}/?item={parent_key})" if parent_key else ""
     if not parent_key and zotero_link:
         parent_key = zotero_link.rstrip("/").split("/")[-1]
 
-    badges = " ".join(filter(None, [
-        pub_link_badge,
-        zotero_link_badge,
-        book_review_badges,
-        oa_link_text,
-        citation_text if include_citation else "",
-        pub_page_badge,   # ← add this
-    ]))
+    # Publication page badge
+    BASE_URL = "https://intelligence.streamlit.app"
+    pub_page_badge = f"[:gray-badge[📄 Publication page]]({BASE_URL}/?item={parent_key})" if parent_key else ""
 
     book_review_badges = ""
     if reviews_map:
         links = reviews_map.get(parent_key) or []
         if links:
             if len(links) == 1:
-                # exactly one review: no number
                 book_review_badges = f"[:violet-badge[Book review]]({links[0]})"
             else:
-                # multiple reviews: number them
                 n = len(links) if max_reviews_inline is None else min(len(links), max_reviews_inline)
                 book_review_badges = " ".join(
                     f"[:violet-badge[Book review {i+1}]]({links[i]})" for i in range(n)
                 )
-                # optional "+N more" cap
                 if max_reviews_inline is not None and len(links) > n:
-                    # assumes links[0] is newest if you sorted upstream
                     book_review_badges += f" [:violet-badge[+{len(links)-n} more]]({links[0]})"
 
     # Build the common badges string ONCE
@@ -76,7 +65,8 @@ def format_entry(row, include_citation=True, reviews_map=None, max_reviews_inlin
         zotero_link_badge,
         book_review_badges,
         oa_link_text,
-        citation_text if include_citation else ""
+        citation_text if include_citation else "",
+        pub_page_badge,   # ← included here
     ]))
 
     # --- display fields ---
