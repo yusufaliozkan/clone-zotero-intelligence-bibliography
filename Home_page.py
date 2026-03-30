@@ -195,6 +195,22 @@ if item_key:
         st.markdown("**Abstract:**")
         st.info(row.get("Abstract", "No abstract available"))
 
+        st.divider()
+        st.markdown("**Cite this publication:**")
+
+        # Get the zotero item key and look up citation format
+        zotero_item_key = _safe(row.get('Zotero link')).replace(
+            "https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/", ""
+        )
+
+        df_zot = pd.read_csv("zotero_citation_format.csv")
+        citation_row = df_zot[df_zot["zotero_item_key"] == zotero_item_key]
+
+        if not citation_row.empty:
+            display_bibliographies(citation_row)
+        else:
+            st.info("Citation format not available for this item.")
+
     else:
         st.warning("Publication not found.")
 
