@@ -43,7 +43,7 @@ def format_entry(row, include_citation=True, reviews_map=None, max_reviews_inlin
 
     # Publication page badge
     BASE_URL = "https://intelligence.streamlit.app"
-    pub_page_badge = f"[:gray-badge[📄 Publication page]]({BASE_URL}/?item={parent_key})" if parent_key else ""
+    pub_page_badge = f"[:gray-badge[📄 IntelArchive details]]({BASE_URL}/?item={parent_key})" if parent_key else ""
 
     book_review_badges = ""
     if reviews_map:
