@@ -213,7 +213,7 @@ with st.spinner("Retrieving data..."):
                         mask = mask | df[col].apply(check)
                     return mask
 
-                import pandas as pd as _pd
+                import pandas as pd
 
                 # ── Recursive descent parser ────────────────────────────────────────────
                 pos = [0]  # use list so nested functions can mutate it
