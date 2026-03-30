@@ -94,10 +94,13 @@ Ozkan, Yusuf A. 'Intelligence Studies Network Dataset'. Zenodo, 15 August 2024. 
 item_key = st.query_params.get("item", "")
 
 if item_key:
-    # Back button at the top
     if st.button("← Back to home"):
         st.query_params.clear()
         st.rerun()
+
+    # Load only what's needed — no spinner, no full load_data()
+    df_dedup = pd.read_csv("all_items.csv")
+    df_dedup["parentKey"] = df_dedup["Zotero link"].str.split("/").str[-1]
 
     item = df_dedup[df_dedup["parentKey"] == item_key]
     if not item.empty:
@@ -143,7 +146,6 @@ if item_key:
             st.markdown(f"**Citations:** {citation_int}")
             st.markdown(f"**OA status:** {'Open Access' if row.get('OA status') else 'Not OA'}")
 
-            # ── Book reviews ────────────────────────────────────────────────────────
             reviews_map = load_reviews_map()
             parent_key  = _safe(row.get('parentKey'))
             if not parent_key:
@@ -172,7 +174,7 @@ if item_key:
     else:
         st.warning("Publication not found.")
 
-    st.stop()  # ← prevents rest of page from rendering
+    st.stop()
 
 # ── Load data ───────────────────────────────────────────────────────────────
 with st.spinner("Retrieving data..."):
@@ -185,7 +187,6 @@ with st.spinner("Retrieving data..."):
         df_book_reviews = pd.read_csv("book_reviews.csv")
         return df_dedup, df_duplicated, df_authors, df_book_reviews
 
-    # Then at the top of your app body:
     df_dedup, df_duplicated, df_authors, df_book_reviews = load_data()
 
 
