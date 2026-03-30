@@ -38,8 +38,19 @@ def format_entry(row, include_citation=True, reviews_map=None, max_reviews_inlin
 
     # --- multiple inline review badges ---
     parent_key = row.get("parentKey")
+    BASE_URL = "https://intelligence.streamlit.app"
+    pub_page_badge = f"[:gray-badge[📄 Publication page]]({BASE_URL}/?item={parent_key})" if parent_key else ""
     if not parent_key and zotero_link:
         parent_key = zotero_link.rstrip("/").split("/")[-1]
+
+    badges = " ".join(filter(None, [
+        pub_link_badge,
+        zotero_link_badge,
+        book_review_badges,
+        oa_link_text,
+        citation_text if include_citation else "",
+        pub_page_badge,   # ← add this
+    ]))
 
     book_review_badges = ""
     if reviews_map:
