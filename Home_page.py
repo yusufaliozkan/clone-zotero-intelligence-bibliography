@@ -2255,11 +2255,12 @@ with st.spinner("Retrieving data..."):
                         response = client.messages.create(
                             model="claude-haiku-4-5-20251001",
                             max_tokens=1024,
-                            system="""You are an assistant for IntelArchive, an intelligence studies bibliography database containing over 8,000 publications. 
-                            Answer questions only based on the database context provided. 
-                            Be specific and cite titles and authors where relevant.
-                            If the context doesn't contain enough information, say so honestly.
-                            Do not make up publications or authors.""",
+                            system="""You are an assistant for IntelArchive, an intelligence studies bibliography database. 
+                            You will be given database context containing relevant publications that were found by searching the database.
+                            If publications are provided in the context, list them specifically with their titles and authors.
+                            If the context says publications were found, report them — do not say you cannot find them.
+                            Be specific and always cite exact titles and authors from the context provided.
+                            Do not make up publications or authors not in the context.""",
                             messages=[
                                 {
                                     "role": "user",
