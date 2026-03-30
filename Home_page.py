@@ -322,6 +322,30 @@ with st.spinner("Retrieving data..."):
                 default=default_pill,
                 key="search_pills",
             )
+
+            item_key = st.query_params.get("item", "")
+
+            if item_key:
+                # Show single publication record view
+                item = df_dedup[df_dedup["parentKey"] == item_key]
+                if not item.empty:
+                    row = item.iloc[0]
+                    st.subheader(row["Title"], anchor=False)
+                    st.markdown(f"**Authors:** {row['FirstName2']}")
+                    st.markdown(f"**Publication type:** {row['Publication type']}")
+                    st.markdown(f"**Date published:** {row['Date published']}")
+                    st.markdown(f"**Publisher:** {row['Publisher']}")
+                    st.markdown(f"**Journal:** {row['Journal']}")
+                    st.markdown(f"**Abstract:** {row['Abstract']}")
+                    st.markdown(f"**Citations:** {row['Citation']}")
+                    st.link_button("View in Zotero", row["Zotero link"])
+                    if row.get("Link to publication"):
+                        st.link_button("View publication", row["Link to publication"])
+                    st.stop()  # don't render rest of page
+                else:
+                    st.warning("Publication not found.")
+                    st.stop()
+
             # ================================================================
             # 0 – KEYWORD SEARCH
             # ================================================================
