@@ -254,11 +254,10 @@ with st.spinner("Retrieving data..."):
                         operand = parse_atom()
                         return ~operand
                     return parse_atom()
-
                 def parse_atom():
                     tok = peek()
                     if tok is None:
-                        return _pd.Series([False] * len(df), index=df.index)
+                        return pd.Series([False] * len(df), index=df.index)
                     if tok == "(":
                         consume()  # eat "("
                         result = parse_expr()
