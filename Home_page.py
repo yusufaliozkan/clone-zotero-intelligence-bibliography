@@ -151,7 +151,7 @@ if item_key:
 
             links_md = []
 
-            zotero_link = _safe(row.get('Zotero recod'))
+            zotero_link = _safe(row.get('Zotero link'))
             if zotero_link:
                 links_md.append(f"[:red-badge[Zotero link]]({zotero_link})")
 
