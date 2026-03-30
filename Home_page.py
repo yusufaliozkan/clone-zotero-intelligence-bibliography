@@ -2214,32 +2214,46 @@ with st.spinner("Retrieving data..."):
                             "in", "the", "title", "about", "with", "a", "an", "and",
                             "or", "is", "are", "what", "who", "how", "many", "show",
                             "me", "please", "list", "give", "tell", "do", "have",
-                            "has", "been", "that", "this", "for", "of", "to"}
+                            "has", "been", "that", "this", "for", "of", "to", "did",
+                            "had", "good", "bad", "well", "better", "best", "was",
+                            "were", "there", "their", "its", "his", "her", "our"}
 
                 keywords = [
                     w.strip("'\"?,.")
                     for w in prompt.split()
                     if w.lower().strip("'\"?.,") not in stop_words
-                    and len(w.strip("'\"?.,")) > 2
+                    and len(w.strip("'\"?.,")) > 3
                 ]
 
                 if keywords:
-                    # Search both title AND abstract
-                    title_mask = df_dedup["Title"].str.lower().apply(
-                        lambda t: any(k.lower() in str(t).lower() for k in keywords)
-                    )
-                    abstract_mask = df_dedup["Abstract"].fillna("").str.lower().apply(
-                        lambda t: any(k.lower() in str(t).lower() for k in keywords)
-                    )
-                    mask    = title_mask | abstract_mask
-                    relevant = df_dedup[mask].head(30)
+                    df_search = df_dedup.copy()
+                    df_search["_title"]    = df_search["Title"].fillna("").str.lower()
+                    df_search["_abstract"] = df_search["Abstract"].fillna("").str.lower()
+                    df_search["_combined"] = df_search["_title"] + " " + df_search["_abstract"]
+
+                    # Score each row by how many keywords it matches
+                    def score_row(text):
+                        return sum(1 for k in keywords if k.lower() in text)
+
+                    df_search["_score"] = df_search["_combined"].apply(score_row)
+
+                    # Only keep rows that match at least 2 keywords, sorted by score
+                    relevant = df_search[df_search["_score"] >= 2].sort_values(
+                        "_score", ascending=False
+                    ).head(30)
+
+                    # If nothing matches 2+, fall back to 1 keyword match
+                    if relevant.empty:
+                        relevant = df_search[df_search["_score"] >= 1].sort_values(
+                            "_score", ascending=False
+                        ).head(30)
                 else:
                     relevant = pd.DataFrame()
 
                 if relevant.empty:
                     context = f"No publications found matching keywords: {keywords}. Database has {len(df_dedup)} total publications."
                 else:
-                    context = f"Found {len(relevant)} relevant publications:\n\n"
+                    context = f"Found {len(relevant)} relevant publications (ranked by relevance):\n\n"
                     for _, row in relevant.iterrows():
                         context += f"Title: {row['Title']}\n"
                         context += f"Authors: {row.get('FirstName2', 'N/A')}\n"
@@ -2248,7 +2262,6 @@ with st.spinner("Retrieving data..."):
                         context += f"Journal/Publisher: {row.get('Journal') or row.get('Publisher', 'N/A')}\n"
                         abstract = str(row.get('Abstract', ''))
                         if abstract and abstract != 'nan':
-                            # Truncate long abstracts to save tokens
                             context += f"Abstract: {abstract[:500]}{'...' if len(abstract) > 500 else ''}\n"
                         context += "\n"
 
