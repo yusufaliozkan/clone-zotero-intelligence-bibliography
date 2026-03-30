@@ -2189,7 +2189,6 @@ with st.spinner("Retrieving data..."):
 
     with tab3:
         import anthropic
-        st.write("Available secret keys:", list(st.secrets.keys()))
         st.header("Chat with IntelArchive", anchor=False)
         st.info("Ask questions about the intelligence studies database. Powered by Claude AI.")
 
