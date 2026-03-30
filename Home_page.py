@@ -44,6 +44,8 @@ from shared_utils import (
     slug_to_author,      # ← add
 )
 
+BASE_URL = "https://intelligence.streamlit.app"
+
 def journal_to_guid(name: str) -> str:
     return str(uuid.uuid5(uuid.NAMESPACE_DNS, name))
 
@@ -537,7 +539,7 @@ with st.spinner("Retrieving data..."):
                             else:
                                 filtered_df = sort_radio(filtered_df, key="kw_sort")
                                 if view == "Basic list":
-                                    articles  = [format_entry(row, include_citation=True, reviews_map=reviews_map) for _, row in filtered_df.iterrows()]
+                                    articles = [format_entry(row, include_citation=True, reviews_map=reviews_map, base_url=BASE_URL) for _, row in filtered_df.iterrows()]
                                     abstracts = [row["Abstract"] if pd.notnull(row["Abstract"]) else "N/A" for _, row in filtered_df.iterrows()]
                                     render_paginated_list(filtered_df, articles, abstracts,
                                                         display_abstracts=display_abstracts,
