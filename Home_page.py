@@ -146,18 +146,41 @@ if item_key:
             st.markdown(f"**Citations:** {citation_int}")
             st.markdown(f"**OA status:** {'Open Access' if row.get('OA status') else 'Not OA'}")
 
+            # ── External links ──────────────────────────────────────────────────
+            st.markdown("**External links:**")
+
+            links_md = []
+
+            zotero_link = _safe(row.get('Zotero link'))
+            if zotero_link:
+                links_md.append(f"[:blue-badge[Zotero link]]({zotero_link})")
+
+            pub_link = _safe(row.get('Link to publication'))
+            if pub_link:
+                links_md.append(f"[:blue-badge[Publication link]]({pub_link})")
+
+            oa_link = _safe(row.get('OA_link')).replace(" ", "%20")
+            if oa_link:
+                links_md.append(f"[:green-badge[OA version]]({oa_link})")
+
+            citation_link = _safe(row.get('Citation_list'))
+            if citation_link and citation_int > 0:
+                links_md.append(f"[:orange-badge[Cited by {citation_int}]]({citation_link})")
+
             reviews_map = load_reviews_map()
             parent_key  = _safe(row.get('parentKey'))
             if not parent_key:
-                zotero_link = _safe(row.get('Zotero link'))
-                parent_key  = zotero_link.rstrip("/").split("/")[-1] if zotero_link else ""
+                parent_key = zotero_link.rstrip("/").split("/")[-1] if zotero_link else ""
 
             if reviews_map and parent_key:
                 review_links = reviews_map.get(parent_key, [])
-                if review_links:
-                    st.markdown("**Book reviews:**")
+                if len(review_links) == 1:
+                    links_md.append(f"[:violet-badge[Book review]]({review_links[0]})")
+                else:
                     for i, link in enumerate(review_links, 1):
-                        st.markdown(f"- [Book review {i}]({link})")
+                        links_md.append(f"[:violet-badge[Book review {i}]]({link})")
+
+            st.markdown(" ".join(links_md))
 
         st.divider()
         st.markdown("**Abstract:**")
