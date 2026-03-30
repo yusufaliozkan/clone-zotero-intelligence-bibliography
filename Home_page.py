@@ -2188,22 +2188,57 @@ with st.spinner("Retrieving data..."):
 
 
     with tab3:
-        import anthropic
         st.header("Chat with IntelArchive", anchor=False)
         st.info("Ask questions about the intelligence studies database. Powered by Claude AI.")
 
-        # Initialise chat history
+        # ── API key input ───────────────────────────────────────────────────────
+        with st.expander("🔑 Enter your Claude API key", expanded="user_api_key" not in st.session_state):
+            st.markdown("""
+            To use the chat feature you need a Claude API key from Anthropic.
+            1. Go to [platform.anthropic.com](https://platform.anthropic.com)
+            2. Sign up and add billing credits (minimum $5)
+            3. Go to **API Keys** → **Create Key**
+            4. Paste your key below
+            
+            Your key is stored only in your browser session and never saved anywhere.
+            """)
+            api_key_input = st.text_input(
+                "Claude API key",
+                type="password",
+                placeholder="sk-ant-...",
+                key="api_key_input_field"
+            )
+            if st.button("Save API key"):
+                if api_key_input.startswith("sk-ant-"):
+                    st.session_state["user_api_key"] = api_key_input
+                    st.success("API key saved for this session.")
+                    st.rerun()
+                else:
+                    st.error("Invalid API key format. It should start with 'sk-ant-'")
+
+        # ── Only show chat if API key is set ───────────────────────────────────
+        if "user_api_key" not in st.session_state:
+            st.warning("Please enter your Claude API key above to use the chat feature.")
+            st.stop()
+
+        # Clear API key button
+        col1, col2 = st.columns([1, 5])
+        with col1:
+            if st.button("🔑 Clear API key"):
+                del st.session_state["user_api_key"]
+                st.rerun()
+        with col2:
+            st.caption("API key active for this session ✓")
+
+        # ── Chat interface ──────────────────────────────────────────────────────
         if "chat_messages" not in st.session_state:
             st.session_state.chat_messages = []
 
-        # Display chat history
         for message in st.session_state.chat_messages:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
 
-        # Chat input
         if prompt := st.chat_input("Ask a question about the database..."):
-            # Add user message to history
             st.session_state.chat_messages.append({"role": "user", "content": prompt})
             with st.chat_message("user"):
                 st.markdown(prompt)
@@ -2270,35 +2305,27 @@ with st.spinner("Retrieving data..."):
                 with st.spinner("Thinking..."):
                     try:
                         import anthropic
-                        client = anthropic.Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
+                        # ← Use user's key instead of st.secrets
+                        client = anthropic.Anthropic(api_key=st.session_state["user_api_key"])
 
                         response = client.messages.create(
                             model="claude-haiku-4-5-20251001",
                             max_tokens=1024,
-                            system="""You are an assistant for IntelArchive, an intelligence studies bibliography database. 
-                            You will be given database context containing relevant publications that were found by searching the database.
-                            If publications are provided in the context, list them specifically with their titles and authors.
-                            If the context says publications were found, report them — do not say you cannot find them.
-                            Be specific and always cite exact titles and authors from the context provided.
-                            Do not make up publications or authors not in the context.""",
-                            messages=[
-                                {
-                                    "role": "user",
-                                    "content": f"""Database context (relevant publications):
-    {context}
-
-    User question: {prompt}"""
-                                }
-                            ]
+                            system="""...""",
+                            messages=[...]
                         )
                         answer = response.content[0].text
                         st.markdown(answer)
                         st.session_state.chat_messages.append({"role": "assistant", "content": answer})
 
+                    except anthropic.AuthenticationError:
+                        st.error("Invalid API key. Please check your key and try again.")
+                        del st.session_state["user_api_key"]
+                    except anthropic.RateLimitError:
+                        st.error("Rate limit reached. Please wait a moment and try again.")
                     except Exception as e:
                         st.error(f"Error calling Claude API: {e}")
 
-        # Clear chat button
         if st.session_state.chat_messages:
             if st.button("Clear chat"):
                 st.session_state.chat_messages = []
