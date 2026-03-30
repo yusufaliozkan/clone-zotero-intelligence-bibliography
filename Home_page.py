@@ -165,158 +165,123 @@ with st.spinner("Retrieving data..."):
         with col1:
 
             def parse_search_terms(search_term):
-                """
-                Supports:
-                - AND, OR, NOT operators
-                - Parentheses: (cia OR mi6) AND humint
-                - Quoted phrases: "covert action"
-                - Wildcards: intel* 
-                - NEAR operator: cia NEAR/5 humint
-                """
-                tokens = re.findall(r'(?:"[^"]*"|\S+)', search_term)
-                boolean_tokens = []
-                i = 0
-                while i < len(tokens):
-                    token = tokens[i]
-                    # Boolean operators
-                    if token in ("AND", "OR", "NOT"):
-                        boolean_tokens.append(token)
-                    # NEAR operator e.g. NEAR/5
-                    elif re.match(r"^NEAR/\d+$", token, re.IGNORECASE):
-                        n = re.search(r"\d+", token).group()
-                        boolean_tokens.append(f"NEAR/{n}")
-                    # Parentheses
-                    elif token in ("(", ")"):
-                        boolean_tokens.append(token)
-                    # Tokens with embedded parentheses e.g. (cia
-                    elif token.startswith("("):
-                        boolean_tokens.append("(")
-                        rest = token[1:]
-                        if rest:
-                            boolean_tokens.append(re.sub(r"[^a-zA-Z0-9\s'\-\u2013*]", "", rest).strip())
-                    elif token.endswith(")"):
-                        rest = token[:-1]
-                        if rest:
-                            boolean_tokens.append(re.sub(r"[^a-zA-Z0-9\s'\-\u2013*]", "", rest).strip())
-                        boolean_tokens.append(")")
-                    # Quoted phrase
-                    elif token.startswith('"') and token.endswith('"'):
-                        boolean_tokens.append(token.strip('"'))
-                    # Regular term (wildcard allowed)
+                """Tokenise search input into a flat list for the recursive parser."""
+                tokens = []
+                for tok in re.findall(r'(?:"[^"]*"|\S+)', search_term):
+                    if tok.startswith("(") and len(tok) > 1:
+                        tokens.append("(")
+                        tokens.append(tok[1:])
+                    elif tok.endswith(")") and len(tok) > 1:
+                        tokens.append(tok[:-1])
+                        tokens.append(")")
                     else:
-                        stripped = re.sub(r"[^a-zA-Z0-9\s'\-\u2013*]", "", token).strip()
-                        if stripped:
-                            boolean_tokens.append(stripped)
-                    i += 1
-
-                # Remove trailing operators
-                while boolean_tokens and boolean_tokens[-1] in ("AND", "OR", "NOT", "("):
-                    boolean_tokens.pop()
-
-                return boolean_tokens
+                        tokens.append(tok)
+                return [t for t in tokens if t]
 
 
             def apply_boolean_search(df, tokens, search_in):
                 if not tokens:
                     return df
 
-                def make_condition(term, search_in):
-                    """Build a pandas query condition string for a single term."""
-                    # Wildcard: intel* → regex intel.*
+                def term_mask(df, term):
+                    """Return a boolean Series: does this term match each row?"""
+                    # Wildcard
                     if "*" in term:
                         pattern = re.escape(term).replace(r"\*", r"\w*")
-                        regex = rf"\b{pattern}"
+                        regex = rf"(?i)\b{pattern}"
                     else:
-                        regex = rf"\b{re.escape(term)}\b"
+                        regex = rf"(?i)\b{re.escape(term)}\b"
 
+                    title_match = df["Title"].str.contains(regex, na=False, regex=True)
                     if search_in == "Title and abstract":
-                        return (
-                            f'(Title.str.contains(r"{regex}", case=False, na=False) | '
-                            f'Abstract.str.contains(r"{regex}", case=False, na=False))'
-                        )
-                    return f'Title.str.contains(r"{regex}", case=False, na=False)'
+                        abs_match = df["Abstract"].str.contains(regex, na=False, regex=True)
+                        return title_match | abs_match
+                    return title_match
 
-                def apply_near(df, term1, term2, n, search_in):
-                    """Filter rows where term1 and term2 appear within n words of each other."""
+                def near_mask(df, term1, term2, n):
+                    """Return a boolean Series: do term1 and term2 appear within n words?"""
                     cols = ["Title", "Abstract"] if search_in == "Title and abstract" else ["Title"]
-                    def near_match(text):
+                    def check(text):
                         if not isinstance(text, str):
                             return False
                         words = text.lower().split()
-                        positions1 = [i for i, w in enumerate(words) if re.search(rf"\b{re.escape(term1.lower())}\b", w)]
-                        positions2 = [i for i, w in enumerate(words) if re.search(rf"\b{re.escape(term2.lower())}\b", w)]
-                        return any(abs(p1 - p2) <= n for p1 in positions1 for p2 in positions2)
-                    mask = df[cols[0]].apply(near_match)
-                    if len(cols) > 1:
-                        mask = mask | df[cols[1]].apply(near_match)
-                    return df[mask]
+                        p1 = [i for i, w in enumerate(words) if re.search(rf"\b{re.escape(term1.lower())}\b", w)]
+                        p2 = [i for i, w in enumerate(words) if re.search(rf"\b{re.escape(term2.lower())}\b", w)]
+                        return any(abs(a - b) <= n for a in p1 for b in p2)
+                    mask = df[cols[0]].apply(check)
+                    for col in cols[1:]:
+                        mask = mask | df[col].apply(check)
+                    return mask
 
-                query        = ""
-                negate_next  = False
-                paren_depth  = 0
-                i            = 0
+                import pandas as pd as _pd
 
-                while i < len(tokens):
-                    token = tokens[i]
+                # ── Recursive descent parser ────────────────────────────────────────────
+                pos = [0]  # use list so nested functions can mutate it
 
-                    if token == "AND":
-                        query += " & "
-                        negate_next = False
-                    elif token == "OR":
-                        query += " | "
-                        negate_next = False
-                    elif token == "NOT":
-                        negate_next = True
-                    elif token == "(":
-                        query += "("
-                        paren_depth += 1
-                    elif token == ")":
-                        query += ")"
-                        paren_depth -= 1
-                    elif re.match(r"^NEAR/\d+$", token, re.IGNORECASE):
-                        # NEAR requires the previous and next term
-                        n = int(re.search(r"\d+", token).group())
-                        if i + 1 < len(tokens):
-                            next_term = tokens[i + 1]
-                            # Get previous term from query — apply NEAR as a post-filter
-                            # We mark it as a placeholder and handle after query runs
-                            cond = make_condition(next_term, search_in)
-                            if query and query.strip()[-1] not in "&|(":
-                                query += " & "
-                            query += cond
-                            # Store NEAR pair for post-filtering
-                            if not hasattr(apply_boolean_search, "_near_pairs"):
-                                apply_boolean_search._near_pairs = []
-                            prev_term = tokens[i - 1] if i > 0 else ""
-                            apply_boolean_search._near_pairs.append((prev_term, next_term, n))
-                            i += 2
-                            continue
-                    else:
-                        cond = make_condition(token, search_in)
-                        if negate_next:
-                            cond = f"~({cond})"
-                            negate_next = False
-                        if query and query.strip()[-1] not in "&|(":
-                            query += " & "
-                        query += cond
+                def peek():
+                    while pos[0] < len(tokens) and tokens[pos[0]] == "":
+                        pos[0] += 1
+                    return tokens[pos[0]] if pos[0] < len(tokens) else None
 
-                    i += 1
+                def consume():
+                    tok = peek()
+                    pos[0] += 1
+                    return tok
 
-                # Close any unclosed parentheses
-                query += ")" * max(0, paren_depth)
+                def parse_expr():
+                    return parse_or()
+
+                def parse_or():
+                    left = parse_and()
+                    while peek() == "OR":
+                        consume()
+                        right = parse_and()
+                        left = left | right
+                    return left
+
+                def parse_and():
+                    left = parse_not()
+                    while peek() not in (None, "OR", ")"):
+                        if peek() == "AND":
+                            consume()
+                        right = parse_not()
+                        left = left & right
+                    return left
+
+                def parse_not():
+                    if peek() == "NOT":
+                        consume()
+                        operand = parse_atom()
+                        return ~operand
+                    return parse_atom()
+
+                def parse_atom():
+                    tok = peek()
+                    if tok is None:
+                        return _pd.Series([False] * len(df), index=df.index)
+                    if tok == "(":
+                        consume()  # eat "("
+                        result = parse_expr()
+                        if peek() == ")":
+                            consume()  # eat ")"
+                        return result
+                    # Check for NEAR: term1 NEAR/N term2
+                    if pos[0] + 1 < len(tokens) and re.match(r"^NEAR/\d+$", tokens[pos[0] + 1] or "", re.I):
+                        term1 = consume()
+                        near_tok = consume()
+                        n = int(re.search(r"\d+", near_tok).group())
+                        term2 = consume()
+                        return near_mask(df, term1, term2, n)
+                    # Plain term or quoted phrase
+                    consume()
+                    term = tok.strip('"')
+                    return term_mask(df, term)
 
                 try:
-                    result = df.query(query, engine="python")
+                    mask = parse_expr()
+                    return df[mask]
                 except Exception:
-                    result = pd.DataFrame()
-
-                # Apply NEAR post-filtering
-                if hasattr(apply_boolean_search, "_near_pairs"):
-                    for term1, term2, n in apply_boolean_search._near_pairs:
-                        result = apply_near(result, term1, term2, n, search_in)
-                    del apply_boolean_search._near_pairs
-
-                return result
+                    return pd.DataFrame()
 
             st.header("Search in database", anchor=False)
             st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
