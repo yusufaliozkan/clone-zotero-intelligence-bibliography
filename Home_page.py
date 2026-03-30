@@ -114,7 +114,16 @@ if item_key:
 
         col1, col2 = st.columns(2)
         with col1:
-            st.markdown(f"**Authors:** {_safe(row.get('FirstName2')) or 'N/A'}")
+            authors_raw = _safe(row.get('FirstName2'))
+            if authors_raw:
+                author_list = [a.strip() for a in authors_raw.split(",")]
+                author_links = " · ".join(
+                    f"[{a}]({BASE_URL}/?author={author_to_slug(a)})"
+                    for a in author_list if a
+                )
+                st.markdown(f"**Authors:** {author_links}")
+            else:
+                st.markdown("**Authors:** N/A")
             st.markdown(f"**Publication type:** {_safe(row.get('Publication type')) or 'N/A'}")
             st.markdown(f"**Date published:** {_safe(row.get('Date published')) or 'N/A'}")
 
