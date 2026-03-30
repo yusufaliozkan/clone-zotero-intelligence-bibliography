@@ -1,5 +1,5 @@
 from pyzotero import zotero
-import pandas as pd
+import pandas as pd as _pd
 import streamlit as st
 import numpy as np
 import altair as alt
