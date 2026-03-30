@@ -342,10 +342,12 @@ with st.spinner("Retrieving data..."):
                     @st.dialog("Search guide")
                     def guide(_):
                         st.write("""
-                            Supports Boolean operators: **AND**, **OR**, **NOT**.
-                            Double-quotes for phrases (e.g. "covert action").
-                            Parentheses are **not** supported.
-                            Share your search: https://intelligence.streamlit.app/?search_in=Title&query=cia+OR+mi6
+                            **Operators:** AND, OR, NOT  
+                            **Grouping:** (cia OR mi6) AND humint  
+                            **Exact phrase:** "covert action"  
+                            **Wildcard:** intel* (matches intelligence, intelligent...)  
+                            **Proximity:** cia NEAR/5 humint (within 5 words)  
+                            **Example:** (cia OR mi6) AND NOT "cold war"
                         """)
 
                     if "guide" not in st.session_state:
