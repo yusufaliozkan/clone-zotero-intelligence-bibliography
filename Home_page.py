@@ -169,16 +169,17 @@ if item_key:
             ].drop_duplicates()
 
             if not item_collections.empty:
+                collection_links = []
                 for _, col_row in item_collections.iterrows():
                     col_name = str(col_row.get("Collection_Name", "")).strip()
                     col_link = str(col_row.get("Collection_Link", "")).strip()
                     col_key  = str(col_row.get("Collection_Key", "")).strip()
                     if col_name and col_name not in ("nan", ""):
-                        # Remove leading numbers like "01 ", "02.99 " etc
                         clean_name = re.sub(r"^\d+[\.\d]*\s*", "", col_name).strip()
-                        # Link to collection in the app
-                        app_link = f"{BASE_URL}/?collection={col_key}"
-                        st.markdown(f"- [{clean_name}]({app_link})")
+                        app_link   = f"{BASE_URL}/?collection={col_key}"
+                        collection_links.append(f"[{clean_name}]({app_link})")
+                
+                st.markdown(" | ".join(collection_links))
             else:
                 st.info("No collections found for this item.")
 
