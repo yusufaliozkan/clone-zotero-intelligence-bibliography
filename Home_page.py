@@ -99,7 +99,8 @@ item_key = st.query_params.get("item", "")
 
 if item_key:
     if st.button("← Back to home"):
-        st.query_params.clear()
+        if any(k in st.query_params for k in ["author", "collection", "type", "journal", "year_from", "year_to", "report"]):
+            st.query_params.clear()
         st.rerun()
 
     # Load only what's needed — no spinner, no full load_data()
@@ -884,7 +885,8 @@ with tab1:
                     link = f"https://intelligence.streamlit.app/?collection={col_key}"
                     st.caption(f"🔗 Shareable link: [{link}]({link})")
                 else:
-                    st.query_params.clear()
+                    if any(k in st.query_params for k in ["author", "collection", "type", "journal", "year_from", "year_to", "report"]):
+                        st.query_params.clear()
 
                 if not selected_col:
                     st.write("Pick a collection to see items")
@@ -994,7 +996,8 @@ with tab1:
                     link    = f"https://intelligence.streamlit.app/?type={encoded}"
                     st.caption(f"🔗 Shareable link: [{link}]({link})")
                 else:
-                    st.query_params.clear()
+                    if any(k in st.query_params for k in ["author", "collection", "type", "journal", "year_from", "year_to", "report"]):
+                        st.query_params.clear()
 
                 if not selected_type:
                     st.write("Pick a publication type to see items")
@@ -1123,7 +1126,8 @@ with tab1:
                     link = f"https://intelligence.streamlit.app/?journal={guids}"
                     st.caption(f"🔗 Shareable link: [{link}]({link})")
                 else:
-                    st.query_params.clear()
+                    if any(k in st.query_params for k in ["author", "collection", "type", "journal", "year_from", "year_to", "report"]):
+                        st.query_params.clear()
 
                 if not journals:
                     st.write("Pick a journal name to see items")
