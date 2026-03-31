@@ -246,6 +246,7 @@ if item_key:
 author_slug = st.query_params.get("author", "")
 
 if author_slug:
+    st.query_params.from_dict({"author": author_slug})
     # Load only what's needed
     df_dedup      = pd.read_csv("all_items.csv")
     df_dedup["parentKey"] = df_dedup["Zotero link"].str.split("/").str[-1]
