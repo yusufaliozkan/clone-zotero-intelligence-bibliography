@@ -159,8 +159,6 @@ if item_key:
             st.markdown(f"**Citations:** {citation_int}")
             st.markdown(f"**OA status:** {'Open Access' if row.get('OA status') else 'Not OA'}")
 
-            st.markdown("**Zotero Collections:**")
-
             # Load duplicated df to get all collections for this item
             df_dup_item = pd.read_csv("all_items_duplicated.csv")
             df_dup_item["parentKey"] = df_dup_item["Zotero link"].str.split("/").str[-1]
@@ -179,9 +177,9 @@ if item_key:
                         app_link   = f"{BASE_URL}/?collection={col_key}"
                         collection_links.append(f"[{clean_name}]({app_link})")
                 
-                st.markdown(" | ".join(collection_links))
+                st.markdown(f"**Collections:** {' | '.join(collection_links)}")
             else:
-                st.info("No collections found for this item.")
+                st.markdown("**Collections:** N/A")
 
             # ── External links ──────────────────────────────────────────────────
             st.markdown("**External links:**")
