@@ -159,7 +159,7 @@ if item_key:
             st.markdown(f"**Citations:** {citation_int}")
             st.markdown(f"**OA status:** {'Open Access' if row.get('OA status') else 'Not OA'}")
 
-            st.markdown("**Collections:**")
+            st.markdown("**Zotero Collections:**")
 
             # Load duplicated df to get all collections for this item
             df_dup_item = pd.read_csv("all_items_duplicated.csv")
