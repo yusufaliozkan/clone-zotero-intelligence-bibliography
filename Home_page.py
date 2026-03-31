@@ -717,7 +717,6 @@ with tab1:
                                         key=lambda a: pub_counts.get(a, 0), reverse=True)
                 options = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
 
-                # Pre-select from URL if ?author= slug is present
                 default_slug  = st.query_params.get("author", "")
                 default_index = 0
                 if default_slug:
@@ -730,36 +729,15 @@ with tab1:
                 selected_display = st.selectbox("Select author", options, index=default_index)
                 selected_author  = selected_display.split(" (")[0] if selected_display else None
 
-                if selected_author:
-                    slug           = author_to_slug(selected_author)
-                    default_report = st.query_params.get("report", "0") == "1"
-
-                    if "report_author_state" not in st.session_state:
-                        st.session_state["report_author_state"] = default_report
-
-                    st.toggle(":material/monitoring: Generate report",
-                            key="report_author",
-                            value=st.session_state["report_author_state"])
-                    on = st.session_state["report_author"]
-                    st.session_state["report_author_state"] = on
-
-                    params = {"author": slug}
-                    if on:
-                        params["report"] = "1"
-                    current_url_report = st.query_params.get("report", "0") == "1"
-                    if on != current_url_report or st.query_params.get("author", "") != slug:
-                        st.query_params.from_dict(params)
-
-                    link = f"https://intelligence.streamlit.app/?author={slug}{'&report=1' if on else ''}"
-                    st.caption(f"🔗 Shareable link: [{link}]({link})")
-                else:
-                    st.session_state.pop("report_author_state", None)
-                    on = st.toggle(":material/monitoring: Generate report", key="report_author_empty")
-                    st.query_params.clear()
-
                 if not selected_author:
                     st.write("Select an author to see items")
                     return
+
+                slug           = author_to_slug(selected_author)
+                default_report = st.query_params.get("report", "0") == "1"
+
+                if "report_author_state" not in st.session_state:
+                    st.session_state["report_author_state"] = default_report
 
                 adf = df_authors[df_authors["Author_name"] == selected_author].copy()
                 adf["Date published"] = parse_date_column(adf["Date published"])
@@ -803,12 +781,12 @@ with tab1:
                     adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
 
                     render_metrics(adf, container_metric=c_m, container_citation=c_cit,
-                                    container_citation_average=c_cit_avg, container_oa=c_oa,
-                                    container_type=c_type, container_publication_ratio=c_collab)
+                                container_citation_average=c_cit_avg, container_oa=c_oa,
+                                container_type=c_type, container_publication_ratio=c_collab)
 
                     csv = convert_df_to_csv(
                         adf[["Publication type","Title","Abstract","Date published",
-                                "Publisher","Journal","Link to publication","Zotero link","Citation"]]
+                            "Publisher","Journal","Link to publication","Zotero link","Citation"]]
                         .assign(Abstract=lambda d: d["Abstract"].str.replace("\n"," "))
                     )
                     c_dl.download_button(
@@ -817,20 +795,37 @@ with tab1:
                         mime="text/csv", key="dl-auth", icon=":material/download:",
                     )
 
+                    # ── Toggle and link — inside expander after metrics ──────────────
+                    st.toggle(":material/monitoring: Generate report",
+                            key="report_author",
+                            value=st.session_state["report_author_state"])
+                    on = st.session_state["report_author"]
+                    st.session_state["report_author_state"] = on
+
+                    params = {"author": slug}
+                    if on:
+                        params["report"] = "1"
+                    current_url_report = st.query_params.get("report", "0") == "1"
+                    if on != current_url_report or st.query_params.get("author", "") != slug:
+                        st.query_params.from_dict(params)
+
+                    link = f"{BASE_URL}/?author={slug}{'&report=1' if on else ''}"
+                    st.caption(f"🔗 Shareable link: [{link}]({link})")
+
                     if on and len(adf):
                         st.info(f"Publications report for {selected_author}")
                         render_report_charts(adf, selected_author, name_replacements,
-                                                show_themes=True, themes_df=fdc)
+                                            show_themes=True, themes_df=fdc)
                     elif not on:
                         adf = sort_radio(adf, key="auth_sort")
                         if view == "Basic list":
                             for i, row in adf.iterrows():
-                                st.write(f"{i+1}) {format_entry(row, include_citation=True, reviews_map=reviews_map)}")
+                                st.write(f"{i+1}) {format_entry(row, include_citation=True, reviews_map=reviews_map, base_url=BASE_URL)}")
                         elif view == "Table":
                             st.dataframe(
                                 adf[["Publication type","Title","Date published","FirstName2",
-                                        "Abstract","Publisher","Journal","Citation",
-                                        "Link to publication","Zotero link"]]
+                                    "Abstract","Publisher","Journal","Citation",
+                                    "Link to publication","Zotero link"]]
                                 .rename(columns={"FirstName2":"Author(s)","Link to publication":"Publication link"})
                             )
                         elif view == "Bibliography":
