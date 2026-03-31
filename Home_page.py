@@ -799,7 +799,6 @@ with tab1:
         # ================================================================
         # 1 – AUTHOR SEARCH
         # ================================================================
-
         elif search_option == 1:
             st.subheader("Search author", anchor=False, divider="blue")
 
@@ -813,12 +812,8 @@ with tab1:
 
             if selected_author:
                 slug = author_to_slug(selected_author)
-                link = f"{BASE_URL}/?author={slug}"
-                st.caption(f"🔗 Shareable link: [{link}]({link})")
-                st.info(f"Click the link above to open the full author page for **{selected_author}**, or use the link to share their publications.")
-                if st.button(f"Open {selected_author}'s page"):
-                    st.query_params.from_dict({"author": slug})
-                    st.rerun()
+                st.query_params.from_dict({"author": slug})
+                st.rerun()
             else:
                 st.write("Select an author to see their publications.")
 
