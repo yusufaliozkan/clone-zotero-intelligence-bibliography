@@ -243,9 +243,9 @@ if item_key:
     st.stop()
 
 # ── Single author page ──────────────────────────────────────────────────────
-author_slug = st.query_params.get("author", "")
+author_page_slug = st.query_params.get("author_page", "")
 
-if author_slug:
+if author_page_slug:
     # Load only what's needed
     df_dedup      = pd.read_csv("all_items.csv")
     df_dedup["parentKey"] = df_dedup["Zotero link"].str.split("/").str[-1]
@@ -253,7 +253,7 @@ if author_slug:
 
     # Match slug to author name
     all_author_names = df_authors_page["Author_name"].unique().tolist()
-    matched_author   = slug_to_author(author_slug, all_author_names)
+    matched_author   = slug_to_author(author_page_slug, all_author_names)
 
     if matched_author:
         # Back button
@@ -284,7 +284,7 @@ if author_slug:
         st.divider()
 
         # ── Shareable link ───────────────────────────────────────────────────
-        link = f"{BASE_URL}/?author={author_slug}"
+        link = f"{BASE_URL}/?author={author_page_slug}"
         st.caption(f"🔗 Shareable link: [{link}]({link})")
 
         # ── Publication type filter ──────────────────────────────────────────
@@ -330,7 +330,7 @@ if author_slug:
             mime="text/csv", icon=":material/download:"
         )
     else:
-        st.warning(f"Author not found: {author_slug}")
+        st.warning(f"Author not found: {author_page_slug}")
         if st.button("← Back to home"):
             st.query_params.clear()
             st.rerun()
