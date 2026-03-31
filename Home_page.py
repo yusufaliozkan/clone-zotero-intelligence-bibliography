@@ -253,7 +253,7 @@ if author_page_slug:
 
     # Match slug to author name
     all_author_names = df_authors_page["Author_name"].unique().tolist()
-    matched_author   = slug_to_author(author_slug, all_author_names)
+    matched_author   = slug_to_author(author_page_slug, all_author_names)
 
     if matched_author:
         # Back button
@@ -284,7 +284,7 @@ if author_page_slug:
         st.divider()
 
         # ── Shareable link ───────────────────────────────────────────────────
-        link = f"{BASE_URL}/?author={author_slug}"
+        link = f"{BASE_URL}/?author={author_page_slug}"
         st.caption(f"🔗 Shareable link: [{link}]({link})")
 
         # ── Publication type filter ──────────────────────────────────────────
