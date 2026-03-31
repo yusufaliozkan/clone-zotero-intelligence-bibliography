@@ -487,7 +487,8 @@ with tab1:
         if search_option == 0:
             # Clear author param if switching to keyword search
             if "author" in st.query_params:
-                st.query_params.clear()
+                if any(k in st.query_params for k in ["author", "collection", "type", "journal", "year_from", "year_to", "report"]):
+                    st.query_params.clear()
             # Clear author state when switching back to keyword
             for key in ["auth_types", "auth_sort"]:
                 if key in st.session_state:
