@@ -243,9 +243,9 @@ if item_key:
     st.stop()
 
 # ── Single author page ──────────────────────────────────────────────────────
-author_slug = st.query_params.get("author", "")
+author_page_slug = st.query_params.get("author_page", "")
 
-if author_slug and "search_pills" not in st.query_params:
+if author_slug:
     # Load only what's needed
     df_dedup      = pd.read_csv("all_items.csv")
     df_dedup["parentKey"] = df_dedup["Zotero link"].str.split("/").str[-1]
