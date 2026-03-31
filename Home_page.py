@@ -339,12 +339,15 @@ with tab1:
 
             def term_mask(df, term):
                 """Return a boolean Series: does this term match each row?"""
-                # Wildcard
                 if "*" in term:
                     pattern = re.escape(term).replace(r"\*", r"\w*")
                     regex = rf"(?i)\b{pattern}"
                 else:
-                    regex = rf"(?i)\b{re.escape(term)}\b"
+                    escaped = re.escape(term)
+                    # Only use word boundaries if term starts/ends with word characters
+                    prefix = r"\b" if re.match(r"\w", term[0]) else ""
+                    suffix = r"\b" if re.match(r"\w", term[-1]) else ""
+                    regex = rf"(?i){prefix}{escaped}{suffix}"
 
                 title_match = df["Title"].str.contains(regex, na=False, regex=True)
                 if search_in == "Title and abstract":
