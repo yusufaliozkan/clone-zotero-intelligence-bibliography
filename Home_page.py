@@ -245,7 +245,7 @@ if item_key:
 # ── Single author page ──────────────────────────────────────────────────────
 author_page_slug = st.query_params.get("author_page", "")
 
-if author_slug:
+if author_page_slug:
     # Load only what's needed
     df_dedup      = pd.read_csv("all_items.csv")
     df_dedup["parentKey"] = df_dedup["Zotero link"].str.split("/").str[-1]
