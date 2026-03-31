@@ -242,104 +242,6 @@ if item_key:
 
     st.stop()
 
-# ── Single author page ──────────────────────────────────────────────────────
-author_slug = st.query_params.get("author", "")
-
-if author_slug:
-    if st.query_params.get("author", "") != author_slug:
-        st.query_params.from_dict({"author": author_slug})
-        st.rerun()
-    # Load only what's needed
-    df_dedup      = pd.read_csv("all_items.csv")
-    df_dedup["parentKey"] = df_dedup["Zotero link"].str.split("/").str[-1]
-    df_authors_page = get_df_authors()
-
-    # Match slug to author name
-    all_author_names = df_authors_page["Author_name"].unique().tolist()
-    matched_author   = slug_to_author(author_slug, all_author_names)
-
-    if matched_author:
-        # Back button
-        if st.button("← Back to home"):
-            st.query_params.clear()
-            st.rerun()
-
-        adf = df_authors_page[df_authors_page["Author_name"] == matched_author].copy()
-        adf["Date published"] = parse_date_column(adf["Date published"])
-        adf["Date published"] = adf["Date published"].fillna("")
-        adf = sort_by_date(adf).sort_values(["No date flag", "Date published"], ascending=[True, True])
-
-        st.header(matched_author, anchor=False)
-        st.caption(f"{len(adf)} publications in IntelArchive")
-        st.divider()
-
-        # ── Metrics ─────────────────────────────────────────────────────────
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Publications", len(adf))
-        with col2:
-            citation_total = int(float(adf["Citation"].sum() or 0))
-            st.metric("Total citations", citation_total)
-        with col3:
-            pub_types = adf["Publication type"].nunique()
-            st.metric("Publication types", pub_types)
-
-        st.divider()
-
-        # ── Shareable link ───────────────────────────────────────────────────
-        link = f"{BASE_URL}/?author={author_slug}"
-        st.caption(f"🔗 Shareable link: [{link}]({link})")
-
-        # ── Publication type filter ──────────────────────────────────────────
-        types = st.multiselect(
-            "Filter by publication type",
-            adf["Publication type"].unique(),
-            adf["Publication type"].unique(),
-            key="author_page_types"
-        )
-        adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
-
-        # ── Sort ─────────────────────────────────────────────────────────────
-        sort_by = st.radio(
-            "Sort by:", ("Publication date", "Citation", "Publication type"),
-            horizontal=True, key="author_page_sort"
-        )
-        if sort_by == "Publication date":
-            adf = adf.sort_values("Date published", ascending=False)
-        elif sort_by == "Citation":
-            adf = adf.sort_values("Citation", ascending=False)
-        elif sort_by == "Publication type":
-            adf = adf.sort_values("Publication type", ascending=True)
-
-        # ── Publications list ────────────────────────────────────────────────
-        reviews_map = load_reviews_map()
-        st.markdown(f"#### Publications ({len(adf)})")
-        for i, row in adf.iterrows():
-            st.markdown(
-                f"{i+1}) {format_entry(row, include_citation=True, reviews_map=reviews_map, base_url=BASE_URL)}",
-                unsafe_allow_html=True
-            )
-
-        # ── Download ─────────────────────────────────────────────────────────
-        st.divider()
-        csv = convert_df_to_csv(
-            adf[["Publication type", "Title", "Abstract", "Date published",
-                 "Publisher", "Journal", "Link to publication", "Zotero link", "Citation"]]
-            .assign(Abstract=lambda d: d["Abstract"].str.replace("\n", " "))
-        )
-        st.download_button(
-            "Download publications", csv,
-            f"{matched_author}_{datetime.date.today().isoformat()}.csv",
-            mime="text/csv", icon=":material/download:"
-        )
-    else:
-        st.warning(f"Author not found: {author_slug}")
-        if st.button("← Back to home"):
-            st.query_params.clear()
-            st.rerun()
-
-    st.stop()
-
 # ── Load data ───────────────────────────────────────────────────────────────
 @st.cache_data(ttl=3600)
 def load_data():
@@ -802,160 +704,143 @@ with tab1:
         # ================================================================
         # 1 – AUTHOR SEARCH
         # ================================================================
+
         elif search_option == 1:
             st.subheader("Search author", anchor=False, divider="blue")
 
-            pub_counts     = df_authors["Author_name"].value_counts().to_dict()
-            sorted_authors = sorted(df_authors["Author_name"].unique(),
-                                    key=lambda a: pub_counts.get(a, 0), reverse=True)
-            options        = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
+            @st.fragment
+            def search_author():
+                reviews_map    = load_reviews_map()
+                pub_counts     = df_authors["Author_name"].value_counts().to_dict()
+                sorted_authors = sorted(df_authors["Author_name"].unique(),
+                                        key=lambda a: pub_counts.get(a, 0), reverse=True)
+                options = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
 
-            selected_display = st.selectbox("Select author", options, index=0)
-            selected_author  = selected_display.split(" (")[0] if selected_display else None
+                # Pre-select from URL if ?author= slug is present
+                default_slug  = st.query_params.get("author", "")
+                default_index = 0
+                if default_slug:
+                    matched = slug_to_author(default_slug, [o.split(" (")[0] for o in options if o])
+                    if matched:
+                        default_index = next(
+                            (i for i, o in enumerate(options) if o.startswith(matched + " (")), 0
+                        )
 
-            if selected_author:
-                slug = author_to_slug(selected_author)
-                st.query_params.from_dict({"author": slug})
-                st.rerun()
-            else:
-                st.write("Select an author to see their publications.")
+                selected_display = st.selectbox("Select author", options, index=default_index)
+                selected_author  = selected_display.split(" (")[0] if selected_display else None
 
-        # elif search_option == 1:
-        #     st.subheader("Search author", anchor=False, divider="blue")
+                if selected_author:
+                    slug           = author_to_slug(selected_author)
+                    default_report = st.query_params.get("report", "0") == "1"
 
-        #     @st.fragment
-        #     def search_author():
-        #         reviews_map    = load_reviews_map()
-        #         pub_counts     = df_authors["Author_name"].value_counts().to_dict()
-        #         sorted_authors = sorted(df_authors["Author_name"].unique(),
-        #                                 key=lambda a: pub_counts.get(a, 0), reverse=True)
-        #         options = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
+                    if "report_author_state" not in st.session_state:
+                        st.session_state["report_author_state"] = default_report
 
-        #         # Pre-select from URL if ?author= slug is present
-        #         default_slug  = st.query_params.get("author", "")
-        #         default_index = 0
-        #         if default_slug:
-        #             matched = slug_to_author(default_slug, [o.split(" (")[0] for o in options if o])
-        #             if matched:
-        #                 default_index = next(
-        #                     (i for i, o in enumerate(options) if o.startswith(matched + " (")), 0
-        #                 )
+                    st.toggle(":material/monitoring: Generate report",
+                            key="report_author",
+                            value=st.session_state["report_author_state"])
+                    on = st.session_state["report_author"]
+                    st.session_state["report_author_state"] = on
 
-        #         selected_display = st.selectbox("Select author", options, index=default_index)
-        #         selected_author  = selected_display.split(" (")[0] if selected_display else None
+                    params = {"author": slug}
+                    if on:
+                        params["report"] = "1"
+                    current_url_report = st.query_params.get("report", "0") == "1"
+                    if on != current_url_report or st.query_params.get("author", "") != slug:
+                        st.query_params.from_dict(params)
 
-        #         if selected_author:
-        #             slug           = author_to_slug(selected_author)
-        #             default_report = st.query_params.get("report", "0") == "1"
+                    link = f"https://intelligence.streamlit.app/?author={slug}{'&report=1' if on else ''}"
+                    st.caption(f"🔗 Shareable link: [{link}]({link})")
+                else:
+                    st.session_state.pop("report_author_state", None)
+                    on = st.toggle(":material/monitoring: Generate report", key="report_author_empty")
+                    st.query_params.clear()
 
-        #             if "report_author_state" not in st.session_state:
-        #                 st.session_state["report_author_state"] = default_report
+                if not selected_author:
+                    st.write("Select an author to see items")
+                    return
 
-        #             st.toggle(":material/monitoring: Generate report",
-        #                     key="report_author",
-        #                     value=st.session_state["report_author_state"])
-        #             on = st.session_state["report_author"]
-        #             st.session_state["report_author_state"] = on
+                adf = df_authors[df_authors["Author_name"] == selected_author].copy()
+                adf["Date published"] = parse_date_column(adf["Date published"])
+                adf["Date published"] = adf["Date published"].fillna("")
+                adf = sort_by_date(adf).sort_values(["No date flag","Date published"], ascending=[True,True])
 
-        #             params = {"author": slug}
-        #             if on:
-        #                 params["report"] = "1"
-        #             current_url_report = st.query_params.get("report", "0") == "1"
-        #             if on != current_url_report or st.query_params.get("author", "") != slug:
-        #                 st.query_params.from_dict(params)
+                with st.expander("Click to expand", expanded=True):
+                    st.subheader(f"Publications by {selected_author}", anchor=False, divider="blue")
+                    ca1, ca2, ca3, ca4 = st.columns(4)
+                    with ca1: c_m = st.container()
+                    with ca2:
+                        with st.popover("More metrics"):
+                            c_cit     = st.container()
+                            c_cit_avg = st.container()
+                            c_oa      = st.container()
+                            c_type    = st.container()
+                            c_collab  = st.container()
+                    with ca3:
+                        with st.popover("Relevant themes"):
+                            st.markdown("##### Top 5 relevant themes")
+                            fdc  = pd.merge(df_duplicated, adf[["Zotero link"]], on="Zotero link")
+                            fdc  = fdc[["Zotero link","Collection_Key","Collection_Name","Collection_Link"]]
+                            fdc2 = fdc["Collection_Name"].value_counts().reset_index().head(10)
+                            fdc2.columns = ["Collection_Name","Number_of_Items"]
+                            fdc2 = fdc2[fdc2["Collection_Name"] != "01 Intelligence history"]
+                            fdc  = pd.merge(fdc2, fdc, on="Collection_Name", how="left").drop_duplicates("Collection_Name").reset_index(drop=True)
+                            fdc["Collection_Name"] = fdc["Collection_Name"].apply(remove_numbers)
+                            for i, row in fdc.iterrows():
+                                st.caption(f"{i+1}) [{row['Collection_Name']}]({row['Collection_Link']}) {row['Number_of_Items']} items")
+                    with ca4:
+                        with st.popover("Filters and more"):
+                            c_types_filter = st.container()
+                            c_dl           = st.container()
+                            view = st.radio("View as:", ("Basic list","Table","Bibliography"), horizontal=True)
 
-        #             link = f"https://intelligence.streamlit.app/?author={slug}{'&report=1' if on else ''}"
-        #             st.caption(f"🔗 Shareable link: [{link}]({link})")
-        #         else:
-        #             st.session_state.pop("report_author_state", None)
-        #             on = st.toggle(":material/monitoring: Generate report", key="report_author_empty")
-        #             st.query_params.clear()
+                    st.write("*This database **may not show** all research outputs of the author.*")
+                    types = c_types_filter.multiselect(
+                        "Publication type", adf["Publication type"].unique(),
+                        adf["Publication type"].unique(), key="auth_types",
+                    )
+                    adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
 
-        #         if not selected_author:
-        #             st.write("Select an author to see items")
-        #             return
+                    render_metrics(adf, container_metric=c_m, container_citation=c_cit,
+                                    container_citation_average=c_cit_avg, container_oa=c_oa,
+                                    container_type=c_type, container_publication_ratio=c_collab)
 
-        #         adf = df_authors[df_authors["Author_name"] == selected_author].copy()
-        #         adf["Date published"] = parse_date_column(adf["Date published"])
-        #         adf["Date published"] = adf["Date published"].fillna("")
-        #         adf = sort_by_date(adf).sort_values(["No date flag","Date published"], ascending=[True,True])
+                    csv = convert_df_to_csv(
+                        adf[["Publication type","Title","Abstract","Date published",
+                                "Publisher","Journal","Link to publication","Zotero link","Citation"]]
+                        .assign(Abstract=lambda d: d["Abstract"].str.replace("\n"," "))
+                    )
+                    c_dl.download_button(
+                        "Download publications", csv,
+                        f"{selected_author}_{datetime.date.today().isoformat()}.csv",
+                        mime="text/csv", key="dl-auth", icon=":material/download:",
+                    )
 
-        #         with st.expander("Click to expand", expanded=True):
-        #             st.subheader(f"Publications by {selected_author}", anchor=False, divider="blue")
-        #             ca1, ca2, ca3, ca4 = st.columns(4)
-        #             with ca1: c_m = st.container()
-        #             with ca2:
-        #                 with st.popover("More metrics"):
-        #                     c_cit     = st.container()
-        #                     c_cit_avg = st.container()
-        #                     c_oa      = st.container()
-        #                     c_type    = st.container()
-        #                     c_collab  = st.container()
-        #             with ca3:
-        #                 with st.popover("Relevant themes"):
-        #                     st.markdown("##### Top 5 relevant themes")
-        #                     fdc  = pd.merge(df_duplicated, adf[["Zotero link"]], on="Zotero link")
-        #                     fdc  = fdc[["Zotero link","Collection_Key","Collection_Name","Collection_Link"]]
-        #                     fdc2 = fdc["Collection_Name"].value_counts().reset_index().head(10)
-        #                     fdc2.columns = ["Collection_Name","Number_of_Items"]
-        #                     fdc2 = fdc2[fdc2["Collection_Name"] != "01 Intelligence history"]
-        #                     fdc  = pd.merge(fdc2, fdc, on="Collection_Name", how="left").drop_duplicates("Collection_Name").reset_index(drop=True)
-        #                     fdc["Collection_Name"] = fdc["Collection_Name"].apply(remove_numbers)
-        #                     for i, row in fdc.iterrows():
-        #                         st.caption(f"{i+1}) [{row['Collection_Name']}]({row['Collection_Link']}) {row['Number_of_Items']} items")
-        #             with ca4:
-        #                 with st.popover("Filters and more"):
-        #                     c_types_filter = st.container()
-        #                     c_dl           = st.container()
-        #                     view = st.radio("View as:", ("Basic list","Table","Bibliography"), horizontal=True)
+                    if on and len(adf):
+                        st.info(f"Publications report for {selected_author}")
+                        render_report_charts(adf, selected_author, name_replacements,
+                                                show_themes=True, themes_df=fdc)
+                    elif not on:
+                        adf = sort_radio(adf, key="auth_sort")
+                        if view == "Basic list":
+                            for i, row in adf.iterrows():
+                                st.write(f"{i+1}) {format_entry(row, include_citation=True, reviews_map=reviews_map)}")
+                        elif view == "Table":
+                            st.dataframe(
+                                adf[["Publication type","Title","Date published","FirstName2",
+                                        "Abstract","Publisher","Journal","Citation",
+                                        "Link to publication","Zotero link"]]
+                                .rename(columns={"FirstName2":"Author(s)","Link to publication":"Publication link"})
+                            )
+                        elif view == "Bibliography":
+                            adf["zotero_item_key"] = adf["Zotero link"].str.replace(
+                                "https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/","")
+                            df_zot = pd.read_csv("zotero_citation_format.csv")
+                            display_bibliographies(pd.merge(adf, df_zot, on="zotero_item_key", how="left"))
+                    else:
+                        st.write("No publication type selected.")
 
-        #             st.write("*This database **may not show** all research outputs of the author.*")
-        #             types = c_types_filter.multiselect(
-        #                 "Publication type", adf["Publication type"].unique(),
-        #                 adf["Publication type"].unique(), key="auth_types",
-        #             )
-        #             adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
-
-        #             render_metrics(adf, container_metric=c_m, container_citation=c_cit,
-        #                             container_citation_average=c_cit_avg, container_oa=c_oa,
-        #                             container_type=c_type, container_publication_ratio=c_collab)
-
-        #             csv = convert_df_to_csv(
-        #                 adf[["Publication type","Title","Abstract","Date published",
-        #                         "Publisher","Journal","Link to publication","Zotero link","Citation"]]
-        #                 .assign(Abstract=lambda d: d["Abstract"].str.replace("\n"," "))
-        #             )
-        #             c_dl.download_button(
-        #                 "Download publications", csv,
-        #                 f"{selected_author}_{datetime.date.today().isoformat()}.csv",
-        #                 mime="text/csv", key="dl-auth", icon=":material/download:",
-        #             )
-
-        #             if on and len(adf):
-        #                 st.info(f"Publications report for {selected_author}")
-        #                 render_report_charts(adf, selected_author, name_replacements,
-        #                                         show_themes=True, themes_df=fdc)
-        #             elif not on:
-        #                 adf = sort_radio(adf, key="auth_sort")
-        #                 if view == "Basic list":
-        #                     for i, row in adf.iterrows():
-        #                         st.write(f"{i+1}) {format_entry(row, include_citation=True, reviews_map=reviews_map)}")
-        #                 elif view == "Table":
-        #                     st.dataframe(
-        #                         adf[["Publication type","Title","Date published","FirstName2",
-        #                                 "Abstract","Publisher","Journal","Citation",
-        #                                 "Link to publication","Zotero link"]]
-        #                         .rename(columns={"FirstName2":"Author(s)","Link to publication":"Publication link"})
-        #                     )
-        #                 elif view == "Bibliography":
-        #                     adf["zotero_item_key"] = adf["Zotero link"].str.replace(
-        #                         "https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/","")
-        #                     df_zot = pd.read_csv("zotero_citation_format.csv")
-        #                     display_bibliographies(pd.merge(adf, df_zot, on="zotero_item_key", how="left"))
-        #             else:
-        #                 st.write("No publication type selected.")
-
-        #     search_author()
+            search_author()
 
         # ================================================================
         # 2 – COLLECTION SEARCH
