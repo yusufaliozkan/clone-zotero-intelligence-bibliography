@@ -26,7 +26,7 @@ def format_entry(row, include_citation=True, reviews_map=None, max_reviews_inlin
     oa_url_fixed        = _clean(row.get("OA_link")).replace(" ", "%20")
 
     pub_link_badge    = f"[:blue-badge[Publication link]]({link_to_publication})" if link_to_publication else ""
-    zotero_link_badge = f"[:blue-badge[Zotero link]]({zotero_link})" if zotero_link else ""
+    zotero_link_badge = f"[:red-badge[Zotero link]]({zotero_link})" if zotero_link else ""
     oa_link_text      = f"[:green-badge[OA version]]({oa_url_fixed})" if oa_url_fixed else ""
     if citation > 0:
         if citation_link:
