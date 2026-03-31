@@ -808,15 +808,17 @@ with tab1:
                                     key=lambda a: pub_counts.get(a, 0), reverse=True)
             options        = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
 
-            default_index = 0
-            selected_display = st.selectbox("Select author", options, index=default_index)
+            selected_display = st.selectbox("Select author", options, index=0)
             selected_author  = selected_display.split(" (")[0] if selected_display else None
 
             if selected_author:
                 slug = author_to_slug(selected_author)
-                # Redirect directly to standalone author page
-                st.query_params.from_dict({"author": slug})
-                st.rerun()
+                link = f"{BASE_URL}/?author={slug}"
+                st.caption(f"🔗 Shareable link: [{link}]({link})")
+                st.info(f"Click the link above to open the full author page for **{selected_author}**, or use the link to share their publications.")
+                if st.button(f"Open {selected_author}'s page"):
+                    st.query_params.from_dict({"author": slug})
+                    st.rerun()
             else:
                 st.write("Select an author to see their publications.")
 
