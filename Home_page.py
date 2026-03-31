@@ -122,7 +122,7 @@ if item_key:
             if authors_raw:
                 author_list = [a.strip() for a in authors_raw.split(",")]
                 author_links = " · ".join(
-                    f"[{a}]({BASE_URL}/?author={author_to_slug(a)})"
+                    f"[{a}]({BASE_URL}/?author_page={author_to_slug(a)})"
                     for a in author_list if a
                 )
                 st.markdown(f"**Authors:** {author_links}")
@@ -284,7 +284,7 @@ if author_page_slug:
         st.divider()
 
         # ── Shareable link ───────────────────────────────────────────────────
-        link = f"{BASE_URL}/?author={author_page_slug}"
+        link = f"{BASE_URL}/?author_page={author_page_slug}"
         st.caption(f"🔗 Shareable link: [{link}]({link})")
 
         # ── Publication type filter ──────────────────────────────────────────
@@ -810,7 +810,7 @@ with tab1:
                                         key=lambda a: pub_counts.get(a, 0), reverse=True)
                 options = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
 
-                # Pre-select from URL if ?author= slug is present
+                # Pre-select from URL if ?author_page= slug is present
                 default_slug  = st.query_params.get("author", "")
                 default_index = 0
                 if default_slug:
@@ -843,7 +843,7 @@ with tab1:
                     if on != current_url_report or st.query_params.get("author", "") != slug:
                         st.query_params.from_dict(params)
 
-                    link = f"https://intelligence.streamlit.app/?author={slug}{'&report=1' if on else ''}"
+                    link = f"https://intelligence.streamlit.app/?author_page={slug}{'&report=1' if on else ''}"
                     st.caption(f"🔗 Shareable link: [{link}]({link})")
                 else:
                     st.session_state.pop("report_author_state", None)
