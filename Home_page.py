@@ -1154,12 +1154,17 @@ with tab1:
                 unique_types = [""] + list(df_authors["Publication type"].unique())
 
                 # Pre-select from URL if ?type= is present
-                default_type       = st.query_params.get("type", "").replace("+", " ")
-                default_type_index = 0
-                if default_type and default_type in unique_types:
-                    default_type_index = unique_types.index(default_type)
+                if "type_selectbox" not in st.session_state:
+                    default_type       = st.query_params.get("type", "").replace("+", " ")
+                    default_type_index = 0
+                    if default_type and default_type in unique_types:
+                        default_type_index = unique_types.index(default_type)
+                    st.session_state["type_selectbox"] = unique_types[default_type_index]
 
-                selected_type = st.selectbox("Select a publication type", unique_types, index=default_type_index)
+                selected_type = st.selectbox(
+                    "Select a publication type", unique_types,
+                    key="type_selectbox",
+                )
 
                 if selected_type:
                     st.query_params.from_dict({"type": selected_type})
