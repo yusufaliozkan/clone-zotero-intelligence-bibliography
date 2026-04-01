@@ -94,6 +94,61 @@ Ozkan, Yusuf A. 'Intelligence Studies Network Dataset'. Zenodo, 15 August 2024. 
 **Cite this page:** IntelArchive. '*Intelligence Studies Network*', Created 1 June 2020, Accessed {cite_today}. https://intelligence.streamlit.app/.
 """
 
+@st.cache_data(ttl=3600)
+def compute_author_similarity(df_authors):
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+    import numpy as np
+
+    # Build one text blob per author
+    author_texts = (
+        df_authors.groupby("Author_name")
+        .apply(lambda g: " ".join(
+            (g["Title"].fillna("") + " " + g["Abstract"].fillna("")).str.strip()
+        ))
+        .reset_index()
+    )
+    author_texts.columns = ["Author_name", "text"]
+    author_texts = author_texts[author_texts["text"].str.len() > 10].reset_index(drop=True)
+
+    # TF-IDF vectorisation
+    vectorizer = TfidfVectorizer(
+        stop_words="english",
+        max_features=10000,
+        ngram_range=(1, 2),
+    )
+    tfidf_matrix = vectorizer.fit_transform(author_texts["text"])
+
+    # Cosine similarity matrix
+    similarity_matrix = cosine_similarity(tfidf_matrix)
+
+    return author_texts, similarity_matrix
+
+
+def get_similar_authors(author_name, df_authors, top_n=5):
+    import numpy as np
+
+    author_texts, similarity_matrix = compute_author_similarity(df_authors)
+
+    if author_name not in author_texts["Author_name"].values:
+        return []
+
+    idx = author_texts[author_texts["Author_name"] == author_name].index[0]
+    scores = similarity_matrix[idx]
+
+    # Exclude self
+    scores[idx] = 0
+
+    top_indices = np.argsort(scores)[::-1][:top_n]
+    results = []
+    for i in top_indices:
+        if scores[i] > 0:
+            results.append({
+                "author": author_texts.iloc[i]["Author_name"],
+                "score": round(float(scores[i]), 3),
+            })
+    return results
+
 def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     reviews_map = load_reviews_map()
 
@@ -146,6 +201,18 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
                     f"{i+1}) [{row['Collection_Name']}]({app_link}) "
                     f"· {row['Number_of_Items']} items"
                 )
+
+            st.divider()
+            st.markdown("##### Top 5 similar authors")
+            with st.spinner("Finding similar authors..."):
+                similar = get_similar_authors(author_name, df_authors)
+            if similar:
+                for s in similar:
+                    s_slug = author_to_slug(s["author"])
+                    profile_url = f"{BASE_URL}/?author_profile={s_slug}"
+                    st.caption(f"[{s['author']}]({profile_url}) · similarity: {s['score']}")
+            else:
+                st.caption("No similar authors found.")
 
     st.write("*This database **may not show** all research outputs of the author.*")
 
