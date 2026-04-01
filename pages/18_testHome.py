@@ -485,13 +485,15 @@ with tab1:
         # 0 – KEYWORD SEARCH
         # ================================================================
         if search_option == 0:
-            # Clear author param if switching to keyword search
-            if "author" in st.query_params:
+            # Clear any non-keyword params when switching to keyword search
+            non_keyword_params = {"author", "collection", "type", "journal", "year_from", "year_to"}
+            if any(k in st.query_params for k in non_keyword_params):
                 st.query_params.clear()
-            # Clear author state when switching back to keyword
-            for key in ["auth_types", "auth_sort"]:
-                if key in st.session_state:
-                    del st.session_state[key]
+            # Clear stale session state
+            for key in ["auth_types", "auth_sort", "report_author_state",
+                        "col_types", "col_sort", "type_sort",
+                        "journal_sort", "year_sort", "cited_sort"]:
+                st.session_state.pop(key, None)
             st.subheader("Search keywords", anchor=False, divider="blue")
 
             @st.fragment
