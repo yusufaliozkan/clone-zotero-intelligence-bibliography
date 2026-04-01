@@ -2270,13 +2270,111 @@ with tab3:
             with st.chat_message(message["role"]):
                 st.markdown(message["content"])
 
-        if prompt := st.chat_input("Ask a question about the database..."):
-            # ... rest of chat code unchanged, all inside this else block ...
+    if prompt := st.chat_input("Ask a question about the database..."):
+        st.session_state.chat_messages.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
 
-        if st.session_state.chat_messages:
-            if st.button("Clear chat"):
-                st.session_state.chat_messages = []
-                st.rerun()
+        # Build context from database
+        with st.spinner("Searching database..."):
+            stop_words = {"can", "you", "find", "any", "publications", "containing",
+                        "in", "the", "title", "about", "with", "a", "an", "and",
+                        "or", "is", "are", "what", "who", "how", "many", "show",
+                        "me", "please", "list", "give", "tell", "do", "have",
+                        "has", "been", "that", "this", "for", "of", "to", "did",
+                        "had", "good", "bad", "well", "better", "best", "was",
+                        "were", "there", "their", "its", "his", "her", "our"}
+
+            keywords = [
+                w.strip("'\"?,.")
+                for w in prompt.split()
+                if w.lower().strip("'\"?.,") not in stop_words
+                and len(w.strip("'\"?.,")) > 3
+            ]
+
+            if keywords:
+                df_search = df_dedup.copy()
+                df_search["_title"]    = df_search["Title"].fillna("").str.lower()
+                df_search["_abstract"] = df_search["Abstract"].fillna("").str.lower()
+                df_search["_combined"] = df_search["_title"] + " " + df_search["_abstract"]
+
+                # Score each row by how many keywords it matches
+                def score_row(text):
+                    return sum(1 for k in keywords if k.lower() in text)
+
+                df_search["_score"] = df_search["_combined"].apply(score_row)
+
+                # Only keep rows that match at least 2 keywords, sorted by score
+                relevant = df_search[df_search["_score"] >= 2].sort_values(
+                    "_score", ascending=False
+                ).head(30)
+
+                # If nothing matches 2+, fall back to 1 keyword match
+                if relevant.empty:
+                    relevant = df_search[df_search["_score"] >= 1].sort_values(
+                        "_score", ascending=False
+                    ).head(30)
+            else:
+                relevant = pd.DataFrame()
+
+            if relevant.empty:
+                context = f"No publications found matching keywords: {keywords}. Database has {len(df_dedup)} total publications."
+            else:
+                context = f"Found {len(relevant)} relevant publications (ranked by relevance):\n\n"
+                for _, row in relevant.iterrows():
+                    context += f"Title: {row['Title']}\n"
+                    context += f"Authors: {row.get('FirstName2', 'N/A')}\n"
+                    context += f"Date: {row.get('Date published', 'N/A')}\n"
+                    context += f"Type: {row.get('Publication type', 'N/A')}\n"
+                    context += f"Journal/Publisher: {row.get('Journal') or row.get('Publisher', 'N/A')}\n"
+                    abstract = str(row.get('Abstract', ''))
+                    if abstract and abstract != 'nan':
+                        context += f"Abstract: {abstract[:500]}{'...' if len(abstract) > 500 else ''}\n"
+                    context += "\n"
+
+        # Call Claude API
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                try:
+                    import anthropic
+                    client = anthropic.Anthropic(api_key=st.session_state["user_api_key"])
+
+                    response = client.messages.create(
+                        model="claude-haiku-4-5-20251001",
+                        max_tokens=1024,
+                        system="""You are an assistant for IntelArchive, an intelligence studies bibliography database containing over 8,000 publications. 
+                        You will be given database context containing relevant publications found by searching the database.
+                        If publications are provided in the context, list them specifically with their titles and authors.
+                        If the context says publications were found, report them — do not say you cannot find them.
+                        Be specific and always cite exact titles and authors from the context provided.
+                        Do not make up publications or authors not in the context.""",
+                        messages=[
+                            {
+                                "role": "user",
+                                "content": f"""Database context (relevant publications):
+        {context}
+
+        User question: {prompt}"""
+                            }
+                        ]
+                    )
+                    answer = response.content[0].text
+                    st.markdown(answer)
+                    st.session_state.chat_messages.append({"role": "assistant", "content": answer})
+
+                except anthropic.AuthenticationError:
+                    st.error("Invalid API key. Please check your key and try again.")
+                    del st.session_state["user_api_key"]
+                except anthropic.RateLimitError:
+                    st.error("Rate limit reached. Please wait a moment and try again.")
+                except Exception as e:
+                    st.error(f"Error calling Claude API: {e}")
+
+    if st.session_state.chat_messages:
+        if st.button("Clear chat"):
+            st.session_state.chat_messages = []
+            st.rerun()
+
 
 st.write("---")
 with st.expander("Acknowledgements"):
