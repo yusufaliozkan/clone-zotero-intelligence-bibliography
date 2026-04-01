@@ -178,7 +178,7 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     fdc["Collection_Name"] = fdc["Collection_Name"].apply(remove_numbers)
 
     # ── Three-column metrics row ─────────────────────────────────────────────
-    ca1, ca2, ca3 = st.columns(3)
+    ca1, ca2, ca3, ca4 = st.columns(3)
 
     with ca1:
         c_m = st.container()
@@ -202,17 +202,17 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
                     f"· {row['Number_of_Items']} items"
                 )
 
-            st.divider()
-            st.markdown("##### Top 5 similar authors")
-            with st.spinner("Finding similar authors..."):
-                similar = get_similar_authors(author_name, df_authors)
-            if similar:
-                for s in similar:
-                    s_slug = author_to_slug(s["author"])
-                    profile_url = f"{BASE_URL}/?author_profile={s_slug}"
-                    st.caption(f"[{s['author']}]({profile_url}) · similarity: {s['score']}")
-            else:
-                st.caption("No similar authors found.")
+    with ca4:
+        st.markdown("##### Top 5 similar authors")
+        with st.spinner("Finding similar authors..."):
+            similar = get_similar_authors(author_name, df_authors)
+        if similar:
+            for s in similar:
+                s_slug = author_to_slug(s["author"])
+                profile_url = f"{BASE_URL}/?author_profile={s_slug}"
+                st.caption(f"[{s['author']}]({profile_url}) · similarity: {s['score']}")
+        else:
+            st.caption("No similar authors found.")
 
     st.write("*This database **may not show** all research outputs of the author.*")
 
