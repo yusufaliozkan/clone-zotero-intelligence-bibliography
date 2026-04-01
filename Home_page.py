@@ -258,6 +258,7 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     # ── Filters + download each in their own column ──────────────────────────
     col_types, col_view = st.columns([3,2])
 
+    with col_types:
         types = st.multiselect(
             "Publication type",
             adf["Publication type"].unique(),
