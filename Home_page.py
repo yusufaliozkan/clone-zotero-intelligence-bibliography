@@ -917,17 +917,23 @@ with tab1:
                                         key=lambda a: pub_counts.get(a, 0), reverse=True)
                 options = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
 
-                default_slug  = st.query_params.get("author_preview", "")
-                default_index = 0
-                if default_slug:
-                    matched = slug_to_author(default_slug, [o.split(" (")[0] for o in options if o])
-                    if matched:
-                        default_index = next(
-                            (i for i, o in enumerate(options) if o.startswith(matched + " (")), 0
-                        )
+                # ── Only read from URL on first load ──────────────────────────
+                if "author_selectbox" not in st.session_state:
+                    default_slug  = st.query_params.get("author_preview", "")
+                    default_index = 0
+                    if default_slug:
+                        matched = slug_to_author(default_slug, [o.split(" (")[0] for o in options if o])
+                        if matched:
+                            default_index = next(
+                                (i for i, o in enumerate(options) if o.startswith(matched + " (")), 0
+                            )
+                    st.session_state["author_selectbox"] = options[default_index]
 
-                selected_display = st.selectbox("Select author", options, index=default_index)
-                selected_author  = selected_display.split(" (")[0] if selected_display else None
+                selected_display = st.selectbox(
+                    "Select author", options,
+                    key="author_selectbox",
+                )
+                selected_author = selected_display.split(" (")[0] if selected_display else None
 
                 if not selected_author:
                     st.write("Select an author to see items")
