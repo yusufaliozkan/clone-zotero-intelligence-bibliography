@@ -99,7 +99,7 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
 
     # ── Header ──────────────────────────────────────────────────────────────
     st.markdown(f"## 👤 {author_name}")
-    st.caption(f"Full publication profile · IntelArchive")
+    st.caption("Full publication profile · IntelArchive")
     st.divider()
 
     # ── Build author dataframe ───────────────────────────────────────────────
@@ -111,11 +111,11 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     )
 
     # ── Top metrics strip ────────────────────────────────────────────────────
-    total_pubs    = len(adf)
-    total_cit     = int(adf["Citation"].sum()) if "Citation" in adf.columns else 0
-    oa_count      = int(adf["OA status"].sum()) if "OA status" in adf.columns else 0
-    multi         = adf["FirstName2"].astype(str).apply(lambda x: "," in x).sum()
-    collab_ratio  = f"{round(multi / total_pubs * 100, 1)}%" if total_pubs else "N/A"
+    total_pubs   = len(adf)
+    total_cit    = int(adf["Citation"].sum()) if "Citation" in adf.columns else 0
+    oa_count     = int(adf["OA status"].sum()) if "OA status" in adf.columns else 0
+    multi        = adf["FirstName2"].astype(str).apply(lambda x: "," in x).sum()
+    collab_ratio = f"{round(multi / total_pubs * 100, 1)}%" if total_pubs else "N/A"
 
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("Publications", total_pubs)
@@ -125,7 +125,7 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
 
     st.divider()
 
-    # ── Two-column layout: themes + filters ─────────────────────────────────
+    # ── Themes + filters sidebar column ─────────────────────────────────────
     col_left, col_right = st.columns([2, 1])
 
     with col_right:
@@ -145,7 +145,8 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
             )
 
         st.divider()
-        st.markdown("#### ⚙️ Filters")
+        st.markdown("#### ⚙️ Filters & options")
+
         types = st.multiselect(
             "Publication type",
             adf["Publication type"].unique(),
@@ -170,44 +171,64 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
             mime="text/csv", key="dl-ap",
         )
 
-        # ── Shareable link ───────────────────────────────────────────────────
-        slug = author_to_slug(author_name)
-        link = f"{BASE_URL}/?author_profile={slug}"
-        st.caption(f"🔗 [Share this profile]({link})")
-
     with col_left:
-        st.markdown("#### 📊 Publications by year")
-        adf_chart = adf.copy()
-        adf_chart["Year"] = pd.to_datetime(
-            adf_chart["Date published"], errors="coerce"
-        ).dt.year
-        year_counts = adf_chart["Year"].dropna().astype(int).value_counts() \
-                        .sort_index().reset_index()
-        year_counts.columns = ["Year", "Count"]
-        if not year_counts.empty:
-            fig = px.bar(
-                year_counts, x="Year", y="Count",
-                title=f"Publications per year · {author_name}",
-            )
-            fig.update_xaxes(type="category", tickangle=-45)
-            fig.update_layout(showlegend=False, height=280, margin=dict(t=40, b=0))
-            st.plotly_chart(fig, use_container_width=True)
-        else:
-            st.info("No dated publications to chart.")
+        # ── Report toggle + shareable link ───────────────────────────────────
+        slug = author_to_slug(author_name)
+        default_report = st.query_params.get("report", "0") == "1"
+
+        if "ap_report_state" not in st.session_state:
+            st.session_state["ap_report_state"] = default_report
+
+        on = st.toggle(
+            ":material/monitoring: Generate full report",
+            key="ap_report",
+            value=st.session_state["ap_report_state"],
+        )
+        st.session_state["ap_report_state"] = on
+
+        # Sync URL so link is always shareable
+        current_url_report = st.query_params.get("report", "0") == "1"
+        if on != current_url_report:
+            params = {"author_profile": slug}
+            if on:
+                params["report"] = "1"
+            st.query_params.from_dict(params)
+
+        link = f"{BASE_URL}/?author_profile={slug}{'&report=1' if on else ''}"
+        st.caption(f"🔗 Shareable link: [{link}]({link})")
 
         st.divider()
 
-        # ── Report toggle ────────────────────────────────────────────────────
-        on = st.toggle(":material/monitoring: Generate full report", key="ap_report")
         if on and len(adf):
+            # ── Full report ───────────────────────────────────────────────────
             st.info(f"Report for {author_name}")
+
+            adf_chart = adf.copy()
+            adf_chart["Year"] = pd.to_datetime(
+                adf_chart["Date published"], errors="coerce"
+            ).dt.year
+            year_counts = adf_chart["Year"].dropna().astype(int) \
+                            .value_counts().sort_index().reset_index()
+            year_counts.columns = ["Year", "Count"]
+            if not year_counts.empty:
+                fig = px.bar(
+                    year_counts, x="Year", y="Count",
+                    title=f"Publications per year · {author_name}",
+                )
+                fig.update_xaxes(type="category", tickangle=-45)
+                fig.update_layout(showlegend=False, height=280, margin=dict(t=40, b=0))
+                st.plotly_chart(fig, use_container_width=True)
+
             render_report_charts(
                 adf, author_name, name_replacements,
                 show_themes=True, themes_df=fdc
             )
+
         else:
+            # ── Publications list only ────────────────────────────────────────
             adf = sort_radio(adf, key="ap_sort")
             st.markdown(f"#### 📄 Publications ({len(adf)})")
+
             if view == "Basic list":
                 for i, row in adf.iterrows():
                     st.write(
@@ -216,8 +237,8 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
             elif view == "Table":
                 st.dataframe(
                     adf[["Publication type", "Title", "Date published", "FirstName2",
-                          "Abstract", "Publisher", "Journal", "Citation",
-                          "Link to publication", "Zotero link"]]
+                         "Abstract", "Publisher", "Journal", "Citation",
+                         "Link to publication", "Zotero link"]]
                     .rename(columns={
                         "FirstName2": "Author(s)",
                         "Link to publication": "Publication link"
