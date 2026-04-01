@@ -924,7 +924,7 @@ with tab1:
                 adf = sort_by_date(adf).sort_values(["No date flag","Date published"], ascending=[True,True])
 
                 with st.expander("Click to expand", expanded=True):
-                st.subheader(f"Publications by {selected_author}", anchor=False, divider="blue")
+                    st.subheader(f"Publications by {selected_author}", anchor=False, divider="blue")
                     st.write("*This database **may not show** all research outputs of the author.*")
 
                     profile_slug = author_to_slug(selected_author)
