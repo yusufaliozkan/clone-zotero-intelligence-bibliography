@@ -2370,11 +2370,10 @@ with tab3:
                 except Exception as e:
                     st.error(f"Error calling Claude API: {e}")
 
-    if st.session_state.chat_messages:
-        if st.button("Clear chat"):
-            st.session_state.chat_messages = []
-            st.rerun()
-
+        if st.session_state.chat_messages:
+            if st.button("Clear chat"):
+                st.session_state.chat_messages = []
+                st.rerun()
 
 st.write("---")
 with st.expander("Acknowledgements"):
