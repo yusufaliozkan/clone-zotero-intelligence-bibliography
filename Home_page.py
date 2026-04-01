@@ -1436,15 +1436,18 @@ with tab1:
                     df_all["Date published"] = df_all["Date published"].fillna("")
                     df_all = sort_by_date(df_all).sort_values("Date published", ascending=False)
 
-                    current_year = date.today().year
-                    default_from = int(st.query_params.get("year_from", current_year))
-                    default_to   = int(st.query_params.get("year_to",   current_year + 1))
-                    default_from = max(min_y, min(default_from, max_y))
-                    default_to   = max(min_y, min(default_to,   max_y))
+                    if "year_slider" not in st.session_state:
+                        current_year = date.today().year
+                        default_from = int(st.query_params.get("year_from", current_year))
+                        default_to   = int(st.query_params.get("year_to",   current_year + 1))
+                        default_from = max(min_y, min(default_from, max_y))
+                        default_to   = max(min_y, min(default_to,   max_y))
+                        st.session_state["year_slider"] = (default_from, default_to)
 
-                    years = st.slider("Publication years between:", min_y, max_y,
-                                    (default_from, default_to), key="years")
-
+                    years = st.slider(
+                        "Publication years between:", min_y, max_y,
+                        key="year_slider",
+                    )
                     st.query_params.from_dict({"year_from": str(years[0]), "year_to": str(years[1])})
                     link = f"https://intelligence.streamlit.app/?year_from={years[0]}&year_to={years[1]}"
                     st.caption(f"🔗 Shareable link: [{link}]({link})")
