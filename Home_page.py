@@ -211,7 +211,7 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
                 for s in similar:
                     s_slug = author_to_slug(s["author"])
                     profile_url = f"{BASE_URL}/?author_profile={s_slug}"
-                    st.caption(f"[{s['author']}]({profile_url}) · similarity: {s['score']}")
+                    st.caption(f"[{s['author']}]({profile_url}) · {round(s['score'] * 100)}% match")
             else:
                 st.caption("No similar authors found.")
 
