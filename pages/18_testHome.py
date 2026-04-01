@@ -178,21 +178,25 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
         if on:
             params["report"] = "1"
         st.query_params.from_dict(params)
-        
+
     link = f"{BASE_URL}/?author_profile={slug}{'&report=1' if on else ''}"
     st.caption(f"🔗 Shareable link: [{link}]({link})")
 
+
+
     # ── Filters + download each in their own column ──────────────────────────
+
+    types = st.multiselect(
+        "Publication type",
+        adf["Publication type"].unique(),
+        adf["Publication type"].unique(),
+        key="ap_types",
+    )
+    adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
     col_types, col_view, col_dl = st.columns(3)
 
     with col_types:
-        types = st.multiselect(
-            "Publication type",
-            adf["Publication type"].unique(),
-            adf["Publication type"].unique(),
-            key="ap_types",
-        )
-        adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
+
 
     with col_view:
         view = st.radio(
