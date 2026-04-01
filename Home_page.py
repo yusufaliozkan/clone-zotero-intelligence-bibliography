@@ -993,7 +993,9 @@ with tab1:
 
                     # ── 5 most recent publications ───────────────────────────────────────
                     st.markdown("**5 most recent publications:**")
-                    recent = adf.sort_values("Date published", ascending=False).head(5)
+                    recent = adf[adf["No date flag"] == False].sort_values(
+                        "Date published", ascending=False
+                    ).head(5)
                     for i, row in recent.iterrows():
                         st.write(
                             f"- {format_entry(row, include_citation=True, reviews_map=reviews_map, base_url=BASE_URL)}"
