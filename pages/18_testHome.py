@@ -977,12 +977,12 @@ with tab1:
                     fdc  = pd.merge(fdc2, fdc, on="Collection_Name", how="left") \
                             .drop_duplicates("Collection_Name").reset_index(drop=True)
                     fdc["Collection_Name"] = fdc["Collection_Name"].apply(remove_numbers)
-                                        theme_links = []
-                                        for _, row in fdc.iterrows():
-                                            col_key = str(row.get("Collection_Key", "")).strip()
-                                            app_link = f"{BASE_URL}/?collection={col_key}" if col_key else row['Collection_Link']
-                                            theme_links.append(f"[{row['Collection_Name']}]({app_link})")
-                                        st.caption(" | ".join(theme_links))
+                    theme_links = []
+                    for _, row in fdc.iterrows():
+                        col_key = str(row.get("Collection_Key", "")).strip()
+                        app_link = f"{BASE_URL}/?collection={col_key}" if col_key else row['Collection_Link']
+                        theme_links.append(f"[{row['Collection_Name']}]({app_link})")
+                    st.caption(" | ".join(theme_links))
 
                     # ── 5 most recent publications ───────────────────────────────────────
                     st.markdown("**5 most recent publications:**")
