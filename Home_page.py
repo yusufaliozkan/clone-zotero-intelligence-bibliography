@@ -412,37 +412,55 @@ if item_key:
     st.markdown("**Related publications:**")
 
     def get_related_publications(row, df, top_n=5):
-        import re
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.metrics.pairwise import cosine_similarity
+        import numpy as np
 
-        current_text = f"{row.get('Title', '')} {row.get('Abstract', '')}".lower()
-        stop_words = {"the","a","an","and","or","of","in","to","for","on",
-                        "with","is","are","was","were","this","that","it","by",
-                        "as","at","from","be","has","have","had","not","but"}
-        current_words = set(
-            w for w in re.findall(r'\b\w{4,}\b', current_text)
-            if w not in stop_words
-        )
-
-        if not current_words:
+        # Combine title and abstract for the current item
+        current_text = f"{row.get('Title', '')} {row.get('Abstract', '')}".strip()
+        if not current_text:
             return pd.DataFrame()
 
+        # Combine title and abstract for all items
         df = df.copy()
+        df["_text"] = (
+            df["Title"].fillna("") + " " + df["Abstract"].fillna("")
+        ).str.strip()
+
+        # Remove the current item
         current_zotero = row.get("Zotero link", "")
         df = df[df["Zotero link"] != current_zotero].reset_index(drop=True)
 
-        def overlap_score(r):
-            text = f"{r.get('Title', '')} {r.get('Abstract', '')}".lower()
-            words = set(
-                w for w in re.findall(r'\b\w{4,}\b', text)
-                if w not in stop_words
-            )
-            if not words:
-                return 0
-            return len(current_words & words) / len(current_words | words)
+        # Filter out items with no text
+        df = df[df["_text"].str.len() > 10].reset_index(drop=True)
 
-        df["_score"] = df.apply(overlap_score, axis=1)
-        df = df[df["_score"] > 0].sort_values("_score", ascending=False).head(top_n)
-        return df.reset_index(drop=True)
+        if df.empty:
+            return pd.DataFrame()
+
+        # TF-IDF vectorisation
+        all_texts = [current_text] + df["_text"].tolist()
+        try:
+            vectorizer = TfidfVectorizer(
+                stop_words="english",
+                max_features=5000,
+                ngram_range=(1, 2),
+            )
+            tfidf_matrix = vectorizer.fit_transform(all_texts)
+        except Exception:
+            return pd.DataFrame()
+
+        # Cosine similarity between current item and all others
+        current_vec = tfidf_matrix[0]
+        other_vecs  = tfidf_matrix[1:]
+        scores = cosine_similarity(current_vec, other_vecs).flatten()
+
+        # Get top N
+        top_indices = np.argsort(scores)[::-1][:top_n]
+        top_df = df.iloc[top_indices].copy()
+        top_df["_score"] = scores[top_indices]
+        top_df = top_df[top_df["_score"] > 0]
+
+        return top_df
 
     with st.spinner("Finding related publications..."):
         df_all_items = pd.read_csv("all_items.csv")
