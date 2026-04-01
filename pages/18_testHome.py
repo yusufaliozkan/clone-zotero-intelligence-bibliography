@@ -110,149 +110,143 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
         ["No date flag", "Date published"], ascending=[True, True]
     )
 
-    # ── Top metrics strip ────────────────────────────────────────────────────
-    total_pubs   = len(adf)
-    total_cit    = int(adf["Citation"].sum()) if "Citation" in adf.columns else 0
-    oa_count     = int(adf["OA status"].sum()) if "OA status" in adf.columns else 0
-    multi        = adf["FirstName2"].astype(str).apply(lambda x: "," in x).sum()
-    collab_ratio = f"{round(multi / total_pubs * 100, 1)}%" if total_pubs else "N/A"
+    # ── Themes dataframe (built once, used in popover + report) ─────────────
+    fdc = pd.merge(df_duplicated, adf[["Zotero link"]], on="Zotero link")
+    fdc = fdc[["Zotero link", "Collection_Key", "Collection_Name", "Collection_Link"]]
+    fdc2 = fdc["Collection_Name"].value_counts().reset_index().head(10)
+    fdc2.columns = ["Collection_Name", "Number_of_Items"]
+    fdc2 = fdc2[fdc2["Collection_Name"] != "01 Intelligence history"]
+    fdc = pd.merge(fdc2, fdc, on="Collection_Name", how="left") \
+            .drop_duplicates("Collection_Name").reset_index(drop=True)
+    fdc["Collection_Name"] = fdc["Collection_Name"].apply(remove_numbers)
 
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Publications", total_pubs)
-    m2.metric("Total citations", total_cit)
-    m3.metric("Open access", oa_count)
-    m4.metric("Collaboration ratio", collab_ratio)
+    # ── Four-column metrics row ──────────────────────────────────────────────
+    ca1, ca2, ca3, ca4 = st.columns(4)
 
-    st.divider()
+    with ca1:
+        c_m = st.container()
 
-    # ── Themes + filters sidebar column ─────────────────────────────────────
-    col_left, col_right = st.columns([2, 1])
+    with ca2:
+        with st.popover("More metrics"):
+            c_cit     = st.container()
+            c_cit_avg = st.container()
+            c_oa      = st.container()
+            c_type    = st.container()
+            c_collab  = st.container()
 
-    with col_right:
-        st.markdown("#### 🗂 Top themes")
-        fdc = pd.merge(df_duplicated, adf[["Zotero link"]], on="Zotero link")
-        fdc = fdc[["Zotero link", "Collection_Key", "Collection_Name", "Collection_Link"]]
-        fdc2 = fdc["Collection_Name"].value_counts().reset_index().head(10)
-        fdc2.columns = ["Collection_Name", "Number_of_Items"]
-        fdc2 = fdc2[fdc2["Collection_Name"] != "01 Intelligence history"]
-        fdc = pd.merge(fdc2, fdc, on="Collection_Name", how="left") \
-                .drop_duplicates("Collection_Name").reset_index(drop=True)
-        fdc["Collection_Name"] = fdc["Collection_Name"].apply(remove_numbers)
-        for i, row in fdc.iterrows():
-            st.caption(
-                f"{i+1}) [{row['Collection_Name']}]({row['Collection_Link']}) "
-                f"· {row['Number_of_Items']} items"
+    with ca3:
+        with st.popover("Relevant themes"):
+            st.markdown("##### Top 5 relevant themes")
+            for i, row in fdc.iterrows():
+                st.caption(
+                    f"{i+1}) [{row['Collection_Name']}]({row['Collection_Link']}) "
+                    f"· {row['Number_of_Items']} items"
+                )
+
+    with ca4:
+        with st.popover("Filters and more"):
+            c_types_filter = st.container()
+            c_dl           = st.container()
+            view = st.radio(
+                "View as:", ("Basic list", "Table", "Bibliography"),
+                horizontal=True, key="ap_view"
             )
 
-        st.divider()
-        st.markdown("#### ⚙️ Filters & options")
+    st.write("*This database **may not show** all research outputs of the author.*")
 
-        types = st.multiselect(
-            "Publication type",
-            adf["Publication type"].unique(),
-            adf["Publication type"].unique(),
-            key="ap_types",
+    # ── Type filter ──────────────────────────────────────────────────────────
+    types = c_types_filter.multiselect(
+        "Publication type",
+        adf["Publication type"].unique(),
+        adf["Publication type"].unique(),
+        key="ap_types",
+    )
+    adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
+
+    # ── Metrics ──────────────────────────────────────────────────────────────
+    render_metrics(
+        adf,
+        container_metric=c_m,
+        container_citation=c_cit,
+        container_citation_average=c_cit_avg,
+        container_oa=c_oa,
+        container_type=c_type,
+        container_publication_ratio=c_collab,
+    )
+
+    # ── Download ─────────────────────────────────────────────────────────────
+    csv = convert_df_to_csv(
+        adf[["Publication type", "Title", "Abstract", "Date published",
+             "Publisher", "Journal", "Link to publication", "Zotero link", "Citation"]]
+        .assign(Abstract=lambda d: d["Abstract"].str.replace("\n", " "))
+    )
+    c_dl.download_button(
+        "⬇ Download publications", csv,
+        f"{author_name}_{datetime.date.today().isoformat()}.csv",
+        mime="text/csv", key="dl-ap",
+    )
+
+    # ── Report toggle + shareable link ───────────────────────────────────────
+    slug = author_to_slug(author_name)
+    default_report = st.query_params.get("report", "0") == "1"
+
+    if "ap_report_state" not in st.session_state:
+        st.session_state["ap_report_state"] = default_report
+
+    st.toggle(
+        ":material/monitoring: Generate report",
+        key="ap_report",
+        value=st.session_state["ap_report_state"],
+    )
+    on = st.session_state["ap_report"]
+    st.session_state["ap_report_state"] = on
+
+    # Sync URL
+    current_url_report = st.query_params.get("report", "0") == "1"
+    if on != current_url_report:
+        params = {"author_profile": slug}
+        if on:
+            params["report"] = "1"
+        st.query_params.from_dict(params)
+
+    link = f"{BASE_URL}/?author_profile={slug}{'&report=1' if on else ''}"
+    st.caption(f"🔗 Shareable link: [{link}]({link})")
+
+    # ── Report or publications list ──────────────────────────────────────────
+    if on and len(adf):
+        st.info(f"Report for {author_name}")
+        render_report_charts(
+            adf, author_name, name_replacements,
+            show_themes=True, themes_df=fdc,
         )
-        adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
-
-        view = st.radio(
-            "View as:", ("Basic list", "Table", "Bibliography"),
-            horizontal=True, key="ap_view"
-        )
-
-        csv = convert_df_to_csv(
-            adf[["Publication type", "Title", "Abstract", "Date published",
-                 "Publisher", "Journal", "Link to publication", "Zotero link", "Citation"]]
-            .assign(Abstract=lambda d: d["Abstract"].str.replace("\n", " "))
-        )
-        st.download_button(
-            "⬇ Download publications", csv,
-            f"{author_name}_{datetime.date.today().isoformat()}.csv",
-            mime="text/csv", key="dl-ap",
-        )
-
-    with col_left:
-        # ── Report toggle + shareable link ───────────────────────────────────
-        slug = author_to_slug(author_name)
-        default_report = st.query_params.get("report", "0") == "1"
-
-        if "ap_report_state" not in st.session_state:
-            st.session_state["ap_report_state"] = default_report
-
-        on = st.toggle(
-            ":material/monitoring: Generate full report",
-            key="ap_report",
-            value=st.session_state["ap_report_state"],
-        )
-        st.session_state["ap_report_state"] = on
-
-        # Sync URL so link is always shareable
-        current_url_report = st.query_params.get("report", "0") == "1"
-        if on != current_url_report:
-            params = {"author_profile": slug}
-            if on:
-                params["report"] = "1"
-            st.query_params.from_dict(params)
-
-        link = f"{BASE_URL}/?author_profile={slug}{'&report=1' if on else ''}"
-        st.caption(f"🔗 Shareable link: [{link}]({link})")
-
-        st.divider()
-
-        if on and len(adf):
-            # ── Full report ───────────────────────────────────────────────────
-            st.info(f"Report for {author_name}")
-
-            adf_chart = adf.copy()
-            adf_chart["Year"] = pd.to_datetime(
-                adf_chart["Date published"], errors="coerce"
-            ).dt.year
-            year_counts = adf_chart["Year"].dropna().astype(int) \
-                            .value_counts().sort_index().reset_index()
-            year_counts.columns = ["Year", "Count"]
-            if not year_counts.empty:
-                fig = px.bar(
-                    year_counts, x="Year", y="Count",
-                    title=f"Publications per year · {author_name}",
+    elif not on:
+        adf = sort_radio(adf, key="ap_sort")
+        if view == "Basic list":
+            for i, row in adf.iterrows():
+                st.write(
+                    f"{i+1}) {format_entry(row, include_citation=True, reviews_map=reviews_map, base_url=BASE_URL)}"
                 )
-                fig.update_xaxes(type="category", tickangle=-45)
-                fig.update_layout(showlegend=False, height=280, margin=dict(t=40, b=0))
-                st.plotly_chart(fig, use_container_width=True)
-
-            render_report_charts(
-                adf, author_name, name_replacements,
-                show_themes=True, themes_df=fdc
+        elif view == "Table":
+            st.dataframe(
+                adf[["Publication type", "Title", "Date published", "FirstName2",
+                     "Abstract", "Publisher", "Journal", "Citation",
+                     "Link to publication", "Zotero link"]]
+                .rename(columns={
+                    "FirstName2": "Author(s)",
+                    "Link to publication": "Publication link",
+                })
             )
-
-        else:
-            # ── Publications list only ────────────────────────────────────────
-            adf = sort_radio(adf, key="ap_sort")
-            st.markdown(f"#### 📄 Publications ({len(adf)})")
-
-            if view == "Basic list":
-                for i, row in adf.iterrows():
-                    st.write(
-                        f"{i+1}) {format_entry(row, include_citation=True, reviews_map=reviews_map, base_url=BASE_URL)}"
-                    )
-            elif view == "Table":
-                st.dataframe(
-                    adf[["Publication type", "Title", "Date published", "FirstName2",
-                         "Abstract", "Publisher", "Journal", "Citation",
-                         "Link to publication", "Zotero link"]]
-                    .rename(columns={
-                        "FirstName2": "Author(s)",
-                        "Link to publication": "Publication link"
-                    })
-                )
-            elif view == "Bibliography":
-                adf["zotero_item_key"] = adf["Zotero link"].str.replace(
-                    "https://www.zotero.org/groups/"
-                    "intelarchive_intelligence_studies_database/items/", ""
-                )
-                df_zot = pd.read_csv("zotero_citation_format.csv")
-                display_bibliographies(
-                    pd.merge(adf, df_zot, on="zotero_item_key", how="left")
-                )
+        elif view == "Bibliography":
+            adf["zotero_item_key"] = adf["Zotero link"].str.replace(
+                "https://www.zotero.org/groups/"
+                "intelarchive_intelligence_studies_database/items/", ""
+            )
+            df_zot = pd.read_csv("zotero_citation_format.csv")
+            display_bibliographies(
+                pd.merge(adf, df_zot, on="zotero_item_key", how="left")
+            )
+    else:
+        st.write("No publication type selected.")
 
 # ── Load data ───────────────────────────────────────────────────────────────
 @st.cache_data(ttl=3600)
