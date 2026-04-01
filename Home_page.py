@@ -669,7 +669,7 @@ with tab1:
             options=list(OPTION_MAP.keys()),
             format_func=lambda o: OPTION_MAP[o],
             selection_mode="single",
-            default=default_pill,
+            default=st.session_state["search_pills"],
             key="search_pills",
         )
 
