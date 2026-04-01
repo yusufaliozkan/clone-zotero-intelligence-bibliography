@@ -652,7 +652,7 @@ with tab1:
         }
         qp = st.query_params
 
-        if qp.get("author"):
+        if qp.get("author_preview"):
             default_pill = 1
         elif qp.get("collection"):
             default_pill = 2
