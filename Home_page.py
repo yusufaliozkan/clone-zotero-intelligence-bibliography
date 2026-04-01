@@ -258,14 +258,14 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     # ── Filters + download each in their own column ──────────────────────────
     col_types, col_view = st.columns([3,2])
 
-    with col_types:
-        types = st.multiselect(
+    types = st.multiselect(
             "Publication type",
             adf["Publication type"].unique(),
-            adf["Publication type"].unique(),
+            default=[],
             key="ap_types",
         )
-        adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
+        if types:
+            adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
 
     with col_view:
         view = st.radio(
