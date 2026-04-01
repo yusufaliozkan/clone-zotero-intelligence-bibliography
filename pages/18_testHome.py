@@ -489,6 +489,25 @@ with tab1:
             key="search_pills",
         )
 
+        if search_input:
+            # Check if it matches an author name
+            matched_author = next(
+                (a for a in df_authors["Author_name"].unique()
+                if search_input.lower() in a.lower()), None
+            )
+            
+            # Check if it matches a collection
+            matched_collection = next(
+                (c for c in df_duplicated["Collection_Name"].unique()
+                if search_input.lower() in c.lower()), None
+            )
+            
+            # Check if it matches a journal
+            matched_journal = next(
+                (j for j in df_dedup["Journal"].dropna().unique()
+                if search_input.lower() in j.lower()), None
+            )
+
         # ================================================================
         # 0 – KEYWORD SEARCH
         # ================================================================
