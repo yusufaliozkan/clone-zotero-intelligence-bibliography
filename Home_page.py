@@ -468,9 +468,9 @@ if item_key:
 
     if not related.empty:
         reviews_map_rel = load_reviews_map()
-        for i, rel_row in related.iterrows():
+        for i, (_, rel_row) in enumerate(related.iterrows(), 1):
             st.write(
-                f"{i+1}) {format_entry(rel_row, include_citation=True, reviews_map=reviews_map_rel, base_url=BASE_URL)}"
+                f"{i}) {format_entry(rel_row, include_citation=True, reviews_map=reviews_map_rel, base_url=BASE_URL)}"
             )
     else:
         st.info("No related publications found.")
