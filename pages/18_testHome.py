@@ -978,10 +978,12 @@ with tab1:
                             .drop_duplicates("Collection_Name").reset_index(drop=True)
                     fdc["Collection_Name"] = fdc["Collection_Name"].apply(remove_numbers)
                     for i, row in fdc.iterrows():
-                        st.caption(
-                            f"{i+1}) [{row['Collection_Name']}]({row['Collection_Link']}) "
-                            f"· {row['Number_of_Items']} items"
-                        )
+                            col_key = str(row.get("Collection_Key", "")).strip()
+                            app_link = f"{BASE_URL}/?collection={col_key}" if col_key else row['Collection_Link']
+                            st.caption(
+                                f"{i+1}) [{row['Collection_Name']}]({app_link}) "
+                                f"· {row['Number_of_Items']} items"
+                            )
 
                     # ── 5 most recent publications ───────────────────────────────────────
                     st.markdown("**5 most recent publications:**")
