@@ -944,6 +944,19 @@ with tab1:
                 adf["Date published"] = adf["Date published"].fillna("")
                 adf = sort_by_date(adf).sort_values(["No date flag","Date published"], ascending=[True,True])
 
+                slug = author_to_slug(selected_author)
+                default_report = st.query_params.get("report", "0") == "1"
+
+                if "report_author_state" not in st.session_state:
+                    st.session_state["report_author_state"] = default_report
+
+                # ── Set URL and shareable link ────────────────────────────────
+                st.query_params.from_dict({"author_preview": slug})
+                preview_link = f"{BASE_URL}/?author_preview={slug}"
+                st.caption(f"🔗 Shareable link: [{preview_link}]({preview_link})")
+
+                adf = df_authors[df_authors["Author_name"] == selected_author].copy()
+
                 with st.expander("Click to expand", expanded=True):
                     st.subheader(f"Publications by {selected_author}", anchor=False, divider="blue")
                     st.write("*This database **may not show** all research outputs of the author.*")
