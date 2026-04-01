@@ -1145,7 +1145,8 @@ with tab1:
         # 3 – PUBLICATION TYPES
         # ================================================================
         elif search_option == 3:
-            # st.query_params.clear()
+            for key in ["type_selectbox"]:
+                st.session_state.pop(key, None)
             st.subheader("Publication types", anchor=False, divider="blue")
 
             @st.fragment
