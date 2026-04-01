@@ -120,8 +120,8 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
             .drop_duplicates("Collection_Name").reset_index(drop=True)
     fdc["Collection_Name"] = fdc["Collection_Name"].apply(remove_numbers)
 
-    # ── Four-column metrics row ──────────────────────────────────────────────
-    ca1, ca2, ca3, ca4 = st.columns(4)
+    # ── Three-column metrics row ─────────────────────────────────────────────
+    ca1, ca2, ca3 = st.columns(3)
 
     with ca1:
         c_m = st.container()
@@ -143,25 +143,7 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
                     f"· {row['Number_of_Items']} items"
                 )
 
-    with ca4:
-        with st.popover("Filters and more"):
-            c_types_filter = st.container()
-            c_dl           = st.container()
-            view = st.radio(
-                "View as:", ("Basic list", "Table", "Bibliography"),
-                horizontal=True, key="ap_view"
-            )
-
     st.write("*This database **may not show** all research outputs of the author.*")
-
-    # ── Type filter ──────────────────────────────────────────────────────────
-    types = c_types_filter.multiselect(
-        "Publication type",
-        adf["Publication type"].unique(),
-        adf["Publication type"].unique(),
-        key="ap_types",
-    )
-    adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
 
     # ── Metrics ──────────────────────────────────────────────────────────────
     render_metrics(
@@ -172,18 +154,6 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
         container_oa=c_oa,
         container_type=c_type,
         container_publication_ratio=c_collab,
-    )
-
-    # ── Download ─────────────────────────────────────────────────────────────
-    csv = convert_df_to_csv(
-        adf[["Publication type", "Title", "Abstract", "Date published",
-             "Publisher", "Journal", "Link to publication", "Zotero link", "Citation"]]
-        .assign(Abstract=lambda d: d["Abstract"].str.replace("\n", " "))
-    )
-    c_dl.download_button(
-        "⬇ Download publications", csv,
-        f"{author_name}_{datetime.date.today().isoformat()}.csv",
-        mime="text/csv", key="dl-ap",
     )
 
     # ── Report toggle + shareable link ───────────────────────────────────────
@@ -211,6 +181,31 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
 
     link = f"{BASE_URL}/?author_profile={slug}{'&report=1' if on else ''}"
     st.caption(f"🔗 Shareable link: [{link}]({link})")
+
+    # ── Filters + download (now inline, below shareable link) ───────────────
+    types = st.multiselect(
+        "Publication type",
+        adf["Publication type"].unique(),
+        adf["Publication type"].unique(),
+        key="ap_types",
+    )
+    adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
+
+    view = st.radio(
+        "View as:", ("Basic list", "Table", "Bibliography"),
+        horizontal=True, key="ap_view",
+    )
+
+    csv = convert_df_to_csv(
+        adf[["Publication type", "Title", "Abstract", "Date published",
+             "Publisher", "Journal", "Link to publication", "Zotero link", "Citation"]]
+        .assign(Abstract=lambda d: d["Abstract"].str.replace("\n", " "))
+    )
+    st.download_button(
+        "⬇ Download publications", csv,
+        f"{author_name}_{datetime.date.today().isoformat()}.csv",
+        mime="text/csv", key="dl-ap",
+    )
 
     # ── Report or publications list ──────────────────────────────────────────
     if on and len(adf):
