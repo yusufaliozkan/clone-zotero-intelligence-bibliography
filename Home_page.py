@@ -411,6 +411,73 @@ if item_key:
     st.write("---")
     display_custom_license()
 
+        st.divider()
+        st.markdown("**Related publications:**")
+
+        def get_related_publications(row, df, top_n=5):
+            from sklearn.feature_extraction.text import TfidfVectorizer
+            from sklearn.metrics.pairwise import cosine_similarity
+            import numpy as np
+
+            # Combine title and abstract for the current item
+            current_text = f"{row.get('Title', '')} {row.get('Abstract', '')}".strip()
+            if not current_text:
+                return pd.DataFrame()
+
+            # Combine title and abstract for all items
+            df = df.copy()
+            df["_text"] = (
+                df["Title"].fillna("") + " " + df["Abstract"].fillna("")
+            ).str.strip()
+
+            # Remove the current item
+            current_zotero = row.get("Zotero link", "")
+            df = df[df["Zotero link"] != current_zotero].reset_index(drop=True)
+
+            # Filter out items with no text
+            df = df[df["_text"].str.len() > 10].reset_index(drop=True)
+
+            if df.empty:
+                return pd.DataFrame()
+
+            # TF-IDF vectorisation
+            all_texts = [current_text] + df["_text"].tolist()
+            try:
+                vectorizer = TfidfVectorizer(
+                    stop_words="english",
+                    max_features=5000,
+                    ngram_range=(1, 2),
+                )
+                tfidf_matrix = vectorizer.fit_transform(all_texts)
+            except Exception:
+                return pd.DataFrame()
+
+            # Cosine similarity between current item and all others
+            current_vec = tfidf_matrix[0]
+            other_vecs  = tfidf_matrix[1:]
+            scores = cosine_similarity(current_vec, other_vecs).flatten()
+
+            # Get top N
+            top_indices = np.argsort(scores)[::-1][:top_n]
+            top_df = df.iloc[top_indices].copy()
+            top_df["_score"] = scores[top_indices]
+            top_df = top_df[top_df["_score"] > 0]
+
+            return top_df
+
+        with st.spinner("Finding related publications..."):
+            df_all_items = pd.read_csv("all_items.csv")
+            related = get_related_publications(row, df_all_items, top_n=5)
+
+        if not related.empty:
+            reviews_map_rel = load_reviews_map()
+            for i, rel_row in related.iterrows():
+                st.write(
+                    f"{i+1}) {format_entry(rel_row, include_citation=True, reviews_map=reviews_map_rel, base_url=BASE_URL)}"
+                )
+        else:
+            st.info("No related publications found.")
+
     st.stop()
 
 # ── Author profile page ─────────────────────────────────────────────────────
