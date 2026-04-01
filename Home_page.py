@@ -1114,18 +1114,16 @@ with tab1:
                     )
 
                     if st.session_state.get("_last_collection") != selected_col:
-                        st.session_state.pop("col_report_state", None)
+                        st.session_state.pop("col_report", None)
                         st.session_state["_last_collection"] = selected_col
 
-                    if "col_report_state" not in st.session_state:
-                        st.session_state["col_report_state"] = st.query_params.get("report", "0") == "1"
+                    if "col_report" not in st.session_state:
+                        st.session_state["col_report"] = st.query_params.get("report", "0") == "1"
 
                     on = st.toggle(
                         ":material/monitoring: Generate report",
                         key="col_report",
-                        value=st.session_state["col_report_state"],
                     )
-                    st.session_state["col_report_state"] = on
 
                     current_url_report = st.query_params.get("report", "0") == "1"
                     if on != current_url_report:
