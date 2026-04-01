@@ -194,7 +194,7 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     )
     adf = adf[adf["Publication type"].isin(types)].reset_index(drop=True)
 
-    col_types, col_dl = st.columns(2)
+    col_view, col_dl = st.columns(2)
 
     with col_view:
         view = st.radio(
