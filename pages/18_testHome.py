@@ -735,17 +735,17 @@ with tab1:
                 )
                 selected_author = selected_display.split(" (")[0] if selected_display else None
 
-                default_slug  = st.query_params.get("author", "")
-                default_index = 0
-                if default_slug:
-                    matched = slug_to_author(default_slug, [o.split(" (")[0] for o in options if o])
-                    if matched:
-                        default_index = next(
-                            (i for i, o in enumerate(options) if o.startswith(matched + " (")), 0
-                        )
+                # default_slug  = st.query_params.get("author", "")
+                # default_index = 0
+                # if default_slug:
+                #     matched = slug_to_author(default_slug, [o.split(" (")[0] for o in options if o])
+                #     if matched:
+                #         default_index = next(
+                #             (i for i, o in enumerate(options) if o.startswith(matched + " (")), 0
+                #         )
 
-                selected_display = st.selectbox("Select author", options, index=default_index)
-                selected_author  = selected_display.split(" (")[0] if selected_display else None
+                # selected_display = st.selectbox("Select author", options, index=default_index)
+                # selected_author  = selected_display.split(" (")[0] if selected_display else None
 
                 if not selected_author:
                     st.write("Select an author to see items")
