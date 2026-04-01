@@ -68,63 +68,63 @@ name_replacements = {
     'Kristian Gustafson':'Kristian C. Gustafson'
 }
 
-# def get_df_authors():
-#     df_authors = pd.read_csv('all_items.csv')
-#     df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
-#     df_authors = df_authors.explode('Author_name')
-#     df_authors.reset_index(drop=True, inplace=True)
-#     df_authors = df_authors.dropna(subset=['FirstName2'])
-#     df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
-#     return df_authors
-
-def get_df_authors(fuzzy_threshold=92):
+def get_df_authors():
     df_authors = pd.read_csv('all_items.csv')
-    df_authors['Author_name'] = df_authors['FirstName2'].apply(
-        lambda x: x.split(', ') if isinstance(x, str) and x else x
-    )
+    df_authors['Author_name'] = df_authors['FirstName2'].apply(lambda x: x.split(', ') if isinstance(x, str) and x else x)
     df_authors = df_authors.explode('Author_name')
     df_authors.reset_index(drop=True, inplace=True)
     df_authors = df_authors.dropna(subset=['FirstName2'])
-
-    # ── Step 1: Apply manual replacements first ───────────────────────────────
-    df_authors['Author_name'] = df_authors['Author_name'].map(
-        name_replacements
-    ).fillna(df_authors['Author_name'])
-
-    # ── Step 2: Auto-resolve remaining duplicates via fuzzy matching ──────────
-    all_names  = df_authors["Author_name"].dropna().unique().tolist()
-    pub_counts = df_authors["Author_name"].value_counts().to_dict()
-
-    # Build auto replacements: map less-published variant → more-published canonical
-    auto_replacements = {}
-    for name in all_names:
-        if name in auto_replacements:
-            continue  # already resolved
-        matches = process.extract(
-            name,
-            all_names,
-            scorer=fuzz.token_sort_ratio,
-            limit=5,
-            score_cutoff=fuzzy_threshold,
-        )
-        for match_name, score, _ in matches:
-            if match_name == name:
-                continue
-            # Pick the name with more publications as canonical
-            if pub_counts.get(name, 0) >= pub_counts.get(match_name, 0):
-                canonical = name
-                variant   = match_name
-            else:
-                canonical = match_name
-                variant   = name
-            # Only add if not already in manual replacements
-            if variant not in name_replacements:
-                auto_replacements[variant] = canonical
-
-    # Apply auto replacements
-    if auto_replacements:
-        df_authors['Author_name'] = df_authors['Author_name'].map(
-            auto_replacements
-        ).fillna(df_authors['Author_name'])
-
+    df_authors['Author_name'] = df_authors['Author_name'].map(name_replacements).fillna(df_authors['Author_name'])
     return df_authors
+
+# def get_df_authors(fuzzy_threshold=92):
+#     df_authors = pd.read_csv('all_items.csv')
+#     df_authors['Author_name'] = df_authors['FirstName2'].apply(
+#         lambda x: x.split(', ') if isinstance(x, str) and x else x
+#     )
+#     df_authors = df_authors.explode('Author_name')
+#     df_authors.reset_index(drop=True, inplace=True)
+#     df_authors = df_authors.dropna(subset=['FirstName2'])
+
+#     # ── Step 1: Apply manual replacements first ───────────────────────────────
+#     df_authors['Author_name'] = df_authors['Author_name'].map(
+#         name_replacements
+#     ).fillna(df_authors['Author_name'])
+
+#     # ── Step 2: Auto-resolve remaining duplicates via fuzzy matching ──────────
+#     all_names  = df_authors["Author_name"].dropna().unique().tolist()
+#     pub_counts = df_authors["Author_name"].value_counts().to_dict()
+
+#     # Build auto replacements: map less-published variant → more-published canonical
+#     auto_replacements = {}
+#     for name in all_names:
+#         if name in auto_replacements:
+#             continue  # already resolved
+#         matches = process.extract(
+#             name,
+#             all_names,
+#             scorer=fuzz.token_sort_ratio,
+#             limit=5,
+#             score_cutoff=fuzzy_threshold,
+#         )
+#         for match_name, score, _ in matches:
+#             if match_name == name:
+#                 continue
+#             # Pick the name with more publications as canonical
+#             if pub_counts.get(name, 0) >= pub_counts.get(match_name, 0):
+#                 canonical = name
+#                 variant   = match_name
+#             else:
+#                 canonical = match_name
+#                 variant   = name
+#             # Only add if not already in manual replacements
+#             if variant not in name_replacements:
+#                 auto_replacements[variant] = canonical
+
+#     # Apply auto replacements
+#     if auto_replacements:
+#         df_authors['Author_name'] = df_authors['Author_name'].map(
+#             auto_replacements
+#         ).fillna(df_authors['Author_name'])
+
+#     return df_authors
