@@ -1133,6 +1133,7 @@ with tab1:
 
                     link = f"{BASE_URL}/?collection={col_key}{'&report=1' if on else ''}"
                     st.caption(f"🔗 Shareable link: [{link}]({link})")
+
                     if on and len(cdf):
                         st.info(f"Report for {selected_col}")
                         render_report_charts(cdf, selected_col, name_replacements)
