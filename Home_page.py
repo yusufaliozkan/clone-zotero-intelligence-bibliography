@@ -178,14 +178,14 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     # Sync URL
     current_url_report = st.query_params.get("report", "0") == "1"
     if on != current_url_report:
-        params = {"author_preview": slug}
+        params = {"author_profile": slug}   # ← was "author_preview", fix to "author_profile"
         if on:
             params["report"] = "1"
         current_url_report = st.query_params.get("report", "0") == "1"
-        if on != current_url_report or st.query_params.get("author_preview", "") != slug:
+        if on != current_url_report or st.query_params.get("author_profile", "") != slug:
             st.query_params.from_dict(params)
 
-        link = f"{BASE_URL}/?author_preview={slug}{'&report=1' if on else ''}"
+        link = f"{BASE_URL}/?author_profile={slug}{'&report=1' if on else ''}"
 
     # ── Filters + download each in their own column ──────────────────────────
     col_types, col_view = st.columns([3,2])
