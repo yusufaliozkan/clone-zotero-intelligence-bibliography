@@ -925,7 +925,11 @@ with tab1:
 
                 with st.expander("Click to expand", expanded=True):
                     st.subheader(f"Publications by {selected_author}", anchor=False, divider="blue")
-                    st.write("*This database **may not show** all research outputs of the author.*")
+                        st.write("*This database **may not show** all research outputs of the author.*")
+
+                        profile_slug = author_to_slug(selected_author)
+                        profile_link = f"{BASE_URL}/?author_profile={profile_slug}"
+                        st.link_button("👤 View full profile", profile_link, key="profile_btn")
 
                     # ── Quick stats ──────────────────────────────────────────────────────
                     total_pubs   = len(adf)
@@ -962,12 +966,6 @@ with tab1:
                         )
 
                     st.divider()
-
-                    # ── Profile link ─────────────────────────────────────────────────────
-                    profile_slug = author_to_slug(selected_author)
-                    profile_link = f"{BASE_URL}/?author_profile={profile_slug}"
-                    st.markdown(f"### [👤 View full profile for {selected_author} →]({profile_link})")
-                    st.caption(f"🔗 Shareable: [{profile_link}]({profile_link})")
 
             search_author()
 
