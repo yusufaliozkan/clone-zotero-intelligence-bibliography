@@ -419,13 +419,6 @@ author_profile_slug = st.query_params.get("author_profile", "")
 if author_profile_slug:
     df_dedup_ap, df_duplicated_ap, df_authors_ap, _ = load_data()
 
-    from shared_utils import (
-        parse_date_column, sort_by_date, render_metrics,
-        render_report_charts, display_bibliographies,
-        sort_radio, render_paginated_list, author_to_slug, slug_to_author,
-        convert_df_to_csv, remove_numbers, split_and_expand,
-    )
-
     matched_author = slug_to_author(
         author_profile_slug,
         df_authors_ap["Author_name"].unique().tolist()
@@ -448,7 +441,6 @@ if author_profile_slug:
 
     st.write("---")
     display_custom_license()
-
     st.stop()
 
 
