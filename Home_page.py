@@ -1012,7 +1012,7 @@ with tab1:
         # ================================================================
         elif search_option == 2:
 
-            for key in ["search_term", "search_term_input", "search_in", "collection_selectbox"]:
+            for key in ["search_term", "search_term_input", "search_in"]:
                 if key in st.session_state:
                     del st.session_state[key]
             st.subheader("Search collection", anchor=False, divider="blue")
@@ -1051,11 +1051,10 @@ with tab1:
                 selected_col = sel_display.rsplit(" [", 1)[0] if sel_display else None
 
                 if selected_col:
-                    # Look up the Collection_Key for the selected collection name
                     col_key = df_csv_col[df_csv_col["Collection_Name"] == selected_col]["Collection_Key"].iloc[0]
-                    st.query_params.from_dict({"collection": col_key})
-                    link = f"https://intelligence.streamlit.app/?collection={col_key}"
-                    st.caption(f"🔗 Shareable link: [{link}]({link})")
+                    # Only update URL if collection changed and report is not on
+                    if st.query_params.get("collection", "") != col_key:
+                        st.query_params.from_dict({"collection": col_key})
                 else:
                     st.query_params.clear()
 
