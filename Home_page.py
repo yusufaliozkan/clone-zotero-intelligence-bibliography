@@ -1114,6 +1114,10 @@ with tab1:
                         mime="text/csv", key="dl-col", icon=":material/download:",
                     )
 
+                    if st.session_state.get("_last_collection") != selected_col:
+                        st.session_state.pop("col_report_state", None)
+                        st.session_state["_last_collection"] = selected_col
+
                     if "col_report_state" not in st.session_state:
                         st.session_state["col_report_state"] = st.query_params.get("report", "0") == "1"
 
