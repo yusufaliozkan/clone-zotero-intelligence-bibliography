@@ -1114,7 +1114,25 @@ with tab1:
                         mime="text/csv", key="dl-col", icon=":material/download:",
                     )
 
-                    on = st.toggle(":material/monitoring: Generate report")
+                    if "col_report_state" not in st.session_state:
+                        st.session_state["col_report_state"] = st.query_params.get("report", "0") == "1"
+
+                    on = st.toggle(
+                        ":material/monitoring: Generate report",
+                        key="col_report",
+                        value=st.session_state["col_report_state"],
+                    )
+                    st.session_state["col_report_state"] = on
+
+                    current_url_report = st.query_params.get("report", "0") == "1"
+                    if on != current_url_report:
+                        params = {"collection": col_key}
+                        if on:
+                            params["report"] = "1"
+                        st.query_params.from_dict(params)
+
+                    link = f"{BASE_URL}/?collection={col_key}{'&report=1' if on else ''}"
+                    st.caption(f"🔗 Shareable link: [{link}]({link})")
                     if on and len(cdf):
                         st.info(f"Report for {selected_col}")
                         render_report_charts(cdf, selected_col, name_replacements)
