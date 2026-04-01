@@ -1012,7 +1012,7 @@ with tab1:
         # ================================================================
         elif search_option == 2:
 
-            for key in ["search_term", "search_term_input", "search_in"]:
+            for key in ["search_term", "search_term_input", "search_in", "collection_selectbox"]:
                 if key in st.session_state:
                     del st.session_state[key]
             st.subheader("Search collection", anchor=False, divider="blue")
