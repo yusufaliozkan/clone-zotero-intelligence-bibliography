@@ -440,6 +440,10 @@ if author_profile_slug:
         df_duplicated_ap,
         df_authors_ap,
     )
+
+    st.write("---")
+    display_custom_license()
+
     st.stop()
 
 
