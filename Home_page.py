@@ -137,15 +137,15 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
             c_collab  = st.container()
 
     with ca3:
-            with st.popover("Relevant themes"):
-                st.markdown("##### Top 5 relevant themes")
-                for i, row in fdc.iterrows():
-                    col_key = str(row.get("Collection_Key", "")).strip()
-                    app_link = f"{BASE_URL}/?collection={col_key}" if col_key else row['Collection_Link']
-                    st.caption(
-                        f"{i+1}) [{row['Collection_Name']}]({app_link}) "
-                        f"· {row['Number_of_Items']} items"
-                    )
+        with st.popover("Relevant themes"):
+            st.markdown("##### Top 5 relevant themes")
+            for i, row in fdc.iterrows():
+                col_key = str(row.get("Collection_Key", "")).strip()
+                app_link = f"{BASE_URL}/?collection={col_key}" if col_key else row['Collection_Link']
+                st.caption(
+                    f"{i+1}) [{row['Collection_Name']}]({app_link}) "
+                    f"· {row['Number_of_Items']} items"
+                )
 
     st.write("*This database **may not show** all research outputs of the author.*")
 
