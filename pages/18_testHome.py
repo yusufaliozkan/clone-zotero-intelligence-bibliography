@@ -477,7 +477,7 @@ with tab1:
             options=list(OPTION_MAP.keys()),
             format_func=lambda o: OPTION_MAP[o],
             selection_mode="single",
-            default=default_pill,
+            default=st.session_state["search_pills"],
             key="search_pills",
         )
 
@@ -716,6 +716,24 @@ with tab1:
                 sorted_authors = sorted(df_authors["Author_name"].unique(),
                                         key=lambda a: pub_counts.get(a, 0), reverse=True)
                 options = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
+
+                # ── Only read from URL on first load ──────────────────────────
+                if "author_selectbox" not in st.session_state:
+                    default_slug  = st.query_params.get("author_preview", "")
+                    default_index = 0
+                    if default_slug:
+                        matched = slug_to_author(default_slug, [o.split(" (")[0] for o in options if o])
+                        if matched:
+                            default_index = next(
+                                (i for i, o in enumerate(options) if o.startswith(matched + " (")), 0
+                            )
+                    st.session_state["author_selectbox"] = options[default_index]
+
+                selected_display = st.selectbox(
+                    "Select author", options,
+                    key="author_selectbox",
+                )
+                selected_author = selected_display.split(" (")[0] if selected_display else None
 
                 default_slug  = st.query_params.get("author", "")
                 default_index = 0
