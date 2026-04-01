@@ -512,7 +512,7 @@ with tab1:
     col1, col2 = st.columns([6, 2])
     with col1:
 
-        # @st.fragment
+        @st.fragment
         def search_options_main_menu():
             def parse_search_terms(search_term):
                 """Tokenise search input into a flat list for the recursive parser."""
