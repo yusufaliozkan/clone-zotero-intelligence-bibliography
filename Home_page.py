@@ -994,8 +994,11 @@ with tab1:
                     # ── 5 most recent publications ───────────────────────────────────────
                     st.markdown("**5 most recent publications:**")
                     recent = adf.copy()
-                    recent["_sort_date"] = pd.to_datetime(recent["Date published"], errors="coerce")
-                    recent = recent.sort_values("_sort_date", ascending=False).drop(columns=["_sort_date"]).head(5)
+                    recent["_sort_date"] = pd.to_datetime(
+                        recent["Date published"], errors="coerce", utc=True
+                    )
+                    recent = recent.sort_values("_sort_date", ascending=False) \
+                                   .drop(columns=["_sort_date"]).head(5)
                     for i, row in recent.iterrows():
                         st.write(
                             f"- {format_entry(row, include_citation=True, reviews_map=reviews_map, base_url=BASE_URL)}"
