@@ -403,6 +403,14 @@ if item_key:
     else:
         st.warning("Publication not found.")
 
+    st.write("---")
+    with st.expander("Acknowledgements"):
+
+        Proudly sponsored by the [King's Centre for the Study of Intelligence](https://kcsi.uk/)
+        """)
+
+    display_custom_license()
+
     st.stop()
 
 # ── Author profile page ─────────────────────────────────────────────────────
