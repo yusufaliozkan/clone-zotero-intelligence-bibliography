@@ -233,6 +233,16 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
                     pd.merge(adf, df_zot, on="zotero_item_key", how="left")
                 )
 
+# ── Load data ───────────────────────────────────────────────────────────────
+@st.cache_data(ttl=3600)
+def load_data():
+    df_dedup        = pd.read_csv("all_items.csv")
+    df_dedup["parentKey"] = df_dedup["Zotero link"].str.split("/").str[-1]
+    df_duplicated   = pd.read_csv("all_items_duplicated.csv")
+    df_authors      = get_df_authors()
+    df_book_reviews = pd.read_csv("book_reviews.csv")
+    return df_dedup, df_duplicated, df_authors, df_book_reviews
+
 item_key = st.query_params.get("item", "")
 
 if item_key:
@@ -414,15 +424,7 @@ if author_profile_slug:
     )
     st.stop()
 
-# ── Load data ───────────────────────────────────────────────────────────────
-@st.cache_data(ttl=3600)
-def load_data():
-    df_dedup        = pd.read_csv("all_items.csv")
-    df_dedup["parentKey"] = df_dedup["Zotero link"].str.split("/").str[-1]
-    df_duplicated   = pd.read_csv("all_items_duplicated.csv")
-    df_authors      = get_df_authors()
-    df_book_reviews = pd.read_csv("book_reviews.csv")
-    return df_dedup, df_duplicated, df_authors, df_book_reviews
+
 
 with st.spinner("Retrieving data..."):
     df_dedup, df_duplicated, df_authors, df_book_reviews = load_data()
