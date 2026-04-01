@@ -100,7 +100,7 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     # ── Header ──────────────────────────────────────────────────────────────
     author_slug = author_to_slug(author_name)
     preview_link = f"{BASE_URL}/?author_preview={author_slug}"
-    st.markdown(f"## 👤 [{author_name}]({preview_link})")
+    st.markdown(f"## 👤 {author_name}")
     st.caption("Full publication profile · IntelArchive")
     st.divider()
 
