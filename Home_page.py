@@ -961,7 +961,7 @@ with tab1:
                     st.subheader(f"Publications by {selected_author}", anchor=False, divider="blue")
                     st.write("*This database **may not show** all research outputs of the author.*")
 
-                    preview_link = f"{BASE_URL}/?author_preview={profile_slug}"
+                    profile_link = f"{BASE_URL}/?author_profile={profile_slug}"
                     st.link_button("👤 View full profile", profile_link)
 
                     # ── Quick stats ──────────────────────────────────────────────────────
