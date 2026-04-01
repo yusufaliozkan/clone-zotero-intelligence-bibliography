@@ -183,7 +183,7 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     st.caption(f"🔗 Shareable link: [{link}]({link})")
 
     # ── Filters + download each in their own column ──────────────────────────
-    col_types, col_view = st.columns([3,1])
+    col_types, col_view = st.columns([3,2])
 
     with col_types:
         types = st.multiselect(
@@ -197,7 +197,7 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     with col_view:
         view = st.radio(
             "View as:", ("Basic list", "Table", "Bibliography"),
-            horizontal=False, key="ap_view",
+            horizontal=True, key="ap_view",
         )
 
 
