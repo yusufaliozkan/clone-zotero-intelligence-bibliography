@@ -408,9 +408,6 @@ if item_key:
     else:
         st.warning("Publication not found.")
 
-    st.write("---")
-    display_custom_license()
-
     st.divider()
     st.markdown("**Related publications:**")
 
@@ -478,6 +475,9 @@ if item_key:
     else:
         st.info("No related publications found.")
 
+    st.write("---")
+    display_custom_license()
+    
     st.stop()
 
 # ── Author profile page ─────────────────────────────────────────────────────
