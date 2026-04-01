@@ -1281,18 +1281,20 @@ with tab1:
                 all_journals = jcounts.index.tolist()
 
                 # Pre-select from URL if ?journal= GUID is present
-                default_guid     = st.query_params.get("journal", "")
-                default_journals = []
-                if default_guid:
-                    guids_list   = default_guid.split(",")
-                    default_journals = [
-                        matched for guid in guids_list
-                        if (matched := guid_to_journal(guid, all_journals))
-                    ]
+                if "journal_multiselect" not in st.session_state:
+                    default_guid     = st.query_params.get("journal", "")
+                    default_journals = []
+                    if default_guid:
+                        guids_list   = default_guid.split(",")
+                        default_journals = [
+                            matched for guid in guids_list
+                            if (matched := guid_to_journal(guid, all_journals))
+                        ]
+                    st.session_state["journal_multiselect"] = default_journals
 
                 journals = st.multiselect(
                     "Select a journal", all_journals,
-                    default=default_journals,
+                    key="journal_multiselect",
                 )
 
                 if journals:
