@@ -910,45 +910,45 @@ with tab1:
                 st.session_state.pop(key, None)
                 
             @st.fragment
-                        def search_author():
-                            reviews_map    = load_reviews_map()
-                            pub_counts     = df_authors["Author_name"].value_counts().to_dict()
-                            sorted_authors = sorted(df_authors["Author_name"].unique(),
-                                                    key=lambda a: pub_counts.get(a, 0), reverse=True)
-                            options = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
+            def search_author():
+                reviews_map    = load_reviews_map()
+                pub_counts     = df_authors["Author_name"].value_counts().to_dict()
+                sorted_authors = sorted(df_authors["Author_name"].unique(),
+                                        key=lambda a: pub_counts.get(a, 0), reverse=True)
+                options = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
 
-                            default_slug  = st.query_params.get("author_preview", "")
-                            default_index = 0
-                            if default_slug:
-                                matched = slug_to_author(default_slug, [o.split(" (")[0] for o in options if o])
-                                if matched:
-                                    default_index = next(
-                                        (i for i, o in enumerate(options) if o.startswith(matched + " (")), 0
-                                    )
+                default_slug  = st.query_params.get("author_preview", "")
+                default_index = 0
+                if default_slug:
+                    matched = slug_to_author(default_slug, [o.split(" (")[0] for o in options if o])
+                    if matched:
+                        default_index = next(
+                            (i for i, o in enumerate(options) if o.startswith(matched + " (")), 0
+                        )
 
-                            selected_display = st.selectbox("Select author", options, index=default_index)
-                            selected_author  = selected_display.split(" (")[0] if selected_display else None
+                selected_display = st.selectbox("Select author", options, index=default_index)
+                selected_author  = selected_display.split(" (")[0] if selected_display else None
 
-                            if not selected_author:
-                                st.write("Select an author to see items")
-                                return
+                if not selected_author:
+                    st.write("Select an author to see items")
+                    return
 
-                            slug = author_to_slug(selected_author)
+                slug = author_to_slug(selected_author)
 
-                            if "report_author_state" not in st.session_state:
-                                st.session_state["report_author_state"] = st.query_params.get("report", "0") == "1"
+                if "report_author_state" not in st.session_state:
+                    st.session_state["report_author_state"] = st.query_params.get("report", "0") == "1"
 
-                            # ── Only update URL if slug has changed ───────────────────────
-                            if st.query_params.get("author_preview", "") != slug:
-                                st.query_params.from_dict({"author_preview": slug})
+                # ── Only update URL if slug has changed ───────────────────────
+                if st.query_params.get("author_preview", "") != slug:
+                    st.query_params.from_dict({"author_preview": slug})
 
-                            preview_link = f"{BASE_URL}/?author_preview={slug}"
-                            st.caption(f"🔗 Shareable link: [{preview_link}]({preview_link})")
+                preview_link = f"{BASE_URL}/?author_preview={slug}"
+                st.caption(f"🔗 Shareable link: [{preview_link}]({preview_link})")
 
-                            adf = df_authors[df_authors["Author_name"] == selected_author].copy()
-                            adf["Date published"] = parse_date_column(adf["Date published"])
-                            adf["Date published"] = adf["Date published"].fillna("")
-                            adf = sort_by_date(adf).sort_values(["No date flag","Date published"], ascending=[True,True])
+                adf = df_authors[df_authors["Author_name"] == selected_author].copy()
+                adf["Date published"] = parse_date_column(adf["Date published"])
+                adf["Date published"] = adf["Date published"].fillna("")
+                adf = sort_by_date(adf).sort_values(["No date flag","Date published"], ascending=[True,True])
 
                 with st.expander("Click to expand", expanded=True):
                     st.subheader(f"Publications by {selected_author}", anchor=False, divider="blue")
