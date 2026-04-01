@@ -178,7 +178,7 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     fdc["Collection_Name"] = fdc["Collection_Name"].apply(remove_numbers)
 
     # ── Three-column metrics row ─────────────────────────────────────────────
-    ca1, ca2, ca3, ca4 = st.columns(3)
+    ca1, ca2, ca3, ca4 = st.columns(4)
 
     with ca1:
         c_m = st.container()
