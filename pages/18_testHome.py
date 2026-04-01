@@ -2377,24 +2377,6 @@ with tab3:
             st.session_state.chat_messages = []
             st.rerun()
 
-st.write("---")
-with st.expander("Acknowledgements"):
-    st.subheader("Acknowledgements", anchor=False)
-    st.write("""
-    The following sources are used to collate some of the items and events in this website:
-    1. [King's Centre for the Study of Intelligence (KCSI) digest](https://kcsi.uk/kcsi-digests) compiled by Kayla Berg
-    2. [International Association for Intelligence Education (IAIE) digest](https://www.iafie.org/Login.aspx) compiled by Filip Kovacevic
-
-    Contributors with comments and sources:
-    1. Daniela Richterove
-    2. Steven Wagner
-    3. Sophie Duroy
-
-    Proudly sponsored by the [King's Centre for the Study of Intelligence](https://kcsi.uk/)
-    """)
-
-display_custom_license()
-
 import streamlit as st
 import pandas as pd
 
@@ -2540,3 +2522,22 @@ if results["publications"]:
         )
     if not show_all and len(results["publications"]) > 4:
         st.caption(f"+{len(results['publications']) - 4} more publications — tick checkbox above to see all")
+
+st.write("---")
+with st.expander("Acknowledgements"):
+    st.subheader("Acknowledgements", anchor=False)
+    st.write("""
+    The following sources are used to collate some of the items and events in this website:
+    1. [King's Centre for the Study of Intelligence (KCSI) digest](https://kcsi.uk/kcsi-digests) compiled by Kayla Berg
+    2. [International Association for Intelligence Education (IAIE) digest](https://www.iafie.org/Login.aspx) compiled by Filip Kovacevic
+
+    Contributors with comments and sources:
+    1. Daniela Richterove
+    2. Steven Wagner
+    3. Sophie Duroy
+
+    Proudly sponsored by the [King's Centre for the Study of Intelligence](https://kcsi.uk/)
+    """)
+
+display_custom_license()
+
