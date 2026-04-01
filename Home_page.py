@@ -1034,15 +1034,20 @@ with tab1:
                     if match:
                         key_to_option[match] = f"{c} [{col_counts[c]} items]"
 
-                default_key       = st.query_params.get("collection", "")
-                default_col_index = 0
-                if default_key and default_key in key_to_option:
-                    target_option = key_to_option[default_key]
-                    default_col_index = next(
-                        (i for i, o in enumerate(options) if o == target_option), 0
-                    )
+                if "collection_selectbox" not in st.session_state:
+                    default_key       = st.query_params.get("collection", "")
+                    default_col_index = 0
+                    if default_key and default_key in key_to_option:
+                        target_option = key_to_option[default_key]
+                        default_col_index = next(
+                            (i for i, o in enumerate(options) if o == target_option), 0
+                        )
+                    st.session_state["collection_selectbox"] = options[default_col_index]
 
-                sel_display  = st.selectbox("Select a collection", options, index=default_col_index)
+                sel_display  = st.selectbox(
+                    "Select a collection", options,
+                    key="collection_selectbox",
+                )
                 selected_col = sel_display.rsplit(" [", 1)[0] if sel_display else None
 
                 if selected_col:
