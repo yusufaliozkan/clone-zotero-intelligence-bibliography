@@ -2393,3 +2393,148 @@ with st.expander("Acknowledgements"):
 
 display_custom_license()
 
+import streamlit as st
+import pandas as pd
+
+# ── Sample data ──────────────────────────────────────────────────────────────
+PUBLICATIONS = [
+    {"title": "British Intelligence and the Cold War", "authors": "Richard J. Aldrich", "date": "2023", "type": "Book"},
+    {"title": "Cold War Espionage and the Intelligence Community", "authors": "Christopher Andrew", "date": "2021", "type": "Journal article"},
+    {"title": "HUMINT Operations in Cold War Europe", "authors": "Mark Phythian", "date": "2020", "type": "Book chapter"},
+    {"title": "Soviet Intelligence during the Cold War", "authors": "Christopher Andrew", "date": "2018", "type": "Book"},
+    {"title": "CIA Covert Action and Cold War Politics", "authors": "Loch K. Johnson", "date": "2022", "type": "Journal article"},
+    {"title": "Intelligence Failures: Lessons from History", "authors": "Richard J. Aldrich", "date": "2021", "type": "Book"},
+    {"title": "SIGINT and the Cold War Confrontation", "authors": "Matthew Aid", "date": "2020", "type": "Journal article"},
+    {"title": "Dardanelles Intelligence Failures 1915", "authors": "James Beach", "date": "2019", "type": "Journal article"},
+]
+
+AUTHORS = [
+    {"name": "Richard J. Aldrich", "count": 42, "speciality": "Cold War, British Intelligence"},
+    {"name": "Christopher Andrew", "count": 38, "speciality": "Cold War, Soviet Intelligence"},
+    {"name": "Loch K. Johnson", "count": 31, "speciality": "CIA, Oversight"},
+    {"name": "Mark Phythian", "count": 27, "speciality": "Intelligence Ethics, UK"},
+    {"name": "James Beach", "count": 12, "speciality": "WWI, Military Intelligence"},
+]
+
+COLLECTIONS = [
+    {"name": "Cold War Intelligence", "key": "CW001", "count": 234},
+    {"name": "Post-Cold War Era", "key": "PCW01", "count": 156},
+    {"name": "Intelligence History", "key": "IH001", "count": 412},
+    {"name": "Covert Action", "key": "CA001", "count": 189},
+    {"name": "SIGINT & Technical Intelligence", "key": "SIG01", "count": 98},
+]
+
+JOURNALS = [
+    {"name": "Intelligence and National Security", "count": 1240},
+    {"name": "International Journal of Intelligence", "count": 456},
+    {"name": "Journal of Intelligence History", "count": 312},
+    {"name": "Cold War History", "count": 198},
+]
+
+# ── Search logic ─────────────────────────────────────────────────────────────
+def search_all(query):
+    q = query.lower().strip()
+    if not q:
+        return {}, {}
+
+    pubs = [
+        p for p in PUBLICATIONS
+        if q in p["title"].lower() or q in p["authors"].lower()
+    ]
+    authors = [
+        a for a in AUTHORS
+        if q in a["name"].lower() or q in a["speciality"].lower()
+    ]
+    collections = [
+        c for c in COLLECTIONS
+        if q in c["name"].lower()
+    ]
+    journals = [
+        j for j in JOURNALS
+        if q in j["name"].lower()
+    ]
+
+    results = {
+        "publications": pubs,
+        "authors": authors,
+        "collections": collections,
+        "journals": journals,
+    }
+    total = sum(len(v) for v in results.values())
+    return results, total
+
+# ── UI ────────────────────────────────────────────────────────────────────────
+st.title("IntelArchive — Universal Search Demo", anchor=False)
+st.caption("Prototype only — uses sample data, not the full database")
+
+query = st.text_input(
+    "Search",
+    placeholder="Search by keyword, author, collection, journal...",
+    label_visibility="collapsed"
+)
+
+if not query:
+    st.info("Type to search across publications, authors, collections and journals.")
+    st.stop()
+
+results, total = search_all(query)
+
+if total == 0:
+    st.warning(f"No results found for **{query}**")
+    st.stop()
+
+st.caption(f"**{total}** results for **{query}**")
+
+# ── Collections ───────────────────────────────────────────────────────────────
+if results["collections"]:
+    st.markdown("##### 📚 Collections")
+    for c in results["collections"]:
+        col1, col2 = st.columns([5, 1])
+        with col1:
+            st.markdown(f"**{c['name']}**")
+            st.caption(f"{c['count']} publications · Key: {c['key']}")
+        with col2:
+            if st.button("Browse", key=f"col_{c['key']}"):
+                st.info(f"Would open: `?collection={c['key']}`")
+    st.divider()
+
+# ── Authors ───────────────────────────────────────────────────────────────────
+if results["authors"]:
+    st.markdown("##### 👤 Authors")
+    for a in results["authors"]:
+        col1, col2 = st.columns([5, 1])
+        with col1:
+            st.markdown(f"**{a['name']}**")
+            st.caption(f"{a['count']} publications · {a['speciality']}")
+        with col2:
+            slug = a["name"].lower().replace(" ", "-").replace(".", "")
+            if st.button("View", key=f"auth_{slug}"):
+                st.info(f"Would open: `?author={slug}`")
+    st.divider()
+
+# ── Journals ──────────────────────────────────────────────────────────────────
+if results["journals"]:
+    st.markdown("##### 📰 Journals")
+    for j in results["journals"]:
+        col1, col2 = st.columns([5, 1])
+        with col1:
+            st.markdown(f"**{j['name']}**")
+            st.caption(f"{j['count']} publications")
+        with col2:
+            if st.button("View", key=f"jour_{j['name'][:10]}"):
+                st.info(f"Would open journal search for: {j['name']}")
+    st.divider()
+
+# ── Publications ──────────────────────────────────────────────────────────────
+if results["publications"]:
+    st.markdown(f"##### 📄 Publications ({len(results['publications'])})")
+    show_all = st.checkbox("Show all publications", value=False)
+    pubs_to_show = results["publications"] if show_all else results["publications"][:4]
+    for i, p in enumerate(pubs_to_show):
+        st.markdown(
+            f"**{p['type']}**: {p['title']} "
+            f"(by *{p['authors']}*) "
+            f"(Publication date: {p['date']})"
+        )
+    if not show_all and len(results["publications"]) > 4:
+        st.caption(f"+{len(results['publications']) - 4} more publications — tick checkbox above to see all")
