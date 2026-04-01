@@ -403,14 +403,14 @@ if item_key:
     else:
         st.warning("Publication not found.")
 
-    st.write("---")
-    with st.expander("Acknowledgements"):
+st.write("---")
+with st.expander("Acknowledgements"):
 
-        st.write("Proudly sponsored by the [King's Centre for the Study of Intelligence](https://kcsi.uk/)]")
+    st.write("Proudly sponsored by the [King's Centre for the Study of Intelligence](https://kcsi.uk/)]")
 
-    display_custom_license()
+display_custom_license()
 
-    st.stop()
+st.stop()
 
 # ── Author profile page ─────────────────────────────────────────────────────
 author_profile_slug = st.query_params.get("author_profile", "")
