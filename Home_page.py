@@ -950,6 +950,13 @@ with tab1:
                 if "report_author_state" not in st.session_state:
                     st.session_state["report_author_state"] = default_report
 
+                # ── Only update URL if slug has changed ───────────────────────
+                if st.query_params.get("author_preview", "") != slug:
+                    st.query_params.from_dict({"author_preview": slug})
+
+                preview_link = f"{BASE_URL}/?author_preview={slug}"
+                st.caption(f"🔗 Shareable link: [{preview_link}]({preview_link})")
+
                 # ── Set URL and shareable link ────────────────────────────────
                 st.query_params.from_dict({"author_preview": slug})
                 preview_link = f"{BASE_URL}/?author_preview={slug}"
