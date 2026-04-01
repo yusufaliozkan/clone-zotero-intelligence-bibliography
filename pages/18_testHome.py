@@ -956,6 +956,7 @@ with tab1:
 
                     profile_slug = author_to_slug(selected_author)
                     profile_link = f"{BASE_URL}/?author_profile={profile_slug}"
+                    preview_link = f"{BASE_URL}/?author_preview={profile_slug}"
                     st.link_button("👤 View full profile", profile_link)
 
                     # ── Quick stats ──────────────────────────────────────────────────────
