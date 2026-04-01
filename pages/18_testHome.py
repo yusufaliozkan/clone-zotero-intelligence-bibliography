@@ -472,23 +472,6 @@ with tab1:
         if "search_pills" not in st.session_state:
             st.session_state["search_pills"] = default_pill
 
-        st.header("Search in database", anchor=False)
-
-        search_input = st.text_input(
-            "Search the database",
-            placeholder="Search by keyword, author name, journal, collection...",
-            key="universal_search"
-        )
-
-        search_option = st.pills(
-            "Select search option",
-            options=list(OPTION_MAP.keys()),
-            format_func=lambda o: OPTION_MAP[o],
-            selection_mode="single",
-            default=default_pill,
-            key="search_pills",
-        )
-
         # ================================================================
         # 0 – KEYWORD SEARCH
         # ================================================================
