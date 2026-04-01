@@ -98,7 +98,9 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     reviews_map = load_reviews_map()
 
     # ── Header ──────────────────────────────────────────────────────────────
-    st.markdown(f"## 👤 {author_name}")
+    author_slug = author_to_slug(author_name)
+    preview_link = f"{BASE_URL}/?author_preview={author_slug}"
+    st.markdown(f"## 👤 [{author_name}]({preview_link})")
     st.caption("Full publication profile · IntelArchive")
     st.divider()
 
