@@ -176,13 +176,14 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     # Sync URL
     current_url_report = st.query_params.get("report", "0") == "1"
     if on != current_url_report:
-        params = {"author_profile": slug}
+        params = {"author_preview": slug}
         if on:
             params["report"] = "1"
-        st.query_params.from_dict(params)
-        
-    link = f"{BASE_URL}/?author_profile={slug}{'&report=1' if on else ''}"
-    st.caption(f"🔗 Shareable link: [{link}]({link})")
+        current_url_report = st.query_params.get("report", "0") == "1"
+        if on != current_url_report or st.query_params.get("author_preview", "") != slug:
+            st.query_params.from_dict(params)
+
+        link = f"{BASE_URL}/?author_preview={slug}{'&report=1' if on else ''}"
 
     # ── Filters + download each in their own column ──────────────────────────
     col_types, col_view = st.columns([3,2])
@@ -922,7 +923,7 @@ with tab1:
                                         key=lambda a: pub_counts.get(a, 0), reverse=True)
                 options = [""] + [f"{a} ({pub_counts.get(a,0)})" for a in sorted_authors]
 
-                default_slug  = st.query_params.get("author", "")
+                default_slug  = st.query_params.get("author_preview", "")
                 default_index = 0
                 if default_slug:
                     matched = slug_to_author(default_slug, [o.split(" (")[0] for o in options if o])
