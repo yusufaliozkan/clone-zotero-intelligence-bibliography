@@ -711,6 +711,12 @@ with tab1:
         elif search_option == 1:
             st.subheader("Search author", anchor=False, divider="blue")
 
+            # Clear stale params when switching to author search
+            for key in ["search_term", "search_term_input", "search_in", "report_keyword_state",
+                        "col_types", "col_sort", "type_sort",
+                        "journal_sort", "year_sort", "cited_sort"]:
+                st.session_state.pop(key, None)
+                
             @st.fragment
             def search_author():
                 reviews_map    = load_reviews_map()
