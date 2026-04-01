@@ -406,8 +406,7 @@ if item_key:
     st.write("---")
     with st.expander("Acknowledgements"):
 
-        Proudly sponsored by the [King's Centre for the Study of Intelligence](https://kcsi.uk/)
-        """)
+        st.write("Proudly sponsored by the [King's Centre for the Study of Intelligence](https://kcsi.uk/)]")
 
     display_custom_license()
 
