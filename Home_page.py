@@ -971,12 +971,13 @@ with tab1:
                                 f"search-result-{datetime.date.today().isoformat()}.csv",
                                 mime="text/csv", key="dl-kw", icon=":material/download:",
                             )
-                            if "report_keyword_state" not in st.session_state:
-                                st.session_state["report_keyword_state"] = st.query_params.get("report", "0") == "1"
+                            if "report_keyword" not in st.session_state:
+                                st.session_state["report_keyword"] = st.query_params.get("report", "0") == "1"
 
-                            st.toggle(":material/monitoring: Generate report",
-                                    key="report_keyword",
-                                    value=st.session_state["report_keyword_state"])
+                            st.toggle(
+                                ":material/monitoring: Generate report",
+                                key="report_keyword",
+                            )
 
                             on = st.session_state["report_keyword"]
 
