@@ -65,7 +65,7 @@ name_replacements = {
     'Celia Parker-Vincent':'Celia G. Parker-Vincent',
     'G. H. Bennett':'Gill Bennett',
     'Emrah Safa Gürkan':'Emrah Safa Gurkan',
-    'Kristian Gustafson':'Kristian C. Gustafson'
+    'Kristian Gustafson':'Kristian C. Gustafson',
     'Joseph Caddell Jr':'Joseph W. Caddell Jr.',
     'Joseph W. Caddell JR':'Joseph W. Caddell Jr.'
 }
