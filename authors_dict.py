@@ -66,6 +66,8 @@ name_replacements = {
     'G. H. Bennett':'Gill Bennett',
     'Emrah Safa Gürkan':'Emrah Safa Gurkan',
     'Kristian Gustafson':'Kristian C. Gustafson'
+    'Joseph Caddell Jr':'Joseph W. Caddell Jr.',
+    'Joseph W. Caddell JR':'Joseph W. Caddell Jr.'
 }
 
 # def get_df_authors():
