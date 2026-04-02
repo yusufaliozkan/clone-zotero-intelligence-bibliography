@@ -7,7 +7,7 @@ name_replacements = {
     'David Vincent Gioe': 'David V. Gioe',
     'Michael Goodman': 'Michael S. Goodman',
     'Michael S Goodman': 'Michael S. Goodman',
-    'Michael Simon Goodman': 'Michael S. Gacoodman',
+    'Michael Simon Goodman': 'Michael S. Goodman',
     'Thomas Maguire':'Thomas J. Maguire',
     'Thomas Joseph Maguire':'Thomas J. Maguire',
     'Huw John Davies':'Huw J. Davies',
