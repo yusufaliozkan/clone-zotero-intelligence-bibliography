@@ -359,7 +359,7 @@ if item_key:
             if authors_raw:
                 author_list = [a.strip() for a in authors_raw.split(",")]
                 author_links = " · ".join(
-                    f"[{a}]({BASE_URL}/?author={author_to_slug(a)})"
+                    f"[{a}]({BASE_URL}/?author_profile={author_to_slug(a)})"
                     for a in author_list if a
                 )
                 st.markdown(f"**Authors:** {author_links}")
