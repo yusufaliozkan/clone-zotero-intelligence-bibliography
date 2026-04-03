@@ -365,6 +365,8 @@ if item_key:
                 st.markdown(f"**Authors:** {author_links}")
             else:
                 st.markdown("**Authors:** N/A")
+
+            st.markdown(f"**Publication type:** {_safe(row.get('Publication type')) or 'N/A'}")
             date_published = _safe(row.get('Date published'))
             if date_published:
                 try:
