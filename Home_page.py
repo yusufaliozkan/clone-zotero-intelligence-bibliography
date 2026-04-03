@@ -257,7 +257,7 @@ def render_collection_profile(collection_key, df_dedup, df_duplicated):
             re.sub(r'^\d+[\.\d]*\s*', '', c["name"]).strip(): c["key"]
             for c in children
         }
-        child_names = list(child_options.keys())
+        child_names = ["All (including subcollections)"] + list(child_options.keys())
 
         url_child = st.query_params.get("subcollection", "")
         default_idx = 0
@@ -267,7 +267,7 @@ def render_collection_profile(collection_key, df_dedup, df_duplicated):
             )
 
         if "col_profile_child" not in st.session_state:
-            st.session_state["col_profile_child"] = child_names[default_idx]
+            st.session_state["col_profile_child"] = child_names[default_idx + 1 if default_idx > 0 else 0]
 
         selected_child_name = st.radio(
             "Select a subcollection",
@@ -277,18 +277,30 @@ def render_collection_profile(collection_key, df_dedup, df_duplicated):
         )
         selected_child_key = child_options[selected_child_name]
 
-        if selected_child_key != url_child:
-            st.query_params.from_dict({
-                "collection": collection_key,
-                "subcollection": selected_child_key,
-            })
-
-        display_name = selected_child_name
+        if selected_child_name == "All (including subcollections)":
+            selected_child_key = collection_key
+            display_name = clean_name
+            if st.query_params.get("subcollection"):
+                st.query_params.from_dict({"collection": collection_key})
+        else:
+            selected_child_key = child_options[selected_child_name]
+            display_name = selected_child_name
+            if selected_child_key != url_child:
+                st.query_params.from_dict({
+                    "collection": collection_key,
+                    "subcollection": selected_child_key,
+                })
     else:
         display_name = clean_name
 
     # ── Filter data ───────────────────────────────────────────────────────────
-    df_col = df_duplicated[df_duplicated["Collection_Key"] == selected_child_key].copy()
+# ── Filter data ───────────────────────────────────────────────────────────
+    if children and selected_child_name == "All (including subcollections)":
+        all_keys = [collection_key] + [c["key"] for c in children]
+        df_col = df_duplicated[df_duplicated["Collection_Key"].isin(all_keys)].copy()
+        df_col = df_col.drop_duplicates(subset=["Zotero link"])
+    else:
+        df_col = df_duplicated[df_duplicated["Collection_Key"] == selected_child_key].copy()
     df_col["Collection_Name"] = df_col["Collection_Name"].apply(remove_numbers)
     df_col["Date published"] = (
         df_col["Date published"]
