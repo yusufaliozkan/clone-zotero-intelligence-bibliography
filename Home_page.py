@@ -209,6 +209,10 @@ def get_children(collection_name, df_duplicated):
     return sorted(children, key=lambda x: x["name"])
 
 def render_collection_profile(collection_key, df_dedup, df_duplicated):
+    import numpy as np
+    from wordcloud import WordCloud
+    import matplotlib.pyplot as plt
+
     reviews_map = load_reviews_map()
 
     collection_name = COLLECTION_KEY_MAP.get(collection_key, "")
@@ -217,16 +221,13 @@ def render_collection_profile(collection_key, df_dedup, df_duplicated):
         return
 
     clean_name = re.sub(r'^\d+[\.\d]*\s*', '', collection_name).strip()
-    prefix = get_collection_prefix(collection_name)
 
     # ── Header ───────────────────────────────────────────────────────────────
-    st.markdown(f"## 📁 {clean_name}")
-    st.caption(f"Collection · IntelArchive")
+    st.title(clean_name, anchor=False)
     st.divider()
 
-    # ── Container collections (no direct items) ───────────────────────────────
+    # ── Container collections ─────────────────────────────────────────────────
     if collection_key.endswith("_CONTAINER"):
-        st.markdown("### Subcollections")
         prefix_map = {
             "01_CONTAINER": "01.",
             "07_CONTAINER": "07.",
@@ -239,6 +240,7 @@ def render_collection_profile(collection_key, df_dedup, df_duplicated):
             ~all_cols["Collection_Name"].str.contains(r'\d+\.\d+\.\d+')
         ].sort_values("Collection_Name")
 
+        st.markdown("### Subcollections")
         for _, row in subcols.iterrows():
             child_clean = re.sub(r'^\d+[\.\d]*\s*', '', row["Collection_Name"]).strip()
             child_link  = f"{BASE_URL}/?collection={row['Collection_Key']}"
@@ -246,192 +248,345 @@ def render_collection_profile(collection_key, df_dedup, df_duplicated):
             st.markdown(f"- [{child_clean}]({child_link}) · {count} items")
         return
 
-    # ── Check for children ───────────────────────────────────────────────────
+    # ── Check for children (e.g. 01.7 Cold War) ──────────────────────────────
     children = get_children(collection_name, df_duplicated)
 
-    # ── Special case: 07 Intelligence collection (no key in data) ────────────
-    is_07_container = collection_key == "07_CONTAINER"
-
-    if is_07_container or (children and collection_key not in [
-        row["key"] for _, row in df_duplicated[
-            ["Collection_Name","Collection_Key"]
-        ].drop_duplicates().iterrows()
-        if COLLECTION_KEY_MAP.get(collection_key) == row["Collection_Name"]
-    ]):
-        # This is a container — show subcollections as clickable links
-        st.markdown("### Subcollections")
-        for child in children:
-            child_link = f"{BASE_URL}/?collection={child['key']}"
-            count = len(df_duplicated[df_duplicated["Collection_Key"] == child["key"]])
-            st.markdown(f"- [{child['clean_name']}]({child_link}) · {count} items")
-        return
-
-    # ── Get publications for this collection ──────────────────────────────────
-    cdf = df_duplicated[df_duplicated["Collection_Key"] == collection_key].copy()
-    cdf = cdf.drop_duplicates(subset=["Zotero link"])
-    cdf["Date published"] = parse_date_column(cdf["Date published"])
-    cdf["Date published"] = cdf["Date published"].fillna("")
-    cdf = sort_by_date(cdf).sort_values(
-        ["No date flag", "Date published"], ascending=[True, True]
-    )
-
-    # ── If has children, show them as radio buttons above publications ────────
-    selected_child_key = None
+    selected_child_key = collection_key
     if children:
-        st.markdown("#### Subcollections")
-        child_options = {c["clean_name"]: c["key"] for c in children}
-        child_names   = ["All"] + list(child_options.keys())
+        child_options = {
+            re.sub(r'^\d+[\.\d]*\s*', '', c["name"]).strip(): c["key"]
+            for c in children
+        }
+        child_names = list(child_options.keys())
 
-        # Check URL for pre-selected child
         url_child = st.query_params.get("subcollection", "")
-        default_child_idx = 0
+        default_idx = 0
         if url_child and url_child in child_options.values():
-            matched = next((i+1 for i, c in enumerate(children) if c["key"] == url_child), 0)
-            default_child_idx = matched
+            default_idx = next(
+                (i for i, c in enumerate(children) if c["key"] == url_child), 0
+            )
 
-        if "collection_child" not in st.session_state:
-            st.session_state["collection_child"] = child_names[default_child_idx]
+        if "col_profile_child" not in st.session_state:
+            st.session_state["col_profile_child"] = child_names[default_idx]
 
-        selected_child = st.radio(
+        selected_child_name = st.radio(
             "Select a subcollection",
             child_names,
             horizontal=True,
-            key="collection_child",
+            key="col_profile_child",
         )
+        selected_child_key = child_options[selected_child_name]
 
-        if selected_child != "All" and selected_child in child_options:
-            selected_child_key = child_options[selected_child]
-            cdf = df_duplicated[
-                df_duplicated["Collection_Key"] == selected_child_key
-            ].copy()
-            cdf = cdf.drop_duplicates(subset=["Zotero link"])
-            cdf["Date published"] = parse_date_column(cdf["Date published"])
-            cdf["Date published"] = cdf["Date published"].fillna("")
-            cdf = sort_by_date(cdf).sort_values(
-                ["No date flag", "Date published"], ascending=[True, True]
-            )
-            # Update URL
+        if selected_child_key != url_child:
             st.query_params.from_dict({
                 "collection": collection_key,
                 "subcollection": selected_child_key,
             })
-        else:
-            if st.query_params.get("subcollection"):
-                st.query_params.from_dict({"collection": collection_key})
+
+        display_name = selected_child_name
+    else:
+        display_name = clean_name
+
+    # ── Filter data ───────────────────────────────────────────────────────────
+    df_col = df_duplicated[df_duplicated["Collection_Key"] == selected_child_key].copy()
+    df_col["Collection_Name"] = df_col["Collection_Name"].apply(remove_numbers)
+    df_col["Date published"] = (
+        df_col["Date published"]
+        .str.strip()
+        .apply(lambda x: pd.to_datetime(x, utc=True, errors="coerce"))
+    )
+    df_col["Date published"] = df_col["Date published"].dt.strftime("%Y-%m-%d")
+    df_col["Date published"] = df_col["Date published"].fillna("")
+    df_col["No date flag"] = df_col["Date published"].isnull().astype(np.uint8)
+    df_col = df_col.sort_values(["No date flag", "Date published"], ascending=[True, True])
+    df_col = df_col.sort_values("Date published", ascending=False)
+    df_col = df_col.reset_index(drop=True)
+
+    collection_link = df_col["Collection_Link"].iloc[0] if not df_col.empty else ""
+
+    st.markdown(f"#### Collection theme: {display_name}")
+
+    # ── Keyword search ────────────────────────────────────────────────────────
+    name = st_keyup(
+        "Enter keywords to search in title",
+        key="col_profile_search",
+        placeholder="Search keyword(s)",
+        debounce=500,
+    )
+    if name:
+        df_col = df_col[df_col["Title"].str.lower().str.contains(name.lower(), na=False)]
 
     # ── Metrics row ───────────────────────────────────────────────────────────
-    ca1, ca2, ca3 = st.columns(3)
-    with ca1:
-        c_m = st.container()
-    with ca2:
+    col1, col2, col3 = st.columns([1, 2, 4])
+    with col1:
+        container_metric = st.container()
+    with col2:
         with st.popover("More metrics"):
-            c_cit     = st.container()
-            c_cit_avg = st.container()
-            c_oa      = st.container()
-            c_type    = st.container()
-            c_collab  = st.container()
-    with ca3:
+            container_citation        = st.container()
+            container_citation_avg    = st.container()
+            container_oa              = st.container()
+            container_type            = st.container()
+            container_author_no       = st.container()
+            container_author_pub      = st.container()
+            container_collab          = st.container()
+    with col3:
         with st.popover("Filters and more"):
-            c_filter = st.container()
-            c_dl     = st.container()
+            st.write(f"View the collection in [Zotero]({collection_link})")
+            col_a, col_b = st.columns(2)
+            with col_a:
+                display2 = st.checkbox("Display abstracts", key="col_profile_abstracts")
+            with col_b:
+                only_citation = st.checkbox("Show cited items only", key="col_profile_cited")
+                if only_citation:
+                    df_col = df_col[
+                        (df_col["Citation"].notna()) & (df_col["Citation"] != 0)
+                    ]
             view = st.radio(
                 "View as:", ("Basic list", "Table", "Bibliography"),
                 horizontal=True, key="col_profile_view",
             )
+            types = st.multiselect(
+                "Publication type",
+                df_col["Publication type"].unique(),
+                df_col["Publication type"].unique(),
+                key="col_profile_types",
+            )
+            df_col = df_col[df_col["Publication type"].isin(types)].reset_index(drop=True)
 
-    st.write("*This database **may not show** all items in this collection.*")
+            csv = convert_df_to_csv(
+                df_col[["Publication type", "Title", "FirstName2", "Abstract",
+                         "Date published", "Publisher", "Journal",
+                         "Link to publication", "Zotero link"]]
+                .assign(Abstract=lambda d: d["Abstract"].str.replace("\n", " "))
+                .reset_index(drop=True)
+            )
+            st.download_button(
+                "⬇ Download collection", csv,
+                f"{display_name}_{datetime.date.today().isoformat()}.csv",
+                mime="text/csv", key="dl-col-profile", icon=":material/download:",
+            )
 
-    # ── Type filter ───────────────────────────────────────────────────────────
-    types = c_filter.multiselect(
-        "Publication type",
-        cdf["Publication type"].unique(),
-        default=[],
-        key="col_profile_types",
-    )
-    if types:
-        cdf = cdf[cdf["Publication type"].isin(types)].reset_index(drop=True)
+    # ── Compute metrics ───────────────────────────────────────────────────────
+    num_items = len(df_col)
+    publications_by_type = df_col["Publication type"].value_counts()
+    breakdown_string = ", ".join([f"{k}: {v}" for k, v in publications_by_type.items()])
+    item_type_no = df_col["Publication type"].nunique()
+    citation_count = df_col["Citation"].sum()
 
-    # ── Metrics ───────────────────────────────────────────────────────────────
-    render_metrics(
-        cdf,
-        container_metric=c_m,
-        container_citation=c_cit,
-        container_citation_average=c_cit_avg,
-        container_oa=c_oa,
-        container_type=c_type,
-        container_publication_ratio=c_collab,
-    )
+    if num_items == 0:
+        author_no, author_pub_ratio, collaboration_ratio = 0, 0.0, 0
+    else:
+        expanded_authors = df_col["FirstName2"].apply(
+            lambda x: pd.Series([a.strip() for a in x.split(",")]) if isinstance(x, str) else pd.Series([x])
+        ).stack().reset_index(level=1, drop=True)
+        author_no = len(expanded_authors)
+        author_pub_ratio = round(author_no / num_items, 2)
+        df_col["multiple_authors"] = df_col["FirstName2"].astype(str).apply(lambda x: "," in x)
+        collaboration_ratio = round(df_col["multiple_authors"].sum() / num_items * 100, 1)
 
-    # ── Download ──────────────────────────────────────────────────────────────
-    csv = convert_df_to_csv(
-        cdf[["Publication type", "Title", "Abstract", "Date published",
-             "Publisher", "Journal", "Link to publication", "Zotero link", "Citation"]]
-        .assign(Abstract=lambda d: d["Abstract"].str.replace("\n", " "))
-        .reset_index(drop=True)
-    )
-    c_dl.download_button(
-        "⬇ Download collection", csv,
-        f"{clean_name}_{datetime.date.today().isoformat()}.csv",
-        mime="text/csv", key="dl-col-profile",
-    )
+    ja = df_col[df_col["Publication type"] == "Journal article"]
+    oa_ratio = (ja["OA status"].sum() / len(ja) * 100) if len(ja) else 0.0
+
+    outlier_detector = (df_col["Citation"] > 1000).any()
+    if outlier_detector:
+        outlier_count = int((df_col["Citation"] > 1000).sum())
+        citation_avg  = round(df_col[df_col["Citation"] < 1000]["Citation"].mean(), 2)
+        citation_avg_with = round(df_col["Citation"].mean(), 2)
+        container_citation_avg.metric(
+            "Average citation", citation_avg,
+            help=f"**{outlier_count}** item(s) >1000 citations. With outliers: **{citation_avg_with}**."
+        )
+    else:
+        container_citation_avg.metric("Average citation", round(df_col["Citation"].mean(), 2))
+
+    container_metric.metric("Items found", num_items, help=breakdown_string)
+    container_citation.metric("Number of citations", int(citation_count))
+    container_oa.metric("Open access coverage", f"{int(oa_ratio)}%", help="Journal articles only")
+    container_type.metric("Number of publication types", int(item_type_no))
+    container_author_no.metric("Number of authors", int(author_no))
+    container_author_pub.metric("Author/publication ratio", author_pub_ratio)
+    container_collab.metric("Collaboration ratio", f"{collaboration_ratio}%")
 
     # ── Report toggle + shareable link ────────────────────────────────────────
     if "col_profile_report" not in st.session_state:
         st.session_state["col_profile_report"] = st.query_params.get("report", "0") == "1"
 
-    on = st.toggle(
+    on_report = st.toggle(
         ":material/monitoring: Generate report",
         key="col_profile_report",
     )
-
     current_url_report = st.query_params.get("report", "0") == "1"
-    if on != current_url_report:
+    if on_report != current_url_report:
         params = {"collection": collection_key}
-        if selected_child_key:
+        if children and selected_child_key != collection_key:
             params["subcollection"] = selected_child_key
-        if on:
+        if on_report:
             params["report"] = "1"
         st.query_params.from_dict(params)
 
     link = (
         f"{BASE_URL}/?collection={collection_key}"
-        f"{'&subcollection=' + selected_child_key if selected_child_key else ''}"
-        f"{'&report=1' if on else ''}"
+        f"{'&subcollection=' + selected_child_key if children and selected_child_key != collection_key else ''}"
+        f"{'&report=1' if on_report else ''}"
     )
     st.caption(f"🔗 Shareable link: [{link}]({link})")
 
-    # ── Report or list ────────────────────────────────────────────────────────
-    if on and len(cdf):
-        st.info(f"Report for {clean_name}")
-        render_report_charts(cdf, clean_name, name_replacements)
-    elif not on:
-        cdf = sort_radio(cdf, key="col_profile_sort")
-        if view == "Basic list":
-            for i, row in cdf.iterrows():
-                st.write(
-                    f"{i+1}) {format_entry(row, include_citation=True, reviews_map=reviews_map, base_url=BASE_URL)}"
+    # ── Tabs ──────────────────────────────────────────────────────────────────
+    tab1, tab2 = st.tabs(["📑 Publications", "📊 Dashboard"])
+
+    with tab1:
+        if on_report:
+            st.info(f"Report for {display_name}")
+            render_report_charts(df_col, display_name, name_replacements)
+        else:
+            sort_by = st.radio(
+                "Sort by:",
+                ("Publication date :arrow_down:", "Publication type", "Citation", "Date added :arrow_down:"),
+                horizontal=True, key="col_profile_sort",
+            )
+            if sort_by == "Publication date :arrow_down:":
+                df_col = df_col.sort_values("Date published", ascending=False).reset_index(drop=True)
+            elif sort_by == "Publication type":
+                df_col = df_col.sort_values("Publication type", ascending=True).reset_index(drop=True)
+            elif sort_by == "Citation":
+                df_col = df_col.sort_values("Citation", ascending=False).reset_index(drop=True)
+            else:
+                df_col = df_col.sort_values("Date added", ascending=False).reset_index(drop=True)
+
+            if view == "Basic list":
+                with st.expander("**Basic list view**", expanded=True):
+                    if sort_by == "Publication type":
+                        current_type = None
+                        count_by_type = {}
+                        for _, row in df_col.iterrows():
+                            if row["Publication type"] != current_type:
+                                current_type = row["Publication type"]
+                                st.subheader(current_type)
+                                count_by_type[current_type] = 1
+                            st.write(f"{count_by_type[current_type]}) {format_entry(row, include_citation=True, reviews_map=reviews_map, base_url=BASE_URL)}")
+                            count_by_type[current_type] += 1
+                            if display2:
+                                st.caption(row["Abstract"])
+                    else:
+                        for count, (_, row) in enumerate(df_col.iterrows(), 1):
+                            st.write(f"{count}) {format_entry(row, include_citation=True, reviews_map=reviews_map, base_url=BASE_URL)}")
+                            if display2:
+                                st.caption(row["Abstract"])
+
+            elif view == "Table":
+                with st.expander("**Table view**", expanded=True):
+                    st.dataframe(
+                        df_col[["Publication type", "Title", "Date published", "FirstName2",
+                                "Abstract", "Publisher", "Journal", "Citation",
+                                "Collection_Name", "Link to publication", "Zotero link"]]
+                        .rename(columns={
+                            "FirstName2": "Author(s)",
+                            "Collection_Name": "Collection",
+                            "Link to publication": "Publication link",
+                        })
+                    )
+            else:
+                with st.expander("**Bibliographic listing**", expanded=True):
+                    df_col["zotero_item_key"] = df_col["Zotero link"].str.replace(
+                        "https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/", ""
+                    )
+                    df_zot = pd.read_csv("zotero_citation_format.csv")
+                    df_zot.drop(columns=["Unnamed: 0"], errors="ignore", inplace=True)
+                    df_col = pd.merge(df_col, df_zot, on="zotero_item_key", how="left")
+                    display_bibliographies(df_col)
+
+    with tab2:
+        st.header("Dashboard")
+        on_dash = st.toggle("Display dashboard", key="col_profile_dash")
+        if on_dash and num_items > 0:
+            col1, col2 = st.columns(2)
+            with col1:
+                df_plot = df_col["Publication type"].value_counts().reset_index()
+                df_plot.columns = ["Publication type", "Count"]
+                fig = px.pie(df_plot, values="Count", names="Publication type",
+                             title=f"Publications: {display_name}")
+                st.plotly_chart(fig, use_container_width=True)
+            with col2:
+                fig = px.bar(df_plot, x="Publication type", y="Count",
+                             color="Publication type",
+                             title=f"Publications: {display_name}")
+                st.plotly_chart(fig, use_container_width=True)
+
+            df_year = df_col.copy()
+            df_year["Date year"] = pd.to_datetime(
+                df_year["Date published"], utc=True, errors="coerce"
+            ).dt.strftime("%Y").fillna("No date")
+            df_year_count = df_year["Date year"].value_counts().reset_index()
+            df_year_count.columns = ["Publication year", "Count"]
+            df_year_count = df_year_count[df_year_count["Publication year"] != "No date"]
+            df_year_count = df_year_count.sort_values("Publication year")
+
+            col1, col2 = st.columns(2)
+            with col1:
+                fig = px.bar(df_year_count, x="Publication year", y="Count",
+                             title=f"Publications by year: {display_name}")
+                fig.update_xaxes(tickangle=-70)
+                st.plotly_chart(fig, use_container_width=True)
+            with col2:
+                df_auth = df_col.copy()
+                df_auth["Author_name"] = df_auth["FirstName2"].apply(
+                    lambda x: x.split(", ") if isinstance(x, str) and x else []
                 )
-        elif view == "Table":
-            st.dataframe(
-                cdf[["Publication type", "Title", "Date published", "FirstName2",
-                     "Abstract", "Publisher", "Journal", "Citation",
-                     "Link to publication", "Zotero link"]]
-                .rename(columns={
-                    "FirstName2": "Author(s)",
-                    "Link to publication": "Publication link",
-                })
-            )
-        elif view == "Bibliography":
-            cdf["zotero_item_key"] = cdf["Zotero link"].str.replace(
-                "https://www.zotero.org/groups/"
-                "intelarchive_intelligence_studies_database/items/", ""
-            )
-            df_zot = pd.read_csv("zotero_citation_format.csv")
-            display_bibliographies(
-                pd.merge(cdf, df_zot, on="zotero_item_key", how="left")
-            )
-    else:
-        st.write("No publication type selected.")
+                df_auth = df_auth.explode("Author_name")
+                df_auth["Author_name"] = df_auth["Author_name"].map(
+                    name_replacements
+                ).fillna(df_auth["Author_name"])
+                max_authors = max(len(df_auth["Author_name"].unique()), 1)
+                num_authors = st.slider(
+                    "Select number of authors to display:",
+                    1, min(50, max_authors), 20,
+                    key="col_profile_authors_slider",
+                )
+                pub_by_author = df_auth["Author_name"].value_counts().head(num_authors)
+                fig = px.bar(
+                    pub_by_author, x=pub_by_author.index, y=pub_by_author.values,
+                    title=f"Top {num_authors} authors ({display_name})",
+                    labels={"x": "Author", "y": "Publications"},
+                )
+                fig.update_layout(xaxis_tickangle=-45)
+                st.plotly_chart(fig, use_container_width=True)
+
+            col1, col2 = st.columns(2)
+            with col1:
+                number = st.select_slider(
+                    "Select a number of publishers",
+                    options=[5, 10, 15, 20, 25, 30], value=10,
+                    key="col_profile_pub_slider",
+                )
+                df_pub = df_col["Publisher"].value_counts().head(number).reset_index()
+                df_pub.columns = ["Publisher", "Count"]
+                fig = px.bar(df_pub, x="Publisher", y="Count", color="Publisher",
+                             title=f"Top {number} publishers")
+                fig.update_xaxes(tickangle=-70)
+                st.plotly_chart(fig, use_container_width=True)
+            with col2:
+                number2 = st.select_slider(
+                    "Select a number of journals",
+                    options=[5, 10, 15, 20, 25, 30], value=10,
+                    key="col_profile_jour_slider",
+                )
+                df_jour = df_col[df_col["Publication type"] == "Journal article"][
+                    "Journal"
+                ].value_counts().head(number2).reset_index()
+                df_jour.columns = ["Journal", "Count"]
+                fig = px.bar(df_jour, x="Journal", y="Count", color="Journal",
+                             title=f"Top {number2} journals")
+                fig.update_xaxes(tickangle=-70)
+                st.plotly_chart(fig, use_container_width=True)
+
+            # ── Wordcloud ─────────────────────────────────────────────────────
+            st.write("---")
+            render_wordcloud(df_col, title=f"Top words in titles ({display_name})")
+
+        elif on_dash and num_items == 0:
+            st.warning("No data to visualise.")
+        else:
+            st.info("Toggle to see the dashboard!")
 
 @st.cache_data(ttl=3600)
 def compute_author_similarity(df_authors):
