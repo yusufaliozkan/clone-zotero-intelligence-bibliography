@@ -367,7 +367,13 @@ if item_key:
                 st.markdown("**Authors:** N/A")
             st.markdown(f"**Publication type:** {_safe(row.get('Publication type')) or 'N/A'}")
             st.markdown(f"**Date published:** {_safe(row.get('Date published')) or 'N/A'}")
-
+            date_added = _safe(row.get('Date added'))
+            if date_added:
+                try:
+                    date_added_fmt = pd.to_datetime(date_added).strftime("%d %B %Y")
+                except Exception:
+                    date_added_fmt = date_added
+                st.markdown(f"**Date added to IntelArchive:** {date_added_fmt}")
             pub_type = _safe(row.get('Publication type'))
 
             if pub_type == "Book chapter":
