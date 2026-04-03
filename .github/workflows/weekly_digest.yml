@@ -21,7 +21,7 @@ jobs:
         run: pip install pandas
 
       - name: Send weekly digest
-        run: python send_digest.py
+        run: python database_update/send_digest.py
         env:
           SMTP_SERVER:   ${{ secrets.SMTP_SERVER }}
           SMTP_PORT:     ${{ secrets.SMTP_PORT }}
