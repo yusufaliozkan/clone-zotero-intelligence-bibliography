@@ -844,8 +844,6 @@ with tab1:
                     st.session_state.pop(key, None)
                 st.subheader("Search keywords", anchor=False, divider="blue")
 
-                if "search_history" not in st.session_state:
-                    st.session_state["search_history"] = []
 
                 @st.fragment
                 def search_keyword():
@@ -905,36 +903,7 @@ with tab1:
 
                     search_term = st.session_state.search_term.strip()
 
-                    if st.session_state.get("search_history"):
-                                        with st.expander("🕐 Recent searches", expanded=False):
-                                            for past_query in st.session_state["search_history"]:
-                                                col_hist, col_clear = st.columns([8, 1])
-                                                with col_hist:
-                                                    if st.button(
-                                                        past_query,
-                                                        key=f"hist_{past_query}",
-                                                        use_container_width=True,
-                                                    ):
-                                                        st.session_state["search_term"] = past_query
-                                                        st.session_state["search_term_input"] = past_query
-                                                        st.rerun()
-                                                with col_clear:
-                                                    if st.button(
-                                                        "✕",
-                                                        key=f"del_{past_query}",
-                                                        help=f"Remove '{past_query}' from history",
-                                                    ):
-                                                        st.session_state["search_history"].remove(past_query)
-                                                        st.rerun()
-
-                                            if st.button("Clear all history", key="clear_history"):
-                                                st.session_state["search_history"] = []
-                                                st.rerun()
-
-                    if search_term:
-                        if search_term not in st.session_state["search_history"]:
-                            st.session_state["search_history"].insert(0, search_term)
-                            st.session_state["search_history"] = st.session_state["search_history"][:10] 
+     
                     if not search_term:
                         st.session_state.pop("report_keyword_state", None)  # ← reset on clear
                         st.info("Please enter a keyword to search in title or abstract.")
