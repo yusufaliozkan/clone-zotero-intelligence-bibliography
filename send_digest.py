@@ -5,16 +5,6 @@ from email.mime.text import MIMEText
 from datetime import datetime, timedelta
 import os
 
-import base64
-
-def get_logo_base64():
-    logo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg")
-    try:
-        with open(logo_path, "rb") as f:
-            return base64.b64encode(f.read()).decode("utf-8")
-    except FileNotFoundError:
-        return None
-
 BASE_URL = "https://intelligence.streamlit.app"
 
 def get_new_items(days=7):
@@ -37,7 +27,7 @@ def build_html_digest(df):
     rows_html = ""
     for pub_type, group in grouped:
         rows_html += f"""
-        <h3 style="color: #1a1a1a; border-bottom: 2px solid #5cb85c; padding-bottom: 6px; margin-top: 28px; font-family: Georgia, serif; text-align: center;">
+        <h3 style="color: #1a1a1a; border-bottom: 2px solid #5cb85c; padding-bottom: 6px; margin-top: 28px; font-family: Georgia, serif;">
             {pub_type} <span style="color: #888; font-size: 0.85em;">({len(group)})</span>
         </h3>
         """
@@ -63,7 +53,7 @@ def build_html_digest(df):
             date_display    = date_pub if date_pub and date_pub != "nan" else "N/A"
 
             rows_html += f"""
-            <div style="margin-bottom: 14px; padding: 14px 16px; background: #f8f8f8; border-left: 4px solid #5cb85c; border-radius: 0 4px 4px 0; text-align: center;">
+            <div style="margin-bottom: 14px; padding: 14px 16px; background: #f8f8f8; border-left: 4px solid #5cb85c; border-radius: 0 4px 4px 0;">
                 <a href="{item_url}" style="font-weight: bold; color: #1a1a1a; text-decoration: none; font-family: Georgia, serif; font-size: 1em; line-height: 1.4;">
                     {title}
                 </a><br>
@@ -87,11 +77,11 @@ def build_html_digest(df):
 
                         <!-- Header -->
                         <tr>
-                            <td style="background-color: #1a1a1a; padding: 28px 32px; text-align: center;">
+                            <td style="background-color: #1a1a1a; padding: 28px 32px; text-align: left;">
                                 <img src="https://raw.githubusercontent.com/yusufaliozkan/zotero-intelligence-bibliography/main/images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.png"
                                      alt="IntelArchive"
                                      width="160"
-                                     style="display:block; margin: 0 auto 8px auto;">
+                                     style="display:block; margin-bottom: 8px;">
                                 <p style="color: #aaaaaa; margin: 6px 0 0 0; font-size: 0.85em; font-family: Arial, sans-serif;">
                                     Intelligence Studies Database
                                 </p>
@@ -100,7 +90,7 @@ def build_html_digest(df):
 
                         <!-- Digest title bar -->
                         <tr>
-                            <td style="background-color: #5cb85c; padding: 12px 32px; text-align: center;">
+                            <td style="background-color: #5cb85c; padding: 12px 32px; text-align: left;">
                                 <span style="color: #ffffff; font-family: Arial, sans-serif; font-size: 0.95em; font-weight: bold;">
                                     Weekly Digest &nbsp;·&nbsp; {today} &nbsp;·&nbsp; {count} new item{"s" if count != 1 else ""}
                                 </span>
@@ -109,7 +99,7 @@ def build_html_digest(df):
 
                         <!-- Body -->
                         <tr>
-                            <td style="padding: 28px 32px; text-align: center;">
+                            <td style="padding: 28px 32px; text-align: left;">
                                 <p style="font-family: Arial, sans-serif; color: #444; margin: 0 0 20px 0; font-size: 0.95em;">
                                     Here are the latest additions to the
                                     <a href="{BASE_URL}" style="color: #5cb85c; text-decoration: none;">IntelArchive Intelligence Studies Database</a>.
@@ -140,42 +130,3 @@ def build_html_digest(df):
     </html>
     """
     return html
-
-def send_digest():
-    new_items = get_new_items(days=7)
-    count     = len(new_items)
-
-    if count == 0:
-        print("No new items this week. Skipping digest.")
-        return
-
-    html = build_html_digest(new_items)
-    if not html:
-        print("Nothing to send.")
-        return
-
-    # Email config from environment variables
-    smtp_server   = os.environ["SMTP_SERVER"]       # e.g. smtp.gmail.com
-    smtp_port     = int(os.environ["SMTP_PORT"])    # e.g. 587
-    smtp_user     = os.environ["SMTP_USER"]         # your gmail address
-    smtp_password = os.environ["SMTP_PASSWORD"]     # app password
-    to_address    = os.environ["DIGEST_TO"]         # Google Group email
-
-    today = datetime.now().strftime("%d %B %Y")
-    subject = f"IntelArchive Weekly Digest — {count} new item{'s' if count != 1 else ''} · {today}"
-
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = subject
-    msg["From"]    = smtp_user
-    msg["To"]      = to_address
-    msg.attach(MIMEText(html, "html"))
-
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
-        server.starttls()
-        server.login(smtp_user, smtp_password)
-        server.sendmail(smtp_user, to_address, msg.as_string())
-
-    print(f"Digest sent: {count} new items to {to_address}")
-
-if __name__ == "__main__":
-    send_digest()
