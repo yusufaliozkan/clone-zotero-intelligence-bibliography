@@ -37,7 +37,7 @@ def build_html_digest(df):
     rows_html = ""
     for pub_type, group in grouped:
         rows_html += f"""
-        <h3 style="color: #1a1a1a; border-bottom: 2px solid #5cb85c; padding-bottom: 6px; margin-top: 28px; font-family: Georgia, serif;">
+        <h3 style="color: #1a1a1a; border-bottom: 2px solid #5cb85c; padding-bottom: 6px; margin-top: 28px; font-family: Georgia, serif; text-align: center;">
             {pub_type} <span style="color: #888; font-size: 0.85em;">({len(group)})</span>
         </h3>
         """
@@ -63,7 +63,7 @@ def build_html_digest(df):
             date_display    = date_pub if date_pub and date_pub != "nan" else "N/A"
 
             rows_html += f"""
-            <div style="margin-bottom: 14px; padding: 14px 16px; background: #f8f8f8; border-left: 4px solid #5cb85c; border-radius: 0 4px 4px 0;">
+            <div style="margin-bottom: 14px; padding: 14px 16px; background: #f8f8f8; border-left: 4px solid #5cb85c; border-radius: 0 4px 4px 0; text-align: center;">
                 <a href="{item_url}" style="font-weight: bold; color: #1a1a1a; text-decoration: none; font-family: Georgia, serif; font-size: 1em; line-height: 1.4;">
                     {title}
                 </a><br>
@@ -77,7 +77,6 @@ def build_html_digest(df):
             </div>
             """
 
-    # Logo as text-based header since SVG in email is unreliable
     html = f"""
     <html>
     <body style="margin: 0; padding: 0; background-color: #f4f4f4;">
@@ -88,22 +87,12 @@ def build_html_digest(df):
 
                         <!-- Header -->
                         <tr>
-                            <td style="background-color: #1a1a1a; padding: 28px 32px;">
-                                <img src="https://raw.githubusercontent.com/yusufaliozkan/zotero-intelligence-bibliography/main/images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.png" 
-                                     alt="IntelArchive" 
-                                     width="160" 
-                                     style="display:block; margin-bottom: 8px;">
+                            <td style="background-color: #1a1a1a; padding: 28px 32px; text-align: center;">
+                                <img src="https://raw.githubusercontent.com/yusufaliozkan/zotero-intelligence-bibliography/main/images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.png"
+                                     alt="IntelArchive"
+                                     width="160"
+                                     style="display:block; margin: 0 auto 8px auto;">
                                 <p style="color: #aaaaaa; margin: 6px 0 0 0; font-size: 0.85em; font-family: Arial, sans-serif;">
-                                    Intelligence Studies Database
-                                </p>
-                            </td>
-                        </tr>
-                                        <td colspan="2">
-                                            <span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #ffffff; letter-spacing: -0.5px;">Archi</span><span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #5cb85c;">v</span><span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #ffffff; letter-spacing: -0.5px;">e</span>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <p style="color: #aaaaaa; margin: 10px 0 0 0; font-size: 0.85em; font-family: Arial, sans-serif;">
                                     Intelligence Studies Database
                                 </p>
                             </td>
@@ -111,7 +100,7 @@ def build_html_digest(df):
 
                         <!-- Digest title bar -->
                         <tr>
-                            <td style="background-color: #5cb85c; padding: 12px 32px;">
+                            <td style="background-color: #5cb85c; padding: 12px 32px; text-align: center;">
                                 <span style="color: #ffffff; font-family: Arial, sans-serif; font-size: 0.95em; font-weight: bold;">
                                     Weekly Digest &nbsp;·&nbsp; {today} &nbsp;·&nbsp; {count} new item{"s" if count != 1 else ""}
                                 </span>
@@ -120,7 +109,7 @@ def build_html_digest(df):
 
                         <!-- Body -->
                         <tr>
-                            <td style="padding: 28px 32px;">
+                            <td style="padding: 28px 32px; text-align: center;">
                                 <p style="font-family: Arial, sans-serif; color: #444; margin: 0 0 20px 0; font-size: 0.95em;">
                                     Here are the latest additions to the
                                     <a href="{BASE_URL}" style="color: #5cb85c; text-decoration: none;">IntelArchive Intelligence Studies Database</a>.
