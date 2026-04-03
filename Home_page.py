@@ -185,7 +185,6 @@ def get_collection_prefix(collection_name):
     return match.group(1) if match else None
 
 def get_children(collection_name, df_duplicated):
-    """Get direct children of a collection based on prefix."""
     prefix = get_collection_prefix(collection_name)
     if not prefix:
         return []
@@ -198,14 +197,15 @@ def get_children(collection_name, df_duplicated):
             continue
         if name == collection_name:
             continue
-        # Direct child: prefix starts with parent prefix + "." and has no further dots after
-        remainder = child_prefix[len(prefix):]
-        if child_prefix.startswith(prefix + ".") and remainder.count(".") == 0:
-            children.append({
-                "name": name,
-                "key": row["Collection_Key"],
-                "clean_name": re.sub(r'^\d+[\.\d]*\s*', '', name).strip(),
-            })
+        if child_prefix.startswith(prefix + "."):
+            remainder = child_prefix[len(prefix + "."):]
+            # Direct child: no further dots in the remainder
+            if "." not in remainder:
+                children.append({
+                    "name": name,
+                    "key": row["Collection_Key"],
+                    "clean_name": re.sub(r'^\d+[\.\d]*\s*', '', name).strip(),
+                })
     return sorted(children, key=lambda x: x["name"])
 
 def render_collection_profile(collection_key, df_dedup, df_duplicated):
