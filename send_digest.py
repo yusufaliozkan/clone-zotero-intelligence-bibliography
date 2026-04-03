@@ -130,3 +130,41 @@ def build_html_digest(df):
     </html>
     """
     return html
+
+def send_digest():
+    new_items = get_new_items(days=7)
+    count     = len(new_items)
+
+    if count == 0:
+        print("No new items this week. Skipping digest.")
+        return
+
+    html = build_html_digest(new_items)
+    if not html:
+        print("Nothing to send.")
+        return
+
+    smtp_server   = os.environ["SMTP_SERVER"]
+    smtp_port     = int(os.environ["SMTP_PORT"])
+    smtp_user     = os.environ["SMTP_USER"]
+    smtp_password = os.environ["SMTP_PASSWORD"]
+    to_address    = os.environ["DIGEST_TO"]
+
+    today = datetime.now().strftime("%d %B %Y")
+    subject = f"IntelArchive Weekly Digest — {count} new item{'s' if count != 1 else ''} · {today}"
+
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"]    = smtp_user
+    msg["To"]      = to_address
+    msg.attach(MIMEText(html, "html"))
+
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.starttls()
+        server.login(smtp_user, smtp_password)
+        server.sendmail(smtp_user, to_address, msg.as_string())
+
+    print(f"Digest sent: {count} new items to {to_address}")
+
+if __name__ == "__main__":
+    send_digest()
