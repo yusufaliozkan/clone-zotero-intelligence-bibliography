@@ -5,6 +5,16 @@ from email.mime.text import MIMEText
 from datetime import datetime, timedelta
 import os
 
+import base64
+
+def get_logo_base64():
+    logo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg")
+    try:
+        with open(logo_path, "rb") as f:
+            return base64.b64encode(f.read()).decode("utf-8")
+    except FileNotFoundError:
+        return None
+
 BASE_URL = "https://intelligence.streamlit.app"
 
 def get_new_items(days=7):
@@ -79,16 +89,15 @@ def build_html_digest(df):
                         <!-- Header -->
                         <tr>
                             <td style="background-color: #1a1a1a; padding: 28px 32px;">
-                                <table cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <td style="padding-right: 4px;">
-                                            <span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #ffffff; letter-spacing: -0.5px;">Intel</span>
-                                        </td>
-                                        <td style="padding: 0 2px;">
-                                            <span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #5cb85c;">|</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
+                                <img src="https://raw.githubusercontent.com/yusufaliozkan/zotero-intelligence-bibliography/main/images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.png" 
+                                     alt="IntelArchive" 
+                                     width="160" 
+                                     style="display:block; margin-bottom: 8px;">
+                                <p style="color: #aaaaaa; margin: 6px 0 0 0; font-size: 0.85em; font-family: Arial, sans-serif;">
+                                    Intelligence Studies Database
+                                </p>
+                            </td>
+                        </tr>
                                         <td colspan="2">
                                             <span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #ffffff; letter-spacing: -0.5px;">Archi</span><span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #5cb85c;">v</span><span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #ffffff; letter-spacing: -0.5px;">e</span>
                                         </td>
