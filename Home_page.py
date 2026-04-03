@@ -30,6 +30,7 @@ from copyright import display_custom_license
 from sidebar_content import sidebar_content, set_page_config
 from format_entry import format_entry
 from events import evens_conferences
+from format_entry import _resolve_author
 
 from shared_utils import (
     parse_date_column,
@@ -359,7 +360,7 @@ if item_key:
             if authors_raw:
                 author_list = [a.strip() for a in authors_raw.split(",")]
                 author_links = " · ".join(
-                    f"[{a}]({BASE_URL}/?author_profile={author_to_slug(a)})"
+                    f"[{a}]({BASE_URL}/?author_profile={author_to_slug(_resolve_author(a))})"
                     for a in author_list if a
                 )
                 st.markdown(f"**Authors:** {author_links}")
