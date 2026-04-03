@@ -52,6 +52,10 @@ def build_html_digest(df):
             authors_display = authors if authors and authors != "nan" else "N/A"
             date_display    = date_pub if date_pub and date_pub != "nan" else "N/A"
 
+            link_to_publication = str(row.get("Link to publication", "")).strip()
+            if link_to_publication == "nan":
+                link_to_publication = ""
+
             rows_html += f"""
             <div style="margin-bottom: 14px; padding: 14px 16px; background: #f8f8f8; border-left: 4px solid #5cb85c; border-radius: 0 4px 4px 0;">
                 <a href="{item_url}" style="font-weight: bold; color: #1a1a1a; text-decoration: none; font-family: Georgia, serif; font-size: 1em; line-height: 1.4;">
@@ -63,6 +67,8 @@ def build_html_digest(df):
                 </span><br>
                 <a href="{item_url}" style="font-size: 0.82em; color: #5cb85c; text-decoration: none; font-family: Arial, sans-serif;">
                     View in IntelArchive →
+                </a>
+                {f'&nbsp;·&nbsp;<a href="{link_to_publication}" style="font-size: 0.82em; color: #888; text-decoration: none; font-family: Arial, sans-serif;">Publication link →</a>' if link_to_publication else ""}
                 </a>
             </div>
             """
