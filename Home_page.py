@@ -275,8 +275,6 @@ def render_collection_profile(collection_key, df_dedup, df_duplicated):
             horizontal=True,
             key="col_profile_child",
         )
-        selected_child_key = child_options[selected_child_name]
-
         if selected_child_name == "All (including subcollections)":
             selected_child_key = collection_key
             display_name = clean_name
@@ -290,8 +288,8 @@ def render_collection_profile(collection_key, df_dedup, df_duplicated):
                     "collection": collection_key,
                     "subcollection": selected_child_key,
                 })
-    else:
-        display_name = clean_name
+
+
 
     # ── Filter data ───────────────────────────────────────────────────────────
 # ── Filter data ───────────────────────────────────────────────────────────
