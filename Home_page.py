@@ -491,7 +491,7 @@ if item_key:
         st.warning("Publication not found.")
 
     st.divider()
-    st.markdown("**Related publications:**")
+    st.markdown("**Similar publications:**")
 
     def get_related_publications(row, df, top_n=5):
         from sklearn.feature_extraction.text import TfidfVectorizer
