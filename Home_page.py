@@ -95,6 +95,344 @@ Ozkan, Yusuf A. 'Intelligence Studies Network Dataset'. Zenodo, 15 August 2024. 
 **Cite this page:** IntelArchive. '*Intelligence Studies Network*', Created 1 June 2020, Accessed {cite_today}. https://intelligence.streamlit.app/.
 """
 
+# ── Collection hierarchy ─────────────────────────────────────────────────────
+COLLECTION_HIERARCHY = {
+    # Top-level containers (no direct items, show subcollections as radio)
+    "01": {
+        "label": "Intelligence history",
+        "key": None,  # no key — doesn't exist as collection in data
+        "children_prefix": "01.",
+        "exclude": ["01 Intelligence history"],
+    },
+    "07": {
+        "label": "Intelligence collection",
+        "key": None,
+        "children_prefix": "07.",
+        "exclude": [],
+    },
+    # All collection keys mapped to their prefix for child detection
+}
+
+# Full key → name mapping
+COLLECTION_KEY_MAP = {
+    "CN9F5URY": "00 Intelligence bibliographies",
+    "DS3WDJUS": "01.1 Pre-Napoleonic Wars",
+    "8XA7D88D": "01.2 Napoleonic Wars",
+    "9DTPTK46": "01.3 1800-1914",
+    "BNPYHVD4": "01.4 WW1 (First Wold War)",
+    "MP7FJ9UA": "01.5 Inter-war period",
+    "SCCGXHMZ": "01.6 WW2 (Second World War)",
+    "CZT6L9T7": "01.7 Cold War",
+    "DHLN8GE4": "01.7.1 Arab-Israeli Conflict",
+    "9I86L884": "01.7.2 Falklands War",
+    "6XBG92FJ": "01.7.3 Suez Crisis",
+    "V7KUA58M": "01.7.4 The Troubles",
+    "BHVIFBRH": "01.7.5 Vietnam War",
+    "WHBCJ8GW": "01.8 Post-Cold War",
+    "TLFN4NAL": "01.9 Terrorism, insurgency, crime",
+    "KGU8VLSW": "01.99 Intelligence archives and methodology",
+    "HCN8YFI8": "02 Intelligence studies",
+    "D67KFVND": "02.1 Intelligence and strategy",
+    "NWAKWPT7": "02.2 Intelligence and culture",
+    "H28QZ8XV": "02.3 Intelligence research and education",
+    "B4CCZ7Y8": "02.4 Policy and intelligence",
+    "2Y7S43YJ": "02.5 Intelligence and media",
+    "TDUVX2TF": "02.98 Methodology",
+    "7R9UG9WU": "02.99 Miscellaneous",
+    "CZJ36V8L": "03 Intelligence analysis",
+    "CK5MNYPQ": "04 Intelligence organisations",
+    "D7XFV7JL": "05 Intelligence failures",
+    "9YPHGMBS": "05.1 Intelligence, warning, and surprise",
+    "CGAXYI88": "05.2 Politicization of intelligence",
+    "DVEM4H4W": "06 Accountability, oversight, and ethics",
+    "ZMVDB8A2": "07.1 HUMINT",
+    "T92JK7A5": "07.2 SIGINT",
+    "PBHFUE8W": "07.3 IMINT - GEOINT",
+    "LXMU5UXP": "07.4 OSINT - SOCMINT",
+    "N8VR3BYE": "07.5 Medical Intelligence",
+    "TEMXY72R": "07.6 Intelligence Collection (other)",
+    "RHJFPRAI": "08 Counterintelligence",
+    "B6RJNLTK": "09 Covert action",
+    "8XXD789V": "10 Intelligence and cybersphere",
+    "AZ3BZ9BR": "14 Global intelligence",
+    "EJW4BLAR": "16 Non-State Actors",
+    "E5UVWK8S": "98.0 AI and intelligence studies",
+    "UVSM9U3L": "98.1 Intelligence and Law",
+    "Y959U28A": "98.2 War in Ukraine",
+    "AWQSU6V5": "98.3 War in Gaza",
+    "AKVWM8BZ": "98.4 Middle East conflict",
+    "9YH9YSYQ": "98.5 Intelligence in literature and popular culture",
+    "MQMHZUFD": "98.6 Disinformation",
+    "28B8SB3Y": "98.7 Surveillance",
+    "VHKQZA5S": "98.8 Current affairs",
+    "R2V36RN8": "98.9 Private-sector intelligence",
+    "9H865NIL": "99 Archival sources and reports",
+    "FIXZQSS9": "Academic programs on intelligence",
+    "Y4YJ2AWB": "Websites",
+}
+
+COLLECTION_KEY_MAP["01_CONTAINER"] = "01 Intelligence history"
+COLLECTION_KEY_MAP["07_CONTAINER"] = "07 Intelligence collection"
+COLLECTION_KEY_MAP["98_CONTAINER"] = "98 Special collections"
+
+# Reverse map: name → key
+COLLECTION_NAME_KEY_MAP = {v: k for k, v in COLLECTION_KEY_MAP.items()}
+
+def get_collection_prefix(collection_name):
+    """Extract numeric prefix from collection name e.g. '01.7' from '01.7 Cold War'"""
+    import re
+    match = re.match(r'^(\d+(?:\.\d+)*)', collection_name)
+    return match.group(1) if match else None
+
+def get_children(collection_name, df_duplicated):
+    """Get direct children of a collection based on prefix."""
+    prefix = get_collection_prefix(collection_name)
+    if not prefix:
+        return []
+    all_collections = df_duplicated[["Collection_Name", "Collection_Key"]].drop_duplicates()
+    children = []
+    for _, row in all_collections.iterrows():
+        name = row["Collection_Name"]
+        child_prefix = get_collection_prefix(name)
+        if not child_prefix:
+            continue
+        if name == collection_name:
+            continue
+        # Direct child: prefix starts with parent prefix + "." and has no further dots after
+        remainder = child_prefix[len(prefix):]
+        if child_prefix.startswith(prefix + ".") and remainder.count(".") == 0:
+            children.append({
+                "name": name,
+                "key": row["Collection_Key"],
+                "clean_name": re.sub(r'^\d+[\.\d]*\s*', '', name).strip(),
+            })
+    return sorted(children, key=lambda x: x["name"])
+
+def render_collection_profile(collection_key, df_dedup, df_duplicated):
+    reviews_map = load_reviews_map()
+
+    collection_name = COLLECTION_KEY_MAP.get(collection_key, "")
+    if not collection_name:
+        st.warning("Collection not found.")
+        return
+
+    clean_name = re.sub(r'^\d+[\.\d]*\s*', '', collection_name).strip()
+    prefix = get_collection_prefix(collection_name)
+
+    # ── Header ───────────────────────────────────────────────────────────────
+    st.markdown(f"## 📁 {clean_name}")
+    st.caption(f"Collection · IntelArchive")
+    st.divider()
+
+    # ── Container collections (no direct items) ───────────────────────────────
+    if collection_key.endswith("_CONTAINER"):
+        st.markdown("### Subcollections")
+        prefix_map = {
+            "01_CONTAINER": "01.",
+            "07_CONTAINER": "07.",
+            "98_CONTAINER": "98.",
+        }
+        prefix = prefix_map.get(collection_key, "")
+        all_cols = df_duplicated[["Collection_Name", "Collection_Key"]].drop_duplicates()
+        subcols = all_cols[
+            all_cols["Collection_Name"].str.startswith(prefix) &
+            ~all_cols["Collection_Name"].str.contains(r'\d+\.\d+\.\d+')
+        ].sort_values("Collection_Name")
+
+        for _, row in subcols.iterrows():
+            child_clean = re.sub(r'^\d+[\.\d]*\s*', '', row["Collection_Name"]).strip()
+            child_link  = f"{BASE_URL}/?collection={row['Collection_Key']}"
+            count = len(df_duplicated[df_duplicated["Collection_Key"] == row["Collection_Key"]])
+            st.markdown(f"- [{child_clean}]({child_link}) · {count} items")
+        return
+
+    # ── Check for children ───────────────────────────────────────────────────
+    children = get_children(collection_name, df_duplicated)
+
+    # ── Special case: 07 Intelligence collection (no key in data) ────────────
+    is_07_container = collection_key == "07_CONTAINER"
+
+    if is_07_container or (children and collection_key not in [
+        row["key"] for _, row in df_duplicated[
+            ["Collection_Name","Collection_Key"]
+        ].drop_duplicates().iterrows()
+        if COLLECTION_KEY_MAP.get(collection_key) == row["Collection_Name"]
+    ]):
+        # This is a container — show subcollections as clickable links
+        st.markdown("### Subcollections")
+        for child in children:
+            child_link = f"{BASE_URL}/?collection={child['key']}"
+            count = len(df_duplicated[df_duplicated["Collection_Key"] == child["key"]])
+            st.markdown(f"- [{child['clean_name']}]({child_link}) · {count} items")
+        return
+
+    # ── Get publications for this collection ──────────────────────────────────
+    cdf = df_duplicated[df_duplicated["Collection_Key"] == collection_key].copy()
+    cdf = cdf.drop_duplicates(subset=["Zotero link"])
+    cdf["Date published"] = parse_date_column(cdf["Date published"])
+    cdf["Date published"] = cdf["Date published"].fillna("")
+    cdf = sort_by_date(cdf).sort_values(
+        ["No date flag", "Date published"], ascending=[True, True]
+    )
+
+    # ── If has children, show them as radio buttons above publications ────────
+    selected_child_key = None
+    if children:
+        st.markdown("#### Subcollections")
+        child_options = {c["clean_name"]: c["key"] for c in children}
+        child_names   = ["All"] + list(child_options.keys())
+
+        # Check URL for pre-selected child
+        url_child = st.query_params.get("subcollection", "")
+        default_child_idx = 0
+        if url_child and url_child in child_options.values():
+            matched = next((i+1 for i, c in enumerate(children) if c["key"] == url_child), 0)
+            default_child_idx = matched
+
+        if "collection_child" not in st.session_state:
+            st.session_state["collection_child"] = child_names[default_child_idx]
+
+        selected_child = st.radio(
+            "Select a subcollection",
+            child_names,
+            horizontal=True,
+            key="collection_child",
+        )
+
+        if selected_child != "All" and selected_child in child_options:
+            selected_child_key = child_options[selected_child]
+            cdf = df_duplicated[
+                df_duplicated["Collection_Key"] == selected_child_key
+            ].copy()
+            cdf = cdf.drop_duplicates(subset=["Zotero link"])
+            cdf["Date published"] = parse_date_column(cdf["Date published"])
+            cdf["Date published"] = cdf["Date published"].fillna("")
+            cdf = sort_by_date(cdf).sort_values(
+                ["No date flag", "Date published"], ascending=[True, True]
+            )
+            # Update URL
+            st.query_params.from_dict({
+                "collection": collection_key,
+                "subcollection": selected_child_key,
+            })
+        else:
+            if st.query_params.get("subcollection"):
+                st.query_params.from_dict({"collection": collection_key})
+
+    # ── Metrics row ───────────────────────────────────────────────────────────
+    ca1, ca2, ca3 = st.columns(3)
+    with ca1:
+        c_m = st.container()
+    with ca2:
+        with st.popover("More metrics"):
+            c_cit     = st.container()
+            c_cit_avg = st.container()
+            c_oa      = st.container()
+            c_type    = st.container()
+            c_collab  = st.container()
+    with ca3:
+        with st.popover("Filters and more"):
+            c_filter = st.container()
+            c_dl     = st.container()
+            view = st.radio(
+                "View as:", ("Basic list", "Table", "Bibliography"),
+                horizontal=True, key="col_profile_view",
+            )
+
+    st.write("*This database **may not show** all items in this collection.*")
+
+    # ── Type filter ───────────────────────────────────────────────────────────
+    types = c_filter.multiselect(
+        "Publication type",
+        cdf["Publication type"].unique(),
+        default=[],
+        key="col_profile_types",
+    )
+    if types:
+        cdf = cdf[cdf["Publication type"].isin(types)].reset_index(drop=True)
+
+    # ── Metrics ───────────────────────────────────────────────────────────────
+    render_metrics(
+        cdf,
+        container_metric=c_m,
+        container_citation=c_cit,
+        container_citation_average=c_cit_avg,
+        container_oa=c_oa,
+        container_type=c_type,
+        container_publication_ratio=c_collab,
+    )
+
+    # ── Download ──────────────────────────────────────────────────────────────
+    csv = convert_df_to_csv(
+        cdf[["Publication type", "Title", "Abstract", "Date published",
+             "Publisher", "Journal", "Link to publication", "Zotero link", "Citation"]]
+        .assign(Abstract=lambda d: d["Abstract"].str.replace("\n", " "))
+        .reset_index(drop=True)
+    )
+    c_dl.download_button(
+        "⬇ Download collection", csv,
+        f"{clean_name}_{datetime.date.today().isoformat()}.csv",
+        mime="text/csv", key="dl-col-profile",
+    )
+
+    # ── Report toggle + shareable link ────────────────────────────────────────
+    if "col_profile_report" not in st.session_state:
+        st.session_state["col_profile_report"] = st.query_params.get("report", "0") == "1"
+
+    on = st.toggle(
+        ":material/monitoring: Generate report",
+        key="col_profile_report",
+    )
+
+    current_url_report = st.query_params.get("report", "0") == "1"
+    if on != current_url_report:
+        params = {"collection": collection_key}
+        if selected_child_key:
+            params["subcollection"] = selected_child_key
+        if on:
+            params["report"] = "1"
+        st.query_params.from_dict(params)
+
+    link = (
+        f"{BASE_URL}/?collection={collection_key}"
+        f"{'&subcollection=' + selected_child_key if selected_child_key else ''}"
+        f"{'&report=1' if on else ''}"
+    )
+    st.caption(f"🔗 Shareable link: [{link}]({link})")
+
+    # ── Report or list ────────────────────────────────────────────────────────
+    if on and len(cdf):
+        st.info(f"Report for {clean_name}")
+        render_report_charts(cdf, clean_name, name_replacements)
+    elif not on:
+        cdf = sort_radio(cdf, key="col_profile_sort")
+        if view == "Basic list":
+            for i, row in cdf.iterrows():
+                st.write(
+                    f"{i+1}) {format_entry(row, include_citation=True, reviews_map=reviews_map, base_url=BASE_URL)}"
+                )
+        elif view == "Table":
+            st.dataframe(
+                cdf[["Publication type", "Title", "Date published", "FirstName2",
+                     "Abstract", "Publisher", "Journal", "Citation",
+                     "Link to publication", "Zotero link"]]
+                .rename(columns={
+                    "FirstName2": "Author(s)",
+                    "Link to publication": "Publication link",
+                })
+            )
+        elif view == "Bibliography":
+            cdf["zotero_item_key"] = cdf["Zotero link"].str.replace(
+                "https://www.zotero.org/groups/"
+                "intelarchive_intelligence_studies_database/items/", ""
+            )
+            df_zot = pd.read_csv("zotero_citation_format.csv")
+            display_bibliographies(
+                pd.merge(cdf, df_zot, on="zotero_item_key", how="left")
+            )
+    else:
+        st.write("No publication type selected.")
+
 @st.cache_data(ttl=3600)
 def compute_author_similarity(df_authors):
     from sklearn.feature_extraction.text import TfidfVectorizer
@@ -322,6 +660,28 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
             )
     else:
         st.write("No publication type selected.")
+
+# ── Collection profile page ──────────────────────────────────────────────────
+collection_profile_key = st.query_params.get("collection", "")
+
+# Only trigger early-exit if it's a known collection key
+# (prevents conflict with search_collection() which also uses ?collection=)
+if collection_profile_key and collection_profile_key in COLLECTION_KEY_MAP:
+    df_dedup_cp, df_duplicated_cp, _, _ = load_data()
+
+    if st.button("← Back to search"):
+        st.query_params.clear()
+        st.rerun()
+
+    render_collection_profile(
+        collection_profile_key,
+        df_dedup_cp,
+        df_duplicated_cp,
+    )
+
+    st.write("---")
+    display_custom_license()
+    st.stop()
 
 # ── Load data ───────────────────────────────────────────────────────────────
 @st.cache_data(ttl=3600)
@@ -1926,24 +2286,25 @@ with tab1:
 
         @st.fragment
         def collection_buttons():
-            pages = [
-                ("Intelligence history",              "pages/1_Intelligence history.py"),
-                ("Intelligence studies",              "pages/2_Intelligence studies.py"),
-                ("Intelligence analysis",             "pages/3_Intelligence analysis.py"),
-                ("Intelligence organisations",        "pages/4_Intelligence organisations.py"),
-                ("Intelligence failures",             "pages/5_Intelligence failures.py"),
-                ("Intelligence oversight and ethics", "pages/6_Intelligence oversight and ethics.py"),
-                ("Intelligence collection",           "pages/7_Intelligence collection.py"),
-                ("Counterintelligence",               "pages/8_Counterintelligence.py"),
-                ("Covert action",                     "pages/9_Covert action.py"),
-                ("Intelligence and cybersphere",      "pages/10_Intelligence and cybersphere.py"),
-                ("Global intelligence",               "pages/11_Global intelligence.py"),
-                ("Special collections",               "pages/12_Special collections.py"),
+            SIDEBAR_COLLECTIONS = [
+                ("Intelligence history",              "01_CONTAINER"),
+                ("Intelligence studies",              "HCN8YFI8"),
+                ("Intelligence analysis",             "CZJ36V8L"),
+                ("Intelligence organisations",        "CK5MNYPQ"),
+                ("Intelligence failures",             "D7XFV7JL"),
+                ("Accountability, oversight, ethics", "DVEM4H4W"),
+                ("Intelligence collection",           "07_CONTAINER"),
+                ("Counterintelligence",               "RHJFPRAI"),
+                ("Covert action",                     "B6RJNLTK"),
+                ("Intelligence and cybersphere",      "8XXD789V"),
+                ("Global intelligence",               "AZ3BZ9BR"),
+                ("Special collections",               "98_CONTAINER"),
             ]
             with st.expander("Collections", expanded=True):
-                for label, page in pages:
+                for label, key in SIDEBAR_COLLECTIONS:
                     if st.button(label):
-                        st.switch_page(page)
+                        st.query_params.from_dict({"collection": key})
+                        st.rerun()
 
         collection_buttons()
 
