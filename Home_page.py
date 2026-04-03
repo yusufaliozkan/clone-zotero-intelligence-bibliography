@@ -574,13 +574,14 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
     if "ap_report_state" not in st.session_state:
         st.session_state["ap_report_state"] = default_report
 
+    if "ap_report" not in st.session_state:
+        st.session_state["ap_report"] = st.query_params.get("report", "0") == "1"
+
     st.toggle(
         ":material/monitoring: Generate report",
         key="ap_report",
-        value=st.session_state["ap_report_state"],
     )
     on = st.session_state["ap_report"]
-    st.session_state["ap_report_state"] = on
 
     # Sync URL
     current_url_report = st.query_params.get("report", "0") == "1"
@@ -593,6 +594,7 @@ def render_author_profile(author_name, df_dedup, df_duplicated, df_authors):
             st.query_params.from_dict(params)
 
         link = f"{BASE_URL}/?author_profile={slug}{'&report=1' if on else ''}"
+        st.caption(f"🔗 Shareable link: [{link}]({link})")
 
     # ── Filters + download each in their own column ──────────────────────────
     col_types, col_view = st.columns([3,2])
@@ -1167,7 +1169,7 @@ with tab1:
 
             if qp.get("author_preview"):
                 default_pill = 1
-            elif qp.get("collection"):
+            elif qp.get("collection_preview"):
                 default_pill = 2
             elif qp.get("type"):
                 default_pill = 3
@@ -1558,7 +1560,7 @@ with tab1:
                             key_to_option[match] = f"{c} [{col_counts[c]} items]"
 
                     if "collection_selectbox" not in st.session_state:
-                        default_key       = st.query_params.get("collection", "")
+                        default_key = st.query_params.get("collection_preview", "")
                         default_col_index = 0
                         if default_key and default_key in key_to_option:
                             target_option = key_to_option[default_key]
@@ -1576,8 +1578,8 @@ with tab1:
                     if selected_col:
                         col_key = df_csv_col[df_csv_col["Collection_Name"] == selected_col]["Collection_Key"].iloc[0]
                         # Only update URL if collection changed and report is not on
-                        if st.query_params.get("collection", "") != col_key:
-                            st.query_params.from_dict({"collection": col_key})
+                    if st.query_params.get("collection_preview", "") != col_key:
+                        st.query_params.from_dict({"collection_preview": col_key})
                     else:
                         st.query_params.clear()
 
@@ -1650,12 +1652,12 @@ with tab1:
 
                         current_url_report = st.query_params.get("report", "0") == "1"
                         if on != current_url_report:
-                            params = {"collection": col_key}
+                            params = {"collection_preview": col_key}
                             if on:
                                 params["report"] = "1"
                             st.query_params.from_dict(params)
 
-                        link = f"{BASE_URL}/?collection={col_key}{'&report=1' if on else ''}"
+                        link = f"{BASE_URL}/?collection_preview={col_key}{'&report=1' if on else ''}"
                         st.caption(f"🔗 Shareable link: [{link}]({link})")
 
                         if on and len(cdf):
