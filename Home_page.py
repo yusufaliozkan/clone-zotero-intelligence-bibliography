@@ -1595,98 +1595,56 @@ with tab1:
 
                     with st.expander("Click to expand", expanded=True):
                         st.markdown(f"#### Collection theme: {selected_col}")
+                        st.write(f"*See the collection in [Zotero]({collection_link})*")
 
+                        # ── Link to full profile ──────────────────────────────
                         profile_link = f"{BASE_URL}/?collection={col_key}"
                         st.link_button("📁 View full collection profile", profile_link)
-                        
-                        cc1, cc2, cc3 = st.columns(3)
-                        with cc1: c_m = st.container()
-                        with cc2:
-                            with st.popover("More metrics"):
-                                c_cit      = st.container()
-                                c_cit_avg  = st.container()
-                                c_oa       = st.container()
-                                c_type     = st.container()
-                                c_auth_no  = st.container()
-                                c_auth_rat = st.container()
-                                c_collab   = st.container()
-                        with cc3:
-                            with st.popover("Filters and more"):
-                                c_info   = st.container()
-                                c_filter = st.container()
-                                c_dl     = st.container()
-                                view = st.radio("View as:", ("Basic list","Table","Bibliography"), horizontal=True)
 
-                        c_info.info(f"See the collection in [Zotero]({collection_link})")
-                        types = c_filter.multiselect(
-                            "Publication type", cdf["Publication type"].unique(),
-                            cdf["Publication type"].unique(), key="col_types",
+                        # ── Quick stats ───────────────────────────────────────
+                        total_items  = len(cdf)
+                        total_cit    = int(cdf["Citation"].sum()) if "Citation" in cdf.columns else 0
+                        top_type     = cdf["Publication type"].value_counts().idxmax() if total_items else "N/A"
+
+                        qs1, qs2, qs3 = st.columns(3)
+                        qs1.metric("Items", total_items)
+                        qs2.metric("Total citations", total_cit)
+                        qs3.metric("Most common type", top_type)
+
+                        # ── Top 3 themes ──────────────────────────────────────
+                        st.markdown("**Top themes:**")
+                        fdc  = pd.merge(df_duplicated, cdf[["Zotero link"]], on="Zotero link")
+                        fdc  = fdc[["Zotero link", "Collection_Key", "Collection_Name", "Collection_Link"]]
+                        fdc2 = fdc["Collection_Name"].value_counts().reset_index().head(4)
+                        fdc2.columns = ["Collection_Name", "Number_of_Items"]
+                        fdc2 = fdc2[fdc2["Collection_Name"] != selected_col]
+                        fdc2 = fdc2.head(3)
+                        fdc  = pd.merge(fdc2, fdc, on="Collection_Name", how="left") \
+                                .drop_duplicates("Collection_Name").reset_index(drop=True)
+                        fdc["Collection_Name"] = fdc["Collection_Name"].apply(remove_numbers)
+                        theme_links = []
+                        for _, row in fdc.iterrows():
+                            t_key    = str(row.get("Collection_Key", "")).strip()
+                            app_link = f"{BASE_URL}/?collection={t_key}" if t_key else row['Collection_Link']
+                            theme_links.append(f"[{row['Collection_Name']}]({app_link})")
+                        st.caption(" | ".join(theme_links))
+
+                        # ── 5 most recent publications ────────────────────────
+                        st.markdown("**5 most recent publications:**")
+                        recent = cdf.copy()
+                        recent["_sort_date"] = pd.to_datetime(
+                            recent["Date published"], errors="coerce", utc=True
                         )
-                        cdf = cdf[cdf["Publication type"].isin(types)].reset_index(drop=True)
+                        recent = recent.sort_values("_sort_date", ascending=False) \
+                                       .drop(columns=["_sort_date"]).head(5)
+                        reviews_map_col = load_reviews_map()
+                        for i, row in recent.iterrows():
+                            st.write(
+                                f"- {format_entry(row, include_citation=True, reviews_map=reviews_map_col, base_url=BASE_URL)}"
+                            )
 
-                        render_metrics(cdf, container_metric=c_m, container_citation=c_cit,
-                                        container_citation_average=c_cit_avg, container_oa=c_oa,
-                                        container_type=c_type, container_author_no=c_auth_no,
-                                        container_author_pub_ratio=c_auth_rat,
-                                        container_publication_ratio=c_collab)
-
-                        csv = convert_df_to_csv(
-                            cdf[["Publication type","Title","Abstract","Date published",
-                                    "Publisher","Journal","Link to publication","Zotero link","Citation"]]
-                            .assign(Abstract=lambda d: d["Abstract"].str.replace("\n"," "))
-                            .reset_index(drop=True)
-                        )
-                        c_dl.download_button(
-                            "Download the collection", csv,
-                            f"{selected_col}_{datetime.date.today().isoformat()}.csv",
-                            mime="text/csv", key="dl-col", icon=":material/download:",
-                        )
-
-                        if st.session_state.get("_last_collection") != selected_col:
-                            st.session_state.pop("col_report", None)
-                            st.session_state["_last_collection"] = selected_col
-
-                        if "col_report" not in st.session_state:
-                            st.session_state["col_report"] = st.query_params.get("report", "0") == "1"
-
-                        on = st.toggle(
-                            ":material/monitoring: Generate report",
-                            key="col_report",
-                        )
-
-                        current_url_report = st.query_params.get("report", "0") == "1"
-                        if on != current_url_report:
-                            params = {"collection_preview": col_key}
-                            if on:
-                                params["report"] = "1"
-                            st.query_params.from_dict(params)
-
-                        link = f"{BASE_URL}/?collection_preview={col_key}{'&report=1' if on else ''}"
-                        st.caption(f"🔗 Shareable link: [{link}]({link})")
-
-                        if on and len(cdf):
-                            st.info(f"Report for {selected_col}")
-                            render_report_charts(cdf, selected_col, name_replacements)
-                        elif not on:
-                            cdf = sort_radio(cdf, key="col_sort")
-                            if len(cdf) > 20 and st.checkbox("Show only first 20 items (untick to see all)", value=True):
-                                cdf = cdf.head(20)
-                            if view == "Basic list":
-                                for i, row in cdf.iterrows():
-                                    st.write(f"{i+1}) {format_entry(row, include_citation=True, reviews_map=reviews_map)}")
-                            elif view == "Table":
-                                st.dataframe(
-                                    cdf[["Publication type","Title","Date published","FirstName2",
-                                            "Abstract","Link to publication","Zotero link"]]
-                                    .rename(columns={"FirstName2":"Author(s)","Link to publication":"Publication link"})
-                                )
-                            elif view == "Bibliography":
-                                cdf["zotero_item_key"] = cdf["Zotero link"].str.replace(
-                                    "https://www.zotero.org/groups/intelarchive_intelligence_studies_database/items/","")
-                                df_zot = pd.read_csv("zotero_citation_format.csv")
-                                display_bibliographies(pd.merge(cdf, df_zot, on="zotero_item_key", how="left"))
-                        else:
-                            st.write("No publication type selected.")
+                        st.divider()
+                        st.caption(f"🔗 Shareable link: [{BASE_URL}/?collection_preview={col_key}]({BASE_URL}/?collection_preview={col_key})")
 
                 search_collection()
 
