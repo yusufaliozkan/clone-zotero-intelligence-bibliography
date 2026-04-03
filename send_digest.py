@@ -69,7 +69,6 @@ def build_html_digest(df):
                     View in IntelArchive →
                 </a>
                 {f'&nbsp;·&nbsp;<a href="{link_to_publication}" style="font-size: 0.82em; color: #888; text-decoration: none; font-family: Arial, sans-serif;">Publication link →</a>' if link_to_publication else ""}
-                </a>
             </div>
             """
 
