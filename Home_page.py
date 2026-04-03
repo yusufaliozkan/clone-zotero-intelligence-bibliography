@@ -1595,6 +1595,10 @@ with tab1:
 
                     with st.expander("Click to expand", expanded=True):
                         st.markdown(f"#### Collection theme: {selected_col}")
+
+                        profile_link = f"{BASE_URL}/?collection={col_key}"
+                        st.link_button("📁 View full collection profile", profile_link)
+                        
                         cc1, cc2, cc3 = st.columns(3)
                         with cc1: c_m = st.container()
                         with cc2:
