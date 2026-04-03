@@ -22,14 +22,13 @@ def build_html_digest(df):
     if count == 0:
         return None
 
-    # Group by publication type
     grouped = df.groupby("Publication type")
 
     rows_html = ""
     for pub_type, group in grouped:
         rows_html += f"""
-        <h3 style="color: #c0392b; border-bottom: 1px solid #eee; padding-bottom: 4px;">
-            {pub_type} ({len(group)})
+        <h3 style="color: #1a1a1a; border-bottom: 2px solid #5cb85c; padding-bottom: 6px; margin-top: 28px; font-family: Georgia, serif;">
+            {pub_type} <span style="color: #888; font-size: 0.85em;">({len(group)})</span>
         </h3>
         """
         for _, row in group.iterrows():
@@ -40,11 +39,9 @@ def build_html_digest(df):
             publisher = str(row.get("Publisher", "")).strip()
             zotero    = str(row.get("Zotero link", "")).strip()
 
-            # Build item URL
             parent_key = zotero.rstrip("/").split("/")[-1] if zotero else ""
             item_url   = f"{BASE_URL}/?item={parent_key}" if parent_key else BASE_URL
 
-            # Source line
             if journal and journal != "nan":
                 source = f"<em>{journal}</em>"
             elif publisher and publisher != "nan":
@@ -56,47 +53,91 @@ def build_html_digest(df):
             date_display    = date_pub if date_pub and date_pub != "nan" else "N/A"
 
             rows_html += f"""
-            <div style="margin-bottom: 16px; padding: 12px; background: #f9f9f9; border-left: 3px solid #c0392b; border-radius: 4px;">
-                <a href="{item_url}" style="font-weight: bold; color: #2c3e50; text-decoration: none;">
+            <div style="margin-bottom: 14px; padding: 14px 16px; background: #f8f8f8; border-left: 4px solid #5cb85c; border-radius: 0 4px 4px 0;">
+                <a href="{item_url}" style="font-weight: bold; color: #1a1a1a; text-decoration: none; font-family: Georgia, serif; font-size: 1em; line-height: 1.4;">
                     {title}
                 </a><br>
-                <span style="color: #555; font-size: 0.9em;">
-                    {authors_display} · {date_display}
-                    {"· " + source if source else ""}
+                <span style="color: #555; font-size: 0.88em; font-family: Arial, sans-serif;">
+                    {authors_display} &nbsp;·&nbsp; {date_display}
+                    {"&nbsp;·&nbsp;" + source if source else ""}
                 </span><br>
-                <a href="{item_url}" style="font-size: 0.85em; color: #c0392b;">
+                <a href="{item_url}" style="font-size: 0.82em; color: #5cb85c; text-decoration: none; font-family: Arial, sans-serif;">
                     View in IntelArchive →
                 </a>
             </div>
             """
 
+    # Logo as text-based header since SVG in email is unreliable
     html = f"""
     <html>
-    <body style="font-family: Georgia, serif; max-width: 700px; margin: auto; padding: 20px; color: #2c3e50;">
-        <div style="background: #c0392b; padding: 20px; border-radius: 6px; margin-bottom: 24px;">
-            <h1 style="color: white; margin: 0; font-size: 1.4em;">
-                📚 IntelArchive Weekly Digest
-            </h1>
-            <p style="color: #f5b7b1; margin: 6px 0 0 0; font-size: 0.9em;">
-                {count} new item{"s" if count != 1 else ""} added · Week of {today}
-            </p>
-        </div>
+    <body style="margin: 0; padding: 0; background-color: #f4f4f4;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4;">
+            <tr>
+                <td align="center" style="padding: 30px 20px;">
+                    <table width="640" cellpadding="0" cellspacing="0" style="max-width: 640px; width: 100%; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
 
-        <p>
-            Here are the latest additions to the 
-            <a href="{BASE_URL}" style="color: #c0392b;">IntelArchive Intelligence Studies Database</a>.
-        </p>
+                        <!-- Header -->
+                        <tr>
+                            <td style="background-color: #1a1a1a; padding: 28px 32px;">
+                                <table cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td style="padding-right: 4px;">
+                                            <span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #ffffff; letter-spacing: -0.5px;">Intel</span>
+                                        </td>
+                                        <td style="padding: 0 2px;">
+                                            <span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #5cb85c;">|</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #ffffff; letter-spacing: -0.5px;">Archi</span><span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #5cb85c;">v</span><span style="font-family: Arial, sans-serif; font-size: 28px; font-weight: bold; color: #ffffff; letter-spacing: -0.5px;">e</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <p style="color: #aaaaaa; margin: 10px 0 0 0; font-size: 0.85em; font-family: Arial, sans-serif;">
+                                    Intelligence Studies Database
+                                </p>
+                            </td>
+                        </tr>
 
-        {rows_html}
+                        <!-- Digest title bar -->
+                        <tr>
+                            <td style="background-color: #5cb85c; padding: 12px 32px;">
+                                <span style="color: #ffffff; font-family: Arial, sans-serif; font-size: 0.95em; font-weight: bold;">
+                                    Weekly Digest &nbsp;·&nbsp; {today} &nbsp;·&nbsp; {count} new item{"s" if count != 1 else ""}
+                                </span>
+                            </td>
+                        </tr>
 
-        <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;">
-        <p style="font-size: 0.8em; color: #999; text-align: center;">
-            You are receiving this because you are subscribed to the 
-            <a href="https://groups.google.com/g/intelarchive" style="color: #c0392b;">
-                IntelArchive mailing list
-            </a>.<br>
-            <a href="{BASE_URL}" style="color: #c0392b;">Visit IntelArchive</a>
-        </p>
+                        <!-- Body -->
+                        <tr>
+                            <td style="padding: 28px 32px;">
+                                <p style="font-family: Arial, sans-serif; color: #444; margin: 0 0 20px 0; font-size: 0.95em;">
+                                    Here are the latest additions to the
+                                    <a href="{BASE_URL}" style="color: #5cb85c; text-decoration: none;">IntelArchive Intelligence Studies Database</a>.
+                                </p>
+
+                                {rows_html}
+                            </td>
+                        </tr>
+
+                        <!-- Footer -->
+                        <tr>
+                            <td style="background-color: #1a1a1a; padding: 20px 32px; text-align: center;">
+                                <p style="font-family: Arial, sans-serif; font-size: 0.78em; color: #888; margin: 0;">
+                                    You are receiving this because you are subscribed to the
+                                    <a href="https://groups.google.com/g/intelarchive" style="color: #5cb85c; text-decoration: none;">IntelArchive mailing list</a>.
+                                </p>
+                                <p style="font-family: Arial, sans-serif; font-size: 0.78em; color: #888; margin: 8px 0 0 0;">
+                                    <a href="{BASE_URL}" style="color: #5cb85c; text-decoration: none;">Visit IntelArchive</a>
+                                </p>
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
     </body>
     </html>
     """
