@@ -8,7 +8,10 @@ import os
 BASE_URL = "https://intelligence.streamlit.app"
 
 def get_new_items(days=7):
-    df = pd.read_csv("all_items.csv")
+    import os
+    # Works whether run from repo root or database_update folder
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    df = pd.read_csv(os.path.join(base_dir, "all_items.csv"))
     df["Date added"] = pd.to_datetime(df["Date added"], utc=True, errors="coerce")
     cutoff = datetime.now(tz=df["Date added"].dt.tz) - timedelta(days=days)
     new_items = df[df["Date added"] >= cutoff].copy()
