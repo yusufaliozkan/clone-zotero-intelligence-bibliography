@@ -116,6 +116,20 @@
 #             f"{badges}"
 #         )
 
+import pandas as pd
+from authors_dict import name_replacements
+
+_auto_replacements = {}
+try:
+    _auto_df = pd.read_csv("author_auto_replacements.csv")
+    _auto_replacements = dict(zip(_auto_df["variant"], _auto_df["canonical"]))
+except FileNotFoundError:
+    pass
+
+def _resolve_author(name):
+    name = name_replacements.get(name, name)
+    name = _auto_replacements.get(name, name)
+    return name
 
 def format_entry(row, include_citation=True, reviews_map=None, max_reviews_inline=None, base_url="https://intelligence.streamlit.app"):
     # Accept Series or dict
@@ -145,7 +159,7 @@ def format_entry(row, include_citation=True, reviews_map=None, max_reviews_inlin
             return name
         parts = [a.strip() for a in authors_str.split(",") if a.strip()]
         linked = [
-            f"[{a}]({base_url}/?author_profile={to_slug(a)})"
+            f"[{a}]({base_url}/?author_profile={to_slug(_resolve_author(a))})"
             for a in parts
         ]
         return ", ".join(linked)
