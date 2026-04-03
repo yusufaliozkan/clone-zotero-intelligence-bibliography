@@ -373,7 +373,6 @@ if item_key:
                     date_published_fmt = date_published
             else:
                 date_published_fmt = 'N/A'
-            st.markdown(f"**Date published:** {date_published_fmt}")
             st.markdown(f"**Date published:** {_safe(row.get('Date published')) or 'N/A'}")
             date_added = _safe(row.get('Date added'))
             if date_added:
