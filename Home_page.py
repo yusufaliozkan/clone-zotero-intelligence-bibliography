@@ -365,7 +365,15 @@ if item_key:
                 st.markdown(f"**Authors:** {author_links}")
             else:
                 st.markdown("**Authors:** N/A")
-            st.markdown(f"**Publication type:** {_safe(row.get('Publication type')) or 'N/A'}")
+            date_published = _safe(row.get('Date published'))
+            if date_published:
+                try:
+                    date_published_fmt = pd.to_datetime(date_published, utc=True).strftime("%d %B %Y")
+                except Exception:
+                    date_published_fmt = date_published
+            else:
+                date_published_fmt = 'N/A'
+            st.markdown(f"**Date published:** {date_published_fmt}")
             st.markdown(f"**Date published:** {_safe(row.get('Date published')) or 'N/A'}")
             date_added = _safe(row.get('Date added'))
             if date_added:
