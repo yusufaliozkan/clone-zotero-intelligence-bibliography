@@ -1743,8 +1743,8 @@ with tab1:
                     if selected_col:
                         col_key = df_csv_col[df_csv_col["Collection_Name"] == selected_col]["Collection_Key"].iloc[0]
                         # Only update URL if collection changed and report is not on
-                    if st.query_params.get("collection_preview", "") != col_key:
-                        st.query_params.from_dict({"collection_preview": col_key})
+                        if st.query_params.get("collection_preview", "") != col_key:
+                            st.query_params.from_dict({"collection_preview": col_key})
                     else:
                         st.query_params.clear()
 
