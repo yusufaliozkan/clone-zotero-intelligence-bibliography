@@ -30,17 +30,25 @@ import requests
 from st_keyup import st_keyup
 
 
+st.set_page_config(
+    layout="wide",
+    page_title="IntelArchive",
+    page_icon="https://raw.githubusercontent.com/yusufaliozkan/clone-zotero-intelligence-bibliography/181b55d8cbe066fee0074cbbd9e0e6bfdfbed570/images/02_icon/IntelArchive_Digital_Icon_Colour-Negative.svg",
+    initial_sidebar_state="expanded"
+)
 
 collection_id = st.query_params.get("collection_id", "")
 
 if collection_id:
-    st.query_params.from_dict({"collection": collection_id})
+    target = f"/?collection={collection_id}"
 else:
-    st.query_params.from_dict({"collection": "01_CONTAINER"})
+    target = "/?collection=01_CONTAINER"
 
-st.switch_page("Home_page.py")
-
-st.title("Intelligence history", anchor=False)
+st.markdown(
+    f'<meta http-equiv="refresh" content="0; url={target}">',
+    unsafe_allow_html=True
+)
+st.stop()
 
 set_page_config()
 
