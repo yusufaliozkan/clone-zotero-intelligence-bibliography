@@ -32,16 +32,20 @@ from st_keyup import st_keyup
 set_page_config()
 
 collection_id = st.query_params.get("collection_id", "")
+
 if collection_id:
-    st.markdown(
-        f'<meta http-equiv="refresh" content="0; url=/?collection={collection_id}">',
-        unsafe_allow_html=True
-    )
+    target = f"/?collection={collection_id}"
 else:
-    st.markdown(
-        '<meta http-equiv="refresh" content="0; url=/?collection=01_CONTAINER">',
-        unsafe_allow_html=True
-    )
+    target = "/?collection=01_CONTAINER"
+
+st.markdown(
+    f"""
+    <script>
+        window.parent.location.href = "{target}";
+    </script>
+    """,
+    unsafe_allow_html=True
+)
 st.stop()
 
 st.title("Intelligence history", anchor=False)
