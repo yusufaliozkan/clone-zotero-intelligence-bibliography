@@ -31,6 +31,8 @@ from st_keyup import st_keyup
 
 set_page_config()
 
+st.title('Intelligence history', anchor=False)
+
 with st.spinner('Retrieving data & updating dashboard...'):
 
     # # Connecting Zotero with API
