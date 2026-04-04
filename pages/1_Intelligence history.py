@@ -29,7 +29,7 @@ from streamlit_dynamic_filters import DynamicFilters
 import requests
 from st_keyup import st_keyup
 
-set_page_config()
+
 
 collection_id = st.query_params.get("collection_id", "")
 
@@ -41,6 +41,8 @@ else:
 st.switch_page("Home_page.py")
 
 st.title("Intelligence history", anchor=False)
+
+set_page_config()
 
 with st.spinner('Retrieving data & updating dashboard...'):
 
