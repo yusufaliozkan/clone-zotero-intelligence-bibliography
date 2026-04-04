@@ -1361,6 +1361,11 @@ with tab1:
             def on_pill_change():
                 st.query_params.clear()
                 pill = st.session_state["search_pills"]
+                # Clear widget session state for previous pill
+                for key in ["collection_selectbox", "author_selectbox",
+                            "journal_selectbox", "type_selectbox", "year_slider",
+                            "col_report", "col_profile_report", "col_profile_child"]:
+                    st.session_state.pop(key, None)
                 prefix_map = {
                     3: {"type": ""},
                     4: {"journal": ""},
@@ -1379,7 +1384,7 @@ with tab1:
                 key="search_pills",
                 on_change=on_pill_change,  # ← add this
             )
-            
+
             # ================================================================
             # 0 – KEYWORD SEARCH
             # ================================================================
