@@ -838,7 +838,7 @@ with st.spinner('Retrieving data & updating dashboard...'):
                 layers=[scatterplot_layer],
                 initial_view_state=view_state,
                 tooltip={"text": "{Country}\nMentions: {Publications}"},
-                map_style="mapbox://styles/mapbox/light-v9"  # Use a light map style
+                map_style="light",  # ← change from "mapbox://styles/mapbox/light-v9"
             )
             st.pydeck_chart(chart, use_container_width=True)
             @st.fragment
