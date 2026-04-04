@@ -252,6 +252,8 @@ def render_collection_profile(collection_key, df_dedup, df_duplicated):
     children = get_children(collection_name, df_duplicated)
 
     selected_child_key = collection_key
+    display_name = clean_name  # ← default, overridden below if children exist
+    selected_child_name = None  # ← default
     if children:
         child_options = {
             re.sub(r'^\d+[\.\d]*\s*', '', c["name"]).strip(): c["key"]
@@ -1739,7 +1741,7 @@ with tab1:
                         key="collection_selectbox",
                     )
                     selected_col = sel_display.rsplit(" [", 1)[0] if sel_display else None
-                    
+
                     if selected_col:
                         col_key = df_csv_col[df_csv_col["Collection_Name"] == selected_col]["Collection_Key"].iloc[0]
                         if st.query_params.get("collection_preview", "") != col_key:
