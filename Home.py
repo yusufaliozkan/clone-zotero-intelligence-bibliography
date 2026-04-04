@@ -56,10 +56,8 @@
 # pg.run()
 
 import streamlit as st
-import pandas as pd
 
 home = st.Page('Home_page.py', title='Home')
-
 events = st.Page('pages/14_Events.py')
 digest = st.Page('pages/15_Digest.py')
 institutions = st.Page('pages/16_Institutions.py')
