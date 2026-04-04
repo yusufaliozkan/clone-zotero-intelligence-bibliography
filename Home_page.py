@@ -1739,10 +1739,9 @@ with tab1:
                         key="collection_selectbox",
                     )
                     selected_col = sel_display.rsplit(" [", 1)[0] if sel_display else None
-
+                    
                     if selected_col:
                         col_key = df_csv_col[df_csv_col["Collection_Name"] == selected_col]["Collection_Key"].iloc[0]
-                        # Only update URL if collection changed and report is not on
                         if st.query_params.get("collection_preview", "") != col_key:
                             st.query_params.from_dict({"collection_preview": col_key})
                     else:
