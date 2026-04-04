@@ -1788,6 +1788,7 @@ with tab1:
                         top_authors = (
                             cdf["FirstName2"].str.split(", ")
                             .explode().str.strip()
+                            .apply(_resolve_author)  # ← resolve canonical name
                             .value_counts().head(3)
                         )
                         author_links = []
