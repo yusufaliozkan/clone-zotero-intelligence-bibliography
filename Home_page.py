@@ -2059,8 +2059,9 @@ with tab1:
                                 with colcite2:
                                     st.metric(label="Citation median", value=round(jdf["Citation"].median()))
                                 with colcite3:
+                                    year_diff_mean = jdf["Year_difference"].mean()
                                     st.metric(label="First citation occurence (avg year)",
-                                                value=round(jdf["Year_difference"].mean()))
+                                                value=round(year_diff_mean) if not pd.isna(year_diff_mean) else "N/A")
                             render_report_charts(jdf, str(journals), name_replacements,
                                                     show_themes=True, themes_df=fdc)
                             jdf_copy = jdf.copy()
