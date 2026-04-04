@@ -1960,34 +1960,32 @@ with tab1:
                     all_journals = jcounts.index.tolist()
 
                     # Pre-select from URL if ?journal= GUID is present
-                    if "journal_multiselect" not in st.session_state:
-                        default_guid     = st.query_params.get("journal", "")
-                        default_journals = []
-                        if default_guid:
-                            guids_list   = default_guid.split(",")
-                            default_journals = [
-                                matched for guid in guids_list
-                                if (matched := guid_to_journal(guid, all_journals))
-                            ]
-                        st.session_state["journal_multiselect"] = default_journals
+                    if "journal_selectbox" not in st.session_state:
+                        default_guid = st.query_params.get("journal", "")
+                        default_journal = guid_to_journal(default_guid, all_journals) if default_guid else ""
+                        default_idx = (all_journals.index(default_journal) + 1) if default_journal in all_journals else 0
+                        st.session_state["journal_selectbox"] = ([""] + all_journals)[default_idx]
 
-                    journals = st.multiselect(
-                        "Select a journal", all_journals,
-                        key="journal_multiselect",
+                    selected_journal = st.selectbox(
+                        "Select a journal",
+                        [""] + all_journals,
+                        key="journal_selectbox",
                     )
 
-                    if journals:
-                        # Encode all selected journals as comma-separated GUIDs
-                        guids = ",".join(journal_to_guid(j) for j in journals)
-                        st.query_params.from_dict({"journal": guids})
-                        link = f"https://intelligence.streamlit.app/?journal={guids}"
+                    if selected_journal:
+                        guid = journal_to_guid(selected_journal)
+                        if st.query_params.get("journal", "") != guid:
+                            st.query_params.from_dict({"journal": guid})
+                        link = f"{BASE_URL}/?journal={guid}"
                         st.caption(f"🔗 Shareable link: [{link}]({link})")
                     else:
                         st.query_params.clear()
 
-                    if not journals:
+                    if not selected_journal:
                         st.write("Pick a journal name to see items")
                         return
+
+                    journals = [selected_journal]
 
                     jdf = df_ja[df_ja["Journal"].isin(journals)].copy()
                     jdf["Date published"] = parse_date_column(jdf["Date published"])
