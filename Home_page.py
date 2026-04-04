@@ -1358,17 +1358,6 @@ with tab1:
             if "search_pills" not in st.session_state:
                 st.session_state["search_pills"] = default_pill
 
-            def on_pill_change():
-                # Clear all widget session state
-                for key in ["collection_selectbox", "author_selectbox",
-                            "journal_selectbox", "type_selectbox", "year_slider",
-                            "col_report", "col_profile_report", "col_profile_child",
-                            "search_term", "search_term_input", "search_in",
-                            "report_keyword", "report_author_state"]:
-                    st.session_state.pop(key, None)
-
-                # Clear all query params
-                st.query_params.clear()
 
             search_option = st.pills(
                 "Select search option",
