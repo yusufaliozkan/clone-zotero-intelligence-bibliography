@@ -1783,23 +1783,18 @@ with tab1:
                         qs2.metric("Total citations", total_cit)
                         qs3.metric("Most common type", top_type)
 
-                        # ── Top 3 themes ──────────────────────────────────────
-                        st.markdown("**Top themes:**")
-                        fdc  = pd.merge(df_duplicated, cdf[["Zotero link"]], on="Zotero link")
-                        fdc  = fdc[["Zotero link", "Collection_Key", "Collection_Name", "Collection_Link"]]
-                        fdc2 = fdc["Collection_Name"].value_counts().reset_index().head(4)
-                        fdc2.columns = ["Collection_Name", "Number_of_Items"]
-                        fdc2 = fdc2[fdc2["Collection_Name"] != selected_col]
-                        fdc2 = fdc2.head(3)
-                        fdc  = pd.merge(fdc2, fdc, on="Collection_Name", how="left") \
-                                .drop_duplicates("Collection_Name").reset_index(drop=True)
-                        fdc["Collection_Name"] = fdc["Collection_Name"].apply(remove_numbers)
-                        theme_links = []
-                        for _, row in fdc.iterrows():
-                            t_key    = str(row.get("Collection_Key", "")).strip()
-                            app_link = f"{BASE_URL}/?collection={t_key}" if t_key else row['Collection_Link']
-                            theme_links.append(f"[{row['Collection_Name']}]({app_link})")
-                        st.caption(" | ".join(theme_links))
+                        # ── Top 3 authors ──────────────────────────────────────
+                        st.markdown("**Top authors:**")
+                        top_authors = (
+                            cdf["FirstName2"].str.split(", ")
+                            .explode().str.strip()
+                            .value_counts().head(3)
+                        )
+                        author_links = []
+                        for author, count in top_authors.items():
+                            slug = author_to_slug(author)
+                            author_links.append(f"[{author}]({BASE_URL}/?author_profile={slug}) ({count})")
+                        st.caption(" | ".join(author_links))
 
                         # ── 5 most recent publications ────────────────────────
                         st.markdown("**5 most recent publications:**")
