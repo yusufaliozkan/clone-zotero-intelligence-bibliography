@@ -1358,7 +1358,6 @@ with tab1:
             if "search_pills" not in st.session_state:
                 st.session_state["search_pills"] = default_pill
 
-
             search_option = st.pills(
                 "Select search option",
                 options=list(OPTION_MAP.keys()),
@@ -1366,7 +1365,6 @@ with tab1:
                 selection_mode="single",
                 default=st.session_state["search_pills"],
                 key="search_pills",
-                on_change=on_pill_change,  # ← add this
             )
 
             # ================================================================
