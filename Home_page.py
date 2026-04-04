@@ -1810,9 +1810,9 @@ with tab1:
                         recent = recent.sort_values("_sort_date", ascending=False) \
                                        .drop(columns=["_sort_date"]).head(5)
                         reviews_map_col = load_reviews_map()
-                        for i, row in recent.iterrows():
+                        for i, (_, row) in enumerate(recent.iterrows(), 1):
                             st.write(
-                                f"- {format_entry(row, include_citation=True, reviews_map=reviews_map_col, base_url=BASE_URL)}"
+                                f"{i}) {format_entry(row, include_citation=True, reviews_map=reviews_map_col, base_url=BASE_URL)}"
                             )
 
                         st.divider()
