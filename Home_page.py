@@ -222,6 +222,12 @@ def render_collection_profile(collection_key, df_dedup, df_duplicated):
 
     clean_name = re.sub(r'^\d+[\.\d]*\s*', '', collection_name).strip()
 
+    # ── Special case for Global Intelligence ─────────────────────────────────
+    if collection_key == "AZ3BZ9BR":
+        st.info("For the full Global Intelligence experience including country-level filtering and maps, visit the [Global Intelligence page](/Global_intelligence).")
+        st.page_link("pages/11_Global intelligence.py", label="Go to Global Intelligence →")
+        st.divider()
+
     # ── Header ───────────────────────────────────────────────────────────────
     st.title(clean_name, anchor=False)
     st.divider()
