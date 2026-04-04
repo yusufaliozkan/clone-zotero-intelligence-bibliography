@@ -34,19 +34,11 @@ set_page_config()
 collection_id = st.query_params.get("collection_id", "")
 
 if collection_id:
-    target = f"/?collection={collection_id}"
+    st.query_params.from_dict({"collection": collection_id})
 else:
-    target = "/?collection=01_CONTAINER"
+    st.query_params.from_dict({"collection": "01_CONTAINER"})
 
-st.markdown(
-    f"""
-    <script>
-        window.parent.location.href = "{target}";
-    </script>
-    """,
-    unsafe_allow_html=True
-)
-st.stop()
+st.switch_page("Home_page.py")
 
 st.title("Intelligence history", anchor=False)
 
