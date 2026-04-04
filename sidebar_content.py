@@ -71,6 +71,31 @@ def sidebar_content():
 
             Report your technical issues or requests [here](https://github.com/YusufAliOzkan/zotero-intelligence-bibliography/issues).            
             ''')
+
+        with st.expander('Collections', expanded=True):
+            SIDEBAR_COLLECTIONS = [
+                ("Intelligence history",              "01_CONTAINER"),
+                ("Intelligence studies",              "HCN8YFI8"),
+                ("Intelligence analysis",             "CZJ36V8L"),
+                ("Intelligence organisations",        "CK5MNYPQ"),
+                ("Intelligence failures",             "D7XFV7JL"),
+                ("Accountability, oversight, ethics", "DVEM4H4W"),
+                ("Intelligence collection",           "07_CONTAINER"),
+                ("Counterintelligence",               "RHJFPRAI"),
+                ("Covert action",                     "B6RJNLTK"),
+                ("Intelligence and cybersphere",      "8XXD789V"),
+                ("Global intelligence",               "AZ3BZ9BR"),
+                ("Special collections",               "98_CONTAINER"),
+            ]
+            for label, key in SIDEBAR_COLLECTIONS:
+                st.markdown(
+                    f'<a href="/?collection={key}" target="_self" style="text-decoration:none; color:inherit;">{label}</a>',
+                    unsafe_allow_html=True
+                )
+
+        st.write('Check the digest [here](https://intelligence.streamlit.app/Digest)')
+        st.toast('Join our [mailing list](https://groups.google.com/g/intelarchive) to receive updates.')
+
         st.write('Check the digest [here](https://intelligence.streamlit.app/Digest)')
         st.toast('Join our [mailing list](https://groups.google.com/g/intelarchive) to receive updates.')
 
