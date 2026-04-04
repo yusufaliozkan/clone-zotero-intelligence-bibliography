@@ -1358,23 +1358,6 @@ with tab1:
             if "search_pills" not in st.session_state:
                 st.session_state["search_pills"] = default_pill
 
-            def on_pill_change():
-                st.query_params.clear()
-                pill = st.session_state["search_pills"]
-                # Clear widget session state for previous pill
-                for key in ["collection_selectbox", "author_selectbox",
-                            "journal_selectbox", "type_selectbox", "year_slider",
-                            "col_report", "col_profile_report", "col_profile_child"]:
-                    st.session_state.pop(key, None)
-                prefix_map = {
-                    3: {"type": ""},
-                    4: {"journal": ""},
-                    5: {"year_from": "", "year_to": ""},
-                    0: {"query": ""},
-                }
-                if pill in prefix_map:
-                    st.query_params.from_dict(prefix_map[pill])
-
             search_option = st.pills(
                 "Select search option",
                 options=list(OPTION_MAP.keys()),
@@ -1382,7 +1365,6 @@ with tab1:
                 selection_mode="single",
                 default=st.session_state["search_pills"],
                 key="search_pills",
-                on_change=on_pill_change,  # ← add this
             )
 
             # ================================================================
