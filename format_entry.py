@@ -179,9 +179,9 @@ def format_entry(row, include_citation=True, reviews_map=None, max_reviews_inlin
     oa_link_text      = f"[:orange-badge[OA version]]({oa_url_fixed})" if oa_url_fixed else ""
     if citation > 0:
         if citation_link:
-            citation_text = f"[:orange-badge[Cited by {citation}]]({citation_link})"
+            citation_text = f"[:gray-badge[Cited by {citation}]]({citation_link})"
         else:
-            citation_text = f":orange-badge[Cited by {citation}]"
+            citation_text = f":gray-badge[Cited by {citation}]"
     else:
         citation_text = ""
 
