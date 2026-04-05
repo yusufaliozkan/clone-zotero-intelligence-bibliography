@@ -386,4 +386,4 @@ def send_digest():
     print(f"Digest sent: {count} new items to {to_address}")
 
 if __name__ == "__main__":
-    send_digest()
+    send_digest() 
