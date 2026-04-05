@@ -176,7 +176,7 @@ def format_entry(row, include_citation=True, reviews_map=None, max_reviews_inlin
 
     pub_link_badge    = f"[:blue-badge[Publication link]]({link_to_publication})" if link_to_publication else ""
     zotero_link_badge = f"[:red-badge[Zotero link]]({zotero_link})" if zotero_link else ""
-    oa_link_text      = f"[:violet-badge[OA version]]({oa_url_fixed})" if oa_url_fixed else ""
+    oa_link_text      = f"[:rainbow-badge[OA version]]({oa_url_fixed})" if oa_url_fixed else ""
     if citation > 0:
         if citation_link:
             citation_text = f"[:orange-badge[Cited by {citation}]]({citation_link})"
