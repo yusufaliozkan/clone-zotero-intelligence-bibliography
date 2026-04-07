@@ -23,38 +23,9 @@ from format_entry import format_entry
 from streamlit_gsheets import GSheetsConnection
 from copyright import display_custom_license
 from streamlit_theme import st_theme
-from send_digest import get_new_items, get_upcoming_events, get_upcoming_conferences, get_upcoming_cfp, build_html_digest, build_events_html
 
 
 set_page_config_centered()
-
-# NEW DIGEST
- 
-theme = st_theme()
-if theme and theme.get('base') == 'dark':
-    image_path = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Negative.svg'
-else:
-    image_path = 'images/01_logo/IntelArchive_Digital_Logo_Colour-Positive.svg'
- 
-with open(image_path, 'r') as file:
-    svg_content = file.read()
-    st.image(svg_content, width=200)
- 
-st.header('Weekly digest', anchor=False)
- 
-with st.sidebar:
-    sidebar_content()
- 
-new_items = get_new_items(days=7)
- 
-if new_items.empty:
-    st.warning('No new items added in the last 7 days.')
-else:
-    st.info(f'{len(new_items)} new item(s) added in the last 7 days.')
-    html = build_html_digest(new_items)
-    if html:
-        components.html(html, height=1200, scrolling=True)
-# END NEW DIGEST
 
 theme = st_theme()
 # Set the image path based on the theme
@@ -69,8 +40,6 @@ with open(image_path, 'r') as file:
     st.image(svg_content, width=200)  # Adjust the width as needed
 
 st.header('Digest', anchor=False)
-
-
 
 with st.spinner('Preparing digest...'):
 
