@@ -2348,6 +2348,7 @@ with tab1:
                 with tab11:
                     st.markdown("#### Recently added or updated items")
                     reviews_map = load_reviews_map()
+                    df_dedup
                     df_ov = df_dedup.sort_values("Date added", ascending=False).head(10).copy()
                     df_ov["Date published"] = parse_date_column(df_ov["Date published"], fmt="%d-%m-%Y")
                     df_ov["Date published"] = df_ov["Date published"].fillna("No date")
