@@ -42,6 +42,8 @@ jobs:
       # Convert and Run the Jupyter Notebook
       - name: Convert and Run Jupyter Notebook
         run: jupyter nbconvert --to notebook --execute --inplace all_items.ipynb
+        env:
+          OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
 
       # Pull, commit, and push changes to CSV files
       - name: Pull, commit, and push changes
