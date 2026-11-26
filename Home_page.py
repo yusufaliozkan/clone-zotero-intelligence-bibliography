@@ -36,6 +36,8 @@ from shared_utils import (
     parse_date_column,
     sort_by_date,
     load_reviews_map,
+    load_recent_reviews,
+    format_review_entry,
     render_wordcloud,
     split_and_expand,
     remove_numbers,
@@ -1153,7 +1155,7 @@ items_this_month = df_intro[
 ]
 with col1:
     st.metric(
-        label="Number of itemss in the library", 
+        label="Number of items in the library", 
         value=f"{len(df_intro):,}",
         delta=len(items_this_month),
         help=f"**{len(items_this_month)}** items added in {current_date.strftime('%B %Y')}",
@@ -2365,7 +2367,25 @@ with tab1:
                     df_ov["Date published"] = df_ov["Date published"].fillna("No date")
                     df_ov["Abstract"]       = df_ov["Abstract"].fillna("No abstract")
                     display = st.checkbox("Display abstract")
-                    for i, (_, row) in enumerate(df_ov.iterrows(), 1):
+
+                    # Merge recent items and recent book reviews into one feed, newest first
+                    feed = [
+                        (pd.to_datetime(row["Date added"], utc=True, errors="coerce"), "item", row)
+                        for _, row in df_ov.iterrows()
+                    ]
+                    feed += [
+                        (rev["dateAdded"], "review", rev)
+                        for _, rev in load_recent_reviews(10).iterrows()
+                    ]
+                    feed.sort(
+                        key=lambda x: x[0] if pd.notna(x[0]) else pd.Timestamp.min.tz_localize("UTC"),
+                        reverse=True,
+                    )
+
+                    for i, (_, kind, row) in enumerate(feed[:10], 1):
+                        if kind == "review":
+                            st.markdown(f"{i}) {format_review_entry(row, base_url=BASE_URL)}", unsafe_allow_html=True)
+                            continue
                         st.markdown(f"{i}) {format_entry(row, include_citation=True, reviews_map=reviews_map)}", unsafe_allow_html=True)
                         if display and row["Abstract"]:
                             st.markdown(f"**Abstract:** {row['Abstract']}")
@@ -2958,81 +2978,82 @@ with tab2:
 
             cited_status_charts()
 
-            st.divider()
-            st.subheader("Country mentions in titles", anchor=False, divider="blue")
+            @st.fragment
+            def geo_ner_wordcloud_section():
+                st.divider()
+                st.subheader("Country mentions in titles", anchor=False, divider="blue")
+                df_countries = pd.read_csv("countries.csv")
+                df_countries["Country"] = df_countries["Country"].replace("UK", "United Kingdom")
+                df_countries = df_countries.groupby("Country", as_index=False).sum()
 
-            # Load and prepare data once
-            df_countries = pd.read_csv("countries.csv")
-            df_countries["Country"] = df_countries["Country"].replace("UK", "United Kingdom")
-            df_countries = df_countries.groupby("Country", as_index=False).sum()
+                @st.cache_data
+                def get_coordinates(country_name):
+                    try:
+                        return CountryInfo(country_name).info().get("latlng", (None, None))
+                    except KeyError:
+                        return None, None
 
-            # Get coordinates
-            def get_coordinates(country_name):
-                try:
-                    return CountryInfo(country_name).info().get("latlng", (None, None))
-                except KeyError:
-                    return None, None
+                @st.cache_data
+                def load_ner_csvs():
+                    return pd.read_csv("gpe.csv"), pd.read_csv("person.csv"), pd.read_csv("org.csv")
 
-            df_countries[["Latitude", "Longitude"]] = df_countries["Country"].apply(
-                lambda x: pd.Series(get_coordinates(x))
-            )
-            df_countries["size"] = df_countries["Count"] * 500 + 100000
-            df_countries = df_countries.dropna(subset=["Latitude", "Longitude"])
-            df_countries = df_countries.sort_values("Count", ascending=False).reset_index(drop=True)
-            df_countries = df_countries.rename(columns={"Count": "# Mentions"})
+                df_countries[["Latitude", "Longitude"]] = df_countries["Country"].apply(
+                    lambda x: pd.Series(get_coordinates(x))
+                )
+                df_countries["size"] = df_countries["Count"] * 500 + 100000
+                df_countries = df_countries.dropna(subset=["Latitude", "Longitude"])
+                df_countries = df_countries.sort_values("Count", ascending=False).reset_index(drop=True)
+                df_countries = df_countries.rename(columns={"Count": "# Mentions"})
 
-            # Build map
-            chart = pdk.Deck(
-                layers=[pdk.Layer(
-                    "ScatterplotLayer",
-                    data=df_countries,
-                    get_position=["Longitude", "Latitude"],
-                    get_radius="size",
-                    get_fill_color="[255, 140, 0, 160]",
-                    pickable=True,
-                    auto_highlight=True,
-                    id="country-mentions-layer",
-                )],
-                initial_view_state=pdk.ViewState(latitude=20, longitude=0, zoom=1, pitch=30),
-                tooltip={"text": "{Country}\nMentions: {# Mentions}"},
-                map_style="light",
-                height=800,  # ← increase this to make the map taller
-            )
+                chart = pdk.Deck(
+                    layers=[pdk.Layer(
+                        "ScatterplotLayer",
+                        data=df_countries,
+                        get_position=["Longitude", "Latitude"],
+                        get_radius="size",
+                        get_fill_color="[255, 140, 0, 160]",
+                        pickable=True,
+                        auto_highlight=True,
+                        id="country-mentions-layer",
+                    )],
+                    initial_view_state=pdk.ViewState(latitude=20, longitude=0, zoom=1, pitch=30),
+                    tooltip={"text": "{Country}\nMentions: {# Mentions}"},
+                    map_style="light",
+                    height=800,
+                )
 
-            col1, col2 = st.columns([8, 3])
-            with col1:
-                st.pydeck_chart(chart, use_container_width=True)
-            with col2:
-                st.dataframe(df_countries[["Country", "# Mentions"]], height=600, hide_index=True, use_container_width=True)
-            
+                col1, col2 = st.columns([8, 3])
+                with col1:
+                    st.pydeck_chart(chart, use_container_width=True)
+                with col2:
+                    st.dataframe(df_countries[["Country", "# Mentions"]], height=600, hide_index=True, use_container_width=True)
 
-            st.divider()
-            st.subheader("Locations, People, and Organisations", anchor=False, divider="blue")
-            st.info("Named Entity Recognition (NER) retrieves locations, people, and organisations from titles and abstracts. [What is NER?](https://medium.com/mysuperai/what-is-named-entity-recognition-ner-and-how-can-i-use-it-2b68cf6f545d)")
+                st.divider()
+                st.subheader("Locations, People, and Organisations", anchor=False, divider="blue")
+                st.info("Named Entity Recognition (NER) retrieves locations, people, and organisations from titles and abstracts. [What is NER?](https://medium.com/mysuperai/what-is-named-entity-recognition-ner-and-how-can-i-use-it-2b68cf6f545d)")
 
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                gpe = pd.read_csv("gpe.csv")
-                st.plotly_chart(px.bar(gpe.head(15), x="GPE", y="count", height=600,
-                                        title="Top 15 locations").update_xaxes(tickangle=-65), use_container_width=True)
-            with col2:
-                per = pd.read_csv("person.csv")
-                st.plotly_chart(px.bar(per.head(15), x="PERSON", y="count", height=600,
-                                        title="Top 15 persons").update_xaxes(tickangle=-65), use_container_width=True)
-            with col3:
-                org = pd.read_csv("org.csv")
-                st.plotly_chart(px.bar(org.head(15), x="ORG", y="count", height=600,
-                                        title="Top 15 organisations").update_xaxes(tickangle=-65), use_container_width=True)
+                col1, col2, col3 = st.columns(3)
+                gpe, per, org = load_ner_csvs()
+                with col1:
+                    st.plotly_chart(px.bar(gpe.head(15), x="GPE", y="count", height=600,
+                                            title="Top 15 locations").update_xaxes(tickangle=-65), use_container_width=True)
+                with col2:
+                    st.plotly_chart(px.bar(per.head(15), x="PERSON", y="count", height=600,
+                                            title="Top 15 persons").update_xaxes(tickangle=-65), use_container_width=True)
+                with col3:
+                    st.plotly_chart(px.bar(org.head(15), x="ORG", y="count", height=600,
+                                            title="Top 15 organisations").update_xaxes(tickangle=-65), use_container_width=True)
+                st.write("---")
+                st.subheader("Wordcloud", anchor=False, divider="blue")
+                wordcloud_opt = st.radio("Wordcloud of:", ("Titles", "Abstracts"), horizontal=True)
+                df_wc = df_csv.copy()
+                df_abs_no = df_wc.dropna(subset=["Abstract"])
+                if wordcloud_opt == "Abstracts":
+                    st.warning(f"Not all items have an abstract. Items with an abstract: {len(df_abs_no)}.")
+                    df_wc["Title"] = df_wc["Abstract"].astype(str)
+                render_wordcloud(df_wc, title=f"Top words in {'abstracts' if wordcloud_opt == 'Abstracts' else 'titles'}")
 
-            st.write("---")
-            st.subheader("Wordcloud", anchor=False, divider="blue")
-            wordcloud_opt = st.radio("Wordcloud of:", ("Titles","Abstracts"), horizontal=True)
-            df_wc     = df_csv.copy()
-            df_abs_no = df_wc.dropna(subset=["Abstract"])
-            if wordcloud_opt == "Abstracts":
-                st.warning(f"Not all items have an abstract. Items with an abstract: {len(df_abs_no)}.")
-                df_wc["Title"] = df_wc["Abstract"].astype(str)
-            render_wordcloud(df_wc, title=f"Top words in {'abstracts' if wordcloud_opt == 'Abstracts' else 'titles'}")
+            geo_ner_wordcloud_section()
 
         st.divider()
         st.subheader("Item inclusion history", anchor=False, divider="blue")
